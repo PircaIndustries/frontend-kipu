@@ -1,5 +1,14 @@
 export default {
-    title: 'Página Principal',
-    description: 'Bienvenido a nuestra aplicación TEST',
-    featured: 'Destacados'
+    navigation: {
+        dashboard: 'Dashboard',
+        advances: 'Avances',
+        rnc: 'RNC',
+        materials: 'Materiales',
+        blueprints: 'Planos',
+        signatures: 'Firmas',
+        budget: 'Presupuesto',
+        team: 'Equipo'
+    },
+    common: { management: 'Gestión de Obras' },
+    roles: { resident: 'Residente de Obra' }
 }
