@@ -7,6 +7,7 @@ import { ref } from 'vue';
 export const allAdvances = ref([
     {
         id: '1',
+        projectId: '1',
         date: '2026-04-18',
         activity: 'Vaciado de Losa N3',
         sector: 'Nivel 3 - Eje A-F',
@@ -17,6 +18,7 @@ export const allAdvances = ref([
     },
     {
         id: '2',
+        projectId: '1',
         date: '2026-04-17',
         activity: 'Instalación Eléctrica',
         sector: 'Nivel 2 - Oficinas',
@@ -27,6 +29,7 @@ export const allAdvances = ref([
     },
     {
         id: '3',
+        projectId: '1',
         date: '2026-04-16',
         activity: 'Acabado de Muros',
         sector: 'Fachada Posterior',

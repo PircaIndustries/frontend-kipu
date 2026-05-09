@@ -8,11 +8,10 @@ const routes = [
     {
         path: '/dashboard',
         name: 'Dashboard',
-        component: { template: '<h1>Dashboard View</h1>' }
+        component: () => import('@/features/projects/presentation/views/ProjectsView.vue')
     },
     {
         path: '/advances',
-        // CRITICAL: The parent MUST be the Layout to show the Tabs
         component: () => import('@/features/execution/presentation/layouts/AdvancesLayout.vue'),
         children: [
             {
