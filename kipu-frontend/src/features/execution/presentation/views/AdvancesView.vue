@@ -1,15 +1,10 @@
 <script setup>
-/**
- * AdvancesView Component
- * Dedicated solely to the progress registry table and filtering.
- */
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
-// Import shared state
+import { useRouter, useRoute } from 'vue-router';
 import { allAdvances } from '../../data/advancesStore';
+import { allProjects } from '../../../projects/data/projectsStore';
 
-// PrimeVue Components
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
@@ -20,8 +15,9 @@ import DatePicker from 'primevue/datepicker';
 
 const { t } = useI18n();
 const router = useRouter();
+const route = useRoute();
 
-/** * Filter states */
+const selectedProject = ref(null);
 const selectedSpecialty = ref(null);
 const dateRange = ref(null);
 
@@ -31,14 +27,22 @@ const specialties = ref([
   { name: t('execution.advances.specialties.architecture'), value: 'Arquitectura' }
 ]);
 
+onMounted(() => {
+  if (route.query.projectId) {
+    const found = allProjects.value.find(p => p.id === route.query.projectId);
+    if (found) selectedProject.value = found;
+  }
+});
+
 const clearFilters = () => {
+  selectedProject.value = null;
   selectedSpecialty.value = null;
   dateRange.value = null;
 };
 
-/** * Reactive Filter Logic using the shared store */
 const filteredAdvances = computed(() => {
   return allAdvances.value.filter(item => {
+    const matchesProject = !selectedProject.value || item.projectId === selectedProject.value.id;
     const matchesSpecialty = !selectedSpecialty.value || item.specialty === selectedSpecialty.value.value;
 
     let matchesDate = true;
@@ -49,9 +53,14 @@ const filteredAdvances = computed(() => {
       matchesDate = itemDate >= start && itemDate <= end;
     }
 
-    return matchesSpecialty && matchesDate;
+    return matchesProject && matchesSpecialty && matchesDate;
   });
 });
+
+const getProjectName = (id) => {
+  const project = allProjects.value.find(p => p.id === id);
+  return project ? project.name : '-';
+};
 
 const getStatusSeverity = (status) => {
   switch (status) {
@@ -60,6 +69,11 @@ const getStatusSeverity = (status) => {
     case 'DELAYED': return 'danger';
     default: return 'warning';
   }
+};
+
+const handleNewAdvance = () => {
+  const queryParams = selectedProject.value ? { projectId: selectedProject.value.id } : {};
+  router.push({ name: 'CreateAdvance', query: queryParams });
 };
 </script>
 
@@ -74,11 +88,20 @@ const getStatusSeverity = (status) => {
           :label="t('execution.advances.newBtn')"
           icon="pi pi-plus"
           class="p-button-primary new-advance-btn"
-          @click="router.push('/advances/new')"
+          @click="handleNewAdvance"
       />
     </header>
 
     <div class="filters-bar">
+      <Select
+          v-model="selectedProject"
+          :options="allProjects"
+          optionLabel="name"
+          :placeholder="t('execution.advances.filterProject')"
+          class="filter-dropdown"
+          showClear
+      />
+
       <Select
           v-model="selectedSpecialty"
           :options="specialties"
@@ -99,7 +122,7 @@ const getStatusSeverity = (status) => {
       />
 
       <Button
-          v-if="selectedSpecialty || dateRange"
+          v-if="selectedProject || selectedSpecialty || dateRange"
           icon="pi pi-filter-slash"
           severity="secondary"
           text
@@ -128,6 +151,13 @@ const getStatusSeverity = (status) => {
             <ProgressBar :value="slotProps.data.progress" :showValue="false" style="height: 6px; flex-grow: 1;" />
             <span class="progress-text">{{ slotProps.data.progress }}%</span>
           </div>
+        </template>
+      </Column>
+      <Column :header="t('execution.table.project')">
+        <template #body="slotProps">
+          <span class="project-truncate" :title="getProjectName(slotProps.data.projectId)">
+            {{ getProjectName(slotProps.data.projectId) }}
+          </span>
         </template>
       </Column>
       <Column :header="t('execution.table.status')">
@@ -164,4 +194,5 @@ const getStatusSeverity = (status) => {
 .progress-cell { display: flex; align-items: center; gap: 1rem; min-width: 180px; }
 .progress-text { font-size: 0.85rem; font-weight: 700; width: 40px; }
 .info-footer { margin-top: 2rem; background: #f8f9fa; padding: 1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.75rem; color: #7f8c8d; border: 1px solid #e9ecef; }
+.project-truncate { display: block; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; color: #34495e; }
 </style>

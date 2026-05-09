@@ -1,16 +1,11 @@
 <script setup>
-/**
- * CreateAdvanceView Component
- * Form for registering new daily work progress.
- * Includes dirty-state checking for discard confirmation.
- */
-import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useConfirm } from "primevue/useconfirm";
 import { allAdvances } from '../../data/advancesStore';
+import { allProjects } from '../../../projects/data/projectsStore';
 
-// PrimeVue Components
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
@@ -21,10 +16,11 @@ import ConfirmDialog from 'primevue/confirmdialog';
 
 const { t } = useI18n();
 const router = useRouter();
+const route = useRoute();
 const confirm = useConfirm();
 
-/** * Define the empty state to compare against */
 const initialFormState = {
+  project: null,
   specialty: null,
   activity: '',
   location: '',
@@ -40,14 +36,12 @@ const form = ref({
   ...initialFormState
 });
 
-/** * Options for Specialty Dropdown */
 const specialties = ref([
   { name: t('execution.advances.specialties.structures'), value: 'structures' },
   { name: t('execution.advances.specialties.installations'), value: 'installations' },
   { name: t('execution.advances.specialties.architecture'), value: 'architecture' }
 ]);
 
-/** * Weather condition options */
 const weatherOptions = [
   { label: 'execution.weather.sunny', icon: 'pi pi-sun', value: 'sunny' },
   { label: 'execution.weather.cloudy', icon: 'pi pi-cloud', value: 'cloudy' },
@@ -55,9 +49,16 @@ const weatherOptions = [
   { label: 'execution.weather.storm', icon: 'pi pi-bolt', value: 'storm' }
 ];
 
-/** * Logic to detect if the user has changed any field */
+onMounted(() => {
+  if (route.query.projectId) {
+    const found = allProjects.value.find(p => p.id === route.query.projectId);
+    if (found) form.value.project = found;
+  }
+});
+
 const isDirty = computed(() => {
-  return form.value.activity !== initialFormState.activity ||
+  return form.value.project !== initialFormState.project ||
+      form.value.activity !== initialFormState.activity ||
       form.value.location !== initialFormState.location ||
       form.value.description !== initialFormState.description ||
       form.value.progress !== initialFormState.progress ||
@@ -67,7 +68,6 @@ const isDirty = computed(() => {
       form.value.weather !== initialFormState.weather;
 });
 
-/** * Safe navigation back with confirmation */
 const goBack = () => {
   if (isDirty.value) {
     confirm.require({
@@ -90,12 +90,12 @@ const goBack = () => {
   }
 };
 
-/** * Save logic */
 const submitForm = () => {
   if (!form.value.activity) return;
 
   const newEntry = {
     id: String(Date.now()),
+    projectId: form.value.project ? form.value.project.id : null,
     date: form.value.date.toISOString().split('T')[0],
     activity: form.value.activity,
     sector: form.value.location,
@@ -122,6 +122,11 @@ const submitForm = () => {
 
     <div class="form-grid">
       <section class="form-section main-fields">
+        <div class="field">
+          <label>{{ t('execution.create.fields.project') }}</label>
+          <Select v-model="form.project" :options="allProjects" optionLabel="name" :placeholder="t('execution.create.placeholders.project')" fluid />
+        </div>
+
         <div class="field-row">
           <div class="field">
             <label>{{ t('execution.create.fields.date') }}</label>

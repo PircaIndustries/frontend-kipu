@@ -25,6 +25,7 @@ export default {
             subtitle: 'Daily records and execution status history.',
             newBtn: 'New Daily Progress',
             filterSpecialty: 'Filter by: Specialty',
+            filterProject: 'Filter by: Project',
             filterWeek: 'Week: Apr 13 - Apr 19',
             weeklyReport: 'You have registered {count} advances this week. Remember to attach photos to each report.',
             specialties: {
@@ -48,6 +49,7 @@ export default {
             activity: 'ACTIVITY PERFORMED',
             specialty: 'SPECIALTY',
             progress: 'PROGRESS (%)',
+            project: 'PROJECT',
             status: 'STATUS'
         },
         status: {
@@ -71,10 +73,12 @@ export default {
                 responsible: 'Responsible',
                 crewSize: 'Crew Size',
                 weather: 'Weather Conditions',
+                project: 'Assigned Project',
                 photos: 'Progress Photos'
             },
             placeholders: {
                 activity: 'e.g., Pouring second level slab',
+                project: 'Select a project',
                 location: 'e.g., Level 2 - Axis A-B'
             },
             photos: {
@@ -87,6 +91,45 @@ export default {
             cloudy: 'Cloudy',
             rainy: 'Rainy',
             storm: 'Storm'
+        }
+    },
+    projects: {
+        title: 'My Projects',
+        newProject: 'New Project',
+        searchPlaceholder: 'Search project...',
+        stats: {
+            active: 'Active Projects',
+            average: 'Average Progress',
+            rnc: 'Open RNC',
+            total: 'Collaborators'
+        },
+        create: {
+            header: 'Enter project details',
+            name: 'Name',
+            location: 'Location',
+            start: 'Start date',
+            end: 'End date',
+            budget: 'Estimated budget',
+            cancel: 'Cancel',
+            submit: 'Create Project',
+            successHeader: 'Project created successfully',
+            goToProject: 'Go to project',
+            errors: {
+                dateLogic: 'The end date cannot be earlier than the start date.'
+            },
+            imageUrl: 'Image URL',
+            status: 'Status',
+            statusOptions: {
+                planning: 'Planning',
+                execution: 'In execution',
+                paused: 'Paused'
+            },
+            discard: {
+                title: 'Discard changes?',
+                message: 'You have unsaved data. Are you sure you want to leave?',
+                continue: 'Continue editing',
+                confirm: 'Discard'
+            }
         }
     },
     /** Common UI labels */

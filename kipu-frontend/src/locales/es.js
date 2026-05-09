@@ -16,6 +16,7 @@ export default {
             newBtn: 'Nuevo Avance Diario',
             filterSpecialty: 'Filtrar por: Especialidad',
             filterWeek: 'Semana: 13 Abr - 19 Abr',
+            filterProject: 'Filtrar por: Proyecto',
             weeklyReport: 'Has registrado {count} avances esta semana. Recuerda adjuntar fotos en cada reporte.',
             specialties: {
                 structures: 'Estructuras',
@@ -50,7 +51,8 @@ export default {
             activity: 'ACTIVIDAD REALIZADA',
             specialty: 'ESPECIALIDAD',
             progress: 'AVANCE (%)',
-            status: 'ESTADO'
+            status: 'ESTADO',
+            project: 'PROYECTO',
         },
         taskLabel: "Partida",
         title: "Registro de Avance Diario",
@@ -70,11 +72,13 @@ export default {
                 responsible: 'Responsable',
                 crewSize: 'Personal de Cuadrilla',
                 weather: 'Condiciones Climáticas',
-                photos: 'Fotos del Avance'
+                photos: 'Fotos del Avance',
+                project: 'Proyecto asignado'
             },
             placeholders: {
                 activity: 'Ej: Vaciado de losa del segundo nivel',
-                location: 'Ej: Nivel 2 - Eje A-B'
+                location: 'Ej: Nivel 2 - Eje A-B',
+                project: 'Seleccione un proyecto'
             },
             photos: {
                 add: 'Agregar foto',
@@ -86,6 +90,45 @@ export default {
             cloudy: 'Nublado',
             rainy: 'Lluvia',
             storm: 'Tormenta'
+        }
+    },
+    projects: {
+        title: 'Mis Proyectos',
+        newProject: 'Nuevo Proyecto',
+        searchPlaceholder: 'Buscar proyecto...',
+        stats: {
+            active: 'Proyectos Activos',
+            average: 'Avance Promedio',
+            rnc: 'RNC Abiertos',
+            total: 'Colaboradores'
+        },
+        create: {
+            header: 'Ingrese los detalles del proyecto',
+            name: 'Nombre',
+            location: 'Ubicación',
+            start: 'Fecha inicio',
+            end: 'Fecha fin',
+            budget: 'Presupuesto estimado',
+            cancel: 'Cancelar',
+            submit: 'Crear Proyecto',
+            successHeader: 'Proyecto creado de manera exitosa',
+            goToProject: 'Ir a proyecto',
+            errors: {
+                dateLogic: 'La fecha de fin no puede ser anterior al inicio.'
+            },
+            imageUrl: 'URL de la Imagen',
+            status: 'Estado',
+            statusOptions: {
+                planning: 'Planificación',
+                execution: 'En ejecución',
+                paused: 'Pausado'
+            },
+            discard: {
+                title: '¿Descartar cambios?',
+                message: 'Tienes datos sin guardar. ¿Estás seguro de que deseas salir?',
+                continue: 'Continuar editando',
+                confirm: 'Descartar'
+            }
         }
     },
     common: {
