@@ -4,6 +4,7 @@ import Aura from '@primevue/themes/aura'; // Using Aura theme for a modern look
 import router from './router';
 import i18n from './locales/i18n';
 import App from './App.vue';
+import ConfirmationService from 'primevue/confirmationservice';
 
 // Styles
 import 'primeicons/primeicons.css';
@@ -16,6 +17,7 @@ app.use(PrimeVue, {
         preset: Aura
     }
 });
+app.use(ConfirmationService);
 app.use(router);
 app.use(i18n);
 
