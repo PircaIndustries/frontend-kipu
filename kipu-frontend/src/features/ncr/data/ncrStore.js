@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 
+// Definimos el array reactivo que guardará todos los NCR
 export const allNcrs = ref([
     {
         id: '1',
@@ -9,6 +10,14 @@ export const allNcrs = ref([
         ncrDescription: 'Se detectó una fisura longitudinal tras el desencofrado.',
         specialty: 'Estructuras',
         severityLevel: 'Alto',
-        photoUrl: 'https://images.unsplash.com/photo-1590274853856-f22d5ee3d228?q=80&w=500'
+        photoUrl: 'https://i.pinimg.com/736x/29/7b/a1/297ba161005c3fef3978dd086c8bc76f.jpg'
     }
 ]);
+
+/**
+ * Función para agregar un nuevo NCR al store
+ * @param {Object} newNcr - Objeto con la estructura del modelo NCR
+ */
+export const addNcr = (newNcr) => {
+    allNcrs.value.unshift(newNcr); // Agregamos al inicio para que aparezca primero en la lista
+};

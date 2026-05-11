@@ -1,9 +1,10 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
+// Importación del store reactivo para mantener los datos
 import { allNcrs } from '../../data/ncrStore';
 import { allProjects } from '../../../projects/data/projectsStore';
-import NcrListItem from './NcrListItem.vue'
+import NcrListItem from './NcrListItem.vue';
 
 import Button from 'primevue/button';
 import Select from 'primevue/select';
@@ -11,29 +12,39 @@ import Select from 'primevue/select';
 const router = useRouter();
 const selectedProject = ref(null);
 
+/**
+ * Obtiene el nombre del proyecto basado en su ID
+ */
 const getProjectName = (id) => {
   const project = allProjects.value.find(p => p.id === id);
   return project ? project.name : '-';
 };
 
+/**
+ * Filtra los NCRs del store basándose en el proyecto seleccionado
+ */
 const filteredNcrs = computed(() => {
   if (!selectedProject.value) return allNcrs.value;
   return allNcrs.value.filter(item => item.projectId === selectedProject.value.id);
 });
+
+const handleCreateNew = () => {
+  router.push({ name: 'RegisterNcr' });
+};
 </script>
 
 <template>
-  <div class="view-content">
+  <div class="ncr-view-container">
     <header class="ncr-header">
-      <div class="title-group">
+      <div class="header-text">
         <h1>No Conformidades (RNC)</h1>
-        <p class="subtitle">Gestión de incidencias y tickets de alerta</p>
+        <p class="subtitle">Gestión de incidencias y tickets de alerta en obra</p>
       </div>
       <Button
           label="Crear Nuevo RNC"
           icon="pi pi-plus"
-          class="btn-new-ncr"
-          @click="router.push({ name: 'RegisterNcr' })"
+          class="p-button-danger create-btn"
+          @click="handleCreateNew"
       />
     </header>
 
@@ -43,54 +54,86 @@ const filteredNcrs = computed(() => {
           :options="allProjects"
           optionLabel="name"
           placeholder="Filtrar por Proyecto"
-          class="filter-select"
+          class="project-selector"
           showClear
       />
     </div>
 
-    <div class="ncr-list-container">
-      <div v-if="filteredNcrs.length" class="list-wrapper">
-        <NcrListItem
-            v-for="item in filteredNcrs"
-            :key="item.id"
-            :ncr="item"
-            :project-name="getProjectName(item.projectId)"
-        />
-      </div>
+    <div class="ncr-cards-list">
+      <NcrListItem
+          v-for="ncr in filteredNcrs"
+          :key="ncr.id"
+          :ncr="ncr"
+          :project-name="getProjectName(ncr.projectId)"
+      />
 
-      <div v-else class="empty-state">
+      <div v-if="filteredNcrs.length === 0" class="empty-state">
         <i class="pi pi-inbox"></i>
-        <p>No hay reportes de no conformidad registrados.</p>
+        <p>No se encontraron registros de no conformidad.</p>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.view-content { padding: 1.5rem 0; }
-.ncr-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-.title-group h1 { margin: 0; font-size: 1.6rem; color: #1e293b; font-weight: 700; }
-.subtitle { color: #64748b; font-size: 0.95rem; }
+.ncr-view-container {
+  padding: 1.5rem 2rem;
+}
 
-.btn-new-ncr { background-color: #ef4444; border: none; padding: 0.75rem 1.5rem; font-weight: 600; border-radius: 8px; }
-.btn-new-ncr:hover { background-color: #dc2626 !important; }
+.ncr-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
 
-.filters-bar { margin-bottom: 2rem; }
-.filter-select { width: 300px; }
+.header-text h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1e293b;
+}
 
-.ncr-list-container {
+.subtitle {
+  color: #64748b;
+  margin-top: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.create-btn {
+  background-color: #ef4444;
+  border: none;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+}
+
+.filters-bar {
+  margin-bottom: 2rem;
+}
+
+.project-selector {
+  width: 320px;
+}
+
+/* Contenedor de la lista para separar los cuadros entre sí */
+.ncr-cards-list {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem; /* Pequeño espacio entre cada cuadro */
 }
 
 .empty-state {
   text-align: center;
-  padding: 4rem;
+  padding: 5rem;
   background: #f8fafc;
   border-radius: 12px;
-  color: #94a3b8;
   border: 2px dashed #e2e8f0;
+  color: #94a3b8;
 }
 
-.empty-state i { font-size: 2.5rem; margin-bottom: 1rem; }
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
 </style>

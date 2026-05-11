@@ -1,10 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { allNcrs } from '../../data/ncrStore';
+// Importamos el store y la función de guardado
+import { addNcr } from '../../data/ncrStore';
 import { allProjects } from '../../../projects/data/projectsStore';
-import { NcrRepository } from '../../infrastructure/repositories/NcrRepository';
-import { ncr as NcrModel } from '../../domain/model/ncr';
 
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -14,7 +13,6 @@ import FileUpload from 'primevue/fileupload';
 import Message from 'primevue/message';
 
 const router = useRouter();
-const ncrRepo = new NcrRepository();
 
 const form = ref({
   project: null,
@@ -25,35 +23,27 @@ const form = ref({
   photo: null
 });
 
-const photoError = ref(false);
-
-const specialties = [
-  { name: 'Estructuras' }, { name: 'Arquitectura' }, { name: 'Instalaciones' }
-];
-
 const handleSave = async () => {
-  if (!form.value.photo) {
-    photoError.value = true;
-    return;
-  }
+  // Validación básica
+  if (!form.value.title || !form.value.project) return;
 
-  const newNcr = new NcrModel(
-      String(Date.now()),
-      form.value.title,
-      form.value.description,
-      new Date().toISOString(),
-      form.value.specialty?.name || 'General',
-      form.value.severity
-  );
-
-  const dataToStore = {
-    ...newNcr,
-    projectId: form.value.project?.id,
-    photoUrl: URL.createObjectURL(form.value.photo)
+  // Creamos el objeto con la estructura que espera el store
+  const newNcrEntry = {
+    id: String(Date.now()), // ID único temporal
+    ncrTitle: form.value.title,
+    specialty: form.value.specialty?.name || 'General',
+    date: new Date().toISOString(),
+    severityLevel: form.value.severity,
+    description: form.value.description,
+    projectId: form.value.project.id,
+    // Si hay foto, creamos una URL temporal para visualizarla
+    photoUrl: form.value.photo ? URL.createObjectURL(form.value.photo) : null
   };
 
-  allNcrs.value.unshift(dataToStore);
-  await ncrRepo.save(dataToStore);
+  // Guardamos en el store global
+  addNcr(newNcrEntry);
+
+  // Redirigimos a la lista
   router.push({ name: 'NcrRegistry' });
 };
 </script>
@@ -83,7 +73,11 @@ const handleSave = async () => {
         <div class="field-row">
           <div class="field">
             <label>Especialidad afectada</label>
-            <Select v-model="form.specialty" :options="specialties" optionLabel="name" fluid />
+            <InputText
+                v-model="form.specialty"
+                placeholder="Ej. Estructuras, Arquitectura, MEP..."
+                fluid
+            />
           </div>
           <div class="field">
             <label>Nivel de severidad</label>
