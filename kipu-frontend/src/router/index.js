@@ -34,6 +34,25 @@ const routes = [
         path: '/advances/new',
         name: 'CreateAdvance',
         component: () => import('@/features/execution/presentation/views/CreateAdvanceView.vue')
+    },
+    {
+        path: '/rnc',
+        children: [
+            {
+                path: '',
+                redirect: '/rnc/registry'
+            },
+            {
+                path: 'registry',
+                name: 'NcrRegistry',
+                component: () => import('@/features/ncr/presentation/views/NcrListView.vue')
+            },
+            {
+                path: 'new',
+                name: 'RegisterNcr',
+                component: () => import('@/features/ncr/presentation/views/register-ncr.view.vue')
+            }
+        ]
     }
 ];
 
