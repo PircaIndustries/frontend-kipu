@@ -9,17 +9,19 @@ const { t } = useI18n();
 const currentRoute = computed(() => route.path);
 
 const tabs = [
-  { label: t('inventory.tab-machinery'), route: '/logistics/machinery' },
-  { label: t('inventory.tab-inventory'), route: '/logistics/inventory' },
-  { label: t('inventory.tab-requests'), route: '/logistics/requests' },
-  { label: t('inventory.tab-suppliers'), route: '/logistics/suppliers' },
-  { label: t('inventory.tab-waste'), route: '/logistics/waste' }
+  { label: t('logistics-tabs.tab-inventory'), route: '/logistics/inventory' },
+  { label: t('logistics-tabs.tab-requests'), route: '/logistics/requests' },
+  { label: t('logistics-tabs.tab-suppliers'), route: '/logistics/suppliers' },
+  { label: t('logistics-tabs.tab-waste'), route: '/logistics/waste' },
+  { label: t('logistics-tabs.tab-machinery'), route: '/logistics/machinery' },
 ];
 </script>
 
 <template>
-  <div class="mb-6">
-    <pv-tabs :value="currentRoute">
+  <div class="m-0">
+    <pv-tabs :value="currentRoute"
+             class="m-0 p-0"
+    >
       <pv-tablist>
         <pv-tab
             v-for="tab in tabs"

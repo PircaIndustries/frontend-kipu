@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import logisticsRoutes from '@/domains/logistics/router/logistics-router.js';
 
 const routes = [
+    ...logisticsRoutes,
     {
         path: '/',
         redirect: '/dashboard'

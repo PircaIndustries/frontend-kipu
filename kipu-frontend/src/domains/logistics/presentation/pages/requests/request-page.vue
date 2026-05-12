@@ -3,6 +3,7 @@
 </script>
 
 <template>
+  <h1>SOLICITUD</h1>
 
 </template>
 

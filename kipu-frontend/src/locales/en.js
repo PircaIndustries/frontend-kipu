@@ -144,9 +144,10 @@ export default {
         resident: 'Works Resident'
     },
     "logistics-tabs": {
-    "tab-inventory": "Inventory",
+        "tab-inventory": "Inventory",
         "tab-requests": "Requests",
         "tab-suppliers": "Suppliers",
-        "tab-waste": "Waste"
+        "tab-waste": "Waste",
+        "tab-machinery": "Machinery",
     }
 };

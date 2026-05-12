@@ -3,6 +3,7 @@
 </script>
 
 <template>
+  <h1>PROVEEDORES</h1>
 
 </template>
 
