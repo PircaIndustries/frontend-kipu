@@ -1,0 +1,16 @@
+{
+  "/api/v1/logistics/materials": "/materialsCatalog",
+  "/api/v1/logistics/categories": "/categoriesCatalog",
+  "/api/v1/logistics/supplierOffer": "/supplierOffers",
+  "/api/v1/logistics/requests": "/materialsRequests",
+  "/api/v1/logistics/inventory": "/materialsInventory",
+  "/api/v1/logistics/waste": "/materialsWaste",
+  "/apu/v1/logistics/machinery": "/machineryCatalog",
+  "/api/v1/logistics/machineryAssignment": "/machineryAssignments",
+  "/api/v1/logistics/suppliers": "/materialsSuppliers",
+  "/api/v1/team/users": "/team-users",
+  "/api/v1/team/workers": "/team-workers",
+  "/api/v1/team": "/team",
+  "/api/v1/documents": "/documents",
+  "/api/v1/*": "/$1"
+}

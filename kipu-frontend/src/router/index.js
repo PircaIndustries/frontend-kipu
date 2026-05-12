@@ -8,11 +8,11 @@ const routes = [
     {
         path: '/dashboard',
         name: 'Dashboard',
-        component: () => import('@/features/projects/presentation/views/ProjectsView.vue')
+        component: () => import('@/domains/project-management/presentation/views/ProjectsView.vue')
     },
     {
         path: '/advances',
-        component: () => import('@/features/execution/presentation/layouts/AdvancesLayout.vue'),
+        component: () => import('@/domains/progress-monitoring/presentation/layouts/AdvancesLayout.vue'),
         children: [
             {
                 path: '',
@@ -21,19 +21,19 @@ const routes = [
             {
                 path: 'registry',
                 name: 'AdvancesRegistry',
-                component: () => import('@/features/execution/presentation/views/AdvancesView.vue')
+                component: () => import('@/domains/progress-monitoring/presentation/views/AdvancesView.vue')
             },
             {
                 path: 'photos',
                 name: 'PhotoLog',
-                component: () => import('@/features/execution/presentation/views/PhotoLogView.vue')
+                component: () => import('@/domains/progress-monitoring/presentation/views/PhotoLogView.vue')
             }
         ]
     },
     {
         path: '/advances/new',
         name: 'CreateAdvance',
-        component: () => import('@/features/execution/presentation/views/CreateAdvanceView.vue')
+        component: () => import('@/domains/progress-monitoring/presentation/views/CreateAdvanceView.vue')
     }
 ];
 
