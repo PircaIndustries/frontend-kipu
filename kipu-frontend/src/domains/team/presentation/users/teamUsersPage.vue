@@ -8,7 +8,7 @@
           @click="openInviteDialog"
           :label="$t('team.users.btn-invite')"
           icon="pi pi-user-plus"
-          class="bg-[#3498DB] text-white border-none hover:bg-[#2980B9]"
+          class="bg-accent! text-white border-none hover:bg-blue-600!"
       />
     </div>
 
@@ -141,29 +141,29 @@
             <div class="flex flex-col gap-4">
               <!-- Administrador -->
               <div>
-                <h3 class="text-sm font-bold text-[#2C3E50]">{{ $t('team.users.role-dictionary.administrator') }}</h3>
-                <p class="text-xs text-[#212529] mt-1 leading-relaxed">
+                <h3 class="text-base font-bold text-[#2C3E50]">{{ $t('team.users.role-dictionary.administrator') }}</h3>
+                <p class="text-sm text-[#212529] mt-1 leading-relaxed">
                   {{ $t('team.users.role-dictionary.administrator-description') }}
                 </p>
               </div>
               <!-- Gestor Operativo -->
               <div>
-                <h3 class="text-sm font-bold text-[#2C3E50]">{{ $t('team.users.role-dictionary.manager') }}</h3>
-                <p class="text-xs text-[#212529] mt-1 leading-relaxed">
+                <h3 class="text-base font-bold text-[#2C3E50]">{{ $t('team.users.role-dictionary.manager') }}</h3>
+                <p class="text-sm text-[#212529] mt-1 leading-relaxed">
                   {{ $t('team.users.role-dictionary.manager-description') }}
                 </p>
               </div>
               <!-- Logística -->
               <div>
-                <h3 class="text-sm font-bold text-[#2C3E50]">{{ $t('team.users.role-dictionary.logistics') }}</h3>
-                <p class="text-xs text-[#212529] mt-1 leading-relaxed">
+                <h3 class="text-base font-bold text-[#2C3E50]">{{ $t('team.users.role-dictionary.logistics') }}</h3>
+                <p class="text-sm text-[#212529] mt-1 leading-relaxed">
                   {{ $t('team.users.role-dictionary.logistics-description') }}
                 </p>
               </div>
               <!-- Cliente (destacado) -->
               <div class="bg-[#F8F9FA] p-3 rounded-md border border-[#B0BEC5]">
-                <h3 class="text-sm font-bold text-[#2C3E50]">{{ $t('team.users.role-dictionary.client') }}</h3>
-                <p class="text-xs text-[#212529] mt-1 leading-relaxed">
+                <h3 class="text-base font-bold text-[#2C3E50]">{{ $t('team.users.role-dictionary.client') }}</h3>
+                <p class="text-sm text-[#212529] mt-1 leading-relaxed">
                   {{ $t('team.users.role-dictionary.client-description-1') }}
                   <span class="font-bold">{{ $t('team.users.role-dictionary.client-description-bold') }}</span>
                   {{ $t('team.users.role-dictionary.client-description-2') }}
