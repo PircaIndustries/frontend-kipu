@@ -431,72 +431,73 @@
                 "summary": "Success",
                 "message": "Request created successfully"
             }
-        },
-        "logistics-tabs": {
-            "tab-inventory": "Inventory",
-            "tab-requests": "Requests",
-            "tab-suppliers": "Suppliers",
-            "tab-waste": "Waste"
-        },
-        "team": {
-            "users": {
-                "tab-users": "System Users",
-                "title": "User Management",
-                "btn-invite": "Send Invitation",
-                "stats": {
-                    "active": "ACTIVE USERS",
-                    "managers": "MANAGERS",
-                    "logistics": "LOGISTICS TEAM",
-                    "clients": "CLIENTS"
-                },
-                "assigned-roles": {
-                    "title": "Role Assignment",
-                    "user-tab": "User",
-                    "email-tab": "Email",
-                    "assigned-role-tab": "Assigned Role",
-                    "action-tab": "Action",
-                    "user-profile-you": "You",
-                    "btn-action": "Disable",
-                    "btn-action-done": "Disabled",
-                    "input-placeholder": "Name, email or role...",
-                    "user-count": "users"
-                },
-                "role-dictionary": {
-                    "title": "Role Dictionary",
-                    "administrator": "Administrator",
-                    "administrator-description": "Full system access. Can manage projects, base budgets and access controls.",
-                    "manager": "Operations Manager",
-                    "manager-description": "Field-focused. Records progress, RNCs and requests materials. Views blueprints.",
-                    "logistics": "Logistics",
-                    "logistics-description": "Office-focused. Approves orders, edits inventory and manages suppliers.",
-                    "client": "Client",
-                    "client-description-1": "Strict access level of ",
-                    "client-description-bold": "Read Only. ",
-                    "client-description-2": "All creation or editing buttons are hidden in their view to protect the data.",
-                    "engineer": "Engineer"
-                },
-                "send-invitation": {
-                    "title": "Invite new user",
-                    "credentials": "An email with system access credentials will be sent.",
-                    "email": "EMAIL ADDRESS",
-                    "email-placeholder": "user@company.com",
-                    "name": "Name",
-                    "name-placeholder": "e.g., 'Juan'",
-                    "lastname": "Lastname",
-                    "lastname-placeholder": "e.g., 'Perez'",
-                    "rol": "Role to assign",
-                    "btn-cancel": "Cancel",
-                    "btn-invite": "Send Invitation"
-                }
+        }
+    },
+    "logistics-tabs": {
+        "tab-inventory": "Inventory",
+        "tab-requests": "Requests",
+        "tab-suppliers": "Suppliers",
+        "tab-waste": "Waste",
+        "tab-machinery": "Machinery"
+    },
+    "team": {
+        "users": {
+            "tab-users": "System Users",
+            "title": "User Management",
+            "btn-invite": "Send Invitation",
+            "stats": {
+                "active": "ACTIVE USERS",
+                "managers": "MANAGERS",
+                "logistics": "LOGISTICS TEAM",
+                "clients": "CLIENTS"
             },
-            "workers": {
-                "tab-workers": "Worker Directory",
-                "title": "Worker Directory",
-                "register": {
-                    "btn-add-worker": "+ New Worker",
-                    "no-workers-found": "No workers registered yet.",
-                    "description": "Passive directory of operational personnel. Used exclusively to link ID numbers within the Logistics Module."
-                }
+            "assigned-roles": {
+                "title": "Role Assignment",
+                "user-tab": "User",
+                "email-tab": "Email",
+                "assigned-role-tab": "Assigned Role",
+                "action-tab": "Action",
+                "user-profile-you": "You",
+                "btn-action": "Disable",
+                "btn-action-done": "Disabled",
+                "input-placeholder": "Name, email or role...",
+                "user-count": "users"
+            },
+            "role-dictionary": {
+                "title": "Role Dictionary",
+                "administrator": "Administrator",
+                "administrator-description": "Full system access. Can manage projects, base budgets and access controls.",
+                "manager": "Operations Manager",
+                "manager-description": "Field-focused. Records progress, RNCs and requests materials. Views blueprints.",
+                "logistics": "Logistics",
+                "logistics-description": "Office-focused. Approves orders, edits inventory and manages suppliers.",
+                "client": "Client",
+                "client-description-1": "Strict access level of ",
+                "client-description-bold": "Read Only. ",
+                "client-description-2": "All creation or editing buttons are hidden in their view to protect the data.",
+                "engineer": "Engineer"
+            },
+            "send-invitation": {
+                "title": "Invite new user",
+                "credentials": "An email with system access credentials will be sent.",
+                "email": "EMAIL ADDRESS",
+                "email-placeholder": "user@company.com",
+                "name": "Name",
+                "name-placeholder": "e.g., 'Juan'",
+                "lastname": "Lastname",
+                "lastname-placeholder": "e.g., 'Perez'",
+                "rol": "Role to assign",
+                "btn-cancel": "Cancel",
+                "btn-invite": "Send Invitation"
+            }
+        },
+        "workers": {
+            "tab-workers": "Worker Directory",
+            "title": "Worker Directory",
+            "register": {
+                "btn-add-worker": "+ New Worker",
+                "no-workers-found": "No workers registered yet.",
+                "description": "Passive directory of operational personnel. Used exclusively to link ID numbers within the Logistics Module."
             }
         }
     }
