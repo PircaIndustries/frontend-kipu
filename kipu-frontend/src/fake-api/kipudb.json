@@ -482,6 +482,25 @@
           "quantity": 15
         }
       ]
+    },
+    {
+      "items": [
+        {
+          "supplierOfferId": "soff-001",
+          "quantity": 9
+        }
+      ],
+      "suggestedSupplierId": "sup-001",
+      "budgetLineId": null,
+      "priority": "LOW",
+      "deliveryLocation": "a",
+      "purpose": "xd",
+      "additionalNotes": "",
+      "requestDate": "2026-05-12",
+      "deadline": "2026-05-13",
+      "requestedBy": "Usuario actual",
+      "status": "PENDING",
+      "id": "iPVsW5E"
     }
   ],
   "materialsWaste": [

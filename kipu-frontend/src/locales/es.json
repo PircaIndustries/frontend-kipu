@@ -267,104 +267,266 @@
         "management": "Gestión de Obras",
         "cancel": "Cancelar",
         "yes": "Sí",
-        "no": "No"
+        "no": "No",
+        "error": "Error"
     },
     "roles": {
         "resident": "Residente de Obra"
     },
-    "logistics-tabs": {
-        "tab-inventory": "Inventario",
-        "tab-requests": "Solicitudes",
-        "tab-suppliers": "Proveedores",
-        "tab-waste": "Mermas"
+    "inventory": {
+        "title": "Inventario",
+        "summary": {
+            "registered-materials": "MATERIALES REGISTRADOS",
+            "critical-stock-alert": "ALERTA DE STOCK CRÍTICO"
+        },
+        "filters": {
+            "category": "FILTRAR POR CATEGORÍA"
+        },
+        "search": {
+            "placeholder": "Buscar por ID de inventario"
+        },
+        "empty": {
+            "title": "Sin resultados",
+            "description": "Probá ajustando los filtros"
+        },
+        "category": {
+            "placeholder": "Seleccionar categoría"
+        },
+        "card": {
+            "equipment": "Equipo",
+            "min-limit": "Límite Mín.",
+            "current-stock": "Stock Actual"
+        },
+        "low-stock": "Stock bajo"
     },
-    "team": {
-        "users": {
-            "tab-users": "Usuarios del Sistema",
-            "title": "Gestión de Usuarios",
-            "btn-invite": "Enviar Invitación",
-            "stats": {
-                "active": "USUARIOS ACTIVOS",
-                "managers": "GESTORES",
-                "logistics": "EQUIPO DE LOGÍSTICA",
-                "clients": "CLIENTES"
+    "request": {
+        "title": "Solicitudes de Materiales",
+        "button-create": "Nueva Solicitud",
+        "filters": {
+            "title": "Filtros",
+            "all": "Todas",
+            "within-budget": "Dentro del Presupuesto",
+            "exceed-budget": "Excede Presupuesto",
+            "expire-48h": "Vence en 48h"
+        },
+        "summary": {
+            "pending": "Pendientes",
+            "approved-today": "Aprobadas Hoy",
+            "rejected": "Rechazadas"
+        },
+        "card": {
+            "header": {
+                "request-date": "Fecha de Solicitud"
             },
-            "assigned-roles": {
-                "title": "Asignación de Roles",
-                "user-tab": "Usuario",
-                "email-tab": "Correo Electrónico",
-                "assigned-role-tab": "Rol Asignado",
-                "action-tab": "Acción",
-                "user-profile-you": "Tú",
-                "btn-action": "Deshabilitar",
-                "btn-action-done": "Deshabilitado",
-                "input-placeholder": "Nombre, correo o rol...",
-                "user-count": "usuarios"
+            "fields": {
+                "material": "Material",
+                "requester": "Solicitante",
+                "budget-line": "Línea Presupuestaria",
+                "required-date": "Fecha Requerida",
+                "in-days": "{days} días restantes",
+                "time-exceeded": "Tiempo excedido"
             },
-            "role-dictionary": {
-                "title": "Diccionario de Roles",
-                "administrator": "Administrador",
-                "administrator-description": "Acceso total al sistema. Puede gestionar obras, presupuestos base y accesos.",
-                "manager": "Gestor Operativo",
-                "manager-description": "Enfocado en campo. Registra avances, RNCs y solicita materiales. Visualiza planos.",
-                "logistics": "Logística",
-                "logistics-description": "Enfocado en oficina. Aprueba pedidos, edita inventarios y gestiona proveedores.",
-                "client": "Cliente",
-                "client-description-1": "Nivel de acceso estricto de ",
-                "client-description-bold": "Solo Lectura. ",
-                "client-description-2": "Todos los botones de creación o edición se ocultan en su vista para proteger la data.",
-                "engineer": "Ingeniero"
+            "purpose": {
+                "title": "Propósito"
             },
-            "send-invitation": {
-                "title": "Invitar nuevo usuario",
-                "credentials": "Se enviará un correo con las credenciales de acceso al sistema.",
-                "email": "CORREO ELECTRÓNICO",
-                "email-placeholder": "compania.com",
-                "name": "Nombre",
-                "name-placeholder": "Ejm. 'Juan'",
-                "lastname": "Apellido",
-                "lastname-placeholder": "Ejm. 'Perez'",
-                "rol": "Rol a asignar",
-                "btn-cancel": "Cancelar",
-                "btn-invite": "Enviar Invitación"
+            "budget-verification": {
+                "title": "Verificación de Presupuesto",
+                "requested-amount": "Monto Solicitado",
+                "available-budget": "Presupuesto Disponible",
+                "status": "Estado"
+            },
+            "status": {
+                "within-budget": "Dentro del Presupuesto",
+                "out-budget": "Fuera del Presupuesto",
+                "approved": "Aprobada",
+                "pending": "Pendiente",
+                "refused": "Rechazada"
+            },
+            "actions": {
+                "modify": "Modificar",
+                "view-details": "Ver Detalles"
             }
         },
-        "workers": {
-            "tab-workers": "Directorio de Obreros",
-            "title": "Directorio de Obreros",
-            "search-placeholder": "Buscar por DNI, nombre o cargo...",
-            "register": {
-                "btn-add-worker": "+ Nuevo Obrero",
-                "no-workers-found": "No se encontraron trabajadores registrados.",
-                "description": "Directorio pasivo del personal operario. Se utiliza exclusivamente para asociar su DNI en el Módulo Logístico.",
-                "tab-dni": "Documento (DNI)",
-                "tab-name": "Nombres Completos",
-                "tab-role": "Cargo / Cuadrilla",
-                "tab-status": "Estado en Obra",
-                "tab-tools": "Herramientas Asignadas",
-                "tab-action": "Acción",
-                "tab-status-active": "ACTIVO",
-                "tab-status-inactive": "INACTIVO",
-                "tab-btn-disable": "Deshabilitar",
-                "tab-btn-enable": "Habilitar",
-                "worker-count": "trabajadores",
-                "flow-title": "Flujo de Herramientas",
-                "flow-description": "El personal registrado en esta lista no cuenta con credenciales de acceso al sistema Kipu. Este directorio es administrado exclusivamente para que el área de Logística y Almacén pueda buscar el DNI del trabajador al momento de registrar préstamos temporales o asignaciones permanentes de maquinarias en obra.",
-                "go-to-materials": "Ir a Módulo Materiales"
+        "modify": {
+            "title": "Editar Solicitud",
+            "actions": {
+                "cancel": "Cancelar",
+                "submit": "Guardar Cambios"
             },
-            "add-modal": {
-                "title": "Registrar Nuevo Obrero",
-                "dni-label": "Documento (DNI)",
-                "dni-placeholder": "8 dígitos",
-                "name-label": "Nombres Completos",
-                "name-placeholder": "Ejm. Juan Perez",
-                "role-label": "Cargo / Cuadrilla",
-                "role-placeholder": "Ejm. Operario de Albañilería",
-                "tools-title": "Herramientas Asignadas",
-                "tools-add": "+ Añadir Herramienta",
-                "tools-placeholder": "Nombre del equipo...",
-                "btn-save": "Guardar Obrero",
-                "btn-cancel": "Cancelar"
+            "success": {
+                "summary": "Actualizada",
+                "message": "Solicitud actualizada exitosamente"
+            }
+        },
+        "detail": {
+            "total-investment": "INVERSIÓN TOTAL",
+            "remaining-days": "{days} días restantes",
+            "per-unit": "/unidad",
+            "budget-validated": "Presupuesto Validado",
+            "btn-close": "Cerrar",
+            "section": {
+                "material-info": "Información del Material",
+                "logistics": "Logística"
+            }
+        },
+        "create": {
+            "title": "Nueva Solicitud de Material",
+            "subtitle": "Complete los detalles para solicitar materiales para su proyecto.",
+            "fields": {
+                "category": "Categoría",
+                "specific-material": "Material Específico",
+                "suggested-supplier": "Proveedor Sugerido",
+                "quantity": "Cantidad",
+                "unit": "Unidad",
+                "budget-line": "Línea Presupuestaria",
+                "priority": "Prioridad",
+                "required-date": "Fecha Requerida",
+                "delivery-location": "Ubicación de Entrega",
+                "purpose": "Propósito",
+                "additional-notes": "Notas Adicionales",
+                "attachments": "Archivos Adjuntos"
+            },
+            "placeholders": {
+                "select": "Seleccionar...",
+                "select-category-first": "Seleccione una categoría primero",
+                "select-material-first": "Seleccione un material primero",
+                "quantity": "Ingrese cantidad",
+                "unit-empty": "La unidad aparecerá aquí",
+                "date": "Seleccione una fecha",
+                "location": "Ej: Almacén A",
+                "purpose": "Describa el motivo de esta solicitud",
+                "additional-notes": "Cualquier información adicional",
+                "dropzone": "Arrastre archivos aquí o haga clic para subir",
+                "dropzone-hint": "Formatos aceptados: PDF, imágenes",
+                "requested-by": "Usuario actual"
+            },
+            "priority": {
+                "low": "Baja",
+                "medium": "Media",
+                "high": "Alta",
+                "critical": "Crítica"
+            },
+            "validation": {
+                "category-required": "La categoría es requerida",
+                "material-required": "El material es requerido",
+                "supplier-required": "El proveedor es requerido",
+                "budget-line-required": "La línea presupuestaria es requerida",
+                "quantity-required": "La cantidad mínima es 1",
+                "date-required": "La fecha requerida es obligatoria",
+                "location-required": "La ubicación de entrega es requerida",
+                "purpose-required": "El propósito es requerido",
+                "check-form": "Revise los campos del formulario"
+            },
+            "budget-verification": {
+                "title": "VERIFICACIÓN DE PRESUPUESTO",
+                "item-budget": "PRESUPUESTO DEL ÍTEM",
+                "executed": "EJECUTADO",
+                "available": "DISPONIBLE"
+            },
+            "actions": {
+                "cancel": "Cancelar",
+                "submit": "Enviar Solicitud"
+            },
+            "success": {
+                "summary": "Éxito",
+                "message": "Solicitud creada exitosamente"
+            }
+        },
+        "logistics-tabs": {
+            "tab-inventory": "Inventario",
+            "tab-requests": "Solicitudes",
+            "tab-suppliers": "Proveedores",
+            "tab-waste": "Mermas"
+        },
+        "team": {
+            "users": {
+                "tab-users": "Usuarios del Sistema",
+                "title": "Gestión de Usuarios",
+                "btn-invite": "Enviar Invitación",
+                "stats": {
+                    "active": "USUARIOS ACTIVOS",
+                    "managers": "GESTORES",
+                    "logistics": "EQUIPO DE LOGÍSTICA",
+                    "clients": "CLIENTES"
+                },
+                "assigned-roles": {
+                    "title": "Asignación de Roles",
+                    "user-tab": "Usuario",
+                    "email-tab": "Correo Electrónico",
+                    "assigned-role-tab": "Rol Asignado",
+                    "action-tab": "Acción",
+                    "user-profile-you": "Tú",
+                    "btn-action": "Deshabilitar",
+                    "btn-action-done": "Deshabilitado",
+                    "input-placeholder": "Nombre, correo o rol...",
+                    "user-count": "usuarios"
+                },
+                "role-dictionary": {
+                    "title": "Diccionario de Roles",
+                    "administrator": "Administrador",
+                    "administrator-description": "Acceso total al sistema. Puede gestionar obras, presupuestos base y accesos.",
+                    "manager": "Gestor Operativo",
+                    "manager-description": "Enfocado en campo. Registra avances, RNCs y solicita materiales. Visualiza planos.",
+                    "logistics": "Logística",
+                    "logistics-description": "Enfocado en oficina. Aprueba pedidos, edita inventarios y gestiona proveedores.",
+                    "client": "Cliente",
+                    "client-description-1": "Nivel de acceso estricto de ",
+                    "client-description-bold": "Solo Lectura. ",
+                    "client-description-2": "Todos los botones de creación o edición se ocultan en su vista para proteger la data.",
+                    "engineer": "Ingeniero"
+                },
+                "send-invitation": {
+                    "title": "Invitar nuevo usuario",
+                    "credentials": "Se enviará un correo con las credenciales de acceso al sistema.",
+                    "email": "CORREO ELECTRÓNICO",
+                    "email-placeholder": "compania.com",
+                    "name": "Nombre",
+                    "name-placeholder": "Ejm. 'Juan'",
+                    "lastname": "Apellido",
+                    "lastname-placeholder": "Ejm. 'Perez'",
+                    "rol": "Rol a asignar",
+                    "btn-cancel": "Cancelar",
+                    "btn-invite": "Enviar Invitación"
+                }
+            },
+            "workers": {
+                "tab-workers": "Directorio de Obreros",
+                "title": "Directorio de Obreros",
+                "search-placeholder": "Buscar por DNI, nombre o cargo...",
+                "register": {
+                    "btn-add-worker": "Nuevo Obrero",
+                    "btn-add-worker": "+ Nuevo Obrero",
+                    "no-workers-found": "No se encontraron trabajadores registrados.",
+                    "description": "Directorio pasivo del personal operario. Se utiliza exclusivamente para asociar su DNI en el Módulo Logístico.",
+                    "tab-dni": "Documento (DNI)",
+                    "tab-name": "Nombres Completos",
+                    "tab-role": "Cargo / Cuadrilla",
+                    "tab-status": "Estado en Obra",
+                    "tab-tools": "Herramientas Asignadas",
+                    "tab-action": "Acción",
+                    "tab-status-active": "ACTIVO",
+                    "tab-status-inactive": "INACTIVO",
+                    "tab-btn-disable": "Deshabilitar",
+                    "tab-btn-enable": "Habilitar",
+                    "worker-count": "trabajadores",
+                    "flow-title": "Flujo de Herramientas",
+                    "flow-description": "El personal registrado en esta lista no cuenta con credenciales de acceso al sistema Kipu. Este directorio es administrado exclusivamente para que el área de Logística y Almacén pueda buscar el DNI del trabajador al momento de registrar préstamos temporales o asignaciones permanentes de maquinarias en obra.",
+                    "go-to-materials": "Ir a Módulo Materiales"
+                },
+                "add-modal": {
+                    "title": "Registrar Nuevo Obrero",
+                    "dni-label": "Documento (DNI)",
+                    "dni-placeholder": "8 dígitos",
+                    "name-label": "Nombres Completos",
+                    "name-placeholder": "Ejm. Juan Perez",
+                    "role-label": "Cargo / Cuadrilla",
+                    "role-placeholder": "Ejm. Operario de Albañilería",
+                    "tools-title": "Herramientas Asignadas",
+                    "tools-add": "+ Añadir Herramienta",
+                    "tools-placeholder": "Nombre del equipo...",
+                    "btn-save": "Guardar Obrero",
+                    "btn-cancel": "Cancelar"
+                }
             }
         }
     }

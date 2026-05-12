@@ -2,6 +2,7 @@ const LogisticsPage = () => import('@/domains/logistics/presentation/pages/logis
 const MachineryPage = () => import('@/domains/logistics/presentation/pages/machinery/machinery-page.vue');
 const InventoryPage = () => import('@/domains/logistics/presentation/pages/materials/inventory-page.vue');
 const RequestsPage = () => import('@/domains/logistics/presentation/pages/requests/request-page.vue');
+const RequestsCreateForm = () => import('@/domains/logistics/presentation/components/requests/form/request-create-form.vue');
 const SuppliersPage = () => import('@/domains/logistics/presentation/pages/suppliers/suppliers-page.vue');
 const WastePage = () => import('@/domains/logistics/presentation/pages/waste/waste-page.vue');
 
@@ -28,6 +29,12 @@ const logisticsRoutes = [
                 name: 'requests-list',
                 component: RequestsPage,
                 meta: { title: 'Requests page' }
+            },
+            {
+                path: 'requests/create',
+                name: 'request-create',
+                component: RequestsCreateForm,
+                meta: { title: 'Create Request' }
             },
             {
                 path: 'suppliers',

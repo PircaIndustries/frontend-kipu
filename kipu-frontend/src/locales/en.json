@@ -267,104 +267,236 @@
         "management": "Works Management",
         "cancel": "Cancel",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "error": "Error"
     },
     "roles": {
         "resident": "Works Resident"
     },
-    "logistics-tabs": {
-        "tab-inventory": "Inventory",
-        "tab-requests": "Requests",
-        "tab-suppliers": "Suppliers",
-        "tab-waste": "Waste"
+    "inventory": {
+        "title": "Inventory",
+        "summary": {
+            "registered-materials": "REGISTERED MATERIALS",
+            "critical-stock-alert": "CRITICAL STOCK ALERT"
+        },
+        "filters": {
+            "category": "FILTER BY CATEGORY"
+        },
+        "search": {
+            "placeholder": "Search by inventory ID"
+        },
+        "empty": {
+            "title": "No results",
+            "description": "Try adjusting the filters"
+        },
+        "category": {
+            "placeholder": "Select category"
+        },
+        "card": {
+            "equipment": "Equipment",
+            "min-limit": "Min. Limit",
+            "current-stock": "Current Stock"
+        },
+        "low-stock": "Low Stock"
     },
-    "team": {
-        "users": {
-            "tab-users": "System Users",
-            "title": "User Management",
-            "btn-invite": "Send Invitation",
-            "stats": {
-                "active": "ACTIVE USERS",
-                "managers": "MANAGERS",
-                "logistics": "LOGISTICS TEAM",
-                "clients": "CLIENTS"
+    "request": {
+        "title": "Material Requests",
+        "button-create": "New Request",
+        "filters": {
+            "title": "Filters",
+            "all": "All",
+            "within-budget": "Within Budget",
+            "exceed-budget": "Exceeds Budget",
+            "expire-48h": "Expires in 48h"
+        },
+        "summary": {
+            "pending": "Pending",
+            "approved-today": "Approved Today",
+            "rejected": "Rejected"
+        },
+        "card": {
+            "header": {
+                "request-date": "Request Date"
             },
-            "assigned-roles": {
-                "title": "Role Assignment",
-                "user-tab": "User",
-                "email-tab": "Email",
-                "assigned-role-tab": "Assigned Role",
-                "action-tab": "Action",
-                "user-profile-you": "You",
-                "btn-action": "Disable",
-                "btn-action-done": "Disabled",
-                "input-placeholder": "Name, email or role...",
-                "user-count": "users"
+            "fields": {
+                "material": "Material",
+                "requester": "Requester",
+                "budget-line": "Budget Line",
+                "required-date": "Required Date",
+                "in-days": "{days} days remaining",
+                "time-exceeded": "Time exceeded"
             },
-            "role-dictionary": {
-                "title": "Role Dictionary",
-                "administrator": "Administrator",
-                "administrator-description": "Full system access. Can manage projects, base budgets and access controls.",
-                "manager": "Operations Manager",
-                "manager-description": "Field-focused. Records progress, RNCs and requests materials. Views blueprints.",
-                "logistics": "Logistics",
-                "logistics-description": "Office-focused. Approves orders, edits inventory and manages suppliers.",
-                "client": "Client",
-                "client-description-1": "Strict access level of ",
-                "client-description-bold": "Read Only. ",
-                "client-description-2": "All creation or editing buttons are hidden in their view to protect the data.",
-                "engineer": "Engineer"
+            "purpose": {
+                "title": "Purpose"
             },
-            "send-invitation": {
-                "title": "Invite new user",
-                "credentials": "An email with system access credentials will be sent.",
-                "email": "EMAIL ADDRESS",
-                "email-placeholder": "user@company.com",
-                "name": "Name",
-                "name-placeholder": "e.g., 'Juan'",
-                "lastname": "Lastname",
-                "lastname-placeholder": "e.g., 'Perez'",
-                "rol": "Role to assign",
-                "btn-cancel": "Cancel",
-                "btn-invite": "Send Invitation"
+            "budget-verification": {
+                "title": "Budget Verification",
+                "requested-amount": "Requested Amount",
+                "available-budget": "Available Budget",
+                "status": "Status"
+            },
+            "status": {
+                "within-budget": "Within Budget",
+                "out-budget": "Out of Budget",
+                "approved": "Approved",
+                "pending": "Pending",
+                "refused": "Refused"
+            },
+            "actions": {
+                "modify": "Modify",
+                "view-details": "View Details"
             }
         },
-        "workers": {
-            "tab-workers": "Worker Directory",
-            "title": "Worker Directory",
-            "search-placeholder": "Search by ID, name or position...",
-            "register": {
-                "btn-add-worker": "+ New Worker",
-                "no-workers-found": "No workers registered yet.",
-                "description": "Passive directory of operational personnel. Used exclusively to link ID numbers within the Logistics Module.",
-                "tab-dni": "ID Number",
-                "tab-name": "Full Name",
-                "tab-role": "Position / Crew",
-                "tab-status": "Work Status",
-                "tab-tools": "Assigned Tools",
-                "tab-action": "Action",
-                "tab-status-active": "ACTIVE",
-                "tab-status-inactive": "INACTIVE",
-                "tab-btn-disable": "Disable",
-                "tab-btn-enable": "Enable",
-                "worker-count": "workers",
-                "flow-title": "Tools Flow",
-                "flow-description": "Personnel registered in this list do not have access credentials to the Kipu system. This directory is managed exclusively so that the Logistics and Warehouse area can search for the worker's ID when registering temporary loans or permanent assignments of machinery on site.",
-                "go-to-materials": "Go to Materials Module"
+        "modify": {
+            "title": "Edit Request",
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Save Changes"
             },
-            "add-modal": {
-                "title": "Register New Worker",
-                "dni-label": "ID Number",
-                "dni-placeholder": "8 digits",
-                "name-label": "Full Name",
-                "name-placeholder": "e.g., Juan Perez",
-                "role-label": "Position / Crew",
-                "role-placeholder": "e.g., Masonry Worker",
-                "tools-title": "Assigned Tools",
-                "tools-add": "+ Add Tool",
-                "tools-placeholder": "Equipment name...",
-                "btn-save": "Save Worker",
-                "btn-cancel": "Cancel"
+            "success": {
+                "summary": "Updated",
+                "message": "Request updated successfully"
+            }
+        },
+        "detail": {
+            "total-investment": "TOTAL INVESTMENT",
+            "remaining-days": "{days} days remaining",
+            "per-unit": "/unit",
+            "budget-validated": "Budget Validated",
+            "btn-close": "Close",
+            "section": {
+                "material-info": "Material Information",
+                "logistics": "Logistics"
+            }
+        },
+        "create": {
+            "title": "New Material Request",
+            "subtitle": "Fill in the details to request materials for your project.",
+            "fields": {
+                "category": "Category",
+                "specific-material": "Specific Material",
+                "suggested-supplier": "Suggested Supplier",
+                "quantity": "Quantity",
+                "unit": "Unit",
+                "budget-line": "Budget Line",
+                "priority": "Priority",
+                "required-date": "Required Date",
+                "delivery-location": "Delivery Location",
+                "purpose": "Purpose",
+                "additional-notes": "Additional Notes",
+                "attachments": "Attachments"
+            },
+            "placeholders": {
+                "select": "Select...",
+                "select-category-first": "Select a category first",
+                "select-material-first": "Select a material first",
+                "quantity": "Enter quantity",
+                "unit-empty": "Unit will appear here",
+                "date": "Select a date",
+                "location": "e.g. Warehouse A",
+                "purpose": "Describe the reason for this request",
+                "additional-notes": "Any additional information",
+                "dropzone": "Drag & drop files here or click to upload",
+                "dropzone-hint": "Accepted formats: PDF, images",
+                "requested-by": "Current user"
+            },
+            "priority": {
+                "low": "Low",
+                "medium": "Medium",
+                "high": "High",
+                "critical": "Critical"
+            },
+            "validation": {
+                "category-required": "Category is required",
+                "material-required": "Material is required",
+                "supplier-required": "Supplier is required",
+                "budget-line-required": "Budget line is required",
+                "quantity-required": "Minimum quantity is 1",
+                "date-required": "Required date is required",
+                "location-required": "Delivery location is required",
+                "purpose-required": "Purpose is required",
+                "check-form": "Please review the form fields"
+            },
+            "budget-verification": {
+                "title": "BUDGET VERIFICATION",
+                "item-budget": "ITEM BUDGET",
+                "executed": "EXECUTED",
+                "available": "AVAILABLE"
+            },
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Submit Request"
+            },
+            "success": {
+                "summary": "Success",
+                "message": "Request created successfully"
+            }
+        },
+        "logistics-tabs": {
+            "tab-inventory": "Inventory",
+            "tab-requests": "Requests",
+            "tab-suppliers": "Suppliers",
+            "tab-waste": "Waste"
+        },
+        "team": {
+            "users": {
+                "tab-users": "System Users",
+                "title": "User Management",
+                "btn-invite": "Send Invitation",
+                "stats": {
+                    "active": "ACTIVE USERS",
+                    "managers": "MANAGERS",
+                    "logistics": "LOGISTICS TEAM",
+                    "clients": "CLIENTS"
+                },
+                "assigned-roles": {
+                    "title": "Role Assignment",
+                    "user-tab": "User",
+                    "email-tab": "Email",
+                    "assigned-role-tab": "Assigned Role",
+                    "action-tab": "Action",
+                    "user-profile-you": "You",
+                    "btn-action": "Disable",
+                    "btn-action-done": "Disabled",
+                    "input-placeholder": "Name, email or role...",
+                    "user-count": "users"
+                },
+                "role-dictionary": {
+                    "title": "Role Dictionary",
+                    "administrator": "Administrator",
+                    "administrator-description": "Full system access. Can manage projects, base budgets and access controls.",
+                    "manager": "Operations Manager",
+                    "manager-description": "Field-focused. Records progress, RNCs and requests materials. Views blueprints.",
+                    "logistics": "Logistics",
+                    "logistics-description": "Office-focused. Approves orders, edits inventory and manages suppliers.",
+                    "client": "Client",
+                    "client-description-1": "Strict access level of ",
+                    "client-description-bold": "Read Only. ",
+                    "client-description-2": "All creation or editing buttons are hidden in their view to protect the data.",
+                    "engineer": "Engineer"
+                },
+                "send-invitation": {
+                    "title": "Invite new user",
+                    "credentials": "An email with system access credentials will be sent.",
+                    "email": "EMAIL ADDRESS",
+                    "email-placeholder": "user@company.com",
+                    "name": "Name",
+                    "name-placeholder": "e.g., 'Juan'",
+                    "lastname": "Lastname",
+                    "lastname-placeholder": "e.g., 'Perez'",
+                    "rol": "Role to assign",
+                    "btn-cancel": "Cancel",
+                    "btn-invite": "Send Invitation"
+                }
+            },
+            "workers": {
+                "tab-workers": "Worker Directory",
+                "title": "Worker Directory",
+                "register": {
+                    "btn-add-worker": "+ New Worker",
+                    "no-workers-found": "No workers registered yet.",
+                    "description": "Passive directory of operational personnel. Used exclusively to link ID numbers within the Logistics Module."
+                }
             }
         }
     }

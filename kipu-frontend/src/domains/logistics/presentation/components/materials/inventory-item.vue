@@ -61,7 +61,7 @@ const inventoryFields = computed(() => [
             class="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-danger-soft text-danger"
         >
           <i class="pi pi-exclamation-triangle text-[10px]"></i>
-          Stock bajo
+          {{ t('inventory.low-stock') }}
         </span>
       </div>
     </template>

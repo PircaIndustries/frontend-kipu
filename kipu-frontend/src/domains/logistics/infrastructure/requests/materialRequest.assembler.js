@@ -1,3 +1,5 @@
+import {MaterialRequestEntity} from "@/domains/logistics/domain/model/requests/materialRequest.entity.js";
+
 /**
  * Maps material request resources into domain entities.
  *
