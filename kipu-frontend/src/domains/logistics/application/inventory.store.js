@@ -11,7 +11,7 @@ import {MaterialInventoryAssembler} from "@/domains/logistics/infrastructure/mat
 
 const logisticsApi = new LogisticsApi();
 
-const useLogisticsStore = defineStore('logistics', () => {
+const useInventoryStore = defineStore('logistics', () => {
 
     // ── RAW ────────────────────────────────────────────────────────────────
 
@@ -77,8 +77,13 @@ const useLogisticsStore = defineStore('logistics', () => {
 
     // ── FILTERS ────────────────────────────────────────────────────────────────
 
+    // ────────── FILTERS STATES ─────────────────────────────────────────────────
+
     const selectedCategory    = ref('');
+    const selectedInventoryId =  ref('');
     const criticalStockFilter = ref(false);
+
+    // ────────── FILTERS INVENTORY  ─────────────────────────────────────────────────
 
     const filteredInventory = computed(() => {
         let result = inventoryView.value;
@@ -88,17 +93,28 @@ const useLogisticsStore = defineStore('logistics', () => {
         if (criticalStockFilter.value) {
             result = result.filter(i => i.currentStock <= i.miniumStock);
         }
+        if (selectedInventoryId.value) {
+            result = result.filter(i => i.id === selectedInventoryId.value);
+        }
         return result;
     });
-
-    const criticalCount = computed(
-        () => inventoryView.value.filter(i => i.currentStock <= i.miniumStock).length
+    // ────────── FILTERS COUNTS  ─────────────────────────────────────────────────
+    const criticalCount = computed(() =>
+        inventoryView.value.filter(i => i.currentStock <= i.miniumStock).length
     );
 
-    function filterByCategory(category) { selectedCategory.value = category; }
-    function clearFilter()              { selectedCategory.value = ''; }
-    function toggleCriticalFilter()     { criticalStockFilter.value = !criticalStockFilter.value; }
+    // ────────── FILTERS ACTIONS ─────────────────────────────────────────────────
+    function filterByCategory(category)  { selectedCategory.value = category; }
+    function clearCategoryFilter()       { selectedCategory.value = ''; }
+    function toggleCriticalFilter()      { criticalStockFilter.value = !criticalStockFilter.value; }
+    function filterById(id)              { selectedInventoryId.value = id; }
+    function clearInventoryIdFilter()    { selectedInventoryId.value = ''; }
 
+    function resetAllFilters() {
+        clearCategoryFilter();
+        criticalStockFilter.value = false;
+        clearInventoryIdFilter();
+    }
 
     // ── LOADERS ────────────────────────────────────────────────────────────────
 
@@ -150,6 +166,7 @@ const useLogisticsStore = defineStore('logistics', () => {
     // ── RETURN ────────────────────────────────────────────────────────────────
 
     return {
+        // states
         inventoryMaterials,
         materials,
         categories,
@@ -158,18 +175,23 @@ const useLogisticsStore = defineStore('logistics', () => {
         materialsLoaded,
         categoriesLoaded,
         inventoryView,
+        // filters
         filteredInventory,
         criticalCount,
         selectedCategory,
         criticalStockFilter,
+        selectedInventoryId,
+        // actions
         fetchCategories,
         fetchMaterials,
         fetchInventory,
         filterByCategory,
-        clearFilter,
+        filterById,
+        clearCategoryFilter,
         toggleCriticalFilter,
+        resetAllFilters,
     };
 
 });
 
-export default useLogisticsStore;
+export default useInventoryStore;
