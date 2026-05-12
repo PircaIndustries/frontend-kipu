@@ -56,7 +56,7 @@ export default {
         },
         taskLabel: "Partida",
         title: "Registro de Avance Diario",
-        /** Movido dentro de execution para que t('execution.create...') funcione */
+        /** Movido dentro de progress-monitoring para que t('progress-monitoring.create...') funcione */
         create: {
             title: 'Nuevo Avance Diario',
             submitBtn: 'Guardar Avance',
@@ -139,5 +139,11 @@ export default {
     },
     roles: {
         resident: 'Residente de Obra'
+    },
+    "logistics-tabs": {
+        "tab-inventory": "Inventario",
+        "tab-requests": "Solicitudes",
+        "tab-suppliers": "Proveedores",
+        "tab-waste": "Mermas"
     }
 };

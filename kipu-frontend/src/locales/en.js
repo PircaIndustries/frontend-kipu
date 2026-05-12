@@ -22,7 +22,7 @@ export default {
         },
         advances: {
             title: 'Work Progress Control',
-            subtitle: 'Daily records and execution status history.',
+            subtitle: 'Daily records and progress-monitoring status history.',
             newBtn: 'New Daily Progress',
             filterSpecialty: 'Filter by: Specialty',
             filterProject: 'Filter by: Project',
@@ -57,7 +57,7 @@ export default {
             IN_PROGRESS: 'IN PROGRESS',
             DELAYED: 'DELAYED'
         },
-        /** Moved inside execution to match component calls */
+        /** Moved inside progress-monitoring to match component calls */
         create: {
             title: 'New Daily Progress',
             submitBtn: 'Save Progress',
@@ -121,7 +121,7 @@ export default {
             status: 'Status',
             statusOptions: {
                 planning: 'Planning',
-                execution: 'In execution',
+                execution: 'In progress-monitoring',
                 paused: 'Paused'
             },
             discard: {
@@ -142,5 +142,11 @@ export default {
     /** User role labels */
     roles: {
         resident: 'Works Resident'
+    },
+    "logistics-tabs": {
+    "tab-inventory": "Inventory",
+        "tab-requests": "Requests",
+        "tab-suppliers": "Suppliers",
+        "tab-waste": "Waste"
     }
 };
