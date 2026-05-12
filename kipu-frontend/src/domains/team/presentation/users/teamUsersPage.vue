@@ -3,12 +3,12 @@
   <div class="p-6">
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
-      <h1 class="text-2xl font-bold">{{ $t('team.users.title') }}</h1>
+      <h1 class="text-2xl font-bold text-text-main">{{ $t('team.users.title') }}</h1>
       <Button
           @click="openInviteDialog"
           :label="$t('team.users.btn-invite')"
           icon="pi pi-user-plus"
-          class="bg-accent! text-white border-none hover:bg-blue-600!"
+          class="bg-accent! text-white border-none! hover:bg-primary!"
       />
     </div>
 
@@ -17,8 +17,8 @@
       <Card>
         <template #content>
           <div class="text-center">
-            <p class="text-gray-500 text-sm">{{ $t('team.users.stats.active') }}</p>
-            <h2 class="text-3xl font-bold text-[#3498DB]">{{ store.totalActiveUsers }}</h2>
+            <p class="text-neutral-border text-sm">{{ $t('team.users.stats.active') }}</p>
+            <h2 class="text-3xl font-bold text-accent">{{ store.totalActiveUsers }}</h2>
           </div>
         </template>
       </Card>
@@ -26,8 +26,8 @@
       <Card>
         <template #content>
           <div class="text-center">
-            <p class="text-gray-500 text-sm">{{ $t('team.users.stats.managers') }}</p>
-            <h2 class="text-3xl font-bold text-[#2C3E50]">{{ store.totalManagers }}</h2>
+            <p class="text-neutral-border text-sm">{{ $t('team.users.stats.managers') }}</p>
+            <h2 class="text-3xl font-bold text-primary">{{ store.totalManagers }}</h2>
           </div>
         </template>
       </Card>
@@ -35,8 +35,8 @@
       <Card>
         <template #content>
           <div class="text-center">
-            <p class="text-gray-500 text-sm">{{ $t('team.users.stats.logistics') }}</p>
-            <h2 class="text-3xl font-bold text-[#2C3E50]">{{ store.totalLogistics }}</h2>
+            <p class="text-neutral-border text-sm">{{ $t('team.users.stats.logistics') }}</p>
+            <h2 class="text-3xl font-bold text-primary">{{ store.totalLogistics }}</h2>
           </div>
         </template>
       </Card>
@@ -44,8 +44,8 @@
       <Card>
         <template #content>
           <div class="text-center">
-            <p class="text-gray-500 text-sm">{{ $t('team.users.stats.clients') }}</p>
-            <h2 class="text-3xl font-bold text-[#2C3E50]">{{ store.totalClients }}</h2>
+            <p class="text-neutral-border text-sm">{{ $t('team.users.stats.clients') }}</p>
+            <h2 class="text-3xl font-bold text-primary">{{ store.totalClients }}</h2>
           </div>
         </template>
       </Card>
@@ -58,9 +58,9 @@
         <Card>
           <template #title>
             <div class="flex justify-between items-center overflow-hidden">
-              <span>{{ $t('team.users.assigned-roles.title') }}</span>
+              <span class="text-text-main">{{ $t('team.users.assigned-roles.title') }}</span>
               <div class="relative">
-                <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-neutral-border text-sm"></i>
                 <InputText
                     v-model="searchValue"
                     :placeholder="$t('team.users.assigned-roles.input-placeholder')"
@@ -69,7 +69,7 @@
                 <i
                     v-if="searchValue"
                     @click="clearSearch"
-                    class="pi pi-times absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer hover:text-gray-600"
+                    class="pi pi-times absolute right-3 top-1/2 -translate-y-1/2 text-neutral-border cursor-pointer hover:text-text-main"
                 ></i>
               </div>
             </div>
@@ -79,9 +79,9 @@
               <Column field="fullName" :header="$t('team.users.assigned-roles.user-tab')">
                 <template #body="{ data }">
                   <div class="flex items-center gap-2">
-                    <Avatar :label="getInitials(data.fullName)" class="bg-[#3498DB]/10 text-[#3498DB]" size="large" />
-                    <span class="text-[#212529]">{{ data.fullName }}</span>
-                    <span v-if="isCurrentUser(data)" class="text-xs text-gray-400 ml-1">
+                    <Avatar :label="getInitials(data.fullName)" class="bg-accent/10 text-accent" size="large" />
+                    <span class="text-text-main">{{ data.fullName }}</span>
+                    <span v-if="isCurrentUser(data)" class="text-xs text-neutral-border ml-1">
                       ({{ $t('team.users.assigned-roles.user-profile-you') }})
                     </span>
                   </div>
@@ -90,7 +90,7 @@
 
               <Column field="email" :header="$t('team.users.assigned-roles.email-tab')">
                 <template #body="{ data }">
-                  <span class="text-[#212529]">{{ data.email }}</span>
+                  <span class="text-text-main">{{ data.email }}</span>
                 </template>
               </Column>
 
@@ -121,7 +121,7 @@
               </Column>
             </DataTable>
 
-            <div class="text-right text-sm text-gray-400 mt-4">
+            <div class="text-right text-sm text-neutral-border mt-4">
               {{ store.filteredUsers.length }} / {{ store.allUsers.length }} {{ $t('team.users.assigned-roles.user-count') }}
             </div>
           </template>
@@ -133,37 +133,37 @@
         <Card>
           <template #title>
             <div class="flex items-center gap-2">
-              <i class="pi pi-book text-[#2C3E50]"></i>
-              <span class="text-[#212529] font-semibold">{{ $t('team.users.role-dictionary.title') }}</span>
+              <i class="pi pi-book text-primary"></i>
+              <span class="text-text-main font-semibold">{{ $t('team.users.role-dictionary.title') }}</span>
             </div>
           </template>
           <template #content>
             <div class="flex flex-col gap-4">
               <!-- Administrador -->
               <div>
-                <h3 class="text-base font-bold text-[#2C3E50]">{{ $t('team.users.role-dictionary.administrator') }}</h3>
-                <p class="text-sm text-[#212529] mt-1 leading-relaxed">
+                <h3 class="text-base font-bold text-primary">{{ $t('team.users.role-dictionary.administrator') }}</h3>
+                <p class="text-sm text-text-main mt-1 leading-relaxed">
                   {{ $t('team.users.role-dictionary.administrator-description') }}
                 </p>
               </div>
               <!-- Gestor Operativo -->
               <div>
-                <h3 class="text-base font-bold text-[#2C3E50]">{{ $t('team.users.role-dictionary.manager') }}</h3>
-                <p class="text-sm text-[#212529] mt-1 leading-relaxed">
+                <h3 class="text-base font-bold text-primary">{{ $t('team.users.role-dictionary.manager') }}</h3>
+                <p class="text-sm text-text-main mt-1 leading-relaxed">
                   {{ $t('team.users.role-dictionary.manager-description') }}
                 </p>
               </div>
               <!-- Logística -->
               <div>
-                <h3 class="text-base font-bold text-[#2C3E50]">{{ $t('team.users.role-dictionary.logistics') }}</h3>
-                <p class="text-sm text-[#212529] mt-1 leading-relaxed">
+                <h3 class="text-base font-bold text-primary">{{ $t('team.users.role-dictionary.logistics') }}</h3>
+                <p class="text-sm text-text-main mt-1 leading-relaxed">
                   {{ $t('team.users.role-dictionary.logistics-description') }}
                 </p>
               </div>
               <!-- Cliente (destacado) -->
-              <div class="bg-[#F8F9FA] p-3 rounded-md border border-[#B0BEC5]">
-                <h3 class="text-base font-bold text-[#2C3E50]">{{ $t('team.users.role-dictionary.client') }}</h3>
-                <p class="text-sm text-[#212529] mt-1 leading-relaxed">
+              <div class="bg-neutral-bg p-3 rounded-md border border-neutral-border">
+                <h3 class="text-base font-bold text-primary">{{ $t('team.users.role-dictionary.client') }}</h3>
+                <p class="text-sm text-text-main mt-1 leading-relaxed">
                   {{ $t('team.users.role-dictionary.client-description-1') }}
                   <span class="font-bold">{{ $t('team.users.role-dictionary.client-description-bold') }}</span>
                   {{ $t('team.users.role-dictionary.client-description-2') }}
@@ -175,47 +175,51 @@
       </div>
     </div>
 
-    <!-- Invite Dialog (sin cambios) -->
+    <!-- Invite Dialog -->
     <Dialog
         v-model:visible="dialogVisible"
         :header="$t('team.users.send-invitation.title')"
         :modal="true"
         class="w-[550px]"
+        :style="{ borderRadius: 'var(--radius-m)' }"
     >
       <form @submit.prevent="inviteUser" class="flex flex-col gap-4">
-        <p class="text-gray-500 text-sm">{{ $t('team.users.send-invitation.credentials') }}</p>
+        <p class="text-neutral-border text-sm">{{ $t('team.users.send-invitation.credentials') }}</p>
 
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-bold">{{ $t('team.users.send-invitation.email') }}</label>
+          <label class="text-xs font-bold text-text-main">{{ $t('team.users.send-invitation.email') }}</label>
           <InputText
               v-model="inviteForm.email"
               type="email"
               :placeholder="$t('team.users.send-invitation.email-placeholder')"
               required
+              class="border-neutral-border focus:border-accent"
           />
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold">{{ $t('team.users.send-invitation.name') }}</label>
+            <label class="text-xs font-bold text-text-main">{{ $t('team.users.send-invitation.name') }}</label>
             <InputText
                 v-model="inviteForm.firstName"
                 :placeholder="$t('team.users.send-invitation.name-placeholder')"
                 required
+                class="border-neutral-border focus:border-accent"
             />
           </div>
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold">{{ $t('team.users.send-invitation.lastname') }}</label>
+            <label class="text-xs font-bold text-text-main">{{ $t('team.users.send-invitation.lastname') }}</label>
             <InputText
                 v-model="inviteForm.lastName"
                 :placeholder="$t('team.users.send-invitation.lastname-placeholder')"
                 required
+                class="border-neutral-border focus:border-accent"
             />
           </div>
         </div>
 
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-bold">{{ $t('team.users.send-invitation.rol') }}</label>
+          <label class="text-xs font-bold text-text-main">{{ $t('team.users.send-invitation.rol') }}</label>
           <Select
               v-model="inviteForm.role"
               :options="roleOptions"
@@ -223,18 +227,19 @@
               optionValue="value"
               placeholder="Seleccionar rol"
               required
+              class="border-neutral-border"
           />
         </div>
       </form>
 
       <template #footer>
         <div class="flex justify-end gap-2">
-          <Button @click="closeDialog" :label="$t('team.users.send-invitation.btn-cancel')" text />
+          <Button @click="closeDialog" :label="$t('team.users.send-invitation.btn-cancel')" text class="text-text-main! hover:text-primary!" />
           <Button
               @click="inviteUser"
               :label="$t('team.users.send-invitation.btn-invite')"
               :disabled="!isInviteFormValid"
-              class="bg-[#3498DB] text-white border-none hover:bg-[#2980B9]"
+              class="bg-accent! text-white border-none! hover:bg-primary"
           />
         </div>
       </template>
@@ -257,7 +262,6 @@ import Select from 'primevue/select'
 
 const store = useTeamUserStore()
 
-// Local state
 const searchValue = ref('')
 const dialogVisible = ref(false)
 const inviteForm = ref({
@@ -281,7 +285,6 @@ const isInviteFormValid = computed(() => {
       inviteForm.value.role
 })
 
-// Methods
 const getInitials = (fullName) => {
   if (!fullName) return '?'
   const parts = fullName.trim().split(' ')
@@ -290,8 +293,6 @@ const getInitials = (fullName) => {
 }
 
 const formatRole = (role) => {
-  const key = store.getRoleTranslationKey(role)
-  // Usar traducción desde el store o fallback
   return role
 }
 
