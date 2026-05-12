@@ -6,10 +6,11 @@ import useRequestStore from '@/domains/logistics/application/requests.store.js'
 import RequestList from '@/domains/logistics/presentation/components/requests/request-list.vue'
 import FilterMenu from "@/shared/presentation/components/FilterMenu.vue"
 import FilterSummaryBar from "@/shared/presentation/components/FilterSummaryBar.vue"
+import { useRouter } from 'vue-router'
 
 const { t } = useI18n()
 const requestStore = useRequestStore()
-
+const router = useRouter()
 const {
   requestDetailsView,
   pendingRequestFilter,
@@ -42,7 +43,7 @@ onMounted(() => {
 })
 
 const handleCreateRequest = () => {
-  // router.push({ name: 'request-create' })
+  router.push({ name: 'request-create' })
 }
 
 const filterItems = computed(() => [

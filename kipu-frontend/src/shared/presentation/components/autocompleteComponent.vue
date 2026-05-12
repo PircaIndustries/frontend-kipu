@@ -1,29 +1,44 @@
 <script setup>
-import {ref} from "vue";
-import {AutoComplete as PvAutocomplete} from "primevue";
+import { ref, computed } from 'vue'
+import AutoComplete from 'primevue/autocomplete'
 
 const props = defineProps({
   options: { type: Array, required: true },
-  placeholder: { type: String, required: true },
+  placeholder: { type: String, default: '' },
   disabled: { type: Boolean, default: false },
+  returnObject: { type: Boolean, default: true }
 })
 
 const model = defineModel()
 const suggestions = ref([])
 
+const internalValue = computed({
+  get: () => {
+    if (props.returnObject) return model.value
+    return props.options.find(opt => opt.name === model.value) ?? null
+  },
+  set: (val) => {
+    if (props.returnObject) {
+      model.value = val
+    } else {
+      model.value = val?.name ?? null
+    }
+  }
+})
+
 const search = (event) => {
   const query = event.query?.trim().toLowerCase() || ''
   setTimeout(() => {
     suggestions.value = query
-        ? props.options.filter(c => c.name.toLowerCase().startsWith(query))
+        ? props.options.filter(opt => opt.name.toLowerCase().startsWith(query))
         : [...props.options]
   }, 250)
 }
 </script>
 
 <template>
-  <pv-autocomplete
-      v-model="model"
+  <AutoComplete
+      v-model="internalValue"
       optionLabel="name"
       :suggestions="suggestions"
       @complete="search"
@@ -40,9 +55,5 @@ const search = (event) => {
         <span>{{ slotProps.option.name }}</span>
       </div>
     </template>
-  </pv-autocomplete>
+  </AutoComplete>
 </template>
-
-<style scoped>
-
-</style>
