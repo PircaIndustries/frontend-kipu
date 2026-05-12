@@ -17,7 +17,8 @@ import AutoComplete from 'primevue/autocomplete';
 
 // Styles
 import 'primeicons/primeicons.css';
-import './style.css'; // Your global styles
+import './style.css';
+import {Toast, ToastService} from "primevue"; // Your global styles
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -35,6 +36,8 @@ app.use(pinia);
 app.use(ConfirmationService);
 app.use(router);
 app.use(i18n);
+app.use(ToastService);
+app.component('Toast', Toast)
 app.component('pv-tabs', Tabs);
 app.component('pv-tablist', TabList);
 app.component('pv-tab', Tab);

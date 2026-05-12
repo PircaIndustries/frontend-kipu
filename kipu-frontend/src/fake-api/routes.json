@@ -1,4 +1,4 @@
-{
+  {
   "/api/v1/logistics/materials": "/materialsCatalog",
   "/api/v1/logistics/categories": "/categoriesCatalog",
   "/api/v1/logistics/supplierOffer": "/supplierOffers",

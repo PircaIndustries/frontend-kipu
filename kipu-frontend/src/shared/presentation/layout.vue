@@ -8,6 +8,7 @@ import HeaderComponent from "@/shared/presentation/components/headerComponent.vu
 </script>
 
 <template>
+  <Toast position="bottom-right" />
   <div class="flex h-screen w-screen">
     <SideNavigationBar/>
     <main class="flex flex-col flex-1 w-full overflow-y-auto">

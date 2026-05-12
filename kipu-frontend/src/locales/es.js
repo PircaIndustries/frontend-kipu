@@ -150,6 +150,7 @@ export default {
     },
     "team": {
         "users": {
+            "tab-users": "Usuarios del Sistema",
             "title": "Gestión de Usuarios",
             "btn-invite": "Enviar Invitación",
             "stats": {
@@ -171,17 +172,24 @@ export default {
                 "user-count": "usuarios"
             },
             "role-dictionary": {
+                "title": "Diccionario de Roles",
                 "administrator": "Administrador",
+                "administrator-description": "Acceso total al sistema. Puede gestionar obras, presupuestos base y accesos.",
                 "manager": "Gestor Operativo",
+                "manager-description": "Enfocado en campo. Registra avances, RNCs y solicita materiales. Visualiza planos.",
                 "logistics": "Logística",
+                "logistics-description": "Enfocado en oficina. Aprueba pedidos, edita inventarios y gestiona proveedores.",
                 "client": "Cliente",
+                "client-description-1": "Nivel de acceso estricto de ",
+                "client-description-bold": "Solo Lectura. ",
+                "client-description-2": "Todos los botones de creación o edición se ocultan en su vista para proteger la data.",
                 "engineer": "Ingeniero"
             },
             "send-invitation": {
                 "title": "Invitar nuevo usuario",
                 "credentials": "Se enviará un correo con las credenciales de acceso al sistema.",
                 "email": "CORREO ELECTRÓNICO",
-                "email-placeholder": "usuario@compañia.com",
+                "email-placeholder": "compania.com",
                 "name": "Nombre",
                 "name-placeholder": "Ejm. 'Juan'",
                 "lastname": "Apellido",
@@ -189,6 +197,16 @@ export default {
                 "rol": "Rol a asignar",
                 "btn-cancel": "Cancelar",
                 "btn-invite": "Enviar Invitación"
+            },
+
+        },
+        "workers": {
+            "tab-workers": "Directorio de Obreros",
+            "title": "Directorio de Obreros",
+            "register": {
+                "btn-add-worker": "+ Nuevo Obrero",
+                "no-workers-found": "No se encontraron trabajadores registrados.",
+                "description": "Directorio pasivo del personal operario. Se utiliza exclusivamente para asociar su DNI en el Módulo Logístico."
             }
         }
     }

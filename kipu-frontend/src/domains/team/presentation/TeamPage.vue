@@ -9,14 +9,14 @@ const { t } = useI18n();
 
 const currentRoute = computed(() => route.path);
 
-const tabs = [
+const tabs = computed(() => [
   { label: t('team.users.tab-users'), route: '/team/users' },
   { label: t('team.workers.tab-workers'), route: '/team/workers' }
-];
+]);
 </script>
 
 <template>
-  <div class="mb-6">
+  <div class="border-b border-gray-200">
     <pv-tabs :value="currentRoute">
       <pv-tablist>
         <pv-tab
@@ -40,5 +40,3 @@ const tabs = [
   </div>
   <router-view />
 </template>
-<style scoped>
-</style>

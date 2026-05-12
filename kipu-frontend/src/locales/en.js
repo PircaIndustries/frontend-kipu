@@ -153,9 +153,9 @@ export default {
     },
     "team": {
         "users": {
+            "tab-users": "System Users",
             "title": "User Management",
             "btn-invite": "Send Invitation",
-            "tab-users": "System Users",
             "stats": {
                 "active": "ACTIVE USERS",
                 "managers": "MANAGERS",
@@ -175,10 +175,17 @@ export default {
                 "user-count": "users"
             },
             "role-dictionary": {
+                "title": "Role Dictionary",
                 "administrator": "Administrator",
+                "administrator-description": "Full system access. Can manage projects, base budgets and access controls.",
                 "manager": "Operations Manager",
+                "manager-description": "Field-focused. Records progress, RNCs and requests materials. Views blueprints.",
                 "logistics": "Logistics",
+                "logistics-description": "Office-focused. Approves orders, edits inventory and manages suppliers.",
                 "client": "Client",
+                "client-description-1": "Strict access level of ",
+                "client-description-bold": "Read Only. ",
+                "client-description-2": "All creation or editing buttons are hidden in their view to protect the data.",
                 "engineer": "Engineer"
             },
             "send-invitation": {
@@ -193,6 +200,15 @@ export default {
                 "rol": "Role to assign",
                 "btn-cancel": "Cancel",
                 "btn-invite": "Send Invitation"
+            }
+        },
+        "workers": {
+            "tab-workers": "Worker Directory",
+            "title": "Worker Directory",
+            "register": {
+                "btn-add-worker": "+ New Worker",
+                "no-workers-found": "No workers registered yet.",
+                "description": "Passive directory of operational personnel. Used exclusively to link ID numbers within the Logistics Module."
             }
         }
     }
