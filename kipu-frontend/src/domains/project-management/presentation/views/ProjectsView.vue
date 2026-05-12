@@ -1,9 +1,8 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { allProjects } from '../../data/projectsStore';
-import { ProjectService } from '../../application/services/ProjectService';
+import { useProjectsStore } from '../../data/useProjectsStore';
 
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
@@ -14,6 +13,7 @@ import Select from 'primevue/select';
 
 const { t } = useI18n();
 const router = useRouter();
+const projectsStore = useProjectsStore();
 
 const showCreateModal = ref(false);
 const showSuccessModal = ref(false);
@@ -23,9 +23,9 @@ const searchQuery = ref('');
 const lastCreatedProjectId = ref(null);
 
 const statusOptions = computed(() => [
-  { label: t('project-management.create.statusOptions.planning'), value: 'Planificación' },
-  { label: t('project-management.create.statusOptions.progress-monitoring'), value: 'En ejecución' },
-  { label: t('project-management.create.statusOptions.paused'), value: 'Pausado' }
+  { label: t('projects.create.statusOptions.planning'), value: 'Planificación' },
+  { label: t('projects.create.statusOptions.execution'), value: 'En ejecución' },
+  { label: t('projects.create.statusOptions.paused'), value: 'Pausado' }
 ]);
 
 const initialForm = {
@@ -50,9 +50,13 @@ const isDirty = computed(() => {
 });
 
 const filteredProjects = computed(() => {
-  if (!searchQuery.value) return allProjects.value;
+  if (!searchQuery.value) return projectsStore.projects;
   const query = searchQuery.value.toLowerCase();
-  return allProjects.value.filter(p => p.name.toLowerCase().includes(query));
+  return projectsStore.projects.filter(p => p.name.toLowerCase().includes(query));
+});
+
+onMounted(() => {
+  projectsStore.loadProjects();
 });
 
 const handleCloseCreateModal = (visible) => {
@@ -74,20 +78,33 @@ const confirmDiscard = () => {
   showCreateModal.value = false;
 };
 
-const handleSave = () => {
-  const errorKey = ProjectService.validateDates(form.value.startDate, form.value.endDate);
-  if (errorKey) {
-    errorMessage.value = t(errorKey);
+const handleSave = async () => {
+  if (form.value.startDate && form.value.endDate && new Date(form.value.endDate) < new Date(form.value.startDate)) {
+    errorMessage.value = t('projects.create.errors.dateLogic');
     return;
   }
 
-  const newProject = ProjectService.create(form.value);
-  lastCreatedProjectId.value = newProject.id;
+  try {
+    const projectData = {
+      name: form.value.name,
+      location: form.value.location,
+      startDate: form.value.startDate?.toISOString().split('T')[0],
+      endDate: form.value.endDate?.toISOString().split('T')[0],
+      budget: form.value.budget,
+      image: form.value.imageUrl,
+      status: form.value.status
+    };
 
-  form.value = { ...initialForm };
-  errorMessage.value = '';
-  showCreateModal.value = false;
-  showSuccessModal.value = true;
+    const newProject = await projectsStore.addProject(projectData);
+    lastCreatedProjectId.value = newProject.id;
+
+    form.value = { ...initialForm };
+    errorMessage.value = '';
+    showCreateModal.value = false;
+    showSuccessModal.value = true;
+  } catch (error) {
+    errorMessage.value = 'Error creating project.';
+  }
 };
 
 const goToProject = () => {
@@ -104,18 +121,18 @@ const goToProject = () => {
 <template>
   <div class="projects-dashboard">
     <header class="stats-grid">
-      <div class="stat-card"><span>{{ t('project-management.stats.active') }}</span> <strong>{{ allProjects.length }}</strong></div>
-      <div class="stat-card"><span>{{ t('project-management.stats.average') }}</span> <strong>48%</strong></div>
-      <div class="stat-card"><span>{{ t('project-management.stats.rnc') }}</span> <strong class="red">12</strong></div>
-      <div class="stat-card"><span>{{ t('project-management.stats.total') }}</span> <strong>45</strong></div>
+      <div class="stat-card"><span>{{ t('projects.stats.active') }}</span> <strong>{{ projectsStore.totalProjects }}</strong></div>
+      <div class="stat-card"><span>{{ t('projects.stats.average') }}</span> <strong>48%</strong></div>
+      <div class="stat-card"><span>{{ t('projects.stats.rnc') }}</span> <strong class="red">12</strong></div>
+      <div class="stat-card"><span>{{ t('projects.stats.total') }}</span> <strong>45</strong></div>
     </header>
 
     <div class="actions-bar">
       <span class="p-input-icon-left search-container">
         <i class="pi pi-search" />
-        <InputText v-model="searchQuery" :placeholder="t('project-management.searchPlaceholder')" class="search-input" />
+        <InputText v-model="searchQuery" :placeholder="t('projects.searchPlaceholder')" class="search-input" />
       </span>
-      <Button :label="t('project-management.newProject')" icon="pi pi-plus" @click="showCreateModal = true" class="new-btn" />
+      <Button :label="t('projects.newProject')" icon="pi pi-plus" @click="showCreateModal = true" class="new-btn" />
     </div>
 
     <div class="projects-grid">
@@ -135,59 +152,59 @@ const goToProject = () => {
       </div>
     </div>
 
-    <Dialog :visible="showCreateModal" @update:visible="handleCloseCreateModal" modal :header="t('project-management.create.header')" :style="{ width: '450px' }">
+    <Dialog :visible="showCreateModal" @update:visible="handleCloseCreateModal" modal :header="t('projects.create.header')" :style="{ width: '450px' }">
       <div class="form-body">
         <div class="field">
-          <label>{{ t('project-management.create.name') }}</label>
+          <label>{{ t('projects.create.name') }}</label>
           <InputText v-model="form.name" fluid />
         </div>
         <div class="field">
-          <label>{{ t('project-management.create.location') }}</label>
+          <label>{{ t('projects.create.location') }}</label>
           <InputText v-model="form.location" fluid />
         </div>
         <div class="field">
-          <label>{{ t('project-management.create.imageUrl') }}</label>
+          <label>{{ t('projects.create.imageUrl') }}</label>
           <InputText v-model="form.imageUrl" fluid placeholder="https://..." />
         </div>
         <div class="field">
-          <label>{{ t('project-management.create.status') }}</label>
+          <label>{{ t('projects.create.status') }}</label>
           <Select v-model="form.status" :options="statusOptions" optionLabel="label" optionValue="value" fluid />
         </div>
         <div class="date-row">
           <div class="field">
-            <label>{{ t('project-management.create.start') }}</label>
+            <label>{{ t('projects.create.start') }}</label>
             <DatePicker v-model="form.startDate" showIcon fluid />
           </div>
           <div class="field">
-            <label>{{ t('project-management.create.end') }}</label>
+            <label>{{ t('projects.create.end') }}</label>
             <DatePicker v-model="form.endDate" showIcon fluid />
           </div>
         </div>
         <div class="field">
-          <label>{{ t('project-management.create.budget') }}</label>
+          <label>{{ t('projects.create.budget') }}</label>
           <InputText v-model="form.budget" type="number" fluid />
         </div>
         <Message v-if="errorMessage" severity="error" size="small">{{ errorMessage }}</Message>
       </div>
       <template #footer>
-        <Button :label="t('project-management.create.cancel')" severity="secondary" text @click="handleCloseCreateModal(false)" />
-        <Button :label="t('project-management.create.submit')" @click="handleSave" />
+        <Button :label="t('projects.create.cancel')" severity="secondary" text @click="handleCloseCreateModal(false)" />
+        <Button :label="t('projects.create.submit')" @click="handleSave" />
       </template>
     </Dialog>
 
     <Dialog v-model:visible="showSuccessModal" modal :style="{ width: '400px' }">
       <div class="success-body">
         <i class="pi pi-check-circle" />
-        <h2>{{ t('project-management.create.successHeader') }}</h2>
-        <Button :label="t('project-management.create.goToProject')" @click="goToProject" />
+        <h2>{{ t('projects.create.successHeader') }}</h2>
+        <Button :label="t('projects.create.goToProject')" @click="goToProject" />
       </div>
     </Dialog>
 
-    <Dialog v-model:visible="showDiscardModal" modal :header="t('project-management.create.discard.title')" :style="{ width: '350px' }">
-      <p style="margin: 0; color: #4b5563;">{{ t('project-management.create.discard.message') }}</p>
+    <Dialog v-model:visible="showDiscardModal" modal :header="t('projects.create.discard.title')" :style="{ width: '350px' }">
+      <p style="margin: 0; color: #4b5563;">{{ t('projects.create.discard.message') }}</p>
       <template #footer>
-        <Button :label="t('project-management.create.discard.continue')" text severity="secondary" @click="showDiscardModal = false" />
-        <Button :label="t('project-management.create.discard.confirm')" severity="danger" @click="confirmDiscard" />
+        <Button :label="t('projects.create.discard.continue')" text severity="secondary" @click="showDiscardModal = false" />
+        <Button :label="t('projects.create.discard.confirm')" severity="danger" @click="confirmDiscard" />
       </template>
     </Dialog>
   </div>

@@ -592,6 +592,75 @@
       "assignmentDetail": "En espera de llegada de camiones volquete para carga."
     }
   ],
+  "identities": [
+    {
+      "id": "id-001",
+      "name": "Carlos Medina",
+      "email": "carlos@kipu.pe",
+      "password": "12345678",
+      "role": "Gestor Operativo"
+    },
+    {
+      "id": "id-002",
+      "name": "Ana Torres",
+      "email": "ana@kipu.pe",
+      "password": "12345678",
+      "role": "Logística y Administración"
+    },
+    {
+      "id": "id-003",
+      "name": "Usuario Demo",
+      "email": "demo@kipu.pe",
+      "password": "12345678",
+      "role": "Gestor Operativo"
+    },
+    {
+      "name": "Mario Perez",
+      "email": "kipu4@hotmail.com",
+      "password": "kipu1234",
+      "role": "Logística y Administración",
+      "id": "zLRgEqI"
+    },
+    {
+      "name": "Mario Perez",
+      "email": "kipu0@hotmail.com",
+      "password": "kipu1234",
+      "role": "Gestor Operativo",
+      "id": "PjaiuHE"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-01",
+      "name": "Edificio Los Alisos",
+      "description": "Edificio residencial de 12 pisos con estacionamiento subterráneo.",
+      "location": "Lima, Perú",
+      "startDate": "2026-01-01",
+      "endDate": "2026-12-31",
+      "budget": 1500000,
+      "progress": 45,
+      "status": "En ejecución",
+      "image": "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?q=80&w=500",
+      "members": 8,
+      "rnc": 3,
+      "pending": 5
+    },
+    {
+      "id": "proj-02",
+      "name": "Centro Comercial Plaza Norte",
+      "description": "Centro comercial de 3 niveles con zona de entretenimiento.",
+      "location": "Trujillo, Perú",
+      "startDate": "2026-03-15",
+      "endDate": "2027-06-30",
+      "budget": 4200000,
+      "progress": 12,
+      "status": "Planificación",
+      "image": "https://images.unsplash.com/photo-1503387762-592dea58ef23?q=80&w=500",
+      "members": 15,
+      "rnc": 9,
+      "pending": 8
+    }
+  ],
   "team-users": [
     {
       "id": "us-01",
