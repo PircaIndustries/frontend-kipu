@@ -1,16 +1,32 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import teamRoutes from "../domains/team/router/team-router.js";
+import teamRoutes from '../domains/team/router/team-router.js';
+
 const routes = [
     ...teamRoutes,
     {
         path: '/',
-        redirect: '/dashboard'
+        redirect: '/login'
     },
+    // ── Identity routes (no sidebar) ──
+    {
+        path: '/login',
+        name: 'Login',
+        component: () => import('@/domains/identity/presentation/views/LoginView.vue'),
+        meta: { hideSidebar: true, title: 'Login' }
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        component: () => import('@/domains/identity/presentation/views/RegisterView.vue'),
+        meta: { hideSidebar: true, title: 'Register' }
+    },
+    // ── Dashboard / Projects ──
     {
         path: '/dashboard',
         name: 'Dashboard',
         component: () => import('@/domains/project-management/presentation/views/ProjectsView.vue')
     },
+    // ── Progress Monitoring ──
     {
         path: '/advances',
         component: () => import('@/domains/progress-monitoring/presentation/layouts/AdvancesLayout.vue'),
