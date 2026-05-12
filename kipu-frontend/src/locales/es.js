@@ -144,6 +144,8 @@ export default {
         "tab-inventory": "Inventario",
         "tab-requests": "Solicitudes",
         "tab-suppliers": "Proveedores",
+        "tab-waste": "Mermas",
+        "tab-machinery": "Maquinaria",
         "tab-waste": "Mermas"
     },
     "team": {

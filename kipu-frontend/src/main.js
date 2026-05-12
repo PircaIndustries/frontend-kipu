@@ -11,7 +11,9 @@ import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
 import Ripple from 'primevue/ripple';
+import Card from 'primevue/card';
 import { createPinia } from 'pinia';
+import AutoComplete from 'primevue/autocomplete';
 
 // Styles
 import 'primeicons/primeicons.css';
@@ -23,7 +25,10 @@ const pinia = createPinia();
 
 app.use(PrimeVue, {
     theme: {
-        preset: Aura
+        preset: Aura,
+        options: {
+            darkModeSelector: '.app-dark'
+        }
     }
 });
 app.use(pinia);
@@ -35,6 +40,7 @@ app.component('pv-tablist', TabList);
 app.component('pv-tab', Tab);
 app.component('pv-tabpanels', TabPanels);
 app.component('pv-tabpanel', TabPanel);
-
+app.component('pv-card', Card);
+app.component('pv-autocomplete', AutoComplete);
 app.directive('ripple', Ripple);
 app.mount('#app');

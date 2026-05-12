@@ -40,6 +40,5 @@ const tabs = [
   </div>
   <router-view />
 </template>
-
 <style scoped>
 </style>
