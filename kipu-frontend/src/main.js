@@ -21,12 +21,12 @@ import Select from 'primevue/select';
 import DatePicker from 'primevue/datepicker';
 import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
-import Toast from 'primevue/toast';
 import Message from 'primevue/message';
-import ToastService from 'primevue/toastservice';
 // Styles
 import 'primeicons/primeicons.css';
 import './style.css';
+import './style.css';
+import {Toast, ToastService} from "primevue";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -45,6 +45,7 @@ app.use(ConfirmationService);
 app.use(router);
 app.use(i18n);
 app.use(ToastService);
+app.component('Toast', Toast)
 app.component('pv-tabs', Tabs);
 app.component('pv-tablist', TabList);
 app.component('pv-tab', Tab);
