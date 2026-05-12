@@ -33,7 +33,7 @@ const useRequestStore = defineStore('request', () => {
      */
     const categories = ref([]);
     /**
-     * List of Supplier Offer entities.
+     * List of Supplier Offer entities (used for request enrichment).
      * @type {import('vue').Ref<SupplierOfferEntity[]>}
      */
     const supplierOffers = ref([]);
@@ -58,7 +58,7 @@ const useRequestStore = defineStore('request', () => {
      */
     const categoriesLoaded = ref(false);
     /**
-     * Whether Supplier Offer have been loaded from the API.
+     * Whether Supplier Offers have been loaded from the API.
      * @type {import('vue').Ref<boolean>}
      */
     const supplierOffersLoaded = ref(false);
@@ -234,27 +234,15 @@ const useRequestStore = defineStore('request', () => {
     // ── RETURN ─────────────────────────────────────────────────────────────
 
     return {
-        // raw
         requests, materials, categories, supplierOffers, errors,
         requestsLoaded, materialsLoaded, categoriesLoaded, supplierOffersLoaded,
-        // enriched view
         requestDetailsView,
-        // filters
         filteredRequests,
-        selectedRequestFilter,
-        pendingRequestFilter,
-        approvedRequestFilter, refusedRequestFilter,
-        // filter actions
+        selectedRequestFilter, pendingRequestFilter, approvedRequestFilter, refusedRequestFilter,
         setSelectedRequestFilter,
         togglePendingRequestFilter, toggleApprovedRequestFilter, toggleRefusedRequestFilter,
-        // loaders
-        fetchMaterials,
-        fetchCategories,
-        fetchSupplierOffers,
-        fetchRequests,
-        // crud
-        createRequest,
-        updateRequest,
+        fetchMaterials, fetchCategories, fetchSupplierOffers, fetchRequests,
+        createRequest, updateRequest,
     };
 });
 

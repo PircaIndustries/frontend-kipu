@@ -79,13 +79,10 @@ const requestFields = computed(() => [
   >
     <template #content>
       <div class="grid grid-cols-2 gap-4 mt-4">
-        <!-- Propósito -->
         <div class="border border-neutral-border rounded-lg p-4 bg-neutral-bg flex flex-col gap-2">
           <p class="font-bold text-primary">{{ t('request.card.purpose.title') }}</p>
           <p class="text-sm text-primary">{{ request.purpose }}</p>
         </div>
-
-        <!-- Presupuesto -->
         <div class="border border-neutral-border rounded-lg p-4 bg-neutral-bg flex flex-col gap-2">
           <p class="font-bold text-primary">{{ t('request.card.budget-verification.title') }}</p>
           <div class="flex justify-between text-sm text-primary">

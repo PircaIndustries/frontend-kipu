@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, computed } from 'vue'
+import {onMounted, computed, ref} from 'vue'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import useRequestStore from '@/domains/logistics/application/requests.store.js'
@@ -7,7 +7,8 @@ import RequestList from '@/domains/logistics/presentation/components/requests/re
 import FilterMenu from "@/shared/presentation/components/FilterMenu.vue"
 import FilterSummaryBar from "@/shared/presentation/components/FilterSummaryBar.vue"
 import { useRouter } from 'vue-router'
-
+import RequestDetailDialog from "@/domains/logistics/presentation/components/requests/request-detail-dialog.vue";
+import RequestModifyDialog from "@/domains/logistics/presentation/components/requests/form/request-modify-dialog.vue";
 const { t } = useI18n()
 const requestStore = useRequestStore()
 const router = useRouter()
@@ -79,6 +80,20 @@ const statusFilters = computed(() => [
     onClick: () => requestStore.toggleRefusedRequestFilter()
   }
 ])
+
+const showDetailDialog = ref(false)
+const selectedRequest = ref(null)
+const handleDetail = (request) => {
+  selectedRequest.value = request
+  showDetailDialog.value = true
+}
+const showModifyDialog = ref(false)
+const selectedModifyRequest = ref(null)
+
+const handleModify = (request) => {
+  selectedModifyRequest.value = request
+  showModifyDialog.value = true
+}
 </script>
 
 <template>
@@ -104,6 +119,8 @@ const statusFilters = computed(() => [
             :requests="filteredRequests"
             :available-budget="0"
             :total-budget="0"
+            @detail="handleDetail"
+            @modify="handleModify"
         />
       </div>
 
@@ -120,5 +137,14 @@ const statusFilters = computed(() => [
         />
       </aside>
     </div>
+    <RequestDetailDialog
+        v-model:visible="showDetailDialog"
+        :request="selectedRequest"
+    />
+    <RequestModifyDialog
+        v-model:visible="showModifyDialog"
+        :request="selectedModifyRequest"
+        @modified="requestStore.fetchRequests()"
+    />
   </section>
 </template>

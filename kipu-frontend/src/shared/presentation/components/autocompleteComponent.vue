@@ -6,7 +6,8 @@ const props = defineProps({
   options: { type: Array, required: true },
   placeholder: { type: String, default: '' },
   disabled: { type: Boolean, default: false },
-  returnObject: { type: Boolean, default: true }
+  returnObject: { type: Boolean, default: true },
+  invalid: { type: Boolean, default: false }
 })
 
 const model = defineModel()
@@ -44,6 +45,7 @@ const search = (event) => {
       @complete="search"
       :placeholder="placeholder"
       :disabled="disabled"
+      :invalid="invalid"
       inputClass="w-full bg-white border border-neutral-border/30 rounded-lg px-3 py-2.5
                 text-sm text-primary placeholder:text-neutral-border/70
                 focus:border-accent/60 focus:shadow-sm transition-all duration-200"

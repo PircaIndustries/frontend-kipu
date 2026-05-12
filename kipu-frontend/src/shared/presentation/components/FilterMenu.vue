@@ -1,22 +1,14 @@
 <script setup>
 defineProps({
-  /** Título de la sección de filtros (opcional) */
   title: {
     type: String,
     default: ''
   },
-  /**
-   * Array de opciones de filtro.
-   * Cada objeto debe tener:
-   *  - key: string (identificador único del filtro)
-   *  - label: string (texto a mostrar)
-   */
   items: {
     type: Array,
     required: true,
     validator: (v) => v.every(item => item.key && item.label)
   },
-  /** Clave del filtro seleccionado actualmente */
   modelValue: {
     type: String,
     default: ''

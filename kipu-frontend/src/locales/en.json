@@ -134,10 +134,174 @@
     "management": "Works Management",
         "cancel": "Cancel",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "error": "Error"
 },
     "roles": {
     "resident": "Works Resident"
+},
+    "general": {
+    "summary": "Summary"
+},
+    "inventory": {
+    "title": "Inventory",
+        "summary": {
+        "registered-materials": "REGISTERED MATERIALS",
+            "critical-stock-alert": "CRITICAL STOCK ALERT"
+    },
+        "filters": {
+        "category": "FILTER BY CATEGORY"
+    },
+        "search": {
+        "placeholder": "Search by inventory ID"
+    },
+        "empty": {
+        "title": "No results",
+            "description": "Try adjusting the filters"
+    },
+        "category": {
+        "placeholder": "Select category"
+    },
+        "card": {
+        "equipment": "Equipment",
+            "min-limit": "Min. Limit",
+            "current-stock": "Current Stock"
+    },
+        "low-stock": "Low Stock"
+},
+    "request": {
+    "title": "Material Requests",
+        "button-create": "New Request",
+        "filters": {
+        "title": "Filters",
+            "all": "All",
+            "within-budget": "Within Budget",
+            "exceed-budget": "Exceeds Budget",
+            "expire-48h": "Expires in 48h"
+    },
+        "summary": {
+        "pending": "Pending",
+            "approved-today": "Approved Today",
+            "rejected": "Rejected"
+    },
+        "card": {
+        "header": {
+            "request-date": "Request Date"
+        },
+        "fields": {
+            "material": "Material",
+                "requester": "Requester",
+                "budget-line": "Budget Line",
+                "required-date": "Required Date",
+                "in-days": "{days} days remaining",
+                "time-exceeded": "Time exceeded"
+        },
+            "purpose": {
+            "title": "Purpose"
+        },
+            "budget-verification": {
+            "title": "Budget Verification",
+                "requested-amount": "Requested Amount",
+                "available-budget": "Available Budget",
+                "status": "Status"
+        },
+            "status": {
+            "within-budget": "Within Budget",
+                "out-budget": "Out of Budget",
+                "approved": "Approved",
+                "pending": "Pending",
+                "refused": "Refused"
+        },
+            "actions": {
+            "modify": "Modify",
+                "view-details": "View Details"
+        }
+    },
+        "modify": {
+        "title": "Edit Request",
+            "actions": {
+            "cancel": "Cancel",
+                "submit": "Save Changes"
+        },
+            "success": {
+            "summary": "Updated",
+                "message": "Request updated successfully"
+        }
+    },
+        "detail": {
+        "total-investment": "TOTAL INVESTMENT",
+            "remaining-days": "{days} days remaining",
+            "per-unit": "/unit",
+            "budget-validated": "Budget Validated",
+            "btn-close": "Close",
+            "section": {
+            "material-info": "Material Information",
+                "logistics": "Logistics"
+        }
+    },
+        "create": {
+        "title": "New Material Request",
+            "subtitle": "Fill in the details to request materials for your project.",
+            "fields": {
+            "category": "Category",
+                "specific-material": "Specific Material",
+                "suggested-supplier": "Suggested Supplier",
+                "quantity": "Quantity",
+                "unit": "Unit",
+                "budget-line": "Budget Line",
+                "priority": "Priority",
+                "required-date": "Required Date",
+                "delivery-location": "Delivery Location",
+                "purpose": "Purpose",
+                "additional-notes": "Additional Notes",
+                "attachments": "Attachments"
+        },
+            "placeholders": {
+            "select": "Select...",
+                "select-category-first": "Select a category first",
+                "select-material-first": "Select a material first",
+                "quantity": "Enter quantity",
+                "unit-empty": "Unit will appear here",
+                "date": "Select a date",
+                "location": "e.g. Warehouse A",
+                "purpose": "Describe the reason for this request",
+                "additional-notes": "Any additional information",
+                "dropzone": "Drag & drop files here or click to upload",
+                "dropzone-hint": "Accepted formats: PDF, images",
+                "requested-by": "Current user"
+        },
+            "priority": {
+            "low": "Low",
+                "medium": "Medium",
+                "high": "High",
+                "critical": "Critical"
+        },
+            "validation": {
+            "category-required": "Category is required",
+                "material-required": "Material is required",
+                "supplier-required": "Supplier is required",
+                "budget-line-required": "Budget line is required",
+                "quantity-required": "Minimum quantity is 1",
+                "date-required": "Required date is required",
+                "location-required": "Delivery location is required",
+                "purpose-required": "Purpose is required",
+                "check-form": "Please review the form fields"
+        },
+            "budget-verification": {
+            "title": "BUDGET VERIFICATION",
+                "item-budget": "ITEM BUDGET",
+                "executed": "EXECUTED",
+                "available": "AVAILABLE"
+        },
+            "actions": {
+            "cancel": "Cancel",
+                "submit": "Submit Request"
+        },
+            "success": {
+            "summary": "Success",
+                "message": "Request created successfully"
+        }
+    }
 },
     "logistics-tabs": {
     "tab-inventory": "Inventory",
@@ -201,7 +365,7 @@
         "tab-workers": "Worker Directory",
             "title": "Worker Directory",
             "register": {
-            "btn-add-worker": "+ New Worker",
+            "btn-add-worker": "New Worker",
                 "no-workers-found": "No workers registered yet.",
                 "description": "Passive directory of operational personnel. Used exclusively to link ID numbers within the Logistics Module."
         }
