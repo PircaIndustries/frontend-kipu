@@ -67,6 +67,7 @@
         "err_password_min": "Debe tener al menos 8 caracteres.",
         "err_role_required": "Debes seleccionar un rol.",
         "err_password_mismatch": "Las contraseñas no coinciden.",
+        "err_invalid_credentials": "El correo electrónico o la contraseña son incorrectos.",
         "hint_checking_email": "Verificando disponibilidad..."
     },
     "projects_dashboard": {

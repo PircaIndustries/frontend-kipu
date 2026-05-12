@@ -620,6 +620,13 @@
       "password": "kipu1234",
       "role": "Logística y Administración",
       "id": "zLRgEqI"
+    },
+    {
+      "name": "Mario Perez",
+      "email": "kipu0@hotmail.com",
+      "password": "kipu1234",
+      "role": "Gestor Operativo",
+      "id": "PjaiuHE"
     }
   ],
   "projects": [

@@ -1,14 +1,12 @@
 <script setup>
 /**
  * LoginView — User authentication page.
- * Provides email/password login with reactive validation.
- * Follows the same visual structure as RegisterView.
+ * Follows the same compact card layout as all identity views.
  */
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { identityApi } from '../../infrastructure/identity.api';
-
 import AuthBanner from '@/shared/presentation/components/AuthBanner.vue';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
@@ -19,20 +17,14 @@ import Divider from 'primevue/divider';
 const { t } = useI18n();
 const router = useRouter();
 
-// ── Form state ──
 const email = ref('');
 const password = ref('');
 const rememberMe = ref(false);
 const loginError = ref('');
 const isSubmitting = ref(false);
 
-// ── Validation state ──
-const touched = ref({
-    email: false,
-    password: false
-});
+const touched = ref({ email: false, password: false });
 
-// ── Validation computed properties ──
 const emailError = computed(() => {
     if (!touched.value.email) return '';
     if (!email.value.trim()) return t('identity.err_email_required');
@@ -47,44 +39,29 @@ const passwordError = computed(() => {
     return '';
 });
 
-const isFormValid = computed(() => {
-    return email.value.trim() &&
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value) &&
-        password.value &&
-        !isSubmitting.value;
-});
-
-// ── Form submission ──
-function markAllTouched() {
-    touched.value = {
-        email: true,
-        password: true
-    };
-}
+const isFormValid = computed(() =>
+    email.value.trim() &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value) &&
+    password.value &&
+    !isSubmitting.value
+);
 
 async function onSubmit() {
-    markAllTouched();
+    touched.value = { email: true, password: true };
     loginError.value = '';
-
     if (!isFormValid.value) return;
 
     isSubmitting.value = true;
-
     try {
-        const user = await identityApi.login({
-            email: email.value,
-            password: password.value
-        });
-
+        const user = await identityApi.login({ email: email.value, password: password.value });
         if (user) {
             localStorage.setItem('currentUser', JSON.stringify(user));
             router.push('/dashboard');
         } else {
-            loginError.value = t('identity.err_email_invalid');
+            loginError.value = t('identity.err_invalid_credentials');
         }
-    } catch (error) {
-        console.error('Login failed:', error);
-        loginError.value = t('identity.err_email_invalid');
+    } catch {
+        loginError.value = t('identity.err_invalid_credentials');
     } finally {
         isSubmitting.value = false;
     }
@@ -92,259 +69,253 @@ async function onSubmit() {
 </script>
 
 <template>
-    <div class="login-page">
-        <div class="login-card">
+    <div class="auth-page">
+        <div class="auth-card">
             <AuthBanner />
 
-            <div class="login-form-container">
-                <h2 class="login-form-container__title">{{ t('identity.login_title') }}</h2>
-                <p class="login-form-container__subtitle">{{ t('identity.login_description') }}</p>
+            <div class="auth-panel">
+                <div class="auth-panel__body">
+                    <h2 class="auth-panel__title">{{ t('identity.login_title') }}</h2>
+                    <p class="auth-panel__subtitle">{{ t('identity.login_description') }}</p>
 
-                <form class="login-form" @submit.prevent="onSubmit">
-                    <!-- Email -->
-                    <div class="login-form__field">
-                        <label for="login-email">{{ t('identity.email') }}</label>
-                        <InputText
-                            id="login-email"
-                            v-model="email"
-                            type="email"
-                            :placeholder="t('identity.email_placeholder')"
-                            fluid
-                            :invalid="!!emailError"
-                            @blur="touched.email = true"
-                        />
-                        <small v-if="emailError" class="login-form__error">{{ emailError }}</small>
-                    </div>
-
-                    <!-- Password -->
-                    <div class="login-form__field">
-                        <label for="login-password">{{ t('identity.password') }}</label>
-                        <Password
-                            id="login-password"
-                            v-model="password"
-                            :placeholder="t('identity.password_placeholder')"
-                            :feedback="false"
-                            toggleMask
-                            fluid
-                            :invalid="!!passwordError"
-                            @blur="touched.password = true"
-                        />
-                        <small v-if="passwordError" class="login-form__error">{{ passwordError }}</small>
-                    </div>
-
-                    <!-- Remember me + Forgot password -->
-                    <div class="login-form__options">
-                        <div class="login-form__checkbox-row">
-                            <Checkbox v-model="rememberMe" inputId="login-remember" :binary="true" />
-                            <label for="login-remember" class="login-form__checkbox-label">
-                                {{ t('identity.remember_me') }}
-                            </label>
+                    <form class="auth-form" @submit.prevent="onSubmit">
+                        <!-- Email -->
+                        <div class="auth-form__field">
+                            <label for="login-email">{{ t('identity.email') }}</label>
+                            <InputText
+                                id="login-email"
+                                v-model="email"
+                                type="email"
+                                :placeholder="t('identity.email_placeholder')"
+                                fluid
+                                :invalid="!!emailError"
+                                @blur="touched.email = true"
+                            />
+                            <small v-if="emailError" class="auth-form__error">{{ emailError }}</small>
                         </div>
-                        <router-link to="/forgot-password" class="login-form__link login-form__link--forgot">
-                            {{ t('identity.forgot_password') }}
-                        </router-link>
-                    </div>
 
-                    <!-- Login error message -->
-                    <small v-if="loginError" class="login-form__error login-form__error--general">
-                        {{ loginError }}
-                    </small>
+                        <!-- Password -->
+                        <div class="auth-form__field">
+                            <label for="login-password">{{ t('identity.password') }}</label>
+                            <Password
+                                id="login-password"
+                                v-model="password"
+                                :feedback="false"
+                                toggleMask
+                                fluid
+                                :invalid="!!passwordError"
+                                @blur="touched.password = true"
+                            />
+                            <small v-if="passwordError" class="auth-form__error">{{ passwordError }}</small>
+                        </div>
 
-                    <!-- Submit -->
-                    <Button
-                        type="submit"
-                        :label="t('identity.login_button')"
-                        :disabled="!isFormValid"
-                        :loading="isSubmitting"
-                        class="login-form__submit"
-                    />
+                        <!-- Remember me + Forgot -->
+                        <div class="auth-form__options">
+                            <div class="auth-form__checkbox-row">
+                                <Checkbox v-model="rememberMe" inputId="login-remember" :binary="true" />
+                                <label for="login-remember" class="auth-form__checkbox-label">
+                                    {{ t('identity.remember_me') }}
+                                </label>
+                            </div>
+                            <router-link to="/forgot-password" class="auth-form__link auth-form__link--small">
+                                {{ t('identity.forgot_password') }}
+                            </router-link>
+                        </div>
 
-                    <!-- Divider -->
-                    <div class="login-form__divider">
-                        <Divider />
-                        <span class="login-form__divider-text">{{ t('identity.continue') }}</span>
-                        <Divider />
-                    </div>
+                        <!-- General error -->
+                        <small v-if="loginError" class="auth-form__error auth-form__error--center">{{ loginError }}</small>
 
-                    <!-- Social buttons -->
-                    <div class="login-form__social">
-                        <Button type="button" outlined class="login-form__social-btn">
-                            <span class="login-form__social-icon">G</span> Google
-                        </Button>
-                        <Button type="button" outlined class="login-form__social-btn">
-                            <span class="login-form__social-icon">M</span> Microsoft
-                        </Button>
-                    </div>
+                        <!-- Submit -->
+                        <Button
+                            type="submit"
+                            :label="t('identity.login_button')"
+                            :disabled="!isFormValid"
+                            :loading="isSubmitting"
+                            class="auth-form__submit"
+                        />
 
-                    <!-- Register link -->
-                    <p class="login-form__footer-text">
-                        {{ t('identity.no_account') }}
-                        <router-link to="/register" class="login-form__link">
-                            {{ t('identity.register_link') }}
-                        </router-link>
-                    </p>
-                </form>
+                        <!-- Divider -->
+                        <div class="auth-form__divider-row">
+                            <Divider />
+                            <span class="auth-form__divider-text">{{ t('identity.continue') }}</span>
+                            <Divider />
+                        </div>
+
+                        <!-- Social buttons -->
+                        <div class="auth-form__social">
+                            <Button type="button" outlined class="auth-form__social-btn">
+                                <span class="auth-form__social-letter">G</span> Google
+                            </Button>
+                            <Button type="button" outlined class="auth-form__social-btn">
+                                <span class="auth-form__social-letter">M</span> Microsoft
+                            </Button>
+                        </div>
+
+                        <!-- Register link -->
+                        <p class="auth-form__footer">
+                            {{ t('identity.no_account') }}
+                            <router-link to="/register" class="auth-form__link">{{ t('identity.register_link') }}</router-link>
+                        </p>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-.login-page {
+.auth-page {
     min-height: 100vh;
-    background-color: #1a252f;
+    background-color: #1e2a38;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+    padding: 1.5rem;
     font-family: 'Inter', sans-serif;
 }
 
-.login-card {
-    background: white;
-    border-radius: 1rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+.auth-card {
     display: flex;
-    flex-direction: row;
     width: 100%;
-    max-width: 64rem;
+    max-width: 52rem;
+    min-height: 32rem;
+    border-radius: 0.75rem;
     overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
-.login-form-container {
+.auth-panel {
     width: 50%;
-    padding: 3rem;
-    background: #f8f9fa;
+    background: #ffffff;
     display: flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: center;
 }
 
-.login-form-container__title {
-    font-size: 1.75rem;
+.auth-panel__body {
+    width: 100%;
+    max-width: 22rem;
+    padding: 3rem 2.5rem;
+}
+
+.auth-panel__title {
+    font-size: 1.5rem;
     font-weight: 700;
     color: #212529;
     margin: 0 0 0.25rem;
 }
 
-.login-form-container__subtitle {
+.auth-panel__subtitle {
+    font-size: 0.82rem;
     color: #6c757d;
-    margin: 0 0 2rem;
-    font-size: 0.875rem;
+    margin: 0 0 1.75rem;
 }
 
-.login-form {
+.auth-form {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1rem;
 }
 
-.login-form__field {
+.auth-form__field {
     display: flex;
     flex-direction: column;
     gap: 0.375rem;
 }
 
-.login-form__field label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #34495e;
+.auth-form__field label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #495057;
 }
 
-.login-form__error {
+.auth-form__error {
     color: #e74c3c;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
 }
 
-.login-form__error--general {
+.auth-form__error--center {
     text-align: center;
-    font-size: 0.8rem;
 }
 
-.login-form__options {
+.auth-form__options {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.login-form__checkbox-row {
+.auth-form__checkbox-row {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.login-form__checkbox-label {
-    font-size: 0.85rem;
+.auth-form__checkbox-label {
+    font-size: 0.82rem;
     color: #4b5563;
     cursor: pointer;
 }
 
-.login-form__link {
-    color: #3498db;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.login-form__link:hover {
-    text-decoration: underline;
-}
-
-.login-form__link--forgot {
-    font-size: 0.8rem;
-}
-
-.login-form__submit {
+.auth-form__submit {
     width: 100%;
-    padding: 0.875rem;
-    font-size: 1rem;
-    font-weight: 600;
+    margin-top: 0.25rem;
 }
 
-.login-form__divider {
+.auth-form__divider-row {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     margin: 0.25rem 0;
 }
 
-.login-form__divider-text {
-    font-size: 0.75rem;
+.auth-form__divider-text {
+    font-size: 0.72rem;
     color: #9ca3af;
     white-space: nowrap;
 }
 
-.login-form__social {
+.auth-form__social {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
-.login-form__social-btn {
+.auth-form__social-btn {
     flex: 1;
-    padding: 0.75rem;
     justify-content: center;
+    font-size: 0.82rem;
+    gap: 0.375rem;
 }
 
-.login-form__social-icon {
+.auth-form__social-letter {
     font-weight: 700;
-    margin-right: 0.5rem;
     color: #374151;
 }
 
-.login-form__footer-text {
+.auth-form__footer {
     text-align: center;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: #6c757d;
-    margin-top: 0.25rem;
+    margin: 0;
 }
 
-@media (max-width: 768px) {
-    .login-card {
-        flex-direction: column;
-    }
+.auth-form__link {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.82rem;
+}
 
-    .login-form-container {
-        width: 100%;
-        padding: 2rem;
-    }
+.auth-form__link--small {
+    font-size: 0.78rem;
+}
+
+.auth-form__link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 680px) {
+    .auth-card { flex-direction: column; }
+    .auth-panel { width: 100%; }
+    .auth-panel__body { padding: 2rem 1.5rem; }
 }
 </style>

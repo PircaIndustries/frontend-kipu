@@ -67,6 +67,7 @@
         "err_password_min": "Must be at least 8 characters.",
         "err_role_required": "You must select a role.",
         "err_password_mismatch": "Passwords do not match.",
+        "err_invalid_credentials": "The email address or password is incorrect.",
         "hint_checking_email": "Verifying availability..."
     },
     "logout": {

@@ -20,6 +20,24 @@ const routes = [
         component: () => import('@/domains/identity/presentation/views/RegisterView.vue'),
         meta: { hideSidebar: true, title: 'Register' }
     },
+    {
+        path: '/forgot-password',
+        name: 'ForgotPassword',
+        component: () => import('@/domains/identity/presentation/views/ForgotPasswordView.vue'),
+        meta: { hideSidebar: true, title: 'Forgot Password' }
+    },
+    {
+        path: '/reset-password',
+        name: 'ResetPassword',
+        component: () => import('@/domains/identity/presentation/views/ResetPasswordView.vue'),
+        meta: { hideSidebar: true, title: 'Reset Password' }
+    },
+    {
+        path: '/verification',
+        name: 'Verification',
+        component: () => import('@/domains/identity/presentation/views/VerificationView.vue'),
+        meta: { hideSidebar: true, title: 'Verification' }
+    },
     // ── Dashboard / Projects ──
     {
         path: '/dashboard',
