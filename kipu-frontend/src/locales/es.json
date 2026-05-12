@@ -70,6 +70,11 @@
         "err_invalid_credentials": "El correo electrónico o la contraseña son incorrectos.",
         "hint_checking_email": "Verificando disponibilidad..."
     },
+    "logout": {
+        "title": "Sesión cerrada",
+        "description": "Se ha cerrado la sesión correctamente.",
+        "continue": "Continuar"
+    },
     "projects_dashboard": {
         "title": "Mis Proyectos",
         "active": "Activos",
@@ -126,11 +131,6 @@
         "delete_prompt_2": "para confirmar:",
         "delete_placeholder": "Nombre del proyecto",
         "delete_submit": "Entiendo las consecuencias, eliminar proyecto"
-    },
-    "logout": {
-        "title": "Sesión cerrada",
-        "description": "Se ha cerrado la sesión correctamente.",
-        "continue": "Continuar"
     },
     "navigation": {
         "dashboard": "Dashboard",
@@ -280,6 +280,7 @@
     },
     "team": {
         "users": {
+            "tab-users": "Usuarios del Sistema",
             "title": "Gestión de Usuarios",
             "btn-invite": "Enviar Invitación",
             "stats": {
@@ -331,10 +332,39 @@
         "workers": {
             "tab-workers": "Directorio de Obreros",
             "title": "Directorio de Obreros",
+            "search-placeholder": "Buscar por DNI, nombre o cargo...",
             "register": {
                 "btn-add-worker": "+ Nuevo Obrero",
                 "no-workers-found": "No se encontraron trabajadores registrados.",
-                "description": "Directorio pasivo del personal operario. Se utiliza exclusivamente para asociar su DNI en el Módulo Logístico."
+                "description": "Directorio pasivo del personal operario. Se utiliza exclusivamente para asociar su DNI en el Módulo Logístico.",
+                "tab-dni": "Documento (DNI)",
+                "tab-name": "Nombres Completos",
+                "tab-role": "Cargo / Cuadrilla",
+                "tab-status": "Estado en Obra",
+                "tab-tools": "Herramientas Asignadas",
+                "tab-action": "Acción",
+                "tab-status-active": "ACTIVO",
+                "tab-status-inactive": "INACTIVO",
+                "tab-btn-disable": "Deshabilitar",
+                "tab-btn-enable": "Habilitar",
+                "worker-count": "trabajadores",
+                "flow-title": "Flujo de Herramientas",
+                "flow-description": "El personal registrado en esta lista no cuenta con credenciales de acceso al sistema Kipu. Este directorio es administrado exclusivamente para que el área de Logística y Almacén pueda buscar el DNI del trabajador al momento de registrar préstamos temporales o asignaciones permanentes de maquinarias en obra.",
+                "go-to-materials": "Ir a Módulo Materiales"
+            },
+            "add-modal": {
+                "title": "Registrar Nuevo Obrero",
+                "dni-label": "Documento (DNI)",
+                "dni-placeholder": "8 dígitos",
+                "name-label": "Nombres Completos",
+                "name-placeholder": "Ejm. Juan Perez",
+                "role-label": "Cargo / Cuadrilla",
+                "role-placeholder": "Ejm. Operario de Albañilería",
+                "tools-title": "Herramientas Asignadas",
+                "tools-add": "+ Añadir Herramienta",
+                "tools-placeholder": "Nombre del equipo...",
+                "btn-save": "Guardar Obrero",
+                "btn-cancel": "Cancelar"
             }
         }
     }

@@ -673,14 +673,14 @@
       "id": "us-02",
       "fullName": "Ana Torres",
       "email": "ana.torres@pirca.com",
-      "isActive": true,
+      "isActive": false,
       "role": "Ingeniero"
     },
     {
       "id": "us-03",
       "fullName": "Juan Pérez",
       "email": "jperez.logistica@pirca.com",
-      "isActive": true,
+      "isActive": false,
       "role": "Gestor"
     },
     {
@@ -703,6 +703,48 @@
       "email": "waranza@gmail.com",
       "isActive": true,
       "role": "Logistica"
+    }
+  ],
+  "team-workers": [
+    {
+      "id": "wkr-001",
+      "dni": "70123456",
+      "fullName": "Carlos Ruiz",
+      "role": "Capataz - Estructuras",
+      "isActive": false,
+      "assignedTools": [
+        "Excavadora CAT 320",
+        "Mezcladora de Concreto"
+      ]
+    },
+    {
+      "id": "wkr-002",
+      "dni": "45678901",
+      "fullName": "Miguel Santos",
+      "role": "Operario - Vaciado",
+      "isActive": false,
+      "assignedTools": [
+        "Vibrador de Concreto"
+      ]
+    },
+    {
+      "id": "wkr-003",
+      "dni": "10293847",
+      "fullName": "Luis Gómez",
+      "role": "Peón",
+      "isActive": true,
+      "assignedTools": []
+    },
+    {
+      "id": "wkr-1778624246549",
+      "dni": "9823311",
+      "fullName": "Juan Perez",
+      "role": "Operario de Cuadrilla",
+      "isActive": true,
+      "assignedTools": [
+        "Pico",
+        "Pala"
+      ]
     }
   ]
 }
