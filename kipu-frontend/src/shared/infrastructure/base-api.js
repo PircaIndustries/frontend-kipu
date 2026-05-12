@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiURL = import.meta.env.BASE_URL;
+const apiURL = import.meta.env.VITE_API_KIPU_BASEURL;
 
 /**
  * @class BaseApi

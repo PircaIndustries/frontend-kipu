@@ -25,4 +25,6 @@
 <script setup>
 import Button from 'primevue/button';
 import Card from 'primevue/card';
+// ❌ Elimina esta línea incorrecta:
+// import {$t} from "@primevue/themes";
 </script>

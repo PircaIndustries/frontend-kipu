@@ -660,5 +660,49 @@
       "rnc": 9,
       "pending": 8
     }
+  ],
+  "team-users": [
+    {
+      "id": "us-01",
+      "fullName": "Admin Demo",
+      "email": "admin@pirca.com",
+      "isActive": true,
+      "role": "Administrador"
+    },
+    {
+      "id": "us-02",
+      "fullName": "Ana Torres",
+      "email": "ana.torres@pirca.com",
+      "isActive": true,
+      "role": "Ingeniero"
+    },
+    {
+      "id": "us-03",
+      "fullName": "Juan Pérez",
+      "email": "jperez.logistica@pirca.com",
+      "isActive": true,
+      "role": "Gestor"
+    },
+    {
+      "id": "us-04",
+      "fullName": "Inversor Centro SAC",
+      "email": "gerencia@inversorcentro.pe",
+      "isActive": true,
+      "role": "Logistica"
+    },
+    {
+      "id": "us-07",
+      "fullName": "Laurel Pallo",
+      "email": "LauPallo@pirca.com",
+      "isActive": true,
+      "role": "Cliente"
+    },
+    {
+      "id": "us-1778611326049",
+      "fullName": "Neto Pepon",
+      "email": "waranza@gmail.com",
+      "isActive": true,
+      "role": "Logistica"
+    }
   ]
 }
