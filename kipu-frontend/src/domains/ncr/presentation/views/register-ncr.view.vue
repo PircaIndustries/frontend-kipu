@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 // Importamos el store y la función de guardado
-import { addNcr } from '../../data/ncrStore';
+import { addNcr } from '../../data/ncrStore.js';
 import { allProjects } from '../../../projects/data/projectsStore';
 
 import Button from 'primevue/button';

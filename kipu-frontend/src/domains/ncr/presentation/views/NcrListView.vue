@@ -2,8 +2,8 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 // Importación del store reactivo para mantener los datos
-import { allNcrs } from '../../data/ncrStore';
-import { allProjects } from '../../../projects/data/projectsStore';
+import { allNcrs } from '../../data/ncrStore.js';
+import { allProjects } from '../../../project-management/data/projectsStore.js';
 import NcrListItem from './NcrListItem.vue';
 
 import Button from 'primevue/button';
