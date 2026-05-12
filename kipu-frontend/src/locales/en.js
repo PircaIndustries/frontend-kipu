@@ -149,5 +149,51 @@ export default {
         "tab-suppliers": "Suppliers",
         "tab-waste": "Waste",
         "tab-machinery": "Machinery",
+        "tab-waste": "Waste"
+    },
+    "team": {
+        "users": {
+            "title": "User Management",
+            "btn-invite": "Send Invitation",
+            "tab-users": "System Users",
+            "stats": {
+                "active": "ACTIVE USERS",
+                "managers": "MANAGERS",
+                "logistics": "LOGISTICS TEAM",
+                "clients": "CLIENTS"
+            },
+            "assigned-roles": {
+                "title": "Role Assignment",
+                "user-tab": "User",
+                "email-tab": "Email",
+                "assigned-role-tab": "Assigned Role",
+                "action-tab": "Action",
+                "user-profile-you": "You",
+                "btn-action": "Disable",
+                "btn-action-done": "Disabled",
+                "input-placeholder": "Name, email or role...",
+                "user-count": "users"
+            },
+            "role-dictionary": {
+                "administrator": "Administrator",
+                "manager": "Operations Manager",
+                "logistics": "Logistics",
+                "client": "Client",
+                "engineer": "Engineer"
+            },
+            "send-invitation": {
+                "title": "Invite new user",
+                "credentials": "An email with system access credentials will be sent.",
+                "email": "EMAIL ADDRESS",
+                "email-placeholder": "user@company.com",
+                "name": "Name",
+                "name-placeholder": "e.g., 'Juan'",
+                "lastname": "Lastname",
+                "lastname-placeholder": "e.g., 'Perez'",
+                "rol": "Role to assign",
+                "btn-cancel": "Cancel",
+                "btn-invite": "Send Invitation"
+            }
+        }
     }
 };

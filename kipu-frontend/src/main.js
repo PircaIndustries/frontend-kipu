@@ -20,6 +20,8 @@ import 'primeicons/primeicons.css';
 import './style.css'; // Your global styles
 
 const app = createApp(App);
+const pinia = createPinia();
+
 
 app.use(PrimeVue, {
     theme: {
@@ -29,10 +31,10 @@ app.use(PrimeVue, {
         }
     }
 });
+app.use(pinia);
 app.use(ConfirmationService);
 app.use(router);
 app.use(i18n);
-app.use(createPinia());
 app.component('pv-tabs', Tabs);
 app.component('pv-tablist', TabList);
 app.component('pv-tab', Tab);

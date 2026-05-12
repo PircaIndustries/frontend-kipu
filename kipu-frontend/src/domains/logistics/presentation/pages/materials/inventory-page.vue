@@ -29,8 +29,6 @@ onMounted(() => {
 
 <template>
   <section class="flex flex-col gap-6 p-6 h-full">
-
-    <!-- Header -->
     <header class="flex items-center justify-between">
       <div class="flex flex-col gap-0.5">
         <h1 class="text-2xl font-bold text-primary tracking-tight m-0">
@@ -60,19 +58,12 @@ onMounted(() => {
           <p class="text-sm font-medium text-primary m-0">Sin resultados</p>
           <p class="text-xs text-neutral-border m-0">Probá ajustando los filtros</p>
         </div>
-
       </div>
-
-      <!-- Sidebar -->
       <aside class="w-60 flex flex-col gap-6 shrink-0">
-
-        <!-- Resumen -->
         <div class="flex flex-col gap-2">
           <h3 class="text-[10px] font-black text-neutral-border uppercase tracking-widest m-0 pb-2 border-b border-neutral-border/20">
             {{ t('general.summary') }}
           </h3>
-
-          <!-- Card: total -->
           <div class="flex items-center justify-between px-4 py-3 bg-white border border-neutral-border/20 rounded-xl">
             <div class="flex flex-col gap-0.5">
               <p class="text-[10px] font-semibold text-neutral-border uppercase tracking-wide m-0">
@@ -84,8 +75,6 @@ onMounted(() => {
               <i class="pi pi-box text-primary text-sm"></i>
             </div>
           </div>
-
-          <!-- Card: stock crítico (toggle) -->
           <button
               @click="store.toggleCriticalFilter()"
               :class="[
@@ -113,14 +102,10 @@ onMounted(() => {
             </div>
           </button>
         </div>
-
-        <!-- Filtro por categoría -->
         <div class="flex flex-col gap-2">
           <h3 class="text-[10px] font-black text-neutral-border uppercase tracking-widest m-0 pb-2 border-b border-neutral-border/20">
             {{ t('inventory.filters.category') }}
           </h3>
-
-          <!-- Chips de categorías — TODO: reemplazar con categoryNames del store -->
           <div class="flex flex-col gap-1">
             <button
                 @click="store.clearFilter()"
@@ -132,8 +117,6 @@ onMounted(() => {
               <i class="pi pi-list text-[11px]"></i>
               Todas las categorías
             </button>
-
-            <!-- v-for cuando tengas categoryNames del store -->
             <button
                 v-for="category in categoryNames"
                 :key="category"

@@ -24,7 +24,7 @@ const menuItems = [
   { label: 'navigation.rnc', icon: 'pi pi-exclamation-triangle', to: '/rnc' },
   { label: 'navigation.logistics', icon: 'pi pi-box', to: '/logistics' },
   { label: 'navigation.blueprints', icon: 'pi pi-map', to: '/blueprints' },
-  { label: 'navigation.legal-compliance', icon: 'pi pi-pencil', to: '/legal-compliance' },
+  { label: 'navigation.signatures', icon: 'pi pi-pencil', to: '/signatures' },
   { label: 'navigation.budget', icon: 'pi pi-money-bill', to: '/budget' },
   { label: 'navigation.team', icon: 'pi pi-users', to: '/team' }
 ];
@@ -59,7 +59,6 @@ const menuItems = [
 </template>
 
 <style scoped>
-/** Main sidebar container */
 .side-navigation {
   width: 260px;
   height: 100vh;
