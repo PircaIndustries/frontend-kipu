@@ -197,14 +197,43 @@
                 "btn-invite": "Send Invitation"
         }
     },
-    "workers": {
-        "tab-workers": "Worker Directory",
+        "workers": {
+            "tab-workers": "Worker Directory",
             "title": "Worker Directory",
+            "search-placeholder": "Search by ID, name or position...",
             "register": {
-            "btn-add-worker": "+ New Worker",
+                "btn-add-worker": "+ New Worker",
                 "no-workers-found": "No workers registered yet.",
-                "description": "Passive directory of operational personnel. Used exclusively to link ID numbers within the Logistics Module."
+                "description": "Passive directory of operational personnel. Used exclusively to link ID numbers within the Logistics Module.",
+                "tab-dni": "ID Number",
+                "tab-name": "Full Name",
+                "tab-role": "Position / Crew",
+                "tab-status": "Work Status",
+                "tab-tools": "Assigned Tools",
+                "tab-action": "Action",
+                "tab-status-active": "ACTIVE",
+                "tab-status-inactive": "INACTIVE",
+                "tab-btn-disable": "Disable",
+                "tab-btn-enable": "Enable",
+                "worker-count": "workers",
+                "flow-title": "Tools Flow",
+                "flow-description": "Personnel registered in this list do not have access credentials to the Kipu system. This directory is managed exclusively so that the Logistics and Warehouse area can search for the worker's ID when registering temporary loans or permanent assignments of machinery on site.",
+                "go-to-materials": "Go to Materials Module"
+            },
+            "add-modal": {
+                "title": "Register New Worker",
+                "dni-label": "ID Number",
+                "dni-placeholder": "8 digits",
+                "name-label": "Full Name",
+                "name-placeholder": "e.g., Juan Perez",
+                "role-label": "Position / Crew",
+                "role-placeholder": "e.g., Masonry Worker",
+                "tools-title": "Assigned Tools",
+                "tools-add": "+ Add Tool",
+                "tools-placeholder": "Equipment name...",
+                "btn-save": "Save Worker",
+                "btn-cancel": "Cancel"
+            }
         }
-    }
 }
 }
