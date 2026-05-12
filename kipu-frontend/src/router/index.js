@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-
+import teamRoutes from "../domains/team/router/team-router.js";
 const routes = [
+    ...teamRoutes,
     {
         path: '/',
         redirect: '/dashboard'

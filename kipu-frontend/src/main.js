@@ -11,17 +11,22 @@ import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
 import Ripple from 'primevue/ripple';
+import { createPinia } from 'pinia';
+
 // Styles
 import 'primeicons/primeicons.css';
 import './style.css'; // Your global styles
 
 const app = createApp(App);
+const pinia = createPinia();
+
 
 app.use(PrimeVue, {
     theme: {
         preset: Aura
     }
 });
+app.use(pinia);
 app.use(ConfirmationService);
 app.use(router);
 app.use(i18n);
