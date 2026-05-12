@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-
+import teamRoutes from "../domains/team/router/team-router.js";
 const routes = [
+    ...teamRoutes,
     {
         path: '/',
         redirect: '/dashboard'
@@ -8,11 +9,11 @@ const routes = [
     {
         path: '/dashboard',
         name: 'Dashboard',
-        component: () => import('@/features/projects/presentation/views/ProjectsView.vue')
+        component: () => import('@/domains/project-management/presentation/views/ProjectsView.vue')
     },
     {
         path: '/advances',
-        component: () => import('@/features/execution/presentation/layouts/AdvancesLayout.vue'),
+        component: () => import('@/domains/progress-monitoring/presentation/layouts/AdvancesLayout.vue'),
         children: [
             {
                 path: '',
@@ -21,38 +22,19 @@ const routes = [
             {
                 path: 'registry',
                 name: 'AdvancesRegistry',
-                component: () => import('@/features/execution/presentation/views/AdvancesView.vue')
+                component: () => import('@/domains/progress-monitoring/presentation/views/AdvancesView.vue')
             },
             {
                 path: 'photos',
                 name: 'PhotoLog',
-                component: () => import('@/features/execution/presentation/views/PhotoLogView.vue')
+                component: () => import('@/domains/progress-monitoring/presentation/views/PhotoLogView.vue')
             }
         ]
     },
     {
         path: '/advances/new',
         name: 'CreateAdvance',
-        component: () => import('@/features/execution/presentation/views/CreateAdvanceView.vue')
-    },
-    {
-        path: '/rnc',
-        children: [
-            {
-                path: '',
-                redirect: '/rnc/registry'
-            },
-            {
-                path: 'registry',
-                name: 'NcrRegistry',
-                component: () => import('@/features/ncr/presentation/views/NcrListView.vue')
-            },
-            {
-                path: 'new',
-                name: 'RegisterNcr',
-                component: () => import('@/features/ncr/presentation/views/register-ncr.view.vue')
-            }
-        ]
+        component: () => import('@/domains/progress-monitoring/presentation/views/CreateAdvanceView.vue')
     }
 ];
 

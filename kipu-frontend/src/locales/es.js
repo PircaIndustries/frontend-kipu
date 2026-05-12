@@ -56,7 +56,7 @@ export default {
         },
         taskLabel: "Partida",
         title: "Registro de Avance Diario",
-        /** Movido dentro de execution para que t('execution.create...') funcione */
+        /** Movido dentro de progress-monitoring para que t('progress-monitoring.create...') funcione */
         create: {
             title: 'Nuevo Avance Diario',
             submitBtn: 'Guardar Avance',
@@ -139,5 +139,55 @@ export default {
     },
     roles: {
         resident: 'Residente de Obra'
+    },
+    "logistics-tabs": {
+        "tab-inventory": "Inventario",
+        "tab-requests": "Solicitudes",
+        "tab-suppliers": "Proveedores",
+        "tab-waste": "Mermas"
+    },
+    "team": {
+        "users": {
+            "title": "Gestión de Usuarios",
+            "btn-invite": "Enviar Invitación",
+            "stats": {
+                "active": "USUARIOS ACTIVOS",
+                "managers": "GESTORES",
+                "logistics": "EQUIPO DE LOGÍSTICA",
+                "clients": "CLIENTES"
+            },
+            "assigned-roles": {
+                "title": "Asignación de Roles",
+                "user-tab": "Usuario",
+                "email-tab": "Correo Electrónico",
+                "assigned-role-tab": "Rol Asignado",
+                "action-tab": "Acción",
+                "user-profile-you": "Tú",
+                "btn-action": "Deshabilitar",
+                "btn-action-done": "Deshabilitado",
+                "input-placeholder": "Nombre, correo o rol...",
+                "user-count": "usuarios"
+            },
+            "role-dictionary": {
+                "administrator": "Administrador",
+                "manager": "Gestor Operativo",
+                "logistics": "Logística",
+                "client": "Cliente",
+                "engineer": "Ingeniero"
+            },
+            "send-invitation": {
+                "title": "Invitar nuevo usuario",
+                "credentials": "Se enviará un correo con las credenciales de acceso al sistema.",
+                "email": "CORREO ELECTRÓNICO",
+                "email-placeholder": "usuario@compañia.com",
+                "name": "Nombre",
+                "name-placeholder": "Ejm. 'Juan'",
+                "lastname": "Apellido",
+                "lastname-placeholder": "Ejm. 'Perez'",
+                "rol": "Rol a asignar",
+                "btn-cancel": "Cancelar",
+                "btn-invite": "Enviar Invitación"
+            }
+        }
     }
 };
