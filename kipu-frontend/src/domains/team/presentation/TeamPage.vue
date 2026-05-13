@@ -9,37 +9,25 @@ const { t } = useI18n();
 
 const currentRoute = computed(() => route.path);
 
-const tabs = [
+const tabs = computed(() => [
   { label: t('team.users.tab-users'), route: '/team/users' },
   { label: t('team.workers.tab-workers'), route: '/team/workers' }
-];
+]);
 </script>
 
 <template>
-  <div class="mb-6">
-    <pv-tabs :value="currentRoute">
-      <pv-tablist>
-        <pv-tab
-            v-for="tab in tabs"
-            :key="tab.route"
-            :value="tab.route"
-        >
-          <router-link v-slot="{ href, navigate }" :to="tab.route" custom>
-            <a
-                v-ripple
-                :href="href"
-                @click="navigate"
-                class="flex items-center gap-2 no-underline text-inherit"
-            >
-              <span>{{ tab.label }}</span>
-            </a>
-          </router-link>
-        </pv-tab>
-      </pv-tablist>
-    </pv-tabs>
+  <div class="px-6">
+    <div class="flex gap-6 border-b border-neutral-border">
+      <router-link
+          v-for="tab in tabs"
+          :key="tab.route"
+          :to="tab.route"
+          class="px-2 py-3 text-text-main hover:text-primary transition-all duration-150 no-underline"
+          :class="{ 'text-accent border-b-2 border-accent -mb-px': $route.path === tab.route }"
+      >
+        {{ tab.label }}
+      </router-link>
+    </div>
   </div>
   <router-view />
 </template>
-
-<style scoped>
-</style>

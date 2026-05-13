@@ -1,84 +1,98 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { catchError, map, Observable, tap } from 'rxjs';
-import { DocumentEntity } from '../domain/model/document.entity.js';
-import { DocumentAssembler } from './document.assembler.js';
+// src/domains/signatures/infrastructure/document.api.js
+import axios from 'axios'
+import { DocumentAssembler } from './document.assembler.js'
+
+const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:3000/api/v1'
+const DOCUMENTS_ENDPOINT = import.meta.env.VITE_API_KIPU_DOCUMENTS_ENDPOINT || '/documents'
+
+const documentsUrl = `${API_BASE_URL}${DOCUMENTS_ENDPOINT}`
 
 /**
  * Infrastructure gateway for Document bounded-context endpoints.
  */
-@Injectable({
-    providedIn: 'root',
-})
-export class DocumentApi {
-    http = inject(HttpClient);
-    apiBaseUrl = import.meta.env.VITE_API_KIPU_BASEURL;
-    documentsEndpoint = import.meta.env.VITE_API_KIPU_DOCUMENTS_ENDPOINT;
-    documentsUrl = `${this.apiBaseUrl}${this.documentsEndpoint}`;
-
+export const documentApi = {
     /**
-     * @returns {Observable<DocumentEntity[]>} Observable of document entities
+     * @returns {Promise<DocumentEntity[]>} Promise resolving to document entities
      */
-    getAllDocuments() {
-        return this.http
-            .get(this.documentsUrl)
-            .pipe(map((response) => DocumentAssembler.toEntitiesFromResponse(response)));
-    }
+    async getAllDocuments() {
+        try {
+            const response = await axios.get(documentsUrl)
+            return DocumentAssembler.toEntitiesFromResponse(response.data)
+        } catch (error) {
+            console.error('Error fetching documents:', error)
+            throw error
+        }
+    },
 
     /**
      * @param {string} projectId - Project identifier
-     * @returns {Observable<DocumentEntity[]>} Observable of document entities
+     * @returns {Promise<DocumentEntity[]>} Promise resolving to document entities
      */
-    getDocumentsByProject(projectId) {
-        const url = `${this.documentsUrl}?projectId=${projectId}`;
-        return this.http
-            .get(url)
-            .pipe(map((response) => DocumentAssembler.toEntitiesFromResponse(response)));
-    }
+    async getDocumentsByProject(projectId) {
+        try {
+            const url = `${documentsUrl}?projectId=${projectId}`
+            const response = await axios.get(url)
+            return DocumentAssembler.toEntitiesFromResponse(response.data)
+        } catch (error) {
+            console.error('Error fetching documents by project:', error)
+            throw error
+        }
+    },
 
     /**
      * @param {string} id - Document identifier
-     * @returns {Observable<DocumentEntity>} Observable of document entity
+     * @returns {Promise<DocumentEntity>} Promise resolving to document entity
      */
-    getDocumentById(id) {
-        const url = `${this.documentsUrl}/${id}`;
-        return this.http
-            .get(url)
-            .pipe(map((resource) => DocumentAssembler.toEntityFromResource(resource)));
-    }
+    async getDocumentById(id) {
+        try {
+            const response = await axios.get(`${documentsUrl}/${id}`)
+            return DocumentAssembler.toEntityFromResource(response.data)
+        } catch (error) {
+            console.error(`Error fetching document ${id}:`, error)
+            throw error
+        }
+    },
 
     /**
      * @param {DocumentEntity} document - Document entity to create
-     * @returns {Observable<DocumentEntity>} Observable of created document
+     * @returns {Promise<DocumentEntity>} Promise resolving to created document
      */
-    postDocument(document) {
-        const resource = DocumentAssembler.toResourceFromEntity(document);
-        return this.http
-            .post(this.documentsUrl, resource)
-            .pipe(map((createdResource) => DocumentAssembler.toEntityFromResource(createdResource)));
-    }
+    async postDocument(document) {
+        try {
+            const resource = DocumentAssembler.toResourceFromEntity(document)
+            const response = await axios.post(documentsUrl, resource)
+            return DocumentAssembler.toEntityFromResource(response.data)
+        } catch (error) {
+            console.error('Error creating document:', error)
+            throw error
+        }
+    },
 
     /**
      * @param {DocumentEntity} document - Document entity to update
-     * @returns {Observable<DocumentEntity>} Observable of updated document
+     * @returns {Promise<DocumentEntity>} Promise resolving to updated document
      */
-    updateDocument(document) {
-        const url = `${this.documentsUrl}/${document.id}`;
-        return this.http.put(url, document).pipe(
-            tap(() => console.log('Documento actualizado en API:', document)),
-            catchError((error) => {
-                console.error('Error en updateDocument:', error);
-                throw error;
-            }),
-        );
-    }
+    async updateDocument(document) {
+        try {
+            const response = await axios.put(`${documentsUrl}/${document.id}`, document)
+            console.log('Document updated in API:', response.data)
+            return DocumentAssembler.toEntityFromResource(response.data)
+        } catch (error) {
+            console.error('Error updating document:', error)
+            throw error
+        }
+    },
 
     /**
      * @param {string} id - Document identifier
-     * @returns {Observable<void>} Observable of delete operation
+     * @returns {Promise<void>} Promise resolving when deleted
      */
-    deleteDocument(id) {
-        const url = `${this.documentsUrl}/${id}`;
-        return this.http.delete(url);
+    async deleteDocument(id) {
+        try {
+            await axios.delete(`${documentsUrl}/${id}`)
+        } catch (error) {
+            console.error(`Error deleting document ${id}:`, error)
+            throw error
+        }
     }
 }

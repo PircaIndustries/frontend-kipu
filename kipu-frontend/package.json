@@ -11,6 +11,7 @@
     "dev:all": "concurrently \"npm run dev\" \"npm run mock\""
   },
   "dependencies": {
+    "@primevue/forms": "^4.5.5",
     "@primevue/themes": "^4.5.4",
     "@tailwindcss/vite": "^4.2.4",
     "axios": "^1.16.0",
@@ -20,7 +21,8 @@
     "tailwindcss": "^4.2.4",
     "vue": "^3.5.32",
     "vue-i18n": "^11.4.0",
-    "vue-router": "^5.0.6"
+    "vue-router": "^5.0.6",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.6",

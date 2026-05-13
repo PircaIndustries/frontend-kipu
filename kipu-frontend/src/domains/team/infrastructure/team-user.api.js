@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1'
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
+const TEAMUSERS_URL = import.meta.env.VITE_TEAMUSERS_ENDPOINT_PATH;
 export const teamUserApi = {
     /**
      * Fetches all team users
@@ -9,7 +9,7 @@ export const teamUserApi = {
      */
     async getAllUsers() {
         try {
-            const response = await axios.get(`${API_BASE_URL}/team-users`)
+            const response = await axios.get(`${API_BASE_URL}${TEAMUSERS_URL}`)
             return response.data
         } catch (error) {
             console.error('Error fetching team users:', error)
