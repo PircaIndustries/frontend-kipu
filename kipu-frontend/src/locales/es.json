@@ -440,6 +440,80 @@
         "tab-waste": "Mermas",
         "tab-machinery": "Maquinaria"
     },
+    "suppliers": {
+        "title": "Proveedores",
+        "button-create": "Nuevo Proveedor",
+        "summary": {
+            "active": "Activos",
+            "inactive": "Inactivos"
+        },
+        "filters": {
+            "status": "ESTADO",
+            "search": "BUSCAR",
+            "search-ruc": "Buscar por RUC"
+        },
+        "card": {
+            "social-reason": "Razón Social",
+            "contact": "Contacto",
+            "phone": "Teléfono",
+            "email": "Correo",
+            "actions": {
+                "button-edit": "Editar",
+                "button-delete": "Eliminar"
+            },
+            "delete": {
+                "message": "¿Estás seguro de eliminar este proveedor?"
+            }
+        },
+        "create": {
+            "title": "Nuevo Proveedor",
+            "ruc-label": "RUC",
+            "ruc-placeholder": "Ingrese RUC",
+            "ruc-required": "RUC es obligatorio (mín. 8 caracteres)",
+            "social-reason-label": "Razón Social",
+            "social-reason-placeholder": "Ingrese razón social",
+            "social-reason-required": "Razón social es obligatoria",
+            "contact-label": "Contacto",
+            "contact-placeholder": "Ingrese nombre de contacto",
+            "contact-required": "Contacto es obligatorio",
+            "phone-label": "Teléfono",
+            "phone-placeholder": "Ingrese número telefónico",
+            "phone-required": "Teléfono es obligatorio",
+            "email-label": "Correo",
+            "email-placeholder": "Ingrese correo",
+            "email-required": "Correo es obligatorio",
+            "actions": {
+                "cancel": "Cancelar",
+                "submit": "Guardar Proveedor"
+            },
+            "success": {
+                "summary": "Éxito",
+                "message": "Proveedor creado exitosamente"
+            },
+            "error": {
+                "message": "Error al crear proveedor"
+            }
+        },
+        "edit": {
+            "title": "Editar Proveedor",
+            "actions": {
+                "submit": "Guardar Cambios"
+            },
+            "success": {
+                "summary": "Actualizado",
+                "message": "Proveedor actualizado exitosamente"
+            },
+            "error": {
+                "message": "Error al actualizar proveedor"
+            }
+        },
+        "delete": {
+            "title": "Eliminar Proveedor",
+            "message": "¿Estás seguro de eliminar a",
+            "confirm": "Sí, eliminar",
+            "cancel": "Cancelar"
+        }
+    },
     "team": {
         "users": {
             "tab-users": "Usuarios del Sistema",

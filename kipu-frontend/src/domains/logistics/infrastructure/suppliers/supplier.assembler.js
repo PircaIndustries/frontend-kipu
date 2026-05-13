@@ -21,11 +21,18 @@ export class SupplierAssembler {
      * @returns {SupplierEntity[]} Supplier entities.
      */
     static toEntitiesFromResponse(response) {
-        if (response.status !== 200) {
+        if (response.status !== 200 && response.status !== 201) {
             console.error(`${response.status}, ${response.statusText}`);
             return [];
         }
-        let resources = response.data instanceof Array ? response.data : response.data['materialsSuppliers'];
+        let resources;
+        if (Array.isArray(response.data)) {
+            resources = response.data;
+        } else if (response.data?.materialsSuppliers) {
+            resources = response.data.materialsSuppliers;
+        } else {
+            resources = [response.data];
+        }
         return resources.map(resource => this.toEntityFromResource(resource));
     }
 }
