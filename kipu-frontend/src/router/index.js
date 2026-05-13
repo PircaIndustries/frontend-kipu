@@ -70,6 +70,12 @@ const routes = [
                 props: true
             },
             {
+                path: 'edit/:id',
+                name: 'EditBudget',
+                component: () => import('@/domains/budget/presentation/views/EditBudgetView.vue'),
+                props: true
+            },
+            {
                 path: 'transaction/new',
                 name: 'RegisterTransaction',
                 component: () => import('@/domains/budget/presentation/views/RegisterTransactionView.vue')

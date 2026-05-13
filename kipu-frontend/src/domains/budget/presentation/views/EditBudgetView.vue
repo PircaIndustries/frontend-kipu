@@ -7,79 +7,49 @@ const router = useRouter();
 const route = useRoute();
 const repository = new BudgetApi();
 
-const budgetOptions = ref([]);
-
-const form = ref({
-  partidaId: route.query.partidaId || '',
-  amount: 0,
-  desc: ''
-});
+const item = ref(null);
+const newBudgeted = ref(0);
 
 onMounted(async () => {
-  budgetOptions.value = await repository.findAll();
+  item.value = await repository.findById(route.params.id);
+  if (item.value) {
+    newBudgeted.ref = item.value.budgeted;
+  }
 });
 
-const save = async () => {
-  if (!form.value.partidaId || form.value.amount <= 0) return;
-
-  try {
-    // Enviamos el ID, el monto y la descripción del formulario
-    await repository.addTransaction(
-        form.value.partidaId,
-        form.value.amount,
-        form.value.desc
-    );
-
-    router.push({ name: 'BudgetManagement' });
-  } catch (error) {
-    alert("Error al procesar la transacción.");
-  }
+const handleUpdate = async () => {
+  await repository.updateBudgetValues(item.value.id, newBudgeted.value);
+  router.push({ name: 'BudgetDetail', params: { id: item.value.id } });
 };
 </script>
 
 <template>
-  <div class="form-page">
+  <div class="form-page" v-if="item">
     <div class="form-card">
       <div class="form-header">
-        <h2 class="form-title">Registrar Gasto</h2>
+        <h2 class="form-title">Revisar Partida: {{ item.id }}</h2>
         <button class="close-btn" @click="router.back()">&times;</button>
       </div>
 
       <div class="form-body">
-        <div class="input-group">
-          <label class="input-label">Partida Presupuestal</label>
-          <select v-model="form.partidaId" class="custom-input">
-            <option value="" disabled>Seleccione una partida</option>
-            <option v-for="b in budgetOptions" :key="b.id" :value="b.id">
-              {{ b.id }} - {{ b.name }}
-            </option>
-          </select>
+        <div class="alert-info">
+          <strong>Estado Actual:</strong> {{ item.alertMessage }}
         </div>
 
         <div class="input-group">
-          <label class="input-label">Monto del Gasto (S/)</label>
-          <input
-              type="number"
-              v-model="form.amount"
-              placeholder="0.00"
-              class="custom-input"
-          >
+          <label class="input-label">Presupuesto Asignado (S/)</label>
+          <input type="number" v-model="newBudgeted" class="custom-input">
+          <p class="input-help">Incremente el presupuesto para autorizar gastos adicionales.</p>
         </div>
 
-        <div class="input-group">
-          <label class="input-label">Descripción Detallada</label>
-          <textarea
-              v-model="form.desc"
-              rows="4"
-              placeholder="Ej. Compra de materiales para..."
-              class="custom-input"
-          ></textarea>
+        <div class="stats-preview">
+          <span>Ejecutado hasta hoy: S/ {{ item.executed.toLocaleString() }}</span>
         </div>
       </div>
 
       <div class="form-footer">
-        <button class="btn-cancel" @click="router.back()">Cancelar</button>
-        <button class="btn-save" @click="save">Confirmar Transacción</button>
+        <button class="btn-cancel" @click="router.back()">Descartar</button>
+        <button class="btn-save" @click="handleUpdate">Actualizar y Autorizar</button>
       </div>
     </div>
   </div>
@@ -102,4 +72,7 @@ const save = async () => {
 .btn-save:hover { background-color: #1e293b; }
 .btn-cancel { flex: 1; background-color: transparent; border: 1px solid #cbd5e1; color: #64748b; padding: 0.875rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
 .btn-cancel:hover { background-color: #f1f5f9; }
+.alert-info { background: #fef2f2; color: #991b1b; padding: 1rem; border-radius: 8px; font-size: 0.9rem; margin-bottom: 1rem; border: 1px solid #fee2e2; }
+.input-help { font-size: 0.8rem; color: #64748b; margin-top: 0.25rem; }
+.stats-preview { padding-top: 1rem; border-top: 1px solid #e2e8f0; font-weight: 600; color: #1e293b; }
 </style>
