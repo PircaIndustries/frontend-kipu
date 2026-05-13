@@ -617,7 +617,7 @@
       "name": "Cimentación",
       "description": "Trabajos preliminares y cimentación",
       "budgeted": 80000,
-      "executed": 7000,
+      "executed": 7100,
       "status": "NORMAL",
       "alertMessage": null
     },
@@ -626,7 +626,7 @@
       "name": "Estructura",
       "description": "Columnas, vigas y losas",
       "budgeted": 70000,
-      "executed": 3000,
+      "executed": 3300,
       "status": "NORMAL",
       "alertMessage": null
     }
@@ -652,6 +652,20 @@
       "date": "2026-05-13",
       "description": "materiales urgentes",
       "id": 3
+    },
+    {
+      "budgetId": "01.01",
+      "amount": 100,
+      "date": "2026-05-13",
+      "description": "Cimentación importante",
+      "id": 4
+    },
+    {
+      "budgetId": "01.02",
+      "amount": 300,
+      "date": "2026-05-13",
+      "description": "Estructuras",
+      "id": 5
     }
   ],
   "ncrs": [
@@ -735,6 +749,13 @@
       "password": "kipu1234",
       "role": "Gestor Operativo",
       "id": "PjaiuHE"
+    },
+    {
+      "name": "Pau Mon",
+      "email": "pau@gmail.com",
+      "password": "paupau707",
+      "role": "Logística y Administración",
+      "id": "6NxPOLs"
     }
   ],
   "team-users": [

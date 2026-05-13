@@ -148,37 +148,25 @@ onMounted(() => {
       @update:visible="(val) => emit('update:visible', val)"
       @show="initForm"
       modal
+      :header="t('request.modify.title')"
       :style="{ width: '750px' }"
-      :pt="{ content: { class: 'p-0' } }"
   >
-    <form @submit.prevent="onFormSubmit" class="flex flex-col border border-neutral-border/30 rounded-xl overflow-hidden">
-      <header
-          class="px-8 py-6 flex items-center justify-between"
-          :class="{
-          'bg-success-soft border-b border-success': request.status === 'APPROVED',
-          'bg-warning-soft border-b border-warning': request.status === 'PENDING',
-          'bg-danger-soft border-b border-danger': request.status === 'REFUSED'
-        }"
-      >
-        <div class="flex items-center gap-3">
-          <span class="text-2xl font-black text-primary tracking-tighter">#{{ request.id }}</span>
-          <span
-              class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border"
-              :class="{
-              'bg-success-soft text-success border-success': request.status === 'APPROVED',
-              'bg-warning-soft text-warning border-warning': request.status === 'PENDING',
-              'bg-danger-soft text-danger border-danger': request.status === 'REFUSED'
-            }"
-          >
-            {{ t(`request.card.status.${request.status?.toLowerCase()}`) }}
-          </span>
-        </div>
-        <div class="text-sm text-primary opacity-70">
-          {{ t('request.modify.title') }}
-        </div>
-      </header>
+    <form id="modify-form" @submit.prevent="onFormSubmit">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="text-2xl font-black text-primary tracking-tighter">#{{ request.id }}</span>
+        <span
+            class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border"
+            :class="{
+            'bg-success-soft text-success border-success': request.status === 'APPROVED',
+            'bg-warning-soft text-warning border-warning': request.status === 'PENDING',
+            'bg-danger-soft text-danger border-danger': request.status === 'REFUSED'
+          }"
+        >
+          {{ t(`request.card.status.${request.status?.toLowerCase()}`) }}
+        </span>
+      </div>
 
-      <div class="p-8 bg-white flex flex-col gap-6 overflow-y-auto max-h-[70vh]">
+      <div class="flex flex-col gap-6">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-l">
           <div class="flex flex-col gap-1">
             <span class="text-xs font-bold text-primary/80 uppercase tracking-wider">{{ t('request.create.fields.category') }}</span>
@@ -303,6 +291,7 @@ onMounted(() => {
           <span class="text-xs font-bold text-primary/80 uppercase tracking-wider">{{ t('request.create.fields.additional-notes') }}</span>
           <pv-textarea v-model="additionalNotes" rows="2" :placeholder="t('request.create.placeholders.additional-notes')" />
         </div>
+
         <div class="bg-primary rounded-xl p-6 flex items-center justify-between">
           <div class="flex flex-col gap-1">
             <span class="text-[10px] text-neutral-border uppercase font-black tracking-widest">{{ t('request.detail.total-investment') }}</span>
@@ -311,23 +300,49 @@ onMounted(() => {
               <span class="text-3xl font-black text-white tracking-tighter">{{ totalPrice.toFixed(2) }}</span>
             </div>
           </div>
+          <div
+            class="px-4 py-2 rounded-lg flex items-center justify-center border"
+            :class="{
+              'bg-success-soft border-success': request.isWithinBudget,
+              'bg-danger-soft border-danger': !request.isWithinBudget
+            }"
+          >
+            <span
+              class="text-xs font-bold flex items-center gap-2 leading-none"
+              :class="{
+                'text-success': request.isWithinBudget,
+                'text-danger': !request.isWithinBudget
+              }"
+            >
+              <i
+                class="text-sm"
+                :class="{
+                  'pi pi-check-circle': request.isWithinBudget,
+                  'pi pi-times-circle': !request.isWithinBudget
+                }"
+              ></i>
+              {{ request.isWithinBudget ? t('request.card.status.within-budget') : t('request.card.status.out-budget') }}
+            </span>
+          </div>
         </div>
       </div>
-
-      <div class="px-8 py-4 bg-neutral-bg border-t border-neutral-border/30 flex justify-end gap-4">
-        <pv-button
-            type="button"
-            :label="t('request.modify.actions.cancel')"
-            severity="secondary"
-            variant="outlined"
-            @click="close"
-        />
-        <pv-button
-            :label="t('request.modify.actions.submit')"
-            icon="pi pi-save"
-            @click="onFormSubmit"
-        />
-      </div>
     </form>
+
+    <template #footer>
+      <pv-button
+          type="button"
+          :label="t('request.modify.actions.cancel')"
+          severity="secondary"
+          variant="outlined"
+          @click="close"
+      />
+      <pv-button
+          type="submit"
+          form="modify-form"
+          :label="t('request.modify.actions.submit')"
+          icon="pi pi-save"
+          :disabled="submitting"
+      />
+    </template>
   </pv-dialog>
 </template>

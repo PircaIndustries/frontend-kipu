@@ -67,7 +67,7 @@ const gridCols = computed(() => {
           </p>
           <div class="flex items-baseline gap-1.5">
             <p
-                class="font-semibold text-base leading-tight m-0"
+                class="font-semibold text-base leading-tight m-0 break-all"
                 :class="{
                 'text-danger': field.highlight === 'danger',
                 'text-success': field.highlight === 'success',
