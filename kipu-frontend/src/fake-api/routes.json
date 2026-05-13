@@ -9,6 +9,7 @@
   "/api/v1/logistics/machineryAssignment": "/machineryAssignments",
   "/api/v1/logistics/suppliers": "/materialsSuppliers",
   "/api/v1/budget": "/budgets",
+  "api/v1/ncr": "ncr",
   "/api/v1/team/users": "/team-users",
   "/api/v1/team/workers": "/team-workers",
   "/api/v1/team": "/team",

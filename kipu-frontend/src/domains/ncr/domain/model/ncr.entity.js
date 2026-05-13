@@ -1,8 +1,8 @@
 /**
- * ncr Entity
+ * ncrEntity Entity
  * Represents the report of the errors in the constructions
  */
-export class ncr{
+export class ncrEntity {
     /**
      *
      * @param id
