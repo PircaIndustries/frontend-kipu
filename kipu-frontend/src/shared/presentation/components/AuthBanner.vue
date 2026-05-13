@@ -6,7 +6,7 @@
  */
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t, locale, availableLocales } = useI18n();
 
 const features = [
     {
@@ -29,6 +29,18 @@ const features = [
 
 <template>
     <div class="auth-banner">
+        <!-- Language switcher -->
+        <div class="auth-banner__lang-switcher">
+            <button
+                v-for="lang in availableLocales"
+                :key="lang"
+                @click="locale = lang"
+                class="auth-banner__lang-btn"
+                :class="{ 'auth-banner__lang-btn--active': locale === lang }"
+            >
+                {{ lang.toUpperCase() }}
+            </button>
+        </div>
         <div class="auth-banner__content">
             <div class="auth-banner__branding">
                 <h1 class="auth-banner__logo">Kipu</h1>
@@ -70,6 +82,40 @@ const features = [
     color: white;
     position: relative;
     overflow: hidden;
+}
+
+/* Language switcher */
+.auth-banner__lang-switcher {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    gap: 0.25rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2rem;
+    padding: 0.2rem;
+    z-index: 2;
+}
+
+.auth-banner__lang-btn {
+    padding: 0.35rem 0.75rem;
+    border: none;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    color: #95a5a6;
+}
+
+.auth-banner__lang-btn:hover {
+    color: white;
+}
+
+.auth-banner__lang-btn--active {
+    background: #3498db;
+    color: white;
 }
 
 .auth-banner__content {

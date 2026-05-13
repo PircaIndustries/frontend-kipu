@@ -1,28 +1,26 @@
 <script setup>
-import { useI18n } from 'vue-i18n'
+/**
+ * Header component.
+ * Shows the current project name (or a prompt to select one),
+ * language switcher, and action icons.
+ */
+import { useI18n } from 'vue-i18n';
+import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore';
 
-const { t, locale, availableLocales } = useI18n()
+const { t, locale, availableLocales } = useI18n();
+const projectsStore = useProjectsStore();
 </script>
+
 <template>
   <header class="flex items-center justify-between px-8 h-16 bg-white border-b border-neutral-border/40 w-full">
     <div class="flex items-center gap-2">
       <h1 class="text-xl font-bold text-primary tracking-tight leading-none m-0">
-        Lorem Ipsum
+        {{ projectsStore.currentProjectName || t('projects_dashboard.select_title') }}
       </h1>
-
-
-
-      <router-link
-          to="/projects/edit"
-          class="flex items-center justify-center text-neutral-border hover:text-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-90 w-8 h-8 rounded-full hover:bg-neutral-bg/50"
-          aria-label="Edit project"
-      >
-        <i class="pi pi-pen-to-square text-lg leading-none"></i>
-      </router-link>
     </div>
 
-    <div class="flex">
-
+    <div class="flex items-center gap-2">
+      <!-- Language switcher -->
       <div class="flex items-center gap-1 bg-neutral-bg rounded-full p-1">
         <button
             v-for="lang in availableLocales"
@@ -39,7 +37,8 @@ const { t, locale, availableLocales } = useI18n()
         </button>
       </div>
 
-      <div class="flex items-center gap-2">
+      <!-- Notifications & settings -->
+      <div class="flex items-center gap-1">
         <router-link
             to="/notifications"
             class="relative flex items-center justify-center text-primary cursor-pointer transition-all duration-200 hover:scale-110 active:scale-90 w-10 h-10 rounded-full hover:bg-neutral-bg/50"
@@ -56,9 +55,8 @@ const { t, locale, availableLocales } = useI18n()
         </router-link>
       </div>
     </div>
-
-
   </header>
 </template>
+
 <style scoped>
 </style>

@@ -71,7 +71,7 @@
         "hint_checking_email": "Verificando disponibilidad..."
     },
     "logout": {
-        "title": "Sesión cerrada",
+        "title": "Cerrar sesión",
         "description": "Se ha cerrado la sesión correctamente.",
         "continue": "Continuar"
     },
