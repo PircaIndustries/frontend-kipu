@@ -1,6 +1,24 @@
 /**
+ * Available local project images from public/assets.
+ */
+const PROJECT_IMAGES = [
+    '/assets/project-image1.png',
+    '/assets/project-image2.png',
+    '/assets/project-image3.png',
+    '/assets/project-image4.png',
+    '/assets/project-image5.png'
+];
+
+/**
+ * Returns a random project image path from the available assets.
+ * @returns {string}
+ */
+export function getRandomProjectImage() {
+    return PROJECT_IMAGES[Math.floor(Math.random() * PROJECT_IMAGES.length)];
+}
+
+/**
  * Domain entity representing a construction project.
- * Equivalent to Angular's ProjectEntity.
  */
 export class ProjectEntity {
     constructor({
@@ -13,6 +31,7 @@ export class ProjectEntity {
         budget = 0,
         progress = 0,
         status = 'Planificación',
+        statusJustification = '',
         image = '',
         members = 1,
         rnc = 0,
@@ -27,7 +46,8 @@ export class ProjectEntity {
         this.budget = budget;
         this.progress = progress;
         this.status = status;
-        this.image = image || 'https://images.unsplash.com/photo-1503387762-592dea58ef23?q=80&w=500';
+        this.statusJustification = statusJustification;
+        this.image = image || getRandomProjectImage();
         this.members = members;
         this.rnc = rnc;
         this.pending = pending;

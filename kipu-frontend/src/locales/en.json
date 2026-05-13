@@ -134,6 +134,7 @@
     },
     "navigation": {
         "dashboard": "Dashboard",
+        "projects": "Projects",
         "advances": "Advances",
         "rnc": "RNC",
         "materials": "Materials",
