@@ -28,7 +28,7 @@ import 'primeicons/primeicons.css';
 import './style.css';
 import './style.css';
 import {Toast} from "primevue";
-
+import ToastService from 'primevue/toastservice';
 const app = createApp(App);
 const pinia = createPinia();
 
@@ -45,6 +45,7 @@ app.use(pinia);
 app.use(ConfirmationService);
 app.use(router);
 app.use(i18n);
+app.use(ToastService);
 app.component('Toast', Toast)
 app.component('pv-tabs', Tabs);
 app.component('pv-tablist', TabList);
