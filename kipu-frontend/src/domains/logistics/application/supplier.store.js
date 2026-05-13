@@ -168,41 +168,33 @@ const useSupplierStore = defineStore('supplier', () => {
      * Creates a new supplier.
      * @param {SupplierEntity} supplier
      * @param {Function} [onSuccess]
+     * @param {Function} [onError]
      */
-    function addSupplier(supplier, onSuccess) {
-        logisticsApi.createSupplier(supplier).then(response => {
-            const newSuppliers = SupplierAssembler.toEntitiesFromResponse(response);
-            suppliers.value.push(...newSuppliers);
-            onSuccess?.();
-        }).catch(error => { errors.value.push(error); });
+    function addSupplier(supplier, onSuccess, onError) {
+        logisticsApi.createSupplier(supplier).then(() => {
+            fetchSuppliers()
+            onSuccess?.()
+        }).catch(error => {
+            errors.value.push(error);
+            onError?.();
+        });
     }
 
-    /**
-     * Updates an existing supplier.
-     * @param {string} id
-     * @param {Partial<SupplierEntity>} updates
-     * @param {Function} [onSuccess]
-     */
-    function updateSupplier(id, updates, onSuccess) {
+    function updateSupplier(id, updates, onSuccess, onError) {
         const payload = { id, ...updates };
-        logisticsApi.updateSupplier(payload).then(response => {
-            const [updated] = SupplierAssembler.toEntitiesFromResponse(response);
-            if (!updated) return;
-            const index = suppliers.value.findIndex(s => s.id === id);
-            if (index !== -1) suppliers.value[index] = updated;
-            onSuccess?.();
-        }).catch(error => { errors.value.push(error); });
+        logisticsApi.updateSupplier(payload).then(() => {
+            fetchSuppliers()
+            onSuccess?.()
+        }).catch(error => {
+            errors.value.push(error);
+            onError?.();
+        });
     }
 
-    /**
-     * Deletes a supplier by its ID.
-     * @param {string} id
-     * @param {Function} [onSuccess]
-     */
     function deleteSupplier(id, onSuccess) {
         logisticsApi.deleteSupplier(id).then(() => {
-            suppliers.value = suppliers.value.filter(s => s.id !== id);
-            onSuccess?.();
+            fetchSuppliers()
+            onSuccess?.()
         }).catch(error => { errors.value.push(error); });
     }
 

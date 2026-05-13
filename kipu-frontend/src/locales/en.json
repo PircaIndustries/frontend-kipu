@@ -440,6 +440,80 @@
         "tab-waste": "Waste",
         "tab-machinery": "Machinery"
     },
+    "suppliers": {
+        "title": "Suppliers",
+        "button-create": "New Supplier",
+        "summary": {
+            "active": "Active",
+            "inactive": "Inactive"
+        },
+        "filters": {
+            "status": "STATUS",
+            "search": "SEARCH",
+            "search-ruc": "Search by RUC"
+        },
+        "card": {
+            "social-reason": "Social Reason",
+            "contact": "Contact",
+            "phone": "Phone",
+            "email": "Email",
+            "actions": {
+                "button-edit": "Edit",
+                "button-delete": "Delete"
+            },
+            "delete": {
+                "message": "Are you sure you want to delete this supplier?"
+            }
+        },
+        "create": {
+            "title": "New Supplier",
+            "ruc-label": "RUC",
+            "ruc-placeholder": "Enter RUC",
+            "ruc-required": "RUC is required (min. 8 characters)",
+            "social-reason-label": "Social Reason",
+            "social-reason-placeholder": "Enter social reason",
+            "social-reason-required": "Social reason is required",
+            "contact-label": "Contact",
+            "contact-placeholder": "Enter contact name",
+            "contact-required": "Contact is required",
+            "phone-label": "Phone",
+            "phone-placeholder": "Enter phone number",
+            "phone-required": "Phone is required",
+            "email-label": "Email",
+            "email-placeholder": "Enter email",
+            "email-required": "Email is required",
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Save Supplier"
+            },
+            "success": {
+                "summary": "Success",
+                "message": "Supplier created successfully"
+            },
+            "error": {
+                "message": "Error creating supplier"
+            }
+        },
+        "edit": {
+            "title": "Edit Supplier",
+            "actions": {
+                "submit": "Save Changes"
+            },
+            "success": {
+                "summary": "Updated",
+                "message": "Supplier updated successfully"
+            },
+            "error": {
+                "message": "Error updating supplier"
+            }
+        },
+        "delete": {
+            "title": "Delete Supplier",
+            "message": "Are you sure you want to delete",
+            "confirm": "Yes, delete",
+            "cancel": "Cancel"
+        }
+    },
     "team": {
         "users": {
             "tab-users": "System Users",
