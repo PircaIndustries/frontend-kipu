@@ -19,7 +19,7 @@ const currentUser = {
 /** * Navigation items definition.
  */
 const menuItems = [
-  { label: 'navigation.dashboard', icon: 'pi pi-th-large', to: '/dashboard' },
+  { label: 'navigation.projects', icon: 'pi pi-folder', to: '/projects' },
   { label: 'navigation.advances', icon: 'pi pi-calendar', to: '/advances' },
   { label: 'navigation.rnc', icon: 'pi pi-exclamation-triangle', to: '/rnc' },
   { label: 'navigation.logistics', icon: 'pi pi-box', to: '/logistics' },

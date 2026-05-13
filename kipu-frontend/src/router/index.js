@@ -2,6 +2,16 @@ import { createRouter, createWebHistory } from 'vue-router';
 import logisticsRoutes from '@/domains/logistics/router/logistics-router.js';
 import teamRoutes from "../domains/team/router/team-router.js";
 import signaturesRoutes from "../domains/signatures/router/signatures-router.js";
+import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore';
+
+/**
+ * Routes that do NOT require a project to be selected.
+ * Used by the navigation guard to avoid infinite redirects.
+ */
+const PROJECT_WHITELIST = [
+    'Login', 'Register', 'ForgotPassword', 'ResetPassword', 'Verification', 'Projects'
+];
+
 const routes = [
     ...logisticsRoutes,
     ...teamRoutes,
@@ -41,10 +51,10 @@ const routes = [
         component: () => import('@/domains/identity/presentation/views/VerificationView.vue'),
         meta: { hideSidebar: true, title: 'Verification' }
     },
-    // ── Dashboard / Projects ──
+    // ── Projects (own section) ──
     {
-        path: '/dashboard',
-        name: 'Dashboard',
+        path: '/projects',
+        name: 'Projects',
         component: () => import('@/domains/project-management/presentation/views/ProjectsView.vue')
     },
     // ── Progress Monitoring ──
@@ -124,6 +134,26 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes
+});
+
+/**
+ * Navigation guard: redirect to /projects if no project is selected
+ * and the target route requires one.
+ */
+router.beforeEach((to) => {
+    const routeName = to.name;
+
+    // Allow whitelisted routes without project selection
+    if (PROJECT_WHITELIST.includes(routeName)) return true;
+
+    // Check if a project is selected (read directly from localStorage for SSR-safe check
+    // before Pinia might be initialized)
+    const hasProject = !!localStorage.getItem('currentProjectId');
+    if (!hasProject) {
+        return { name: 'Projects' };
+    }
+
+    return true;
 });
 
 export default router;

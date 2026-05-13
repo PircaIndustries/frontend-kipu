@@ -1,30 +1,51 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { projectsApi } from '../infrastructure/projects.api';
-import { ProjectEntity } from '../domain/models/project.entity';
+import { ProjectEntity, getRandomProjectImage } from '../domain/models/project.entity';
 
 /**
  * Pinia store for project management.
- * Translated from Angular's ProjectsStore using Composition API.
- * Signals → refs, computed signals → computed properties.
+ * Provides state, getters and actions for the entire application.
+ *
+ * Key getters for other developers:
+ *   - currentProject      → full ProjectEntity of the selected project
+ *   - currentProjectName  → string name of the selected project
+ *   - hasProjectSelected  → boolean indicating if a project is active
  */
 export const useProjectsStore = defineStore('projects', () => {
-    // ── State (equivalent to Angular signals) ──
+    // ── State ──
     const projects = ref([]);
     const currentProjectId = ref(localStorage.getItem('currentProjectId') || null);
 
-    // ── Getters (equivalent to Angular computed signals) ──
+    // ── Getters ──
+    /** Full entity of the currently selected project. */
     const currentProject = computed(() =>
         projects.value.find(p => p.id === currentProjectId.value) || null
     );
 
+    /** Name of the currently selected project (convenience getter for other modules). */
+    const currentProjectName = computed(() => currentProject.value?.name || '');
+
+    /** Whether a project is currently selected — used by the navigation guard. */
+    const hasProjectSelected = computed(() => !!currentProjectId.value);
+
+    /** Total count of loaded projects. */
     const totalProjects = computed(() => projects.value.length);
+
+    // ── Persistence ──
+    // Sync currentProjectId to localStorage on every change.
+    watch(currentProjectId, (newId) => {
+        if (newId) {
+            localStorage.setItem('currentProjectId', newId);
+        } else {
+            localStorage.removeItem('currentProjectId');
+        }
+    });
 
     // ── Actions ──
 
     /**
-     * Loads all projects from the API.
-     * Only fetches if the local list is empty (cache-first strategy).
+     * Loads all projects from the API (cache-first).
      */
     async function loadProjects() {
         if (projects.value.length === 0) {
@@ -38,23 +59,37 @@ export const useProjectsStore = defineStore('projects', () => {
     }
 
     /**
-     * Sets the current working project and persists the selection.
+     * Sets the current working project.
      * @param {string} id - Project identifier
      */
     function setCurrentProject(id) {
-        localStorage.setItem('currentProjectId', id);
         currentProjectId.value = id;
     }
 
     /**
-     * Creates a new project via the API and adds it to the local store.
-     * @param {Object} projectData - Project data to create
-     * @returns {Promise<ProjectEntity>} The created project
+     * Clears the current project selection.
+     */
+    function clearCurrentProject() {
+        currentProjectId.value = null;
+    }
+
+    /**
+     * Creates a new project. Assigns a random local image automatically.
+     * @param {Object} projectData
+     * @returns {Promise<ProjectEntity>}
      */
     async function addProject(projectData) {
         try {
-            const newProject = await projectsApi.create(projectData);
-            const entity = new ProjectEntity(newProject);
+            const payload = {
+                ...projectData,
+                image: getRandomProjectImage(),
+                progress: 0,
+                members: 1,
+                rnc: 0,
+                pending: 0
+            };
+            const created = await projectsApi.create(payload);
+            const entity = new ProjectEntity(created);
             projects.value.unshift(entity);
             return entity;
         } catch (error) {
@@ -64,8 +99,8 @@ export const useProjectsStore = defineStore('projects', () => {
     }
 
     /**
-     * Checks whether a project name is already taken.
-     * @param {string} name - Project name to verify
+     * Checks whether a project name already exists via GET filter to json-server.
+     * @param {string} name
      * @returns {Promise<boolean>}
      */
     function checkNameExists(name) {
@@ -73,19 +108,20 @@ export const useProjectsStore = defineStore('projects', () => {
     }
 
     /**
-     * Updates the status of a project and refreshes the local copy.
-     * @param {string} id - Project identifier
-     * @param {string} status - New status value
-     * @param {string} [justification] - Optional status change reason
+     * Updates the status of a project and persists the justification.
+     * @param {string} id
+     * @param {string} status
+     * @param {string} [justification]
      */
     async function updateProjectStatus(id, status, justification) {
         try {
-            const updatedProject = await projectsApi.updateStatus(id, {
-                status,
-                statusJustification: justification
-            });
+            const payload = { status };
+            if (justification) {
+                payload.statusJustification = justification;
+            }
+            const updated = await projectsApi.updateStatus(id, payload);
             projects.value = projects.value.map(p =>
-                p.id === id ? new ProjectEntity(updatedProject) : p
+                p.id === id ? new ProjectEntity(updated) : p
             );
         } catch (error) {
             console.error('Failed to update project status:', error);
@@ -94,8 +130,8 @@ export const useProjectsStore = defineStore('projects', () => {
     }
 
     /**
-     * Deletes a project and clears it from current selection if necessary.
-     * @param {string} id - Project identifier
+     * Deletes a project.
+     * @param {string} id
      */
     async function deleteProject(id) {
         try {
@@ -103,7 +139,6 @@ export const useProjectsStore = defineStore('projects', () => {
             projects.value = projects.value.filter(p => p.id !== id);
             if (currentProjectId.value === id) {
                 currentProjectId.value = null;
-                localStorage.removeItem('currentProjectId');
             }
         } catch (error) {
             console.error('Failed to delete project:', error);
@@ -115,12 +150,15 @@ export const useProjectsStore = defineStore('projects', () => {
         // State
         projects,
         currentProjectId,
-        // Getters
+        // Getters (for other developers)
         currentProject,
+        currentProjectName,
+        hasProjectSelected,
         totalProjects,
         // Actions
         loadProjects,
         setCurrentProject,
+        clearCurrentProject,
         addProject,
         checkNameExists,
         updateProjectStatus,

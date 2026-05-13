@@ -720,7 +720,8 @@
       "budget": 1500000,
       "progress": 45,
       "status": "En ejecución",
-      "image": "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?q=80&w=500",
+      "statusJustification": "",
+      "image": "/assets/project-image1.png",
       "members": 8,
       "rnc": 3,
       "pending": 5
@@ -735,7 +736,8 @@
       "budget": 4200000,
       "progress": 12,
       "status": "Planificación",
-      "image": "https://images.unsplash.com/photo-1503387762-592dea58ef23?q=80&w=500",
+      "statusJustification": "",
+      "image": "/assets/project-image2.png",
       "members": 15,
       "rnc": 9,
       "pending": 8
