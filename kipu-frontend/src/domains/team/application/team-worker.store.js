@@ -122,7 +122,7 @@ export const useTeamWorkerStore = defineStore('teamWorker', () => {
 
     /**
      * Create a new worker
-     * @param {Object} workerData - Worker data (dni, fullName, role, assignedTools)
+     * @param {Object} workerData - Worker application (dni, fullName, role, assignedTools)
      * @returns {Promise<TeamWorkerEntity|null>}
      */
     const createWorker = async (workerData) => {

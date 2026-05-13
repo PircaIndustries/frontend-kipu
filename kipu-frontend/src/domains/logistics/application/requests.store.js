@@ -77,7 +77,7 @@ const useRequestStore = defineStore('request', () => {
 
     // ── ENRICHED VIEW ───────────────────────────────────────────────────────
     /**
-     * Enriched view of all requests with material, category and price data.
+     * Enriched view of all requests with material, category and price application.
      * @type {import('vue').ComputedRef<EnrichedRequest[]>}
      */
     const requestDetailsView = computed(() => {

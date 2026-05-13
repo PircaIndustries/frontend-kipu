@@ -10,7 +10,7 @@ export const identityApi = {
     /**
      * Registers a new user identity
      * @param {{ name: string, email: string, password: string, role: string }} identity
-     * @returns {Promise<Object>} Created identity data
+     * @returns {Promise<Object>} Created identity application
      */
     async register(identity) {
         try {
@@ -42,7 +42,7 @@ export const identityApi = {
     /**
      * Authenticates a user with email and password
      * @param {{ email: string, password: string }} credentials
-     * @returns {Promise<Object|null>} User data if credentials match, null otherwise
+     * @returns {Promise<Object|null>} User application if credentials match, null otherwise
      */
     async login(credentials) {
         try {

@@ -50,7 +50,7 @@ export const teamUserApi = {
     /**
      * Updates an existing team user
      * @param {string} id - User identifier
-     * @param {TeamUserEntity} user - Updated user data
+     * @param {TeamUserEntity} user - Updated user application
      * @returns {Promise<TeamUserEntity>} Promise resolving to updated user
      */
     async updateUser(id, user) {
