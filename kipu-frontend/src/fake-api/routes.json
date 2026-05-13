@@ -1,4 +1,4 @@
-  {
+{
   "/api/v1/logistics/materials": "/materialsCatalog",
   "/api/v1/logistics/categories": "/categoriesCatalog",
   "/api/v1/logistics/supplierOffer": "/supplierOffers",
@@ -19,6 +19,8 @@
     "/api/v1/logistics/suppliers/:id": "/materialsSuppliers/:id",
   "/api/v1/identities": "/identities",
   "/api/v1/projects": "/projects",
+  "/api/v1/budget": "/budgets",
+  "api/v1/ncr": "ncr",
   "/api/v1/team/users": "/team-users",
   "/api/v1/team/workers": "/team-workers",
   "/api/v1/team": "/team",

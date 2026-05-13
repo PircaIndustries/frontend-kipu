@@ -611,6 +611,67 @@
       "assignmentDetail": "En espera de llegada de camiones volquete para carga."
     }
   ],
+  "budgets": [
+    {
+      "id": "01.01",
+      "name": "Cimentación",
+      "description": "Trabajos preliminares y cimentación",
+      "budgeted": 80000,
+      "executed": 7000,
+      "status": "NORMAL",
+      "alertMessage": null
+    },
+    {
+      "id": "01.02",
+      "name": "Estructura",
+      "description": "Columnas, vigas y losas",
+      "budgeted": 70000,
+      "executed": 3000,
+      "status": "NORMAL",
+      "alertMessage": null
+    }
+  ],
+  "transactions": [
+    {
+      "id": 1,
+      "budgetId": "01.01",
+      "amount": 5000,
+      "date": "2026-05-12",
+      "description": "Compra de cemento"
+    },
+    {
+      "budgetId": "01.02",
+      "amount": 9000,
+      "date": "2026-05-13",
+      "description": "",
+      "id": 2
+    },
+    {
+      "budgetId": "01.02",
+      "amount": 8750,
+      "date": "2026-05-13",
+      "description": "materiales urgentes",
+      "id": 3
+    }
+  ],
+  "ncrs": [
+    {
+      "id": "1",
+      "projectId": "1",
+      "date": "2026-04-20T10:00:00.000Z",
+      "ncrTitle": "Fisura en Losa N3",
+      "ncrDescription": "Se detectó una fisura longitudinal tras el desencofrado.",
+      "specialty": "Estructuras",
+      "severityLevel": "Alto",
+      "photoUrl": "https://i.pinimg.com/736x/29/7b/a1/297ba161005c3fef3978dd086c8bc76.jpg"
+    }
+  ],
+  "projects": [
+    {
+      "id": "1",
+      "name": "Edificio Los Alisos"
+    }
+  ],
   "identities": [
     {
       "id": "id-001",

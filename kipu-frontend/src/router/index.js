@@ -82,6 +82,52 @@ const routes = [
         path: '/advances/new',
         name: 'CreateAdvance',
         component: () => import('@/domains/progress-monitoring/presentation/views/CreateAdvanceView.vue')
+    },
+    {
+        path: '/rnc',
+        children: [
+            {
+                path: '',
+                redirect: '/rnc/registry'
+            },
+            {
+                path: 'registry',
+                name: 'Registry',
+                component: () => import('@/domains/ncr/presentation/views/NcrListView.vue')
+            },
+            {
+                path: 'new',
+                name: 'RegisterNcr',
+                component: () => import('@/domains/ncr/presentation/views/register-ncr.view.vue')
+            }
+        ]
+    },
+    {
+        path: '/budget',
+        children: [
+            {
+                path: '',
+                name: 'BudgetManagement',
+                component: () => import('@/domains/budget/presentation/views/BudgetManagement.component.vue')
+            },
+            {
+                path: ':id',
+                name: 'BudgetDetail',
+                component: () => import('@/domains/budget/presentation/views/BudgetDetailView.vue'),
+                props: true
+            },
+            {
+                path: 'edit/:id',
+                name: 'EditBudget',
+                component: () => import('@/domains/budget/presentation/views/EditBudgetView.vue'),
+                props: true
+            },
+            {
+                path: 'transaction/new',
+                name: 'RegisterTransaction',
+                component: () => import('@/domains/budget/presentation/views/RegisterTransactionView.vue')
+            }
+        ]
     }
 ];
 
