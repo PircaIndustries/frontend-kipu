@@ -1,0 +1,969 @@
+{
+  "categoriesCatalog": [
+    {
+      "id": "cat-001",
+      "name": "Estructuras y Albañilería",
+      "description": "Ladrillos, bloques y elementos prefabricados para muros y techos.",
+      "isActive": true
+    },
+    {
+      "id": "cat-002",
+      "name": "Aglomerantes",
+      "description": "Materiales que unen o cohesionan mezclas, como cemento, cal y yeso.",
+      "isActive": true
+    },
+    {
+      "id": "cat-003",
+      "name": "Agregados",
+      "description": "Arena fina, arena gruesa, piedra chancada, confitillo y hormigón.",
+      "isActive": true
+    },
+    {
+      "id": "cat-004",
+      "name": "Metales y Acero",
+      "description": "Acero corrugado, alambres, clavos, mallas electrosoldadas y perfiles metálicos.",
+      "isActive": true
+    },
+    {
+      "id": "cat-005",
+      "name": "Maderas y Encofrados",
+      "description": "Tableros, triplay fenólico, listones y madera para encofrado.",
+      "isActive": true
+    },
+    {
+      "id": "cat-006",
+      "name": "Consumibles y Varios",
+      "description": "Discos de corte, lijas, aditivos para concreto, soldadura, etc.",
+      "isActive": true
+    },
+    {
+      "id": "cat-007",
+      "name": "Equipos de Protección Personal (EPP)",
+      "description": "Cascos, guantes, lentes, botas, tapones auditivos y arneses de seguridad.",
+      "isActive": true
+    }
+  ],
+  "materialsCatalog": [
+    {
+      "id": "mat-001",
+      "name": "Ladrillo King Kong 18 huecos",
+      "categoryId": "cat-001",
+      "subcategory": "Muros",
+      "measureUnit": "und"
+    },
+    {
+      "id": "mat-002",
+      "name": "Cemento Portland Tipo I",
+      "categoryId": "cat-002",
+      "subcategory": "Cementos",
+      "measureUnit": "bolsa"
+    },
+    {
+      "id": "mat-003",
+      "name": "Arena Fina",
+      "categoryId": "cat-003",
+      "subcategory": "Arenas",
+      "measureUnit": "m3"
+    },
+    {
+      "id": "mat-004",
+      "name": "Acero Corrugado 1/2\" x 9m",
+      "categoryId": "cat-004",
+      "subcategory": "Acero de refuerzo",
+      "measureUnit": "varilla"
+    },
+    {
+      "id": "mat-005",
+      "name": "Triplay Fenólico 18mm",
+      "categoryId": "cat-005",
+      "subcategory": "Encofrados",
+      "measureUnit": "plancha"
+    },
+    {
+      "id": "mat-006",
+      "name": "Disco de Corte 7\"",
+      "categoryId": "cat-006",
+      "subcategory": "Abrasivos",
+      "measureUnit": "und"
+    },
+    {
+      "id": "mat-007",
+      "name": "Casco de Seguridad",
+      "categoryId": "cat-007",
+      "subcategory": "Protección de cabeza",
+      "measureUnit": "und"
+    },
+    {
+      "id": "mat-008",
+      "name": "Clavos 3\" para madera",
+      "categoryId": "cat-004",
+      "subcategory": "Clavos y pernos",
+      "measureUnit": "kg"
+    },
+    {
+      "id": "mat-009",
+      "name": "Piedra Chancada 1/2\"",
+      "categoryId": "cat-003",
+      "subcategory": "Piedras",
+      "measureUnit": "m3"
+    },
+    {
+      "id": "mat-010",
+      "name": "Bloque de Concreto 20x20x40",
+      "categoryId": "cat-001",
+      "subcategory": "Bloques",
+      "measureUnit": "und"
+    },
+    {
+      "id": "mat-011",
+      "name": "Cal Hidratada",
+      "categoryId": "cat-002",
+      "subcategory": "Cal",
+      "measureUnit": "bolsa"
+    },
+    {
+      "id": "mat-012",
+      "name": "Guantes de Cuero",
+      "categoryId": "cat-007",
+      "subcategory": "Protección de manos",
+      "measureUnit": "par"
+    },
+    {
+      "id": "mat-013",
+      "name": "Listón de Madera 2x3x300cm",
+      "categoryId": "cat-005",
+      "subcategory": "Maderas",
+      "measureUnit": "und"
+    },
+    {
+      "id": "mat-014",
+      "name": "Soldadura 6011 1/8\"",
+      "categoryId": "cat-006",
+      "subcategory": "Soldadura",
+      "measureUnit": "kg"
+    }
+  ],
+  "materialsInventory": [
+    {
+      "id": "inv-001",
+      "projectId": "proj-01",
+      "materialId": "mat-001",
+      "currentStock": 5400,
+      "miniumStock": 1000,
+      "location": "Almacén Principal"
+    },
+    {
+      "id": "inv-002",
+      "projectId": "proj-02",
+      "materialId": "mat-002",
+      "currentStock": 150,
+      "miniumStock": 20,
+      "location": "Sótano 1"
+    },
+    {
+      "id": "inv-003",
+      "projectId": "proj-01",
+      "materialId": "mat-003",
+      "currentStock": 800,
+      "miniumStock": 100,
+      "location": "Patio de Agregados"
+    },
+    {
+      "id": "inv-004",
+      "projectId": "proj-02",
+      "materialId": "mat-004",
+      "currentStock": 20,
+      "miniumStock": 30,
+      "location": "Almacén Techado"
+    },
+    {
+      "id": "inv-005",
+      "projectId": "proj-01",
+      "materialId": "mat-005",
+      "currentStock": 45,
+      "miniumStock": 10,
+      "location": "Almacén Principal"
+    },
+    {
+      "id": "inv-006",
+      "projectId": "proj-02",
+      "materialId": "mat-006",
+      "currentStock": 200,
+      "miniumStock": 50,
+      "location": "Estante 4B"
+    },
+    {
+      "id": "inv-007",
+      "projectId": "proj-01",
+      "materialId": "mat-007",
+      "currentStock": 12,
+      "miniumStock": 25,
+      "location": "Almacén Principal"
+    },
+    {
+      "id": "inv-008",
+      "projectId": "proj-02",
+      "materialId": "mat-008",
+      "currentStock": 5,
+      "miniumStock": 10,
+      "location": "Estante 2A"
+    },
+    {
+      "id": "inv-009",
+      "projectId": "proj-01",
+      "materialId": "mat-009",
+      "currentStock": 300,
+      "miniumStock": 50,
+      "location": "Patio de Agregados"
+    },
+    {
+      "id": "inv-010",
+      "projectId": "proj-02",
+      "materialId": "mat-010",
+      "currentStock": 0,
+      "miniumStock": 50,
+      "location": "Patio Exterior"
+    },
+    {
+      "id": "inv-011",
+      "projectId": "proj-01",
+      "materialId": "mat-011",
+      "currentStock": 60,
+      "miniumStock": 15,
+      "location": "Sótano 2"
+    },
+    {
+      "id": "inv-012",
+      "projectId": "proj-02",
+      "materialId": "mat-012",
+      "currentStock": 35,
+      "miniumStock": 10,
+      "location": "Almacén Principal"
+    },
+    {
+      "id": "inv-013",
+      "projectId": "proj-01",
+      "materialId": "mat-013",
+      "currentStock": 120,
+      "miniumStock": 30,
+      "location": "Patio de Maderas"
+    },
+    {
+      "id": "inv-014",
+      "projectId": "proj-02",
+      "materialId": "mat-014",
+      "currentStock": 18,
+      "miniumStock": 5,
+      "location": "Estante 3C"
+    }
+  ],
+  "supplierOffers": [
+    {
+      "id": "soff-001",
+      "supplierId": "sup-001",
+      "materialId": "mat-004",
+      "unitPrice": 35.5
+    },
+    {
+      "id": "soff-002",
+      "supplierId": "sup-001",
+      "materialId": "mat-008",
+      "unitPrice": 8.2
+    },
+    {
+      "id": "soff-003",
+      "supplierId": "sup-002",
+      "materialId": "mat-002",
+      "unitPrice": 28
+    },
+    {
+      "id": "soff-004",
+      "supplierId": "sup-002",
+      "materialId": "mat-011",
+      "unitPrice": 15.5
+    },
+    {
+      "id": "soff-005",
+      "supplierId": "sup-003",
+      "materialId": "mat-001",
+      "unitPrice": 1.2
+    },
+    {
+      "id": "soff-006",
+      "supplierId": "sup-003",
+      "materialId": "mat-010",
+      "unitPrice": 4.5
+    },
+    {
+      "id": "soff-007",
+      "supplierId": "sup-004",
+      "materialId": "mat-005",
+      "unitPrice": 62
+    },
+    {
+      "id": "soff-008",
+      "supplierId": "sup-004",
+      "materialId": "mat-013",
+      "unitPrice": 18.5
+    },
+    {
+      "id": "soff-009",
+      "supplierId": "sup-005",
+      "materialId": "mat-006",
+      "unitPrice": 12.8
+    },
+    {
+      "id": "soff-010",
+      "supplierId": "sup-005",
+      "materialId": "mat-007",
+      "unitPrice": 8.5
+    },
+    {
+      "id": "soff-011",
+      "supplierId": "sup-005",
+      "materialId": "mat-012",
+      "unitPrice": 15
+    },
+    {
+      "id": "soff-012",
+      "supplierId": "sup-005",
+      "materialId": "mat-014",
+      "unitPrice": 9.3
+    },
+    {
+      "id": "soff-013",
+      "supplierId": "sup-006",
+      "materialId": "mat-003",
+      "unitPrice": 45
+    },
+    {
+      "id": "soff-014",
+      "supplierId": "sup-006",
+      "materialId": "mat-009",
+      "unitPrice": 55
+    }
+  ],
+  "materialsSuppliers": [
+    {
+      "id": "sup-001",
+      "ruc": "20100200300",
+      "onboarded": "2023-11-15",
+      "socialReason": "Aceros Arequipa S.A.",
+      "contact": "Ventas Corporativas",
+      "phone": "01-517-1800",
+      "email": "ventas@acerosarequipa.pe",
+      "paymentTerms": "NET 30",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "sup-002",
+      "ruc": "20457896324",
+      "onboarded": "2024-02-20",
+      "socialReason": "Cementos Pacasmayo S.A.",
+      "contact": "Atención al Cliente",
+      "phone": "01-614-0400",
+      "email": "atencioncliente@cementospacasmayo.pe",
+      "paymentTerms": "NET 45",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "sup-003",
+      "ruc": "20601234567",
+      "onboarded": "2024-03-10",
+      "socialReason": "Ladrillera Santa Rosa S.A.C.",
+      "contact": "Área de Ventas",
+      "phone": "054-225500",
+      "email": "ventas@ladrillerasantarosa.pe",
+      "paymentTerms": "NET 30",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "sup-004",
+      "ruc": "20123456789",
+      "onboarded": "2024-05-05",
+      "socialReason": "Maderas del Norte S.A.C.",
+      "contact": "Carlos Mendoza",
+      "phone": "01-225-3344",
+      "email": "ventas@maderasnorte.pe",
+      "paymentTerms": "NET 30",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "sup-005",
+      "ruc": "20567890123",
+      "onboarded": "2025-01-12",
+      "socialReason": "Ferretería Industrial EIRL",
+      "contact": "Luisa Fernández",
+      "phone": "01-778-9900",
+      "email": "ventas@ferreteriaindustrial.pe",
+      "paymentTerms": "NET 15",
+      "status": "INACTIVE"
+    },
+    {
+      "id": "sup-006",
+      "ruc": "20789012345",
+      "onboarded": "2025-03-01",
+      "socialReason": "Agregados del Sur EIRL",
+      "contact": "Roberto Gutiérrez",
+      "phone": "084-225678",
+      "email": "ventas@agregadossur.pe",
+      "paymentTerms": "NET 30",
+      "status": "ACTIVE"
+    }
+  ],
+  "materialsRequests": [
+    {
+      "id": "req-001",
+      "projectId": "proj-01",
+      "requestDate": "2026-05-01",
+      "deadline": "2026-05-10",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "deliveryLocation": "Sótano 2",
+      "budgetLineId": "PP-2026-05",
+      "purpose": "esotilin",
+      "additionalNotes": "aaasdasd",
+      "suggestedSupplierId": "sup-002",
+      "attachments": [],
+      "requestedBy": "us-01",
+      "items": [
+        {
+          "supplierOfferId": "soff-003",
+          "quantity": 70
+        }
+      ]
+    },
+    {
+      "id": "req-002",
+      "projectId": "proj-02",
+      "requestDate": "2026-05-05",
+      "deadline": "2026-05-12",
+      "status": "APPROVED",
+      "priority": "HIGH",
+      "deliveryLocation": "Almacén Techado",
+      "budgetLineId": "PP-2026-06",
+      "purpose": "Habilitación de aceros para columnas",
+      "additionalNotes": "Entregar a primera hora",
+      "suggestedSupplierId": "sup-001",
+      "attachments": [],
+      "requestedBy": "us-01",
+      "items": [
+        {
+          "supplierOfferId": "soff-001",
+          "quantity": 150
+        },
+        {
+          "supplierOfferId": "soff-002",
+          "quantity": 25
+        }
+      ]
+    },
+    {
+      "id": "req-003",
+      "projectId": "proj-02",
+      "requestDate": "2026-05-08",
+      "deadline": "2026-05-15",
+      "status": "PENDING",
+      "priority": "LOW",
+      "deliveryLocation": "Oficina de Obra",
+      "budgetLineId": "PP-2026-07",
+      "purpose": "Renovación de EPP",
+      "additionalNotes": "Tallas variadas",
+      "suggestedSupplierId": "sup-005",
+      "attachments": [],
+      "requestedBy": "us-03",
+      "items": [
+        {
+          "supplierOfferId": "soff-010",
+          "quantity": 15
+        },
+        {
+          "supplierOfferId": "soff-011",
+          "quantity": 15
+        }
+      ]
+    },
+    {
+      "items": [
+        {
+          "supplierOfferId": "soff-001",
+          "quantity": 9
+        }
+      ],
+      "suggestedSupplierId": "sup-001",
+      "budgetLineId": null,
+      "priority": "LOW",
+      "deliveryLocation": "a",
+      "purpose": "xd",
+      "additionalNotes": "",
+      "requestDate": "2026-05-12",
+      "deadline": "2026-05-13",
+      "requestedBy": "Usuario actual",
+      "status": "PENDING",
+      "id": "iPVsW5E"
+    }
+  ],
+  "materialsWaste": [
+    {
+      "id": "rmt-001",
+      "projectId": "proj-01",
+      "materialId": "mat-001",
+      "quantity": 50,
+      "classificationType": "ROTURA",
+      "date": "2026-05-02",
+      "description": "Ladrillos rotos durante maniobra de descarga del camión en obra. Material inutilizable.",
+      "reportedBy": "us-01",
+      "photoUrl": ""
+    },
+    {
+      "id": "rmt-002",
+      "projectId": "proj-02",
+      "materialId": "mat-002",
+      "quantity": 8,
+      "classificationType": "VENCIMIENTO",
+      "date": "2026-05-06",
+      "description": "Bolsas de cemento endurecidas por filtración de humedad en el sótano 1.",
+      "reportedBy": "us-03",
+      "photoUrl": ""
+    }
+  ],
+  "machineryCatalog": [
+    {
+      "id": "maq-001",
+      "name": "Excavadora Hidráulica",
+      "brand": "Caterpillar",
+      "model": "320 GC",
+      "serialNumber": "CAT-320-X991",
+      "acquisitionDate": "2023-05-12T00:00:00Z"
+    },
+    {
+      "id": "maq-002",
+      "name": "Excavadora Hidráulica",
+      "brand": "Caterpillar",
+      "model": "320 GC",
+      "serialNumber": "CAT-320-X992",
+      "acquisitionDate": "2023-05-12T00:00:00Z"
+    },
+    {
+      "id": "maq-003",
+      "name": "Mezcladora de Concreto Trompo",
+      "brand": "Fiori",
+      "model": "DB 460",
+      "serialNumber": "FIO-460-A11",
+      "acquisitionDate": "2024-01-20T00:00:00Z"
+    },
+    {
+      "id": "maq-004",
+      "name": "Cargador Frontal",
+      "brand": "Komatsu",
+      "model": "WA380-6",
+      "serialNumber": "KOM-WA-777",
+      "acquisitionDate": "2022-11-05T00:00:00Z"
+    },
+    {
+      "id": "maq-005",
+      "name": "Rodillo Compactador",
+      "brand": "Bomag",
+      "model": "BW 211 D-40",
+      "serialNumber": "BOM-211-Z88",
+      "acquisitionDate": "2025-02-15T00:00:00Z"
+    }
+  ],
+  "machineryAssignments": [
+    {
+      "id": "asig-101",
+      "projectId": "proj-01",
+      "machineryId": "maq-001",
+      "status": "IN_USE",
+      "assignedTo": "us-01",
+      "registrationDate": "2026-05-01T08:30:00Z",
+      "maintenanceHours": "1200",
+      "assignmentDetail": "Movimiento de tierras en el sector Norte."
+    },
+    {
+      "id": "asig-102",
+      "projectId": "proj-01",
+      "machineryId": "maq-003",
+      "status": "URGENT_MAINTENANCE",
+      "assignedTo": "us-02",
+      "registrationDate": "2026-05-05T09:15:00Z",
+      "maintenanceHours": "450",
+      "assignmentDetail": "Falla en el tambor rotatorio, requiere revisión del motor."
+    },
+    {
+      "id": "asig-103",
+      "projectId": "proj-02",
+      "machineryId": "maq-002",
+      "status": "IN_USE",
+      "assignedTo": "us-03",
+      "registrationDate": "2026-05-10T07:00:00Z",
+      "maintenanceHours": "1150",
+      "assignmentDetail": "Excavación para cimientos profundos."
+    },
+    {
+      "id": "asig-104",
+      "projectId": "proj-02",
+      "machineryId": "maq-004",
+      "status": "AVAILABLE",
+      "assignedTo": "us-04",
+      "registrationDate": "2026-05-11T08:00:00Z",
+      "maintenanceHours": "3200",
+      "assignmentDetail": "En espera de llegada de camiones volquete para carga."
+    }
+  ],
+  "budgets": [
+    {
+      "id": "01.01",
+      "name": "Cimentación",
+      "description": "Trabajos preliminares y cimentación",
+      "budgeted": 80000,
+      "executed": 7100,
+      "status": "NORMAL",
+      "alertMessage": null
+    },
+    {
+      "id": "01.02",
+      "name": "Estructura",
+      "description": "Columnas, vigas y losas",
+      "budgeted": 70000,
+      "executed": 3300,
+      "status": "NORMAL",
+      "alertMessage": null
+    }
+  ],
+  "transactions": [
+    {
+      "id": 1,
+      "budgetId": "01.01",
+      "amount": 5000,
+      "date": "2026-05-12",
+      "description": "Compra de cemento"
+    },
+    {
+      "budgetId": "01.02",
+      "amount": 9000,
+      "date": "2026-05-13",
+      "description": "",
+      "id": 2
+    },
+    {
+      "budgetId": "01.02",
+      "amount": 8750,
+      "date": "2026-05-13",
+      "description": "materiales urgentes",
+      "id": 3
+    },
+    {
+      "budgetId": "01.01",
+      "amount": 100,
+      "date": "2026-05-13",
+      "description": "Cimentación importante",
+      "id": 4
+    },
+    {
+      "budgetId": "01.02",
+      "amount": 300,
+      "date": "2026-05-13",
+      "description": "Estructuras",
+      "id": 5
+    }
+  ],
+  "ncrs": [
+    {
+      "id": "1",
+      "projectId": "1",
+      "date": "2026-04-20T10:00:00.000Z",
+      "ncrTitle": "Fisura en Losa N3",
+      "ncrDescription": "Se detectó una fisura longitudinal tras el desencofrado.",
+      "specialty": "Estructuras",
+      "severityLevel": "Alto",
+      "photoUrl": "https://i.pinimg.com/736x/29/7b/a1/297ba161005c3fef3978dd086c8bc76.jpg"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-01",
+      "name": "Edificio Los Alisos",
+      "description": "Edificio residencial de 12 pisos con estacionamiento subterráneo.",
+      "location": "Lima, Perú",
+      "startDate": "2026-01-01",
+      "endDate": "2026-12-31",
+      "budget": 1500000,
+      "progress": 45,
+      "status": "En ejecución",
+      "statusJustification": "34",
+      "image": "/assets/project-image1.png",
+      "members": 8,
+      "rnc": 3,
+      "pending": 5
+    },
+    {
+      "id": "proj-02",
+      "name": "Centro Comercial Plaza Norte",
+      "description": "Centro comercial de 3 niveles con zona de entretenimiento.",
+      "location": "Trujillo, Perú",
+      "startDate": "2026-03-15",
+      "endDate": "2027-06-30",
+      "budget": 4200000,
+      "progress": 12,
+      "status": "Planificación",
+      "statusJustification": "",
+      "image": "/assets/project-image2.png",
+      "members": 15,
+      "rnc": 9,
+      "pending": 8
+    }
+  ],
+  "identities": [
+    {
+      "id": "id-001",
+      "name": "Carlos Medina",
+      "email": "carlos@kipu.pe",
+      "password": "12345678",
+      "role": "Gestor Operativo"
+    },
+    {
+      "id": "id-002",
+      "name": "Ana Torres",
+      "email": "ana@kipu.pe",
+      "password": "12345678",
+      "role": "Logística y Administración"
+    },
+    {
+      "id": "id-003",
+      "name": "Usuario Demo",
+      "email": "demo@kipu.pe",
+      "password": "12345678",
+      "role": "Gestor Operativo"
+    },
+    {
+      "name": "Mario Perez",
+      "email": "kipu4@hotmail.com",
+      "password": "kipu1234",
+      "role": "Logística y Administración",
+      "id": "zLRgEqI"
+    },
+    {
+      "name": "Mario Perez",
+      "email": "kipu0@hotmail.com",
+      "password": "kipu1234",
+      "role": "Gestor Operativo",
+      "id": "PjaiuHE"
+    },
+    {
+      "name": "Pau Mon",
+      "email": "pau@gmail.com",
+      "password": "paupau707",
+      "role": "Logística y Administración",
+      "id": "6NxPOLs"
+    },
+    {
+      "name": "pepe",
+      "email": "pepe@gmail.com",
+      "password": "12345678",
+      "role": "Gestor Operativo",
+      "id": "iBdZ7sw"
+    }
+  ],
+  "progress": [
+    {
+      "date": "2026-05-07",
+      "specialty": "execution.advances.specialties.installations",
+      "activityName": "sadas",
+      "location": "asdasd",
+      "percentage": 12,
+      "description": "adsad",
+      "responsible": "Juan Pérez",
+      "workers": 12,
+      "weather": "sunny",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-05-07T05:00:00.000Z",
+      "projectId": "1",
+      "id": 1
+    }
+  ],
+  "team-users": [
+    {
+      "id": "us-01",
+      "fullName": "Admin Demo",
+      "email": "admin@pirca.com",
+      "isActive": true,
+      "role": "Administrador"
+    },
+    {
+      "id": "us-02",
+      "fullName": "Ana Torres",
+      "email": "ana.torres@pirca.com",
+      "isActive": false,
+      "role": "Ingeniero"
+    },
+    {
+      "id": "us-03",
+      "fullName": "Juan Pérez",
+      "email": "jperez.logistica@pirca.com",
+      "isActive": false,
+      "role": "Gestor"
+    },
+    {
+      "id": "us-04",
+      "fullName": "Inversor Centro SAC",
+      "email": "gerencia@inversorcentro.pe",
+      "isActive": true,
+      "role": "Logistica"
+    },
+    {
+      "id": "us-07",
+      "fullName": "Laurel Pallo",
+      "email": "LauPallo@pirca.com",
+      "isActive": true,
+      "role": "Cliente"
+    },
+    {
+      "id": "us-1778611326049",
+      "fullName": "Neto Pepon",
+      "email": "waranza@gmail.com",
+      "isActive": true,
+      "role": "Logistica"
+    }
+  ],
+  "team-workers": [
+    {
+      "id": "wkr-001",
+      "dni": "70123456",
+      "fullName": "Carlos Ruiz",
+      "role": "Capataz - Estructuras",
+      "isActive": false,
+      "assignedTools": [
+        "Excavadora CAT 320",
+        "Mezcladora de Concreto"
+      ]
+    },
+    {
+      "id": "wkr-002",
+      "dni": "45678901",
+      "fullName": "Miguel Santos",
+      "role": "Operario - Vaciado",
+      "isActive": false,
+      "assignedTools": [
+        "Vibrador de Concreto"
+      ]
+    },
+    {
+      "id": "wkr-003",
+      "dni": "10293847",
+      "fullName": "Luis Gómez",
+      "role": "Peón",
+      "isActive": true,
+      "assignedTools": []
+    },
+    {
+      "id": "wkr-1778624246549",
+      "dni": "9823311",
+      "fullName": "Juan Perez",
+      "role": "Operario de Cuadrilla",
+      "isActive": true,
+      "assignedTools": [
+        "Pico",
+        "Pala"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc-001",
+      "type": "Acta de Conformidad - Estructura",
+      "isSigned": true,
+      "digitalSignatureToken": "123456",
+      "deadLine": "2024-12-31T23:59:59.000Z",
+      "assignedTo": [
+        {
+          "id": "us-01",
+          "fullName": "Admin Demo",
+          "signedAt": "2024-12-30T10:30:00.000Z"
+        },
+        {
+          "id": "us-02",
+          "fullName": "Ana Torres",
+          "signedAt": "2024-12-29T14:45:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "doc-002",
+      "type": "Acta de Conformidad - Instalaciones Eléctricas",
+      "isSigned": true,
+      "digitalSignatureToken": "123456",
+      "deadLine": "2025-01-15T23:59:59.000Z",
+      "assignedTo": [
+        {
+          "id": "us-01",
+          "fullName": "Admin Demo"
+        },
+        {
+          "id": "us-03",
+          "fullName": "Juan Pérez"
+        }
+      ]
+    },
+    {
+      "id": "doc-003",
+      "type": "RNC - Fisura en losa de cimentación",
+      "isSigned": false,
+      "digitalSignatureToken": null,
+      "deadLine": "2025-06-20T23:59:59.000Z",
+      "assignedTo": [
+        {
+          "id": "us-02",
+          "fullName": "Ana Torres",
+          "signedAt": null
+        },
+        {
+          "id": "us-04",
+          "fullName": "Inversor Centro SAC",
+          "signedAt": null
+        }
+      ]
+    },
+    {
+      "id": "doc-004",
+      "type": "Liquidación de Obra - Proyecto Los Olivos",
+      "isSigned": false,
+      "digitalSignatureToken": null,
+      "deadLine": "2025-02-28T23:59:59.000Z",
+      "assignedTo": [
+        {
+          "id": "us-01",
+          "fullName": "Admin Demo",
+          "signedAt": null
+        },
+        {
+          "id": "us-03",
+          "fullName": "Juan Pérez",
+          "signedAt": null
+        },
+        {
+          "id": "us-07",
+          "fullName": "Laurel Pallo",
+          "signedAt": null
+        }
+      ]
+    },
+    {
+      "id": "doc-1778630190036-37vn6i",
+      "type": "Acta de Conformidad - Tolvas petromagnéticas",
+      "isSigned": true,
+      "digitalSignatureToken": "123456",
+      "deadLine": "2026-05-13T05:00:00.000Z",
+      "assignedTo": [
+        {
+          "id": "us-04",
+          "fullName": "Inversor Centro SAC"
+        },
+        {
+          "id": "us-07",
+          "fullName": "Laurel Pallo"
+        }
+      ]
+    }
+  ]
+}
