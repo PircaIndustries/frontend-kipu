@@ -26,7 +26,6 @@ import Dialog from 'primevue/dialog';
 // Styles
 import 'primeicons/primeicons.css';
 import './style.css';
-import './style.css';
 import {Toast} from "primevue";
 import ToastService from 'primevue/toastservice';
 const app = createApp(App);
