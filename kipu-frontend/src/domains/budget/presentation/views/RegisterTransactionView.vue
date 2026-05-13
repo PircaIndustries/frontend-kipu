@@ -23,7 +23,6 @@ const save = async () => {
   if (!form.value.partidaId || form.value.amount <= 0) return;
 
   try {
-    // Enviamos el ID, el monto y la descripción del formulario
     await repository.addTransaction(
         form.value.partidaId,
         form.value.amount,

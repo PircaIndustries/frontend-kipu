@@ -3,19 +3,16 @@ import axios from 'axios';
 const API_URL = 'http://localhost:3000/budgets';
 
 export class BudgetApi {
-    // Obtener todas las partidas desde db.json
     async findAll() {
         const { data } = await axios.get(API_URL);
         return data;
     }
 
-    // Obtener una sola partida por ID
     async findById(id) {
         const { data } = await axios.get(`${API_URL}/${id}`);
         return data;
     }
 
-    // Obtener resumen calculado
     async getProjectSummary() {
         const items = await this.findAll();
         const total = items.reduce((acc, curr) => acc + curr.budgeted, 0);
@@ -34,7 +31,6 @@ export class BudgetApi {
             const item = await this.findById(id);
             if (!item) throw new Error("Partida no encontrada");
 
-            // Convertir siempre a números para evitar errores de concatenación
             const numAmount = Number(amount);
             const numBudgeted = Number(item.budgeted);
             const newExecuted = Number(item.executed) + numAmount;
@@ -48,7 +44,6 @@ export class BudgetApi {
                 alertMessage: null
             };
 
-            // Lógica de alerta del 12.5%
             if (newExecuted > numBudgeted) {
                 updateData.status = 'AT_RISK';
                 if (excessPercentage >= 12.5) {
@@ -58,7 +53,6 @@ export class BudgetApi {
                 }
             }
 
-            // Ejecutar ambas peticiones. Si 'transactions' no existe en db.json, esto fallará.
             await axios.post('http://localhost:3000/transactions', {
                 budgetId: id,
                 amount: numAmount,
@@ -79,7 +73,6 @@ export class BudgetApi {
             const item = await this.findById(id);
             if (!item) return;
 
-            // Recalculamos el estado basado en el nuevo presupuesto
             let newStatus = 'NORMAL';
             let newAlert = null;
 

@@ -1,6 +1,5 @@
 import { ref } from 'vue';
 
-// Definimos el array reactivo que guardará todos los NCR
 export const allNcrs = ref([
     {
         id: '1',
