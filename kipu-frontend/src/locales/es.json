@@ -496,7 +496,6 @@
             "title": "Directorio de Obreros",
             "search-placeholder": "Buscar por DNI, nombre o cargo...",
             "register": {
-                "btn-add-worker": "Nuevo Obrero",
                 "btn-add-worker": "+ Nuevo Obrero",
                 "no-workers-found": "No se encontraron trabajadores registrados.",
                 "description": "Directorio pasivo del personal operario. Se utiliza exclusivamente para asociar su DNI en el Módulo Logístico.",
