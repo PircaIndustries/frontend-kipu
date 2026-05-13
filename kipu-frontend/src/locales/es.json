@@ -143,88 +143,6 @@
         "budget": "Presupuesto",
         "team": "Equipo"
     },
-    "execution": {
-        "advances": {
-            "title": "Control de Avances",
-            "subtitle": "Historial de registros diarios y estados de ejecución.",
-            "newBtn": "Nuevo Avance Diario",
-            "filterSpecialty": "Filtrar por: Especialidad",
-            "filterWeek": "Semana: 13 Abr - 19 Abr",
-            "filterProject": "Filtrar por: Proyecto",
-            "weeklyReport": "Has registrado {count} avances esta semana. Recuerda adjuntar fotos en cada reporte.",
-            "specialties": {
-                "structures": "Estructuras",
-                "installations": "Instalaciones",
-                "architecture": "Arquitectura"
-            },
-            "tabs": {
-                "registry": "Registro de Avance (PPC)",
-                "photoLog": "Bitácora Fotográfica"
-            },
-            "photoLog": {
-                "title": "Galería de Evidencias",
-                "noPhotos": "No hay fotos registradas para este periodo.",
-                "viewFull": "Ver pantalla completa",
-                "filterBy": "Especialidad:"
-            }
-        },
-        "impedimentLabel": "Motivo de Impedimento",
-        "status": {
-            "COMPLETED": "COMPLETADO",
-            "IN_PROGRESS": "EN CURSO",
-            "DELAYED": "DEMORADO"
-        },
-        "statusLabel": "Estado",
-        "statusOptions": {
-            "progress": "En Avance",
-            "blocked": "Bloqueado"
-        },
-        "submitBtn": "Registrar Avance",
-        "table": {
-            "date": "FECHA",
-            "activity": "ACTIVIDAD REALIZADA",
-            "specialty": "ESPECIALIDAD",
-            "progress": "AVANCE (%)",
-            "status": "ESTADO",
-            "project": "PROYECTO"
-        },
-        "taskLabel": "Partida",
-        "title": "Registro de Avance Diario",
-        "create": {
-            "title": "Nuevo Avance Diario",
-            "submitBtn": "Guardar Avance",
-            "discardHeader": "Confirmar descarte",
-            "discardMessage": "Tienes cambios sin guardar. ¿Estás seguro de que deseas salir?",
-            "fields": {
-                "date": "Fecha del Avance",
-                "specialty": "Especialidad",
-                "activity": "Actividad Realizada",
-                "location": "Ubicación/Sector",
-                "progress": "Porcentaje de Avance",
-                "description": "Descripción Detallada",
-                "responsible": "Responsable",
-                "crewSize": "Personal de Cuadrilla",
-                "weather": "Condiciones Climáticas",
-                "photos": "Fotos del Avance",
-                "project": "Proyecto asignado"
-            },
-            "placeholders": {
-                "activity": "Ej: Vaciado de losa del segundo nivel",
-                "location": "Ej: Nivel 2 - Eje A-B",
-                "project": "Seleccione un proyecto"
-            },
-            "photos": {
-                "add": "Agregar foto",
-                "empty": "Arrastra imágenes aquí para subirlas"
-            }
-        },
-        "weather": {
-            "sunny": "Soleado",
-            "cloudy": "Nublado",
-            "rainy": "Lluvia",
-            "storm": "Tormenta"
-        }
-    },
     "projects": {
         "title": "Mis Proyectos",
         "newProject": "Nuevo Proyecto",
@@ -651,6 +569,128 @@
             "token-sent": "Se ha enviado un código de 6 dígitos a tu correo",
             "btn-confirm": "Confirmar Firma",
             "btn-cancel": "Cancelar"
+        }
+    },
+    "progress-monitoring": {
+        "advances": {
+            "title": "Control de Avances",
+            "subtitle": "Historial de registros diarios y estados de ejecución.",
+            "newBtn": "Nuevo Avance Diario",
+            "filterProject": "Filtrar por: Proyecto",
+            "filterSpecialty": "Filtrar por: Especialidad",
+            "filterWeek": "Rango de fechas",
+            "weeklyReport": "Has registrado {count} avances en este proyecto. Recuerda adjuntar fotos en cada reporte.",
+            "specialties": {
+                "structures": "Estructuras",
+                "installations": "Instalaciones",
+                "architecture": "Arquitectura"
+            }
+        },
+        "table": {
+            "date": "Fecha",
+            "activity": "Actividad Realizada",
+            "specialty": "Especialidad",
+            "progress": "Avance (%)",
+            "project": "Proyecto",
+            "status": "Estado"
+        },
+        "tabs": {
+            "log": "Registro de Avance (PPC)",
+            "photos": "Bitácora Fotográfica"
+        },
+        "actions": {
+            "export": "Exportar Reporte",
+            "upload": "Subir Fotos"
+        },
+        "filters": {
+            "activity": "Buscar actividad...",
+            "specialty": "Filtrar por: Especialidad",
+            "start_date": "Fecha inicio",
+            "end_date": "Fecha fin"
+        }
+    },
+    "execution": {
+        "advances": {
+            "title": "Control de Avances",
+            "subtitle": "Historial de registros diarios y estados de ejecución.",
+            "newBtn": "Nuevo Avance Diario",
+            "filterSpecialty": "Filtrar por: Especialidad",
+            "filterWeek": "Rango de fechas",
+            "weeklyReport": "Has registrado {count} avances en este proyecto.",
+            "specialties": {
+                "structures": "Estructuras",
+                "installations": "Instalaciones",
+                "architecture": "Arquitectura"
+            },
+            "tabs": {
+                "registry": "Registro de Avance (PPC)",
+                "photoLog": "Bitácora Fotográfica"
+            },
+            "photoLog": {
+                "title": "Galería de Evidencias",
+                "noPhotos": "No hay fotos registradas para este periodo.",
+                "viewFull": "Ver pantalla completa",
+                "filterBy": "Especialidad:"
+            }
+        },
+        "impedimentLabel": "Motivo de Impedimento",
+        "status": {
+            "COMPLETED": "COMPLETADO",
+            "IN_PROGRESS": "EN CURSO",
+            "DELAYED": "DEMORADO",
+            "ACTIVE": "ACTIVO",
+            "FINISHED": "FINALIZADO"
+        },
+        "statusLabel": "Estado",
+        "statusOptions": {
+            "progress": "En Avance",
+            "blocked": "Bloqueado"
+        },
+        "submitBtn": "Registrar Avance",
+        "table": {
+            "date": "FECHA",
+            "activity": "ACTIVIDAD REALIZADA",
+            "specialty": "ESPECIALIDAD",
+            "progress": "AVANCE (%)",
+            "status": "ESTADO",
+            "project": "PROYECTO"
+        },
+        "taskLabel": "Partida",
+        "title": "Registro de Avance Diario",
+        "create": {
+            "title": "Nuevo Avance Diario",
+            "submitBtn": "Guardar Avance",
+            "discardHeader": "Confirmar descarte",
+            "discardMessage": "Tienes cambios sin guardar. ¿Estás seguro de que deseas salir?",
+            "fields": {
+                "date": "Fecha del Avance",
+                "specialty": "Especialidad",
+                "activity": "Actividad Realizada",
+                "location": "Ubicación/Sector",
+                "progress": "Porcentaje de Avance",
+                "description": "Descripción Detallada",
+                "responsible": "Responsable",
+                "crewSize": "Personal de Cuadrilla",
+                "weather": "Condiciones Climáticas",
+                "photos": "Fotos del Avance",
+                "project": "Proyecto asignado"
+            },
+            "placeholders": {
+                "activity": "Ej: Vaciado de losa del segundo nivel",
+                "location": "Ej: Nivel 2 - Eje A-B",
+                "project": "Seleccione un proyecto",
+                "date": "Seleccionar fecha"
+            },
+            "photos": {
+                "add": "Agregar foto",
+                "empty": "Arrastra imágenes aquí para subirlas"
+            }
+        },
+        "weather": {
+            "sunny": "Soleado",
+            "cloudy": "Nublado",
+            "rainy": "Lluvia",
+            "storm": "Tormenta"
         }
     }
 }

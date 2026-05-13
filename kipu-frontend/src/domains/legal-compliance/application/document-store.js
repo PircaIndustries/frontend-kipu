@@ -111,7 +111,7 @@ const useDocumentStore = defineStore('document', () => {
 
     /**
      * Updates an existing document and synchronizes local state.
-     * @param {DocumentEntity} document - Document entity with updated data.
+     * @param {DocumentEntity} document - Document entity with updated application.
      * @returns {void}
      */
     function updateDocument(document) {

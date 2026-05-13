@@ -9,7 +9,7 @@ const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:
 export const projectsApi = {
     /**
      * Fetches all projects
-     * @returns {Promise<Object[]>} Array of project data
+     * @returns {Promise<Object[]>} Array of project application
      */
     async getAll() {
         try {
@@ -23,8 +23,8 @@ export const projectsApi = {
 
     /**
      * Creates a new project
-     * @param {Object} project - Project data to create
-     * @returns {Promise<Object>} Created project data
+     * @param {Object} project - Project application to create
+     * @returns {Promise<Object>} Created project application
      */
     async create(project) {
         try {
@@ -57,7 +57,7 @@ export const projectsApi = {
      * Updates the status of a project
      * @param {string} id - Project identifier
      * @param {{ status: string, statusJustification?: string }} payload
-     * @returns {Promise<Object>} Updated project data
+     * @returns {Promise<Object>} Updated project application
      */
     async updateStatus(id, payload) {
         try {

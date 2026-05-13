@@ -737,6 +737,23 @@
       "id": "PjaiuHE"
     }
   ],
+  "progress": [
+    {
+      "date": "2026-05-07",
+      "specialty": "execution.advances.specialties.installations",
+      "activityName": "sadas",
+      "location": "asdasd",
+      "percentage": 12,
+      "description": "adsad",
+      "responsible": "Juan Pérez",
+      "workers": 12,
+      "weather": "sunny",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-05-07T05:00:00.000Z",
+      "projectId": "1",
+      "id": 1
+    }
+  ],
   "team-users": [
     {
       "id": "us-01",
