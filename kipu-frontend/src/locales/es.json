@@ -137,11 +137,97 @@
         "projects": "Proyectos",
         "advances": "Avances",
         "rnc": "RNC",
+        "logistics": "Logística",
         "materials": "Materiales",
         "blueprints": "Planos",
         "signatures": "Firmas",
         "budget": "Presupuesto",
         "team": "Equipo"
+    },
+    "execution": {
+        "advances": {
+            "title": "Control de Avances",
+            "subtitle": "Historial de registros diarios y estados de ejecución.",
+            "newBtn": "Nuevo Avance Diario",
+            "filterSpecialty": "Filtrar por: Especialidad",
+            "filterWeek": "Rango de fechas",
+            "filterProject": "Filtrar por: Proyecto",
+            "weeklyReport": "Has registrado {count} avances en este proyecto.",
+            "specialties": {
+                "structures": "Estructuras",
+                "installations": "Instalaciones",
+                "architecture": "Arquitectura"
+            },
+            "tabs": {
+                "registry": "Registro de Avance (PPC)",
+                "photoLog": "Bitácora Fotográfica"
+            },
+            "photoLog": {
+                "title": "Galería de Evidencias",
+                "noPhotos": "No hay fotos registradas para este periodo.",
+                "viewFull": "Ver pantalla completa",
+                "filterBy": "Especialidad:"
+            }
+        },
+        "impedimentLabel": "Motivo de Impedimento",
+        "status": {
+            "COMPLETED": "COMPLETADO",
+            "IN_PROGRESS": "EN CURSO",
+            "DELAYED": "DEMORADO",
+            "ACTIVE": "ACTIVO",
+            "FINISHED": "FINALIZADO"
+        },
+        "statusLabel": "Estado",
+        "statusOptions": {
+            "progress": "En Avance",
+            "blocked": "Bloqueado"
+        },
+        "submitBtn": "Registrar Avance",
+        "table": {
+            "date": "FECHA",
+            "activity": "ACTIVIDAD REALIZADA",
+            "specialty": "ESPECIALIDAD",
+            "progress": "AVANCE (%)",
+            "status": "ESTADO",
+            "project": "PROYECTO"
+        },
+        "taskLabel": "Partida",
+        "title": "Registro de Avance Diario",
+        "create": {
+            "title": "Nuevo Avance Diario",
+            "submitBtn": "Guardar Avance",
+            "discardHeader": "Confirmar descarte",
+            "discardMessage": "Tienes cambios sin guardar. ¿Estás seguro de que deseas salir?",
+            "fields": {
+                "date": "Fecha del Avance",
+                "specialty": "Especialidad",
+                "activity": "Actividad Realizada",
+                "location": "Ubicación/Sector",
+                "progress": "Porcentaje de Avance",
+                "description": "Descripción Detallada",
+                "responsible": "Responsable",
+                "crewSize": "Personal de Cuadrilla",
+                "weather": "Condiciones Climáticas",
+                "photos": "Fotos del Avance",
+                "project": "Proyecto asignado"
+            },
+            "placeholders": {
+                "activity": "Ej: Vaciado de losa del segundo nivel",
+                "location": "Ej: Nivel 2 - Eje A-B",
+                "project": "Seleccione un proyecto",
+                "date": "Seleccionar fecha"
+            },
+            "photos": {
+                "add": "Agregar foto",
+                "empty": "Arrastra imágenes aquí para subirlas"
+            }
+        },
+        "weather": {
+            "sunny": "Soleado",
+            "cloudy": "Nublado",
+            "rainy": "Lluvia",
+            "storm": "Tormenta"
+        }
     },
     "projects": {
         "title": "Mis Proyectos",
@@ -530,7 +616,7 @@
             "signed-title": "Documentos Firmados",
             "deadline": "Vence",
             "signers": "Firmantes",
-            "btn-sign": "Firmar Documento",
+            "btn-sign": "Sign Document",
             "empty-pending": "No hay documentos pendientes",
             "empty-signed": "No hay documentos firmados",
             "summary-title": "Resumen",
@@ -540,7 +626,7 @@
             "security-description": "Todas las firmas son encriptadas y tienen validez legal según normativa vigente.",
             "howto-title": "¿Cómo firmar?",
             "howto-step1": "Revisa el documento completo",
-            "howto-step2": "Haz clic en 'Firmar Documento'",
+            "howto-step2": "Haz clic en 'Sign Document'",
             "howto-step3": "Ingresa el código de verificación",
             "howto-step4": "La firma se registra automáticamente",
             "btn-create": "Crear Documento"
@@ -564,133 +650,63 @@
                 "deadline-required": "La fecha límite es requerida",
                 "users-required": "Debes seleccionar al menos un usuario"
             },
-            "title": "Firmar Documento",
+            "title": "Sign Document",
             "description": "Ingresa el código de verificación",
             "token-sent": "Se ha enviado un código de 6 dígitos a tu correo",
             "btn-confirm": "Confirmar Firma",
             "btn-cancel": "Cancelar"
         }
     },
-    "progress-monitoring": {
-        "advances": {
-            "title": "Control de Avances",
-            "subtitle": "Historial de registros diarios y estados de ejecución.",
-            "newBtn": "Nuevo Avance Diario",
-            "filterProject": "Filtrar por: Proyecto",
-            "filterSpecialty": "Filtrar por: Especialidad",
-            "filterWeek": "Rango de fechas",
-            "weeklyReport": "Has registrado {count} avances en este proyecto. Recuerda adjuntar fotos en cada reporte.",
-            "specialties": {
-                "structures": "Estructuras",
-                "installations": "Instalaciones",
-                "architecture": "Arquitectura"
-            }
-        },
-        "table": {
-            "date": "Fecha",
-            "activity": "Actividad Realizada",
-            "specialty": "Especialidad",
-            "progress": "Avance (%)",
-            "project": "Proyecto",
-            "status": "Estado"
-        },
-        "tabs": {
-            "log": "Registro de Avance (PPC)",
-            "photos": "Bitácora Fotográfica"
+    "budget": {
+        "title": "Gestión de Presupuesto",
+        "summary": {
+            "total-budget": "PRESUPUESTO TOTAL DEL PROYECTO",
+            "total-amount": "PRESUPUESTO TOTAL",
+            "executed": "EJECUTADO",
+            "available": "S/ {value} DISPONIBLES",
+            "executed-lower": "ejecutado"
         },
         "actions": {
-            "export": "Exportar Reporte",
-            "upload": "Subir Fotos"
+            "new-expense": "Nuevo Gasto",
+            "request-extension": "Solicitar Ampliación",
+            "view-detail": "Ver Detalle",
+            "view-expenses": "Ver Gastos",
+            "export": "Exportar",
+            "save": "Guardar",
+            "cancel": "Cancelar"
         },
-        "filters": {
-            "activity": "Buscar actividad...",
-            "specialty": "Filtrar por: Especialidad",
-            "start_date": "Fecha inicio",
-            "end_date": "Fecha fin"
-        }
-    },
-    "execution": {
-        "advances": {
-            "title": "Control de Avances",
-            "subtitle": "Historial de registros diarios y estados de ejecución.",
-            "newBtn": "Nuevo Avance Diario",
-            "filterSpecialty": "Filtrar por: Especialidad",
-            "filterWeek": "Rango de fechas",
-            "weeklyReport": "Has registrado {count} avances en este proyecto.",
-            "specialties": {
-                "structures": "Estructuras",
-                "installations": "Instalaciones",
-                "architecture": "Arquitectura"
-            },
-            "tabs": {
-                "registry": "Registro de Avance (PPC)",
-                "photoLog": "Bitácora Fotográfica"
-            },
-            "photoLog": {
-                "title": "Galería de Evidencias",
-                "noPhotos": "No hay fotos registradas para este periodo.",
-                "viewFull": "Ver pantalla completa",
-                "filterBy": "Especialidad:"
-            }
-        },
-        "impedimentLabel": "Motivo de Impedimento",
-        "status": {
-            "COMPLETED": "COMPLETADO",
-            "IN_PROGRESS": "EN CURSO",
-            "DELAYED": "DEMORADO",
-            "ACTIVE": "ACTIVO",
-            "FINISHED": "FINALIZADO"
-        },
-        "statusLabel": "Estado",
-        "statusOptions": {
-            "progress": "En Avance",
-            "blocked": "Bloqueado"
-        },
-        "submitBtn": "Registrar Avance",
         "table": {
-            "date": "FECHA",
-            "activity": "ACTIVIDAD REALIZADA",
-            "specialty": "ESPECIALIDAD",
-            "progress": "AVANCE (%)",
-            "status": "ESTADO",
-            "project": "PROYECTO"
+            "title": "Presupuesto por Partidas",
+            "search": "Buscar partida por código o nombre...",
+            "budgeted": "PRESUPUESTADO",
+            "status": "ESTADO"
         },
-        "taskLabel": "Partida",
-        "title": "Registro de Avance Diario",
-        "create": {
-            "title": "Nuevo Avance Diario",
-            "submitBtn": "Guardar Avance",
-            "discardHeader": "Confirmar descarte",
-            "discardMessage": "Tienes cambios sin guardar. ¿Estás seguro de que deseas salir?",
-            "fields": {
-                "date": "Fecha del Avance",
-                "specialty": "Especialidad",
-                "activity": "Actividad Realizada",
-                "location": "Ubicación/Sector",
-                "progress": "Porcentaje de Avance",
-                "description": "Descripción Detallada",
-                "responsible": "Responsable",
-                "crewSize": "Personal de Cuadrilla",
-                "weather": "Condiciones Climáticas",
-                "photos": "Fotos del Avance",
-                "project": "Proyecto asignado"
-            },
-            "placeholders": {
-                "activity": "Ej: Vaciado de losa del segundo nivel",
-                "location": "Ej: Nivel 2 - Eje A-B",
-                "project": "Seleccione un proyecto",
-                "date": "Seleccionar fecha"
-            },
-            "photos": {
-                "add": "Agregar foto",
-                "empty": "Arrastra imágenes aquí para subirlas"
-            }
+        "forms": {
+            "new-expense-title": "Registro Formal de Gasto",
+            "request-extension-title": "Solicitud de Ampliación de Presupuesto",
+            "item": "PARTIDA / AVANCE",
+            "concept": "CONCEPTO / NOMBRE",
+            "amount": "MONTO (S/)",
+            "authorized_person": "PERSONA AUTORIZADA",
+            "select_person": "-- Seleccionar Responsable --",
+            "extension_reason": "JUSTIFICACIÓN TÉCNICA DE AMPLIACIÓN",
+            "description": "DESCRIPCIÓN DETALLADA",
+            "responsible": "RESPONSABLE"
         },
-        "weather": {
-            "sunny": "Soleado",
-            "cloudy": "Nublado",
-            "rainy": "Lluvia",
-            "storm": "Tormenta"
+        "details": {
+            "list-title": "Historial de Gastos",
+            "no-expenses": "No hay gastos registrados para este ítem.",
+            "view-expenses-title": "Ver Gastos"
+        },
+        "status": {
+            "normal": "Normal",
+            "risk": "Riesgo"
+        },
+        "sidebar": {
+            "recent-movements": "MOVIMIENTOS RECIENTES"
+        },
+        "errors": {
+            "insufficient-funds": "Gasto bloqueado: El monto excede el presupuesto disponible."
         }
     }
 }

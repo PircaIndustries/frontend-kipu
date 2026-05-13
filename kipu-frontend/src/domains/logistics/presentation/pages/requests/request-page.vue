@@ -41,6 +41,7 @@ onMounted(() => {
   requestStore.fetchCategories()
   requestStore.fetchSupplierOffers()
   requestStore.fetchRequests()
+  requestStore.fetchBudgetLines()
 })
 
 const handleCreateRequest = () => {
@@ -117,8 +118,6 @@ const handleModify = (request) => {
       <div class="flex-1 min-w-0 flex flex-col gap-4">
         <RequestList
             :requests="filteredRequests"
-            :available-budget="0"
-            :total-budget="0"
             @detail="handleDetail"
             @modify="handleModify"
         />

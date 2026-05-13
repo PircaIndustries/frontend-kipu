@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { LogisticsApi } from "@/domains/logistics/infrastructure/logistics.api.js";
+import { BudgetApi } from "@/domains/budget/infrastructure/budget-api.js";
 import {MaterialRequestEntity} from "@/domains/logistics/domain/model/requests/materialRequest.entity.js";
 import { MaterialEntity } from "@/domains/logistics/domain/model/materials/material.entity.js";
 import { CategoryEntity } from "@/domains/logistics/domain/model/materials/category.entity.js";
@@ -10,6 +11,7 @@ import { MaterialAssembler } from "@/domains/logistics/infrastructure/materials/
 import { CategoryAssembler } from "@/domains/logistics/infrastructure/materials/category.assembler.js";
 import {SupplierOfferAssembler} from "@/domains/logistics/infrastructure/suppliers/supplierOffer.assembler.js";
 const logisticsApi = new LogisticsApi();
+const budgetApi = new BudgetApi();
 
 
 
@@ -62,6 +64,16 @@ const useRequestStore = defineStore('request', () => {
      * @type {import('vue').Ref<boolean>}
      */
     const supplierOffersLoaded = ref(false);
+    /**
+     * List of budget lines from budget API.
+     * @type {import('vue').Ref<Array>}
+     */
+    const budgetLines = ref([]);
+    /**
+     * Whether budget lines have been loaded.
+     * @type {import('vue').Ref<boolean>}
+     */
+    const budgetLinesLoaded = ref(false);
 
     // ── ENRICHED VIEW ───────────────────────────────────────────────────────
     /**
@@ -72,6 +84,7 @@ const useRequestStore = defineStore('request', () => {
         const currentMaterials = materials.value;
         const currentCategories = categories.value.filter(c => c.isActive);
         const currentSupplierOffers = supplierOffers.value;
+        const currentBudgetLines = budgetLines.value;
 
         return requests.value.map(request => {
             const enrichedItems = request.items.map(item => {
@@ -88,9 +101,17 @@ const useRequestStore = defineStore('request', () => {
                 };
             });
 
+            const totalAmount = enrichedItems.reduce((sum, item) => sum + item.quantity * item.pricePerUnit, 0);
+            const budgetLine = currentBudgetLines.find(b => b.id === request.budgetLineId);
+            const budgetAvailable = budgetLine ? budgetLine.budgeted - budgetLine.executed : 0;
+            const isWithinBudget = budgetLine ? totalAmount <= budgetAvailable : true;
+
             return {
                 ...request,
                 items: enrichedItems,
+                totalAmount,
+                budgetAvailable,
+                isWithinBudget,
             };
         });
     });
@@ -117,7 +138,9 @@ const useRequestStore = defineStore('request', () => {
 
         const filter = selectedRequestFilter.value;
         if (filter === 'within-budget') {
+            result = result.filter(r => r.isWithinBudget);
         } else if (filter === 'out-budget') {
+            result = result.filter(r => !r.isWithinBudget);
         } else if (filter === 'expire-48h') {
             const now = Date.now();
             result = result.filter(r => {
@@ -195,6 +218,16 @@ const useRequestStore = defineStore('request', () => {
             categoriesLoaded.value = true;
         }).catch(error => { errors.value.push(error); });
     }
+    /**
+     * Fetches budget lines from budget API.
+     * @returns {void}
+     */
+    function fetchBudgetLines() {
+        budgetApi.findAll().then(response => {
+            budgetLines.value = response;
+            budgetLinesLoaded.value = true;
+        }).catch(error => { errors.value.push(error); });
+    }
 
     // ── CRUD ────────────────────────────────────────────────────────────────
 
@@ -234,14 +267,14 @@ const useRequestStore = defineStore('request', () => {
     // ── RETURN ─────────────────────────────────────────────────────────────
 
     return {
-        requests, materials, categories, supplierOffers, errors,
-        requestsLoaded, materialsLoaded, categoriesLoaded, supplierOffersLoaded,
+        requests, materials, categories, supplierOffers, budgetLines, errors,
+        requestsLoaded, materialsLoaded, categoriesLoaded, supplierOffersLoaded, budgetLinesLoaded,
         requestDetailsView,
         filteredRequests,
         selectedRequestFilter, pendingRequestFilter, approvedRequestFilter, refusedRequestFilter,
         setSelectedRequestFilter,
         togglePendingRequestFilter, toggleApprovedRequestFilter, toggleRefusedRequestFilter,
-        fetchMaterials, fetchCategories, fetchSupplierOffers, fetchRequests,
+        fetchMaterials, fetchCategories, fetchSupplierOffers, fetchRequests, fetchBudgetLines,
         createRequest, updateRequest,
     };
 });
