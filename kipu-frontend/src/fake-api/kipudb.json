@@ -765,5 +765,103 @@
         "Pala"
       ]
     }
+  ],
+  "documents": [
+    {
+      "id": "doc-001",
+      "type": "Acta de Conformidad - Estructura",
+      "isSigned": true,
+      "digitalSignatureToken": "123456",
+      "deadLine": "2024-12-31T23:59:59.000Z",
+      "assignedTo": [
+        {
+          "id": "us-01",
+          "fullName": "Admin Demo",
+          "signedAt": "2024-12-30T10:30:00.000Z"
+        },
+        {
+          "id": "us-02",
+          "fullName": "Ana Torres",
+          "signedAt": "2024-12-29T14:45:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "doc-002",
+      "type": "Acta de Conformidad - Instalaciones Eléctricas",
+      "isSigned": true,
+      "digitalSignatureToken": "123456",
+      "deadLine": "2025-01-15T23:59:59.000Z",
+      "assignedTo": [
+        {
+          "id": "us-01",
+          "fullName": "Admin Demo"
+        },
+        {
+          "id": "us-03",
+          "fullName": "Juan Pérez"
+        }
+      ]
+    },
+    {
+      "id": "doc-003",
+      "type": "RNC - Fisura en losa de cimentación",
+      "isSigned": false,
+      "digitalSignatureToken": null,
+      "deadLine": "2025-06-20T23:59:59.000Z",
+      "assignedTo": [
+        {
+          "id": "us-02",
+          "fullName": "Ana Torres",
+          "signedAt": null
+        },
+        {
+          "id": "us-04",
+          "fullName": "Inversor Centro SAC",
+          "signedAt": null
+        }
+      ]
+    },
+    {
+      "id": "doc-004",
+      "type": "Liquidación de Obra - Proyecto Los Olivos",
+      "isSigned": false,
+      "digitalSignatureToken": null,
+      "deadLine": "2025-02-28T23:59:59.000Z",
+      "assignedTo": [
+        {
+          "id": "us-01",
+          "fullName": "Admin Demo",
+          "signedAt": null
+        },
+        {
+          "id": "us-03",
+          "fullName": "Juan Pérez",
+          "signedAt": null
+        },
+        {
+          "id": "us-07",
+          "fullName": "Laurel Pallo",
+          "signedAt": null
+        }
+      ]
+    },
+    {
+      "id": "doc-1778630190036-37vn6i",
+      "type": "Acta de Conformidad - Tolvas petromagnéticas",
+      "isSigned": true,
+      "digitalSignatureToken": "123456",
+      "deadLine": "2026-05-13T05:00:00.000Z",
+      "assignedTo": [
+        {
+          "id": "us-04",
+          "fullName": "Inversor Centro SAC"
+        },
+        {
+          "id": "us-07",
+          "fullName": "Laurel Pallo"
+        }
+      ]
+    }
   ]
 }

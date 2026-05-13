@@ -14,7 +14,7 @@ import Ripple from 'primevue/ripple';
 import Card from 'primevue/card';
 import { createPinia } from 'pinia';
 import AutoComplete from 'primevue/autocomplete';
-import Form from '@primevue/forms/form';
+import { Form } from '@primevue/forms';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import Select from 'primevue/select';
@@ -27,7 +27,7 @@ import Dialog from 'primevue/dialog';
 import 'primeicons/primeicons.css';
 import './style.css';
 import './style.css';
-import {Toast, ToastService} from "primevue";
+import {Toast} from "primevue";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -45,7 +45,6 @@ app.use(pinia);
 app.use(ConfirmationService);
 app.use(router);
 app.use(i18n);
-app.use(ToastService);
 app.component('Toast', Toast)
 app.component('pv-tabs', Tabs);
 app.component('pv-tablist', TabList);

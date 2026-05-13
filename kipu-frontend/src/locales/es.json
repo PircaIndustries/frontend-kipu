@@ -570,7 +570,6 @@
             "title": "Directorio de Obreros",
             "search-placeholder": "Buscar por DNI, nombre o cargo...",
             "register": {
-                "btn-add-worker": "Nuevo Obrero",
                 "btn-add-worker": "+ Nuevo Obrero",
                 "no-workers-found": "No se encontraron trabajadores registrados.",
                 "description": "Directorio pasivo del personal operario. Se utiliza exclusivamente para asociar su DNI en el Módulo Logístico.",
@@ -603,6 +602,54 @@
                 "btn-save": "Guardar Obrero",
                 "btn-cancel": "Cancelar"
             }
+        }
+    },
+    "signatures": {
+        "page": {
+            "title": "Documentos",
+            "pending-title": "Documentos Pendientes de Tu Firma",
+            "signed-title": "Documentos Firmados",
+            "deadline": "Vence",
+            "signers": "Firmantes",
+            "btn-sign": "Firmar Documento",
+            "empty-pending": "No hay documentos pendientes",
+            "empty-signed": "No hay documentos firmados",
+            "summary-title": "Resumen",
+            "summary-pending": "Pendientes",
+            "summary-signed": "Firmados",
+            "security-title": "Firma Digital Segura",
+            "security-description": "Todas las firmas son encriptadas y tienen validez legal según normativa vigente.",
+            "howto-title": "¿Cómo firmar?",
+            "howto-step1": "Revisa el documento completo",
+            "howto-step2": "Haz clic en 'Firmar Documento'",
+            "howto-step3": "Ingresa el código de verificación",
+            "howto-step4": "La firma se registra automáticamente",
+            "btn-create": "Crear Documento"
+        },
+        "dialog": {
+            "add-document-title": "Crear Nuevo Documento",
+            "document-type": "TIPO DE DOCUMENTO",
+            "type-placeholder": "Ingrese tipo de documento",
+            "deadline": "FECHA LÍMITE",
+            "deadline-placeholder": "Seleccionar fecha",
+            "assign-users": "ASIGNAR A USUARIOS",
+            "users-placeholder": "Buscar o seleccionar usuarios",
+            "attach-document": "ADJUNTAR DOCUMENTO",
+            "dropzone": "Arrastra o haz clic para subir el documento",
+            "dropzone-hint": "PDF, DOC, DOCX, JPG, PNG (máx. 10MB)",
+            "selected-count": "Usuarios seleccionados",
+            "btn-create": "Crear Documento",
+            "btn-cancel": "Cancelar",
+            "validation": {
+                "type-required": "El tipo de documento es requerido",
+                "deadline-required": "La fecha límite es requerida",
+                "users-required": "Debes seleccionar al menos un usuario"
+            },
+            "title": "Firmar Documento",
+            "description": "Ingresa el código de verificación",
+            "token-sent": "Se ha enviado un código de 6 dígitos a tu correo",
+            "btn-confirm": "Confirmar Firma",
+            "btn-cancel": "Cancelar"
         }
     }
 }

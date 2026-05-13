@@ -28,7 +28,7 @@
     </div>
 
     <!-- Descripción -->
-    <p class="text-sm text-neutral-border mb-4">{{ $t('team.workers.register.description') }}</p>
+    <p class="text-base text-neutral-border mb-4">{{ $t('team.workers.register.description') }}</p>
 
     <!-- Tabla de trabajadores -->
     <Card>
@@ -111,10 +111,10 @@
     </Card>
 
     <!-- Nota del flujo -->
-    <div class="mt-6 p-4 bg-neutral-bg rounded-md border border-neutral-border">
-      <h3 class="text-sm font-bold text-primary mb-2">{{ $t('team.workers.register.flow-title') }}</h3>
-      <p class="text-sm text-text-main">{{ $t('team.workers.register.flow-description') }}</p>
-      <router-link to="/logistics/machinery" class="text-sm text-accent mt-2 cursor-pointer hover:underline">
+    <div class="mt-6 p-4 bg-neutral-bg rounded-md border border-neutral-border flex gap-0.5 flex-col">
+      <h3 class="text-xl font-bold text-primary mb-2">{{ $t('team.workers.register.flow-title') }}</h3>
+      <p class="text-base text-text-main">{{ $t('team.workers.register.flow-description') }}</p>
+      <router-link to="/logistics/machinery" class="text-base text-accent mt-2 cursor-pointer hover:underline">
         {{ $t('team.workers.register.go-to-materials') }}
       </router-link>
     </div>
