@@ -22,6 +22,21 @@ const filteredProjects = computed(() => {
   return store.projects.filter(p => p.name.toLowerCase().includes(q));
 });
 
+// ── Dynamic stats ──
+const averageAdvance = computed(() => {
+  if (store.projects.length === 0) return 0;
+  const sum = store.projects.reduce((acc, p) => acc + (p.progress || 0), 0);
+  return Math.round(sum / store.projects.length);
+});
+
+const totalRnc = computed(() =>
+  store.projects.reduce((acc, p) => acc + (p.rnc || 0), 0)
+);
+
+const totalCollaborators = computed(() =>
+  store.projects.reduce((acc, p) => acc + (p.members || 0), 0)
+);
+
 // ── Create project ──
 const showCreateModal = ref(false);
 const showSuccessModal = ref(false);
@@ -92,13 +107,38 @@ const showSelectDialog = ref(false);
 const projectToSelect = ref(null);
 
 function onCardClick(project) {
-  if (project.id === store.currentProjectId) return; // already selected
+  if (project.id === store.currentProjectId) return;
   projectToSelect.value = project;
   showSelectDialog.value = true;
 }
 function confirmSelect() {
   if (projectToSelect.value) store.setCurrentProject(projectToSelect.value.id);
   showSelectDialog.value = false; projectToSelect.value = null;
+}
+
+// ── Delete project ──
+const showDeleteDialog = ref(false);
+const projectToDelete = ref(null);
+const deleteConfirmName = ref('');
+
+function openDeleteDialog(project) {
+  projectToDelete.value = project;
+  deleteConfirmName.value = '';
+  showDeleteDialog.value = true;
+}
+
+const isDeleteValid = computed(() =>
+  projectToDelete.value && deleteConfirmName.value === projectToDelete.value.name
+);
+
+async function confirmDelete() {
+  if (!isDeleteValid.value) return;
+  try {
+    await store.deleteProject(projectToDelete.value.id);
+    showDeleteDialog.value = false;
+    projectToDelete.value = null;
+    deleteConfirmName.value = '';
+  } catch { /* handled in store */ }
 }
 
 // ── Change status ──
@@ -128,10 +168,24 @@ const isStatusValid = computed(() => {
   return true;
 });
 
+/** Map status to automatic progress value. */
+const STATUS_PROGRESS_MAP = {
+  'Planificación': 12,
+  'En ejecución': 45,
+  'Finalizada': 100,
+  'Paralizada': null  // keeps current progress, bar turns gray
+};
+
 async function confirmStatusChange() {
   if (!isStatusValid.value || !statusProject.value) return;
   try {
-    await store.updateProjectStatus(statusProject.value.id, newStatus.value, statusJustification.value.trim() || undefined);
+    const progress = STATUS_PROGRESS_MAP[newStatus.value];
+    await store.updateProjectStatus(
+      statusProject.value.id,
+      newStatus.value,
+      statusJustification.value.trim() || undefined,
+      progress
+    );
     showStatusDialog.value = false; statusProject.value = null;
   } catch { /* error handled in store */ }
 }
@@ -143,12 +197,12 @@ onMounted(() => { store.loadProjects(); });
   <div class="projects-page">
     <h1 class="projects-page__title">{{ t('projects_dashboard.title') }}</h1>
 
-    <!-- Stats -->
+    <!-- Stats (dynamic) -->
     <header class="stats-grid">
       <div class="stat-card"><span>{{ t('projects_dashboard.active_projects') }}</span><strong>{{ store.totalProjects }}</strong></div>
-      <div class="stat-card"><span>{{ t('projects_dashboard.average_advance') }}</span><strong>48%</strong></div>
-      <div class="stat-card"><span>{{ t('projects_dashboard.open_rncs') }}</span><strong class="stat-card__red">12</strong></div>
-      <div class="stat-card"><span>{{ t('projects_dashboard.collaborators') }}</span><strong>45</strong></div>
+      <div class="stat-card"><span>{{ t('projects_dashboard.average_advance') }}</span><strong>{{ averageAdvance }}%</strong></div>
+      <div class="stat-card"><span>{{ t('projects_dashboard.open_rncs') }}</span><strong class="stat-card__red">{{ totalRnc }}</strong></div>
+      <div class="stat-card"><span>{{ t('projects_dashboard.collaborators') }}</span><strong>{{ totalCollaborators }}</strong></div>
     </header>
 
     <!-- Actions bar -->
@@ -186,7 +240,23 @@ onMounted(() => { store.loadProjects(); });
         <div class="project-card__body">
           <div class="project-card__header">
             <h3 class="project-card__name">{{ p.name }}</h3>
-            <span class="project-card__status-tag" :class="'project-card__status-tag--' + p.status.toLowerCase().replace(/\s/g, '-')">{{ p.status }}</span>
+            <div class="project-card__header-actions">
+              <!-- Status tag — clickable to change status -->
+              <span
+                class="project-card__status-tag project-card__status-tag--clickable"
+                :class="'project-card__status-tag--' + p.status.toLowerCase().replace(/\s/g, '-')"
+                @click.stop="openStatusDialog(p)"
+                v-tooltip.top="'Click to change status'"
+              >{{ p.status }}</span>
+              <!-- Delete button -->
+              <button
+                class="project-card__delete-btn"
+                @click.stop="openDeleteDialog(p)"
+                v-tooltip.top="'Delete'"
+              >
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
           </div>
 
           <p v-if="p.description" class="project-card__desc">{{ p.description }}</p>
@@ -196,24 +266,15 @@ onMounted(() => { store.loadProjects(); });
             <span class="project-card__progress-label">{{ t('projects_dashboard.progress') }}</span>
             <span class="project-card__progress-value">{{ p.progress }}%</span>
           </div>
-          <div class="project-card__progress-bar"><div :style="{ width: p.progress + '%' }"></div></div>
+          <div class="project-card__progress-bar" :class="{ 'project-card__progress-bar--gray': p.status === 'Paralizada' }">
+            <div :style="{ width: p.progress + '%' }"></div>
+          </div>
 
           <!-- Footer -->
           <div class="project-card__footer">
             <span><i class="pi pi-users"></i> {{ p.members }} {{ t('projects_dashboard.card_members') }}</span>
             <span>{{ p.rnc }} {{ t('projects_dashboard.card_rnc') }} | {{ p.pending }} {{ t('projects_dashboard.card_pending') }}</span>
           </div>
-
-          <!-- Status change button -->
-          <Button
-            icon="pi pi-cog"
-            size="small"
-            severity="secondary"
-            text
-            rounded
-            class="project-card__status-btn"
-            @click.stop="openStatusDialog(p)"
-          />
         </div>
       </div>
     </div>
@@ -279,6 +340,28 @@ onMounted(() => { store.loadProjects(); });
       <template #footer>
         <Button :label="t('projects_dashboard.select_cancel')" severity="secondary" text @click="showSelectDialog = false" />
         <Button :label="t('projects_dashboard.select_continue')" @click="confirmSelect" />
+      </template>
+    </Dialog>
+
+    <!-- ═══ DELETE PROJECT DIALOG ═══ -->
+    <Dialog v-model:visible="showDeleteDialog" modal :header="t('projects_dashboard.delete_title')" :style="{ width: '460px' }">
+      <div class="delete-dialog">
+        <p class="delete-dialog__warning">
+          {{ t('projects_dashboard.delete_desc_1') }} <strong>{{ projectToDelete?.name }}</strong>{{ t('projects_dashboard.delete_desc_2') }}
+        </p>
+        <p class="delete-dialog__prompt">
+          {{ t('projects_dashboard.delete_prompt_1') }} <strong>"{{ projectToDelete?.name }}"</strong> {{ t('projects_dashboard.delete_prompt_2') }}
+        </p>
+        <InputText v-model="deleteConfirmName" :placeholder="t('projects_dashboard.delete_placeholder')" fluid />
+      </div>
+      <template #footer>
+        <Button :label="t('projects_dashboard.create_cancel')" severity="secondary" text @click="showDeleteDialog = false" />
+        <Button
+          :label="t('projects_dashboard.delete_submit')"
+          severity="danger"
+          :disabled="!isDeleteValid"
+          @click="confirmDelete"
+        />
       </template>
     </Dialog>
 
@@ -373,8 +456,48 @@ onMounted(() => { store.loadProjects(); });
 /* Footer */
 .project-card__footer { display: flex; justify-content: space-between; font-size: 0.78rem; color: #7f8c8d; }
 
-/* Status button */
-.project-card__status-btn { position: absolute !important; top: 0.75rem; right: 0.75rem; }
+/* Header actions (status tag + delete) */
+.project-card__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-shrink: 0;
+}
+
+.project-card__status-tag--clickable {
+  cursor: pointer;
+  transition: filter 0.2s, transform 0.15s;
+}
+
+.project-card__status-tag--clickable:hover {
+  filter: brightness(0.9);
+  transform: scale(1.05);
+}
+
+.project-card__delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: none;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: #95a5a6;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+}
+
+.project-card__delete-btn:hover {
+  background: #fdecea;
+  color: #e74c3c;
+}
+
+/* Paralizada gray progress bar */
+.project-card__progress-bar--gray div {
+  background: #bdc3c7 !important;
+}
 
 /* Form shared */
 .form-body { display: flex; flex-direction: column; gap: 1rem; }
@@ -394,6 +517,11 @@ onMounted(() => { store.loadProjects(); });
 /* Select dialog */
 .select-dialog__text { margin: 0 0 0.5rem; color: #4b5563; font-size: 0.9rem; }
 .select-dialog__prompt { margin: 0; color: #6c757d; font-size: 0.85rem; }
+
+/* Delete dialog */
+.delete-dialog { display: flex; flex-direction: column; gap: 1rem; }
+.delete-dialog__warning { margin: 0; color: #4b5563; font-size: 0.9rem; line-height: 1.5; }
+.delete-dialog__prompt { margin: 0; color: #6c757d; font-size: 0.85rem; }
 
 @media (max-width: 768px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }

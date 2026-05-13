@@ -71,7 +71,7 @@
         "hint_checking_email": "Verifying availability..."
     },
     "logout": {
-        "title": "Logged out",
+        "title": "Log out",
         "description": "You have been successfully logged out of your account.",
         "continue": "Continue"
     },
@@ -588,7 +588,6 @@
                 "flow-title": "Tools Flow",
                 "flow-description": "Personnel registered in this list do not have access credentials to the Kipu system. This directory is managed exclusively so that the Logistics and Warehouse area can search for the worker's ID when registering temporary loans or permanent assignments of machinery on site.",
                 "go-to-materials": "Go to Materials Module"
-
             }
         }
     },

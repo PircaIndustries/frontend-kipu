@@ -668,8 +668,36 @@
   ],
   "projects": [
     {
-      "id": "1",
-      "name": "Edificio Los Alisos"
+      "id": "proj-01",
+      "name": "Edificio Los Alisos",
+      "description": "Edificio residencial de 12 pisos con estacionamiento subterráneo.",
+      "location": "Lima, Perú",
+      "startDate": "2026-01-01",
+      "endDate": "2026-12-31",
+      "budget": 1500000,
+      "progress": 45,
+      "status": "En ejecución",
+      "statusJustification": "34",
+      "image": "/assets/project-image1.png",
+      "members": 8,
+      "rnc": 3,
+      "pending": 5
+    },
+    {
+      "id": "proj-02",
+      "name": "Centro Comercial Plaza Norte",
+      "description": "Centro comercial de 3 niveles con zona de entretenimiento.",
+      "location": "Trujillo, Perú",
+      "startDate": "2026-03-15",
+      "endDate": "2027-06-30",
+      "budget": 4200000,
+      "progress": 12,
+      "status": "Planificación",
+      "statusJustification": "",
+      "image": "/assets/project-image2.png",
+      "members": 15,
+      "rnc": 9,
+      "pending": 8
     }
   ],
   "identities": [
@@ -707,40 +735,6 @@
       "password": "kipu1234",
       "role": "Gestor Operativo",
       "id": "PjaiuHE"
-    }
-  ],
-  "projects": [
-    {
-      "id": "proj-01",
-      "name": "Edificio Los Alisos",
-      "description": "Edificio residencial de 12 pisos con estacionamiento subterráneo.",
-      "location": "Lima, Perú",
-      "startDate": "2026-01-01",
-      "endDate": "2026-12-31",
-      "budget": 1500000,
-      "progress": 45,
-      "status": "En ejecución",
-      "statusJustification": "",
-      "image": "/assets/project-image1.png",
-      "members": 8,
-      "rnc": 3,
-      "pending": 5
-    },
-    {
-      "id": "proj-02",
-      "name": "Centro Comercial Plaza Norte",
-      "description": "Centro comercial de 3 niveles con zona de entretenimiento.",
-      "location": "Trujillo, Perú",
-      "startDate": "2026-03-15",
-      "endDate": "2027-06-30",
-      "budget": 4200000,
-      "progress": 12,
-      "status": "Planificación",
-      "statusJustification": "",
-      "image": "/assets/project-image2.png",
-      "members": 15,
-      "rnc": 9,
-      "pending": 8
     }
   ],
   "team-users": [

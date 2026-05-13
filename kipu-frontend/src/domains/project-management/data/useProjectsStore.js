@@ -109,15 +109,20 @@ export const useProjectsStore = defineStore('projects', () => {
 
     /**
      * Updates the status of a project and persists the justification.
+     * When progress is provided (number), it also updates the progress bar.
      * @param {string} id
      * @param {string} status
      * @param {string} [justification]
+     * @param {number|null} [progress] - Auto-set progress, null keeps current value
      */
-    async function updateProjectStatus(id, status, justification) {
+    async function updateProjectStatus(id, status, justification, progress) {
         try {
             const payload = { status };
             if (justification) {
                 payload.statusJustification = justification;
+            }
+            if (typeof progress === 'number') {
+                payload.progress = progress;
             }
             const updated = await projectsApi.updateStatus(id, payload);
             projects.value = projects.value.map(p =>
