@@ -18,7 +18,6 @@ export class MaterialRequestEntity {
      * @param {string} [params.budgetLineId=''] - Associated budget line code.
      * @param {string} [params.purpose=''] - Reason for the request.
      * @param {string} [params.additionalNotes=''] - Extra comments or delivery instructions.
-     * @param {?string} [params.suggestedSupplierId=null] - Preferred supplier identifier.
      * @param {Array} [params.attachments=[]] - List of attached file URLs or references.
      * @param {?string} [params.requestedBy=null] - User identifier who made the request.
      * @param {MaterialRequestItemEntity[]} [params.items=[]] - List of requested items.

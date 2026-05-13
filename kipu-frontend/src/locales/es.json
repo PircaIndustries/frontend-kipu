@@ -70,6 +70,11 @@
         "err_invalid_credentials": "El correo electrónico o la contraseña son incorrectos.",
         "hint_checking_email": "Verificando disponibilidad..."
     },
+    "logout": {
+        "title": "Sesión cerrada",
+        "description": "Se ha cerrado la sesión correctamente.",
+        "continue": "Continuar"
+    },
     "projects_dashboard": {
         "title": "Mis Proyectos",
         "active": "Activos",
@@ -126,11 +131,6 @@
         "delete_prompt_2": "para confirmar:",
         "delete_placeholder": "Nombre del proyecto",
         "delete_submit": "Entiendo las consecuencias, eliminar proyecto"
-    },
-    "logout": {
-        "title": "Sesión cerrada",
-        "description": "Se ha cerrado la sesión correctamente.",
-        "continue": "Continuar"
     },
     "navigation": {
         "dashboard": "Dashboard",
@@ -268,19 +268,256 @@
         "management": "Gestión de Obras",
         "cancel": "Cancelar",
         "yes": "Sí",
-        "no": "No"
+        "no": "No",
+        "error": "Error"
     },
     "roles": {
         "resident": "Residente de Obra"
+    },
+    "inventory": {
+        "title": "Inventario",
+        "summary": {
+            "registered-materials": "MATERIALES REGISTRADOS",
+            "critical-stock-alert": "ALERTA DE STOCK CRÍTICO"
+        },
+        "filters": {
+            "category": "FILTRAR POR CATEGORÍA"
+        },
+        "search": {
+            "placeholder": "Buscar por ID de inventario"
+        },
+        "empty": {
+            "title": "Sin resultados",
+            "description": "Probá ajustando los filtros"
+        },
+        "category": {
+            "placeholder": "Seleccionar categoría"
+        },
+        "card": {
+            "equipment": "Equipo",
+            "min-limit": "Límite Mín.",
+            "current-stock": "Stock Actual"
+        },
+        "low-stock": "Stock bajo"
+    },
+    "request": {
+        "title": "Solicitudes de Materiales",
+        "button-create": "Nueva Solicitud",
+        "filters": {
+            "title": "Filtros",
+            "all": "Todas",
+            "within-budget": "Dentro del Presupuesto",
+            "exceed-budget": "Excede Presupuesto",
+            "expire-48h": "Vence en 48h"
+        },
+        "summary": {
+            "pending": "Pendientes",
+            "approved-today": "Aprobadas Hoy",
+            "rejected": "Rechazadas"
+        },
+        "card": {
+            "header": {
+                "request-date": "Fecha de Solicitud"
+            },
+            "fields": {
+                "material": "Material",
+                "requester": "Solicitante",
+                "budget-line": "Línea Presupuestaria",
+                "required-date": "Fecha Requerida",
+                "in-days": "{days} días restantes",
+                "time-exceeded": "Tiempo excedido"
+            },
+            "purpose": {
+                "title": "Propósito"
+            },
+            "budget-verification": {
+                "title": "Verificación de Presupuesto",
+                "requested-amount": "Monto Solicitado",
+                "available-budget": "Presupuesto Disponible",
+                "status": "Estado"
+            },
+            "status": {
+                "within-budget": "Dentro del Presupuesto",
+                "out-budget": "Fuera del Presupuesto",
+                "approved": "Aprobada",
+                "pending": "Pendiente",
+                "refused": "Rechazada"
+            },
+            "actions": {
+                "modify": "Modificar",
+                "view-details": "Ver Detalles"
+            }
+        },
+        "modify": {
+            "title": "Editar Solicitud",
+            "actions": {
+                "cancel": "Cancelar",
+                "submit": "Guardar Cambios"
+            },
+            "success": {
+                "summary": "Actualizada",
+                "message": "Solicitud actualizada exitosamente"
+            }
+        },
+        "detail": {
+            "total-investment": "INVERSIÓN TOTAL",
+            "remaining-days": "{days} días restantes",
+            "per-unit": "/unidad",
+            "budget-validated": "Presupuesto Validado",
+            "btn-close": "Cerrar",
+            "section": {
+                "material-info": "Información del Material",
+                "logistics": "Logística"
+            }
+        },
+        "create": {
+            "title": "Nueva Solicitud de Material",
+            "subtitle": "Complete los detalles para solicitar materiales para su proyecto.",
+            "fields": {
+                "category": "Categoría",
+                "specific-material": "Material Específico",
+                "suggested-supplier": "Proveedor Sugerido",
+                "quantity": "Cantidad",
+                "unit": "Unidad",
+                "budget-line": "Línea Presupuestaria",
+                "priority": "Prioridad",
+                "required-date": "Fecha Requerida",
+                "delivery-location": "Ubicación de Entrega",
+                "purpose": "Propósito",
+                "additional-notes": "Notas Adicionales",
+                "attachments": "Archivos Adjuntos"
+            },
+            "placeholders": {
+                "select": "Seleccionar...",
+                "select-category-first": "Seleccione una categoría primero",
+                "select-material-first": "Seleccione un material primero",
+                "quantity": "Ingrese cantidad",
+                "unit-empty": "La unidad aparecerá aquí",
+                "date": "Seleccione una fecha",
+                "location": "Ej: Almacén A",
+                "purpose": "Describa el motivo de esta solicitud",
+                "additional-notes": "Cualquier información adicional",
+                "dropzone": "Arrastre archivos aquí o haga clic para subir",
+                "dropzone-hint": "Formatos aceptados: PDF, imágenes",
+                "requested-by": "Usuario actual"
+            },
+            "priority": {
+                "low": "Baja",
+                "medium": "Media",
+                "high": "Alta",
+                "critical": "Crítica"
+            },
+            "validation": {
+                "category-required": "La categoría es requerida",
+                "material-required": "El material es requerido",
+                "supplier-required": "El proveedor es requerido",
+                "budget-line-required": "La línea presupuestaria es requerida",
+                "quantity-required": "La cantidad mínima es 1",
+                "date-required": "La fecha requerida es obligatoria",
+                "location-required": "La ubicación de entrega es requerida",
+                "purpose-required": "El propósito es requerido",
+                "check-form": "Revise los campos del formulario"
+            },
+            "budget-verification": {
+                "title": "VERIFICACIÓN DE PRESUPUESTO",
+                "item-budget": "PRESUPUESTO DEL ÍTEM",
+                "executed": "EJECUTADO",
+                "available": "DISPONIBLE"
+            },
+            "actions": {
+                "cancel": "Cancelar",
+                "submit": "Enviar Solicitud"
+            },
+            "success": {
+                "summary": "Éxito",
+                "message": "Solicitud creada exitosamente"
+            }
+        }
     },
     "logistics-tabs": {
         "tab-inventory": "Inventario",
         "tab-requests": "Solicitudes",
         "tab-suppliers": "Proveedores",
-        "tab-waste": "Mermas"
+        "tab-waste": "Mermas",
+        "tab-machinery": "Maquinaria"
+    },
+    "suppliers": {
+        "title": "Proveedores",
+        "button-create": "Nuevo Proveedor",
+        "summary": {
+            "active": "Activos",
+            "inactive": "Inactivos"
+        },
+        "filters": {
+            "status": "ESTADO",
+            "search": "BUSCAR",
+            "search-ruc": "Buscar por RUC"
+        },
+        "card": {
+            "social-reason": "Razón Social",
+            "contact": "Contacto",
+            "phone": "Teléfono",
+            "email": "Correo",
+            "actions": {
+                "button-edit": "Editar",
+                "button-delete": "Eliminar"
+            },
+            "delete": {
+                "message": "¿Estás seguro de eliminar este proveedor?"
+            }
+        },
+        "create": {
+            "title": "Nuevo Proveedor",
+            "ruc-label": "RUC",
+            "ruc-placeholder": "Ingrese RUC",
+            "ruc-required": "RUC es obligatorio (mín. 8 caracteres)",
+            "social-reason-label": "Razón Social",
+            "social-reason-placeholder": "Ingrese razón social",
+            "social-reason-required": "Razón social es obligatoria",
+            "contact-label": "Contacto",
+            "contact-placeholder": "Ingrese nombre de contacto",
+            "contact-required": "Contacto es obligatorio",
+            "phone-label": "Teléfono",
+            "phone-placeholder": "Ingrese número telefónico",
+            "phone-required": "Teléfono es obligatorio",
+            "email-label": "Correo",
+            "email-placeholder": "Ingrese correo",
+            "email-required": "Correo es obligatorio",
+            "actions": {
+                "cancel": "Cancelar",
+                "submit": "Guardar Proveedor"
+            },
+            "success": {
+                "summary": "Éxito",
+                "message": "Proveedor creado exitosamente"
+            },
+            "error": {
+                "message": "Error al crear proveedor"
+            }
+        },
+        "edit": {
+            "title": "Editar Proveedor",
+            "actions": {
+                "submit": "Guardar Cambios"
+            },
+            "success": {
+                "summary": "Actualizado",
+                "message": "Proveedor actualizado exitosamente"
+            },
+            "error": {
+                "message": "Error al actualizar proveedor"
+            }
+        },
+        "delete": {
+            "title": "Eliminar Proveedor",
+            "message": "¿Estás seguro de eliminar a",
+            "confirm": "Sí, eliminar",
+            "cancel": "Cancelar"
+        }
     },
     "team": {
         "users": {
+            "tab-users": "Usuarios del Sistema",
             "title": "Gestión de Usuarios",
             "btn-invite": "Enviar Invitación",
             "stats": {
@@ -332,11 +569,88 @@
         "workers": {
             "tab-workers": "Directorio de Obreros",
             "title": "Directorio de Obreros",
+            "search-placeholder": "Buscar por DNI, nombre o cargo...",
             "register": {
                 "btn-add-worker": "+ Nuevo Obrero",
                 "no-workers-found": "No se encontraron trabajadores registrados.",
-                "description": "Directorio pasivo del personal operario. Se utiliza exclusivamente para asociar su DNI en el Módulo Logístico."
+                "description": "Directorio pasivo del personal operario. Se utiliza exclusivamente para asociar su DNI en el Módulo Logístico.",
+                "tab-dni": "Documento (DNI)",
+                "tab-name": "Nombres Completos",
+                "tab-role": "Cargo / Cuadrilla",
+                "tab-status": "Estado en Obra",
+                "tab-tools": "Herramientas Asignadas",
+                "tab-action": "Acción",
+                "tab-status-active": "ACTIVO",
+                "tab-status-inactive": "INACTIVO",
+                "tab-btn-disable": "Deshabilitar",
+                "tab-btn-enable": "Habilitar",
+                "worker-count": "trabajadores",
+                "flow-title": "Flujo de Herramientas",
+                "flow-description": "El personal registrado en esta lista no cuenta con credenciales de acceso al sistema Kipu. Este directorio es administrado exclusivamente para que el área de Logística y Almacén pueda buscar el DNI del trabajador al momento de registrar préstamos temporales o asignaciones permanentes de maquinarias en obra.",
+                "go-to-materials": "Ir a Módulo Materiales"
+            },
+            "add-modal": {
+                "title": "Registrar Nuevo Obrero",
+                "dni-label": "Documento (DNI)",
+                "dni-placeholder": "8 dígitos",
+                "name-label": "Nombres Completos",
+                "name-placeholder": "Ejm. Juan Perez",
+                "role-label": "Cargo / Cuadrilla",
+                "role-placeholder": "Ejm. Operario de Albañilería",
+                "tools-title": "Herramientas Asignadas",
+                "tools-add": "+ Añadir Herramienta",
+                "tools-placeholder": "Nombre del equipo...",
+                "btn-save": "Guardar Obrero",
+                "btn-cancel": "Cancelar"
             }
+        }
+    },
+    "signatures": {
+        "page": {
+            "title": "Documentos",
+            "pending-title": "Documentos Pendientes de Tu Firma",
+            "signed-title": "Documentos Firmados",
+            "deadline": "Vence",
+            "signers": "Firmantes",
+            "btn-sign": "Firmar Documento",
+            "empty-pending": "No hay documentos pendientes",
+            "empty-signed": "No hay documentos firmados",
+            "summary-title": "Resumen",
+            "summary-pending": "Pendientes",
+            "summary-signed": "Firmados",
+            "security-title": "Firma Digital Segura",
+            "security-description": "Todas las firmas son encriptadas y tienen validez legal según normativa vigente.",
+            "howto-title": "¿Cómo firmar?",
+            "howto-step1": "Revisa el documento completo",
+            "howto-step2": "Haz clic en 'Firmar Documento'",
+            "howto-step3": "Ingresa el código de verificación",
+            "howto-step4": "La firma se registra automáticamente",
+            "btn-create": "Crear Documento"
+        },
+        "dialog": {
+            "add-document-title": "Crear Nuevo Documento",
+            "document-type": "TIPO DE DOCUMENTO",
+            "type-placeholder": "Ingrese tipo de documento",
+            "deadline": "FECHA LÍMITE",
+            "deadline-placeholder": "Seleccionar fecha",
+            "assign-users": "ASIGNAR A USUARIOS",
+            "users-placeholder": "Buscar o seleccionar usuarios",
+            "attach-document": "ADJUNTAR DOCUMENTO",
+            "dropzone": "Arrastra o haz clic para subir el documento",
+            "dropzone-hint": "PDF, DOC, DOCX, JPG, PNG (máx. 10MB)",
+            "selected-count": "Usuarios seleccionados",
+            "btn-create": "Crear Documento",
+            "btn-cancel": "Cancelar",
+            "validation": {
+                "type-required": "El tipo de documento es requerido",
+                "deadline-required": "La fecha límite es requerida",
+                "users-required": "Debes seleccionar al menos un usuario"
+            },
+            "title": "Firmar Documento",
+            "description": "Ingresa el código de verificación",
+            "token-sent": "Se ha enviado un código de 6 dígitos a tu correo",
+            "btn-confirm": "Confirmar Firma",
+            "btn-cancel": "Cancelar"
         }
     }
 }

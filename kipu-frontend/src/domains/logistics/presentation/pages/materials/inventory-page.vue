@@ -62,15 +62,15 @@ import SummaryComponent from "@/shared/presentation/components/summaryComponent.
         <autocomplete-component
             v-model="selectedInventoryModel"
             :options="inventoryIdOptions"
-            placeholder="Buscar por ID de inventario"
+            :placeholder="t('inventory.search.placeholder')"
         />
         <InventoryList :inventory-materials="filteredInventory" />
         <div v-if="filteredInventory.length === 0" class="flex flex-col items-center justify-center gap-3 py-20 text-center">
           <div class="w-14 h-14 rounded-full bg-neutral-bg flex items-center justify-center">
             <i class="pi pi-inbox text-2xl text-neutral-border"></i>
           </div>
-          <p class="text-sm font-medium text-primary m-0">Sin resultados</p>
-          <p class="text-xs text-neutral-border m-0">Probá ajustando los filtros</p>
+          <p class="text-sm font-medium text-primary m-0">{{ t('inventory.empty.title') }}</p>
+          <p class="text-xs text-neutral-border m-0">{{ t('inventory.empty.description') }}</p>
         </div>
       </div>
 
@@ -102,7 +102,7 @@ import SummaryComponent from "@/shared/presentation/components/summaryComponent.
             <autocomplete-component
                 v-model="selectedCategoryModel"
                 :options="categoriesList"
-                placeholder="Seleccionar categoría"
+                :placeholder="t('inventory.category.placeholder')"
             />
           </div>
         </div>

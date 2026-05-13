@@ -41,31 +41,31 @@ const variantClasses = computed(() => {
       hover: 'hover:border-danger/50'
     },
     success: {
-      border: 'border-green/30',
+      border: 'border-success/30',
       bg: 'bg-white',
-      text: 'text-green',
-      ring: 'bg-green/10',
-      iconColor: 'text-green',
-      valueColor: 'text-green',
-      hover: 'hover:border-green/50'
+      text: 'text-success',
+      ring: 'bg-success/10',
+      iconColor: 'text-success',
+      valueColor: 'text-success',
+      hover: 'hover:border-success/50'
     },
     warning: {
-      border: 'border-yellow/30',
+      border: 'border-warning/30',
       bg: 'bg-white',
-      text: 'text-yellow',
-      ring: 'bg-yellow/10',
-      iconColor: 'text-yellow',
-      valueColor: 'text-yellow',
-      hover: 'hover:border-yellow/50'
+      text: 'text-warning',
+      ring: 'bg-warning/10',
+      iconColor: 'text-warning',
+      valueColor: 'text-warning',
+      hover: 'hover:border-warning/50'
     },
     info: {
-      border: 'border-blue/30',
+      border: 'border-info/30',
       bg: 'bg-white',
-      text: 'text-blue',
-      ring: 'bg-blue/10',
-      iconColor: 'text-blue',
-      valueColor: 'text-blue',
-      hover: 'hover:border-blue/50'
+      text: 'text-info',
+      ring: 'bg-info/10',
+      iconColor: 'text-info',
+      valueColor: 'text-info',
+      hover: 'hover:border-info/50'
     }
   }
   return map[props.variant] || map.neutral
@@ -87,19 +87,19 @@ const activeOverride = computed(() => {
       ring: 'bg-danger/20',
     },
     success: {
-      border: 'border-green/60',
-      bg: 'bg-green-soft',
-      ring: 'bg-green/20',
+      border: 'border-success/60',
+      bg: 'bg-success-soft',
+      ring: 'bg-success/20',
     },
     warning: {
-      border: 'border-yellow/60',
-      bg: 'bg-yellow-soft',
-      ring: 'bg-yellow/20',
+      border: 'border-warning/60',
+      bg: 'bg-warning-soft',
+      ring: 'bg-warning/20',
     },
     info: {
-      border: 'border-blue/60',
-      bg: 'bg-blue-soft',
-      ring: 'bg-blue/20',
+      border: 'border-info/60',
+      bg: 'bg-info-soft',
+      ring: 'bg-info/20',
     }
   }
   return activeMap[props.variant] || {}
@@ -147,7 +147,3 @@ const classes = computed(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>

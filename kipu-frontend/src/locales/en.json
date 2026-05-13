@@ -268,22 +268,258 @@
         "management": "Works Management",
         "cancel": "Cancel",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "error": "Error"
     },
     "roles": {
         "resident": "Works Resident"
+    },
+    "inventory": {
+        "title": "Inventory",
+        "summary": {
+            "registered-materials": "REGISTERED MATERIALS",
+            "critical-stock-alert": "CRITICAL STOCK ALERT"
+        },
+        "filters": {
+            "category": "FILTER BY CATEGORY"
+        },
+        "search": {
+            "placeholder": "Search by inventory ID"
+        },
+        "empty": {
+            "title": "No results",
+            "description": "Try adjusting the filters"
+        },
+        "category": {
+            "placeholder": "Select category"
+        },
+        "card": {
+            "equipment": "Equipment",
+            "min-limit": "Min. Limit",
+            "current-stock": "Current Stock"
+        },
+        "low-stock": "Low Stock"
+    },
+    "request": {
+        "title": "Material Requests",
+        "button-create": "New Request",
+        "filters": {
+            "title": "Filters",
+            "all": "All",
+            "within-budget": "Within Budget",
+            "exceed-budget": "Exceeds Budget",
+            "expire-48h": "Expires in 48h"
+        },
+        "summary": {
+            "pending": "Pending",
+            "approved-today": "Approved Today",
+            "rejected": "Rejected"
+        },
+        "card": {
+            "header": {
+                "request-date": "Request Date"
+            },
+            "fields": {
+                "material": "Material",
+                "requester": "Requester",
+                "budget-line": "Budget Line",
+                "required-date": "Required Date",
+                "in-days": "{days} days remaining",
+                "time-exceeded": "Time exceeded"
+            },
+            "purpose": {
+                "title": "Purpose"
+            },
+            "budget-verification": {
+                "title": "Budget Verification",
+                "requested-amount": "Requested Amount",
+                "available-budget": "Available Budget",
+                "status": "Status"
+            },
+            "status": {
+                "within-budget": "Within Budget",
+                "out-budget": "Out of Budget",
+                "approved": "Approved",
+                "pending": "Pending",
+                "refused": "Refused"
+            },
+            "actions": {
+                "modify": "Modify",
+                "view-details": "View Details"
+            }
+        },
+        "modify": {
+            "title": "Edit Request",
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Save Changes"
+            },
+            "success": {
+                "summary": "Updated",
+                "message": "Request updated successfully"
+            }
+        },
+        "detail": {
+            "total-investment": "TOTAL INVESTMENT",
+            "remaining-days": "{days} days remaining",
+            "per-unit": "/unit",
+            "budget-validated": "Budget Validated",
+            "btn-close": "Close",
+            "section": {
+                "material-info": "Material Information",
+                "logistics": "Logistics"
+            }
+        },
+        "create": {
+            "title": "New Material Request",
+            "subtitle": "Fill in the details to request materials for your project.",
+            "fields": {
+                "category": "Category",
+                "specific-material": "Specific Material",
+                "suggested-supplier": "Suggested Supplier",
+                "quantity": "Quantity",
+                "unit": "Unit",
+                "budget-line": "Budget Line",
+                "priority": "Priority",
+                "required-date": "Required Date",
+                "delivery-location": "Delivery Location",
+                "purpose": "Purpose",
+                "additional-notes": "Additional Notes",
+                "attachments": "Attachments"
+            },
+            "placeholders": {
+                "select": "Select...",
+                "select-category-first": "Select a category first",
+                "select-material-first": "Select a material first",
+                "quantity": "Enter quantity",
+                "unit-empty": "Unit will appear here",
+                "date": "Select a date",
+                "location": "e.g. Warehouse A",
+                "purpose": "Describe the reason for this request",
+                "additional-notes": "Any additional information",
+                "dropzone": "Drag & drop files here or click to upload",
+                "dropzone-hint": "Accepted formats: PDF, images",
+                "requested-by": "Current user"
+            },
+            "priority": {
+                "low": "Low",
+                "medium": "Medium",
+                "high": "High",
+                "critical": "Critical"
+            },
+            "validation": {
+                "category-required": "Category is required",
+                "material-required": "Material is required",
+                "supplier-required": "Supplier is required",
+                "budget-line-required": "Budget line is required",
+                "quantity-required": "Minimum quantity is 1",
+                "date-required": "Required date is required",
+                "location-required": "Delivery location is required",
+                "purpose-required": "Purpose is required",
+                "check-form": "Please review the form fields"
+            },
+            "budget-verification": {
+                "title": "BUDGET VERIFICATION",
+                "item-budget": "ITEM BUDGET",
+                "executed": "EXECUTED",
+                "available": "AVAILABLE"
+            },
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Submit Request"
+            },
+            "success": {
+                "summary": "Success",
+                "message": "Request created successfully"
+            }
+        }
     },
     "logistics-tabs": {
         "tab-inventory": "Inventory",
         "tab-requests": "Requests",
         "tab-suppliers": "Suppliers",
-        "tab-waste": "Waste"
+        "tab-waste": "Waste",
+        "tab-machinery": "Machinery"
+    },
+    "suppliers": {
+        "title": "Suppliers",
+        "button-create": "New Supplier",
+        "summary": {
+            "active": "Active",
+            "inactive": "Inactive"
+        },
+        "filters": {
+            "status": "STATUS",
+            "search": "SEARCH",
+            "search-ruc": "Search by RUC"
+        },
+        "card": {
+            "social-reason": "Social Reason",
+            "contact": "Contact",
+            "phone": "Phone",
+            "email": "Email",
+            "actions": {
+                "button-edit": "Edit",
+                "button-delete": "Delete"
+            },
+            "delete": {
+                "message": "Are you sure you want to delete this supplier?"
+            }
+        },
+        "create": {
+            "title": "New Supplier",
+            "ruc-label": "RUC",
+            "ruc-placeholder": "Enter RUC",
+            "ruc-required": "RUC is required (min. 8 characters)",
+            "social-reason-label": "Social Reason",
+            "social-reason-placeholder": "Enter social reason",
+            "social-reason-required": "Social reason is required",
+            "contact-label": "Contact",
+            "contact-placeholder": "Enter contact name",
+            "contact-required": "Contact is required",
+            "phone-label": "Phone",
+            "phone-placeholder": "Enter phone number",
+            "phone-required": "Phone is required",
+            "email-label": "Email",
+            "email-placeholder": "Enter email",
+            "email-required": "Email is required",
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Save Supplier"
+            },
+            "success": {
+                "summary": "Success",
+                "message": "Supplier created successfully"
+            },
+            "error": {
+                "message": "Error creating supplier"
+            }
+        },
+        "edit": {
+            "title": "Edit Supplier",
+            "actions": {
+                "submit": "Save Changes"
+            },
+            "success": {
+                "summary": "Updated",
+                "message": "Supplier updated successfully"
+            },
+            "error": {
+                "message": "Error updating supplier"
+            }
+        },
+        "delete": {
+            "title": "Delete Supplier",
+            "message": "Are you sure you want to delete",
+            "confirm": "Yes, delete",
+            "cancel": "Cancel"
+        }
     },
     "team": {
         "users": {
+            "tab-users": "System Users",
             "title": "User Management",
             "btn-invite": "Send Invitation",
-            "tab-users": "System Users",
             "stats": {
                 "active": "ACTIVE USERS",
                 "managers": "MANAGERS",
@@ -333,11 +569,75 @@
         "workers": {
             "tab-workers": "Worker Directory",
             "title": "Worker Directory",
+            "search-placeholder": "Search by ID, name or position...",
             "register": {
                 "btn-add-worker": "+ New Worker",
                 "no-workers-found": "No workers registered yet.",
-                "description": "Passive directory of operational personnel. Used exclusively to link ID numbers within the Logistics Module."
+                "description": "Passive directory of operational personnel. Used exclusively to link ID numbers within the Logistics Module.",
+                "tab-dni": "ID Number",
+                "tab-name": "Full Name",
+                "tab-role": "Position / Crew",
+                "tab-status": "Work Status",
+                "tab-tools": "Assigned Tools",
+                "tab-action": "Action",
+                "tab-status-active": "ACTIVE",
+                "tab-status-inactive": "INACTIVE",
+                "tab-btn-disable": "Disable",
+                "tab-btn-enable": "Enable",
+                "worker-count": "workers",
+                "flow-title": "Tools Flow",
+                "flow-description": "Personnel registered in this list do not have access credentials to the Kipu system. This directory is managed exclusively so that the Logistics and Warehouse area can search for the worker's ID when registering temporary loans or permanent assignments of machinery on site.",
+                "go-to-materials": "Go to Materials Module"
+
             }
+        }
+    },
+    "signatures": {
+        "page": {
+            "title": "Documents",
+            "pending-title": "Documents Pending Your Signature",
+            "signed-title": "Signed Documents",
+            "deadline": "Deadline",
+            "signers": "Signers",
+            "btn-sign": "Sign Document",
+            "empty-pending": "No pending documents",
+            "empty-signed": "No signed documents",
+            "summary-title": "Summary",
+            "summary-pending": "Pending",
+            "summary-signed": "Signed",
+            "security-title": "Secure Digital Signature",
+            "security-description": "All signatures are encrypted and have legal validity according to current regulations.",
+            "howto-title": "How to sign?",
+            "howto-step1": "Review the complete document",
+            "howto-step2": "Click on 'Sign Document'",
+            "howto-step3": "Enter the verification code",
+            "howto-step4": "The signature is automatically recorded",
+            "btn-create": "Create Document"
+        },
+        "dialog": {
+            "add-document-title": "Create New Document",
+            "document-type": "DOCUMENT TYPE",
+            "type-placeholder": "Enter document type",
+            "deadline": "DEADLINE",
+            "deadline-placeholder": "Select date",
+            "assign-users": "ASSIGN TO USERS",
+            "users-placeholder": "Search or select users",
+            "attach-document": "ATTACH DOCUMENT",
+            "dropzone": "Drag or click to upload the document",
+            "dropzone-hint": "PDF, DOC, DOCX, JPG, PNG (max. 10MB)",
+            "selected-count": "Selected users",
+            "btn-create": "Create Document",
+            "btn-cancel": "Cancel",
+            "validation": {
+                "type-required": "Document type is required",
+                "deadline-required": "Deadline is required",
+                "users-required": "You must select at least one user"
+            },
+            "title": "Sign Document",
+            "description": "Enter the verification code",
+            "token-sent": "A 6-digit code has been sent to your email",
+            "btn-confirm": "Confirm Signature",
+            "btn-cancel": "Cancel"
         }
     }
 }

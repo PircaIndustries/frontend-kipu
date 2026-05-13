@@ -82,6 +82,7 @@ const gridCols = computed(() => {
             >
               {{ field.unit }}
             </span>
+            <p v-if="field.subtext" class="text-xs text-neutral-border mt-1">{{ field.subtext }}</p>
           </div>
         </div>
       </div>
