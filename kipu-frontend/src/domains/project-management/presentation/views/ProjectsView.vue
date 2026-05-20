@@ -10,6 +10,10 @@ import Textarea from 'primevue/textarea';
 import DatePicker from 'primevue/datepicker';
 import Message from 'primevue/message';
 import Select from 'primevue/select';
+import Timeline from 'primevue/timeline';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Badge from 'primevue/badge';
 
 const { t } = useI18n();
 const store = useProjectsStore();
@@ -190,6 +194,60 @@ async function confirmStatusChange() {
   } catch { /* error handled in store */ }
 }
 
+// ── Active Project Details Helpers & Document Form ──
+const showAddDocDialog = ref(false);
+const docForm = ref({
+  name: '',
+  type: 'Plano',
+  version: 'v1.0',
+  isSigned: false,
+  deadline: null
+});
+
+const docTypes = [
+  { label: 'Plano de Estructuras', value: 'Plano' },
+  { label: 'Expediente Técnico', value: 'Expediente' },
+  { label: 'Informe de Avance', value: 'Informe' },
+  { label: 'Memoria Descriptiva', value: 'Memoria' }
+];
+
+const getTimelineIcon = (status) => {
+  switch (status) {
+    case 'Planificación': return 'pi pi-calendar-plus';
+    case 'En ejecución': return 'pi pi-play-circle';
+    case 'Paralizada': return 'pi pi-exclamation-triangle';
+    case 'Finalizada': return 'pi pi-check-circle';
+    default: return 'pi pi-info-circle';
+  }
+};
+
+const getTimelineColor = (status) => {
+  switch (status) {
+    case 'Planificación': return '#3498db';
+    case 'En ejecución': return '#2ecc71';
+    case 'Paralizada': return '#e67e22';
+    case 'Finalizada': return '#9b59b6';
+    default: return '#95a5a6';
+  }
+};
+
+async function handleAddDocument() {
+  if (!docForm.value.name.trim()) return;
+  try {
+    await store.addProjectDocument(store.currentProjectId, {
+      name: docForm.value.name.trim(),
+      type: docForm.value.type,
+      version: docForm.value.version,
+      isSigned: docForm.value.isSigned,
+      deadline: docForm.value.deadline?.toISOString().split('T')[0] || ''
+    });
+    showAddDocDialog.value = false;
+    docForm.value = { name: '', type: 'Plano', version: 'v1.0', isSigned: false, deadline: null };
+  } catch (err) {
+    console.error('Error adding document:', err);
+  }
+}
+
 onMounted(() => { store.loadProjects(); });
 </script>
 
@@ -278,6 +336,141 @@ onMounted(() => { store.loadProjects(); });
         </div>
       </div>
     </div>
+
+    <!-- ═══ DETALLES DEL PROYECTO SELECCIONADO (1:N STATUS LOGS & 1:N DOCUMENTS) ═══ -->
+    <div v-if="store.currentProject" class="details-panel">
+      <div class="details-panel__header">
+        <div class="details-panel__title-area">
+          <i class="pi pi-briefcase details-panel__icon"></i>
+          <div>
+            <h2 class="details-panel__title">Ficha Técnica: {{ store.currentProject.name }}</h2>
+            <p class="details-panel__subtitle">{{ store.currentProject.location }} • {{ store.currentProject.startDate }} a {{ store.currentProject.endDate }}</p>
+          </div>
+        </div>
+        <span class="project-card__status-tag" :class="'project-card__status-tag--' + store.currentProject.status.toLowerCase().replace(/\s/g, '-')">
+          {{ store.currentProject.status }}
+        </span>
+      </div>
+
+      <div class="details-panel__grid">
+        <div class="details-card">
+          <div class="details-card__header">
+            <h3><i class="pi pi-history"></i> Historial de Estados</h3>
+            <p class="details-card__desc">Trazabilidad histórica de los cambios de estado con su respectiva justificación técnica.</p>
+          </div>
+          <div class="details-card__content">
+            <Timeline :value="store.currentProject.statusLogs || []" align="left" class="custom-timeline">
+              <template #marker="slotProps">
+                <span class="timeline-marker" :style="{ backgroundColor: getTimelineColor(slotProps.item.status) }">
+                  <i :class="getTimelineIcon(slotProps.item.status)" style="color: white; font-size: 0.75rem;"></i>
+                </span>
+              </template>
+              <template #content="slotProps">
+                <div class="timeline-item-card">
+                  <div class="timeline-item-header">
+                    <span class="timeline-item-status" :style="{ color: getTimelineColor(slotProps.item.status) }">
+                      {{ slotProps.item.status }}
+                    </span>
+                    <span class="timeline-item-date">{{ slotProps.item.date }}</span>
+                  </div>
+                  <p class="timeline-item-justification">{{ slotProps.item.justification }}</p>
+                  <div v-if="slotProps.item.progress !== null" class="timeline-item-progress">
+                    Avance asignado: <span class="font-bold text-gray-800">{{ slotProps.item.progress }}%</span>
+                  </div>
+                </div>
+              </template>
+            </Timeline>
+            <div v-if="!store.currentProject.statusLogs || store.currentProject.statusLogs.length === 0" class="empty-detail-state">
+              <i class="pi pi-info-circle mr-1"></i> Sin registros de cambios de estado.
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna 2: Planos y Expedientes Técnicos (DataTable de PrimeVue) -->
+        <div class="details-card">
+          <div class="details-card__header flex-row-between">
+            <div>
+              <h3><i class="pi pi-file"></i> Expedientes y Planos Técnicos</h3>
+              <p class="details-card__desc">Lista de planos constructivos y especificaciones técnicas aprobadas para esta obra.</p>
+            </div>
+            <Button label="Subir Plano" icon="pi pi-plus" size="small" severity="success" outlined @click="showAddDocDialog = true" />
+          </div>
+          <div class="details-card__content">
+            <DataTable :value="store.currentProject.documents || []" responsiveLayout="scroll" class="p-datatable-sm custom-datatable" :paginator="true" :rows="3">
+              <Column field="name" header="Nombre Documento / Plano" sortable>
+                <template #body="slotProps">
+                  <div class="flex items-center gap-2">
+                    <i class="pi pi-file-pdf text-red-500 text-lg"></i>
+                    <span class="font-semibold text-gray-800">{{ slotProps.data.name }}</span>
+                  </div>
+                </template>
+              </Column>
+              <Column field="type" header="Tipo" sortable style="width: 20%">
+                <template #body="slotProps">
+                  <Badge :value="slotProps.data.type" severity="info" />
+                </template>
+              </Column>
+              <Column field="version" header="Versión" style="width: 15%">
+                <template #body="slotProps">
+                  <span class="font-mono text-xs text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded border">{{ slotProps.data.version }}</span>
+                </template>
+              </Column>
+              <Column field="isSigned" header="Firma Digital" sortable style="width: 20%">
+                <template #body="slotProps">
+                  <Badge 
+                    :value="slotProps.data.isSigned ? 'Firmado' : 'Pendiente'" 
+                    :severity="slotProps.data.isSigned ? 'success' : 'danger'" 
+                  />
+                </template>
+              </Column>
+              <Column field="deadline" header="Vence" sortable style="width: 15%"></Column>
+            </DataTable>
+            <div v-if="!store.currentProject.documents || store.currentProject.documents.length === 0" class="empty-detail-state">
+              <i class="pi pi-folder-open mr-1"></i> No se han registrado planos ni especificaciones para esta obra.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ DIÁLOGO PARA AÑADIR PLANO / DOCUMENTO TÉCNICO ═══ -->
+    <Dialog v-model:visible="showAddDocDialog" modal header="Subir Plano o Documento Técnico" :style="{ width: '450px' }">
+      <div class="form-body">
+        <div class="field">
+          <label>Nombre del Documento / Plano <span class="field__required">*</span></label>
+          <InputText v-model="docForm.name" placeholder="Ej. Plano de Cimentaciones Sector B" fluid />
+        </div>
+        <div class="field">
+          <label>Tipo de Elemento</label>
+          <Select v-model="docForm.type" :options="docTypes" optionLabel="label" optionValue="value" fluid />
+        </div>
+        <div class="field">
+          <label>Versión</label>
+          <InputText v-model="docForm.version" placeholder="Ej. v1.0" fluid />
+        </div>
+        <div class="field">
+          <label>Estado de Firma Digital</label>
+          <div class="flex gap-4 mt-1">
+            <div class="flex items-center gap-2">
+              <input type="radio" id="signed-true" :value="true" v-model="docForm.isSigned" />
+              <label for="signed-true" class="cursor-pointer text-sm">Firmado Digitalmente</label>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="radio" id="signed-false" :value="false" v-model="docForm.isSigned" />
+              <label for="signed-false" class="cursor-pointer text-sm">Firma Pendiente</label>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Fecha Límite para Aprobación</label>
+          <DatePicker v-model="docForm.deadline" showIcon fluid />
+        </div>
+      </div>
+      <template #footer>
+        <Button label="Cancelar" severity="secondary" text @click="showAddDocDialog = false" />
+        <Button label="Registrar Documento" :disabled="!docForm.name.trim()" @click="handleAddDocument" />
+      </template>
+    </Dialog>
 
     <!-- ═══ CREATE PROJECT DIALOG ═══ -->
     <Dialog :visible="showCreateModal" @update:visible="handleCloseCreate" modal :header="t('projects_dashboard.create_title')" :style="{ width: '480px' }">
@@ -526,5 +719,208 @@ onMounted(() => { store.loadProjects(); });
 @media (max-width: 768px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .projects-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Active Project Details Section ── */
+.details-panel {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  border: 2px solid #e9ecef;
+  margin-top: 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  animation: detailsFadeIn 0.3s ease-out;
+}
+
+@keyframes detailsFadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.details-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.details-panel__title-area {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.details-panel__icon {
+  font-size: 1.5rem;
+  color: #1abc9c;
+  background: #e8f8f5;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+}
+
+.details-panel__title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.details-panel__subtitle {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin: 0.25rem 0 0;
+}
+
+.details-panel__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .details-panel__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.details-card {
+  background: #fafbfc;
+  border: 1px solid #eef2f5;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.01);
+}
+
+.details-card__header {
+  margin-bottom: 1.5rem;
+}
+
+.flex-row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.details-card__header h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.details-card__header h3 i {
+  color: #3498db;
+}
+
+.details-card__desc {
+  font-size: 0.8rem;
+  color: #95a5a6;
+  margin: 0.25rem 0 0;
+}
+
+.details-card__content {
+  flex: 1;
+}
+
+/* Timeline Custom Styles */
+.custom-timeline {
+  padding: 0.5rem 0;
+}
+
+.timeline-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+.timeline-item-card {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+  margin-left: 0.5rem;
+}
+
+.timeline-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-item-status {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.timeline-item-date {
+  font-size: 0.75rem;
+  color: #95a5a6;
+}
+
+.timeline-item-justification {
+  font-size: 0.8rem;
+  color: #555;
+  margin: 0 0 0.5rem;
+  line-height: 1.5;
+}
+
+.timeline-item-progress {
+  font-size: 0.75rem;
+  color: #7f8c8d;
+  border-top: 1px dashed #e9ecef;
+  padding-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.empty-detail-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: #95a5a6;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Datatable Custom Styles */
+.custom-datatable {
+  background: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #e9ecef;
+}
+
+.custom-datatable :deep(.p-datatable-thead > tr > th) {
+  background-color: #f8f9fa;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #4b5563;
+  padding: 0.75rem 1rem;
+}
+
+.custom-datatable :deep(.p-datatable-tbody > tr > td) {
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
 }
 </style>

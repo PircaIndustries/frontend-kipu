@@ -35,7 +35,9 @@ export class ProjectEntity {
         image = '',
         members = 1,
         rnc = 0,
-        pending = 0
+        pending = 0,
+        statusLogs = [],
+        documents = []
     } = {}) {
         this.id = id;
         this.name = name;
@@ -51,5 +53,7 @@ export class ProjectEntity {
         this.members = members;
         this.rnc = rnc;
         this.pending = pending;
+        this.statusLogs = statusLogs;
+        this.documents = documents;
     }
 }
