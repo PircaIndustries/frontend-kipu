@@ -1,198 +1,125 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRouter, useRoute } from 'vue-router';
-import { allAdvances } from '../../data/advancesStore';
-import { allProjects } from '../../../project-management/data/projectsStore';
+import { useRouter } from 'vue-router';
+import { useAdvanceStore } from '@/domains/progress-monitoring/application/advancesStore.js';
 
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import Button from 'primevue/button';
-import ProgressBar from 'primevue/progressbar';
-import Tag from 'primevue/tag';
-import Select from 'primevue/select';
 import DatePicker from 'primevue/datepicker';
+import Select from 'primevue/select';
+import InputText from 'primevue/inputtext';
 
 const { t } = useI18n();
 const router = useRouter();
-const route = useRoute();
+const store = useAdvanceStore();
 
-const selectedProject = ref(null);
-const selectedSpecialty = ref(null);
-const dateRange = ref(null);
+// Calendar range state
+const dates = ref(null);
 
-const specialties = ref([
-  { name: t('progress-monitoring.advances.specialties.structures'), value: 'Estructuras' },
-  { name: t('progress-monitoring.advances.specialties.installations'), value: 'Instalaciones' },
-  { name: t('progress-monitoring.advances.specialties.architecture'), value: 'Arquitectura' }
+// Computed list to ensure i18n translates reactively
+const specialtiesOptions = computed(() => [
+  { name: t('execution.advances.specialties.structures'), value: 'Estructuras' },
+  { name: t('execution.advances.specialties.installations'), value: 'Instalaciones' },
+  { name: t('execution.advances.specialties.architecture'), value: 'Arquitectura' }
 ]);
 
 onMounted(() => {
-  if (route.query.projectId) {
-    const found = allProjects.value.find(p => p.id === route.query.projectId);
-    if (found) selectedProject.value = found;
-  }
+  store.loadAdvances();
 });
 
-const clearFilters = () => {
-  selectedProject.value = null;
-  selectedSpecialty.value = null;
-  dateRange.value = null;
-};
-
-const filteredAdvances = computed(() => {
-  return allAdvances.value.filter(item => {
-    const matchesProject = !selectedProject.value || item.projectId === selectedProject.value.id;
-    const matchesSpecialty = !selectedSpecialty.value || item.specialty === selectedSpecialty.value.value;
-
-    let matchesDate = true;
-    if (dateRange.value && dateRange.value[0] && dateRange.value[1]) {
-      const start = new Date(dateRange.value[0]).setHours(0,0,0,0);
-      const end = new Date(dateRange.value[1]).setHours(23,59,59,999);
-      const itemDate = new Date(item.date).getTime();
-      matchesDate = itemDate >= start && itemDate <= end;
-    }
-
-    return matchesProject && matchesSpecialty && matchesDate;
-  });
-});
-
-const getProjectName = (id) => {
-  const project = allProjects.value.find(p => p.id === id);
-  return project ? project.name : '-';
-};
-
-const getStatusSeverity = (status) => {
-  switch (status) {
-    case 'COMPLETED': return 'success';
-    case 'IN_PROGRESS': return 'info';
-    case 'DELAYED': return 'danger';
-    default: return 'warning';
+const onDateRangeChange = () => {
+  if (dates.value && dates.value.length === 2 && dates.value[1]) {
+    store.setDateRange(dates.value[0], dates.value[1]);
+  } else if (!dates.value) {
+    store.setDateRange(null, null);
   }
 };
 
-const handleNewAdvance = () => {
-  const queryParams = selectedProject.value ? { projectId: selectedProject.value.id } : {};
-  router.push({ name: 'CreateAdvance', query: queryParams });
+const getStatusBadgeClass = (s) => {
+  const status = (s || 'ACTIVE').toUpperCase();
+  const base = 'px-3 py-1 rounded-md text-xs font-bold uppercase';
+  if (status === 'FINISHED' || status === 'COMPLETED') return `${base} bg-green-100 text-emerald-600`;
+  if (status === 'DELAYED') return `${base} bg-red-100 text-red-600`;
+  return `${base} bg-blue-100 text-blue-500`;
 };
+
+const navigateToCreate = () => router.push('/advances/new');
 </script>
 
 <template>
-  <div class="view-content">
-    <header class="advances-header">
-      <div class="title-group">
-        <h1>{{ t('progress-monitoring.advances.title') }}</h1>
-        <p class="subtitle">{{ t('progress-monitoring.advances.subtitle') }}</p>
+  <div class="bg-white p-6 rounded-b-xl shadow-sm">
+    <div class="flex justify-between items-center mb-6">
+      <div class="flex flex-wrap gap-4 items-center">
+        <div class="w-[280px]">
+          <InputText
+              placeholder="Buscar..."
+              class="w-full !rounded-lg"
+              @input="(e) => store.setSearchFilter(e.target.value)"
+          />
+        </div>
+        <div class="w-[280px]">
+          <Select
+              :options="specialtiesOptions"
+              optionLabel="name"
+              optionValue="value"
+              :placeholder="t('execution.advances.filterSpecialty')"
+              class="w-full !rounded-lg"
+              @change="(e) => store.setSpecialtyFilter(e.value)"
+              showClear
+          />
+        </div>
+        <div class="w-[300px]">
+          <DatePicker
+              v-model="dates"
+              selectionMode="range"
+              :placeholder="t('execution.advances.filterWeek')"
+              class="w-full !rounded-lg"
+              @update:modelValue="onDateRangeChange"
+              showIcon
+          />
+        </div>
       </div>
-      <Button
-          :label="t('progress-monitoring.advances.newBtn')"
-          icon="pi pi-plus"
-          class="p-button-primary new-advance-btn"
-          @click="handleNewAdvance"
-      />
-    </header>
 
-    <div class="filters-bar">
-      <Select
-          v-model="selectedProject"
-          :options="allProjects"
-          optionLabel="name"
-          :placeholder="t('progress-monitoring.advances.filterProject')"
-          class="filter-dropdown"
-          showClear
-      />
-
-      <Select
-          v-model="selectedSpecialty"
-          :options="specialties"
-          optionLabel="name"
-          :placeholder="t('progress-monitoring.advances.filterSpecialty')"
-          class="filter-dropdown"
-          showClear
-      />
-
-      <DatePicker
-          v-model="dateRange"
-          selectionMode="range"
-          showIcon
-          iconDisplay="input"
-          :placeholder="t('progress-monitoring.advances.filterWeek')"
-          class="filter-calendar"
-          showButtonBar
-      />
-
-      <Button
-          v-if="selectedProject || selectedSpecialty || dateRange"
-          icon="pi pi-filter-slash"
-          severity="secondary"
-          text
-          @click="clearFilters"
-      />
+      <button class="bg-[#2c3e50] text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-[#34495e] transition-colors font-bold" @click="navigateToCreate">
+        <i class="pi pi-plus"></i> {{ t('execution.advances.newBtn') }}
+      </button>
     </div>
 
-    <DataTable :value="filteredAdvances" class="p-datatable-sm custom-table">
-      <Column field="date" :header="t('progress-monitoring.table.date')">
-        <template #body="slotProps">
-          {{ new Date(slotProps.data.date).toLocaleDateString() }}
-        </template>
-      </Column>
-      <Column :header="t('progress-monitoring.table.activity')">
-        <template #body="slotProps">
-          <div class="activity-cell">
-            <span class="activity-name">{{ slotProps.data.activity }}</span>
-            <span class="activity-sector">{{ slotProps.data.sector }}</span>
-          </div>
-        </template>
-      </Column>
-      <Column field="specialty" :header="t('progress-monitoring.table.specialty')"></Column>
-      <Column :header="t('progress-monitoring.table.progress')">
-        <template #body="slotProps">
-          <div class="progress-cell">
-            <ProgressBar :value="slotProps.data.progress" :showValue="false" style="height: 6px; flex-grow: 1;" />
-            <span class="progress-text">{{ slotProps.data.progress }}%</span>
-          </div>
-        </template>
-      </Column>
-      <Column :header="t('progress-monitoring.table.project')">
-        <template #body="slotProps">
-          <span class="project-truncate" :title="getProjectName(slotProps.data.projectId)">
-            {{ getProjectName(slotProps.data.projectId) }}
-          </span>
-        </template>
-      </Column>
-      <Column :header="t('progress-monitoring.table.status')">
-        <template #body="slotProps">
-          <Tag :value="t(`execution.status.${slotProps.data.status}`)"
-               :severity="getStatusSeverity(slotProps.data.status)" />
-        </template>
-      </Column>
-      <Column>
-        <template #body>
-          <Button icon="pi pi-angle-right" text plain />
-        </template>
-      </Column>
-    </DataTable>
+    <div class="border border-gray-100 rounded-lg overflow-hidden">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-gray-50 text-gray-400 uppercase font-semibold text-xs">
+        <tr>
+          <th class="px-6 py-4">{{ t('execution.table.date') }}</th>
+          <th class="px-6 py-4">{{ t('execution.table.activity') }}</th>
+          <th class="px-6 py-4">{{ t('execution.table.specialty') }}</th>
+          <th class="px-6 py-4">{{ t('execution.table.progress') }}</th>
+          <th class="px-6 py-4">{{ t('execution.table.status') }}</th>
+        </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+        <tr v-if="store.filteredAdvances.length === 0">
+          <td colspan="5" class="px-6 py-10 text-center text-gray-400 italic">No hay registros para este proyecto.</td>
+        </tr>
+        <tr v-for="item in store.filteredAdvances" :key="item.id" class="hover:bg-gray-50 transition-colors">
+          <td class="px-6 py-4">{{ new Date(item.lastUpdate || item.date).toLocaleDateString() }}</td>
+          <td class="px-6 py-4">
+            <div class="font-bold text-gray-800">{{ item.activityName || item.activity }}</div>
+            <div class="text-xs text-gray-400 font-normal">{{ item.details || item.sector }}</div>
+          </td>
+          <td class="px-6 py-4 text-gray-500">{{ item.specialty }}</td>
+          <td class="px-6 py-4 font-bold">{{ item.currentPercentage || item.progress }}%</td>
+          <td class="px-6 py-4">
+              <span :class="getStatusBadgeClass(item.status)">
+                {{ t(`execution.status.${(item.status || 'ACTIVE').toUpperCase()}`) }}
+              </span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <div class="info-footer">
-      <i class="pi pi-info-circle"></i>
-      <span>{{ t('progress-monitoring.advances.weeklyReport', { count: filteredAdvances.length }) }}</span>
+    <div class="mt-6 p-4 bg-gray-50 border border-gray-100 rounded-lg flex items-center gap-3 text-gray-500 text-sm">
+      <i class="pi pi-info-circle text-blue-500"></i>
+      <span>{{ t('execution.advances.weeklyReport', { count: store.filteredAdvances.length }) }}</span>
     </div>
   </div>
 </template>
-
-<style scoped>
-.view-content { padding: 0.5rem 0; }
-.advances-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-.title-group h1 { margin: 0; font-size: 1.5rem; color: #2c3e50; }
-.subtitle { color: #95a5a6; font-size: 0.9rem; }
-.new-advance-btn { background-color: #3498db; border: none; }
-.filters-bar { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
-.filter-dropdown, .filter-calendar { min-width: 240px; }
-.activity-cell { display: flex; flex-direction: column; }
-.activity-name { font-weight: 600; color: #2c3e50; }
-.activity-sector { font-size: 0.8rem; color: #95a5a6; }
-.progress-cell { display: flex; align-items: center; gap: 1rem; min-width: 180px; }
-.progress-text { font-size: 0.85rem; font-weight: 700; width: 40px; }
-.info-footer { margin-top: 2rem; background: #f8f9fa; padding: 1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.75rem; color: #7f8c8d; border: 1px solid #e9ecef; }
-.project-truncate { display: block; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; color: #34495e; }
-</style>

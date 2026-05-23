@@ -159,7 +159,7 @@ export const useTeamUserStore = defineStore('teamUser', () => {
 
     /**
      * Invite a new user
-     * @param {Object} userData - User data (email, firstName, lastName, role)
+     * @param {Object} userData - User application (email, firstName, lastName, role)
      * @returns {Promise<TeamUserEntity|null>}
      */
     const inviteUser = async (userData) => {

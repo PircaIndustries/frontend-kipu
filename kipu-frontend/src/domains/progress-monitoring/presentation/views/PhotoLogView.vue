@@ -1,148 +1,42 @@
 <script setup>
-/**
- * PhotoLogView Component
- * Displays a gallery of work progress photos using shared store data.
- */
-import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { allAdvances } from '../../data/advancesStore';
-
-// PrimeVue Components
-import Card from 'primevue/card';
-import Image from 'primevue/image';
-import Tag from 'primevue/tag';
-import Select from 'primevue/select';
 
 const { t } = useI18n();
 
-const selectedSpecialty = ref(null);
-const specialties = ref([
-  { name: t('progress-monitoring.advances.specialties.structures'), value: 'Estructuras' },
-  { name: t('progress-monitoring.advances.specialties.installations'), value: 'Instalaciones' },
-  { name: t('progress-monitoring.advances.specialties.architecture'), value: 'Arquitectura' }
-]);
-
-/** * Integrated Logic: We read the advances from the Store.
- * If an advance has a 'photoUrl', we show it.
- * If not, we show a professional placeholder.
- */
-const galleryItems = computed(() => {
-  return allAdvances.value.map(advance => ({
-    id: advance.id,
-    // If the advance has no photo, we use a construction-themed placeholder
-    url: advance.photoUrl || `https://images.unsplash.com/photo-1541913053-470260714300?q=80&w=500&sig=${advance.id}`,
-    date: advance.date,
-    specialty: advance.specialty,
-    activity: advance.activity
-  }));
-});
-
-const filteredPhotos = computed(() => {
-  if (!selectedSpecialty.value) return galleryItems.value;
-  return galleryItems.value.filter(p => p.specialty === selectedSpecialty.value.value);
-});
+// Mock data for the photo log gallery
+const mockPhotos = [
+  { title: 'Excavaciones', url: 'https://loremflickr.com/600/400/excavator,construction?lock=1' },
+  { title: 'Cimentación', url: 'https://loremflickr.com/600/400/foundation,construction?lock=2' },
+  { title: 'Armado de Columnas', url: 'https://loremflickr.com/600/400/rebar,construction?lock=3' }
+];
 </script>
 
 <template>
-  <div class="photo-log-container">
-    <header class="gallery-header">
-      <h2>{{ t('progress-monitoring.advances.photoLog.title') }}</h2>
-      <Select
-          v-model="selectedSpecialty"
-          :options="specialties"
-          optionLabel="name"
-          :placeholder="t('progress-monitoring.advances.photoLog.filterBy')"
-          showClear
-          class="gallery-filter"
-      />
-    </header>
-
-    <div v-if="filteredPhotos.length" class="photo-grid">
-      <Card v-for="photo in filteredPhotos" :key="photo.id" class="photo-card">
-        <template #header>
-          <Image :src="photo.url" alt="Progress Photo" preview class="gallery-img" />
-        </template>
-        <template #title>
-          <span class="photo-title">{{ photo.activity }}</span>
-        </template>
-        <template #subtitle>
-          <div class="photo-meta">
-            <span>{{ new Date(photo.date).toLocaleDateString() }}</span>
-            <Tag :value="photo.specialty" severity="secondary" />
-          </div>
-        </template>
-      </Card>
+  <div class="bg-white p-6 rounded-b-xl shadow-sm">
+    <div class="flex justify-between items-center mb-6">
+      <div class="flex gap-2">
+        <button class="px-4 py-2 border border-[#3498DB] text-[#3498DB] rounded-md font-medium text-sm hover:bg-blue-50 transition-colors">Excavaciones</button>
+        <button class="px-4 py-2 border border-[#3498DB] text-[#3498DB] rounded-md font-medium text-sm hover:bg-blue-50 transition-colors">Cimentación</button>
+      </div>
+      <div class="flex gap-2">
+        <button class="text-gray-500 flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-md font-bold text-sm transition-colors">
+          <i class="pi pi-download"></i> Exportar
+        </button>
+        <button class="bg-gray-800 text-white flex items-center gap-2 px-4 py-2 rounded-md font-bold text-sm hover:bg-gray-900 transition-colors">
+          <i class="pi pi-plus"></i> Subir Fotos
+        </button>
+      </div>
     </div>
 
-    <div v-else class="empty-gallery">
-      <i class="pi pi-images"></i>
-      <p>{{ t('progress-monitoring.advances.photoLog.noPhotos') }}</p>
+    <div class="grid grid-cols-3 gap-4">
+      <div v-for="photo in mockPhotos" :key="photo.url"
+           class="h-48 bg-gray-200 rounded-xl relative overflow-hidden bg-cover bg-center shadow-sm hover:scale-[1.02] transition-transform cursor-pointer"
+           :style="{ backgroundImage: `url(${photo.url})` }">
+        <div class="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors"></div>
+      </div>
+      <div class="h-48 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center text-gray-400 cursor-pointer hover:bg-gray-50 hover:border-[#3498DB] hover:text-[#3498DB] transition-all">
+        <i class="pi pi-plus text-4xl"></i>
+      </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-.photo-log-container {
-  padding: 0.5rem 0;
-}
-
-.gallery-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.gallery-header h2 { margin: 0; color: #2c3e50; font-size: 1.25rem; }
-.gallery-filter { width: 250px; }
-
-.photo-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.photo-card {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.2s;
-  border: 1px solid #e9ecef;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.photo-card:hover { transform: translateY(-5px); }
-
-/* FIXED: This makes the image fill the top part of the card perfectly */
-:deep(.p-image), :deep(.p-image img) {
-  width: 100%;
-  height: 200px;
-  display: block;
-  object-fit: cover; /* Fill the card without distortion */
-}
-
-.photo-title {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #2c3e50;
-  display: block;
-  margin-bottom: 0.5rem;
-  padding: 0 1rem;
-}
-
-.photo-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: auto;
-  padding: 0 1rem 1rem 1rem;
-}
-
-.empty-gallery {
-  text-align: center;
-  padding: 5rem;
-  color: #95a5a6;
-}
-
-.empty-gallery i { font-size: 3rem; margin-bottom: 1rem; }
-</style>

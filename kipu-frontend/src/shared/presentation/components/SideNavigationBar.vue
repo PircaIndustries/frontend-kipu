@@ -13,7 +13,7 @@ import Button from 'primevue/button';
 const { t } = useI18n();
 const router = useRouter();
 
-/** Read user data from localStorage (set at login). */
+/** Read user application from localStorage (set at login). */
 const currentUser = computed(() => {
   try {
     const raw = localStorage.getItem('currentUser');

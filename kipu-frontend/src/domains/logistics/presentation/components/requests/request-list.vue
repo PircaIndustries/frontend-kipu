@@ -5,19 +5,7 @@ defineProps({
   requests: {
     type: Array,
     required: true
-  },
-
-  /*
-  * availableBudget: {
-    type: Number,
-    default: 0
-  },
-  totalBudget: {
-    type: Number,
-    default: 0
   }
-  * */
-
 })
 
 const emit = defineEmits(['modify', 'detail'])
@@ -29,8 +17,6 @@ const emit = defineEmits(['modify', 'detail'])
         v-for="request in requests"
         :key="request.id"
         :request="request"
-        :available-budget="availableBudget"
-        :total-budget="totalBudget"
         @modify="emit('modify', request)"
         @detail="emit('detail', request)"
     />

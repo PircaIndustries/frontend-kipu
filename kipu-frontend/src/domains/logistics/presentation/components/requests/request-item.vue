@@ -10,14 +10,6 @@ const props = defineProps({
     /** @type {import('vue').Prop<EnrichedRequest>} */
     type: Object,
     required: true
-  },
-  availableBudget: {
-    type: Number,
-    default: 0
-  },
-  totalBudget: {
-    type: Number,
-    default: 0
   }
 })
 
@@ -34,13 +26,15 @@ const remainingDaysText = computed(() => {
 })
 
 const requestedAmount = computed(() => {
-  return props.request.items.reduce((total, item) => {
-    return total + Math.ceil(item.quantity * item.pricePerUnit)
-  }, 0)
+  return props.request.totalAmount ?? 0
 })
 
 const isAmountValid = computed(() => {
-  return props.availableBudget + requestedAmount.value <= props.totalBudget
+  return props.request.isWithinBudget ?? true
+})
+
+const budgetAvailable = computed(() => {
+  return props.request.budgetAvailable ?? 0
 })
 
 const firstItem = computed(() => props.request.items[0] ?? {})
@@ -91,7 +85,7 @@ const requestFields = computed(() => [
           </div>
           <div class="flex justify-between text-sm text-primary">
             <span>{{ t('request.card.budget-verification.available-budget') }}</span>
-            <span class="font-bold">{{ availableBudget }}</span>
+            <span class="font-bold">{{ budgetAvailable }}</span>
           </div>
           <hr class="border-t-2 border-primary my-2 opacity-20" />
           <div class="flex justify-between items-center text-sm">

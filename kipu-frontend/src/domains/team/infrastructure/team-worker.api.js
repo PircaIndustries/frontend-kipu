@@ -53,7 +53,7 @@ export const teamWorkerApi = {
     /**
      * Updates an existing team worker
      * @param {string} id - Worker identifier
-     * @param {TeamWorkerEntity} worker - Updated worker data
+     * @param {TeamWorkerEntity} worker - Updated worker application
      * @returns {Promise<TeamWorkerEntity>} Promise resolving to updated worker
      */
     async updateWorker(id, worker) {
