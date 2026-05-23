@@ -78,15 +78,31 @@ export const useProjectsStore = defineStore('projects', () => {
      * @param {Object} projectData
      * @returns {Promise<ProjectEntity>}
      */
+    /**
+     * Creates a new project. Assigns a random local image automatically.
+     * @param {Object} projectData
+     * @returns {Promise<ProjectEntity>}
+     */
     async function addProject(projectData) {
         try {
+            const initialStatus = projectData.status || 'Planificación';
             const payload = {
                 ...projectData,
                 image: getRandomProjectImage(),
                 progress: 0,
                 members: 1,
                 rnc: 0,
-                pending: 0
+                pending: 0,
+                statusLogs: [
+                    {
+                        id: `log-${Date.now()}`,
+                        status: initialStatus,
+                        date: new Date().toISOString().split('T')[0],
+                        justification: 'Proyecto creado e iniciado.',
+                        progress: initialStatus === 'En ejecución' ? 45 : 12
+                    }
+                ],
+                documents: []
             };
             const created = await projectsApi.create(payload);
             const entity = new ProjectEntity(created);
@@ -108,7 +124,7 @@ export const useProjectsStore = defineStore('projects', () => {
     }
 
     /**
-     * Updates the status of a project and persists the justification.
+     * Updates the status of a project and persists the justification in a 1:N StatusLog collection.
      * When progress is provided (number), it also updates the progress bar.
      * @param {string} id
      * @param {string} status
@@ -117,19 +133,68 @@ export const useProjectsStore = defineStore('projects', () => {
      */
     async function updateProjectStatus(id, status, justification, progress) {
         try {
-            const payload = { status };
-            if (justification) {
-                payload.statusJustification = justification;
-            }
+            const project = projects.value.find(p => p.id === id);
+            if (!project) throw new Error('Project not found');
+
+            const currentProgress = typeof progress === 'number' ? progress : project.progress;
+            const newLogEntry = {
+                id: `log-${Date.now()}`,
+                status: status,
+                date: new Date().toISOString().split('T')[0],
+                justification: justification || 'Cambio de estado del proyecto.',
+                progress: currentProgress
+            };
+
+            const updatedLogs = [...(project.statusLogs || []), newLogEntry];
+
+            const payload = {
+                status,
+                statusJustification: justification || '',
+                statusLogs: updatedLogs
+            };
             if (typeof progress === 'number') {
                 payload.progress = progress;
             }
+
             const updated = await projectsApi.updateStatus(id, payload);
             projects.value = projects.value.map(p =>
                 p.id === id ? new ProjectEntity(updated) : p
             );
         } catch (error) {
             console.error('Failed to update project status:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Adds a new document/blueprint to a project.
+     * @param {string} projectId
+     * @param {Object} documentData
+     */
+    async function addProjectDocument(projectId, documentData) {
+        try {
+            const project = projects.value.find(p => p.id === projectId);
+            if (!project) throw new Error('Project not found');
+
+            const newDoc = {
+                id: `doc-proj-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+                name: documentData.name,
+                type: documentData.type || 'Plano',
+                version: documentData.version || 'v1.0',
+                uploadDate: new Date().toISOString().split('T')[0],
+                isSigned: documentData.isSigned || false,
+                deadline: documentData.deadline || ''
+            };
+
+            const updatedDocs = [...(project.documents || []), newDoc];
+
+            const updated = await projectsApi.updateStatus(projectId, { documents: updatedDocs });
+            projects.value = projects.value.map(p =>
+                p.id === projectId ? new ProjectEntity(updated) : p
+            );
+            return newDoc;
+        } catch (error) {
+            console.error('Failed to add project document:', error);
             throw error;
         }
     }
@@ -167,6 +232,7 @@ export const useProjectsStore = defineStore('projects', () => {
         addProject,
         checkNameExists,
         updateProjectStatus,
+        addProjectDocument,
         deleteProject
     };
 });

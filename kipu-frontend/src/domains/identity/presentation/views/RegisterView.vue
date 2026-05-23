@@ -22,7 +22,6 @@ const name = ref('');
 const email = ref('');
 const password = ref('');
 const role = ref('');
-const rememberMe = ref(false);
 const showSuccessDialog = ref(false);
 
 const touched = ref({ name: false, email: false, password: false, role: false });
@@ -105,17 +104,13 @@ function onSuccessClose() { showSuccessDialog.value = false; router.push('/login
                         </div>
                         <div class="auth-form__field">
                             <label for="register-password">{{ t('identity.password') }}</label>
-                            <Password id="register-password" v-model="password" :feedback="false" toggleMask fluid :invalid="!!passwordError" @blur="touched.password = true" />
+                            <Password id="register-password" v-model="password" :placeholder="t('identity.password_placeholder')" :feedback="false" toggleMask fluid :invalid="!!passwordError" @blur="touched.password = true" />
                             <small v-if="passwordError" class="auth-form__error">{{ passwordError }}</small>
                         </div>
                         <div class="auth-form__field">
                             <label for="register-role">{{ t('identity.role') }}</label>
                             <Select id="register-role" v-model="role" :options="roleOptions" optionLabel="label" optionValue="value" :placeholder="t('identity.role_placeholder')" fluid :invalid="!!roleError" @blur="touched.role = true" />
                             <small v-if="roleError" class="auth-form__error">{{ roleError }}</small>
-                        </div>
-                        <div class="auth-form__checkbox-row">
-                            <Checkbox v-model="rememberMe" inputId="register-remember" :binary="true" />
-                            <label for="register-remember" class="auth-form__checkbox-label">{{ t('identity.remember_me') }}</label>
                         </div>
                         <Button type="submit" :label="t('identity.register_button')" :disabled="!isFormValid" class="auth-form__submit" />
                         <div class="auth-form__divider-row">

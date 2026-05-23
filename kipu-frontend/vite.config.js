@@ -19,6 +19,11 @@ export default defineConfig({
        * Allows using '@/path/to/file' instead of relative paths.
        */
       '@': fileURLToPath(new URL('./src', import.meta.url))
+    },
+  },
+  server: {
+    watch: {
+      ignored: ['**/src/fake-api/**'],
     }
   }
 });

@@ -689,13 +689,77 @@
       "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "budget": 1500000,
-      "progress": 45,
-      "status": "En ejecución",
-      "statusJustification": "34",
+      "progress": 12,
+      "status": "Planificación",
+      "statusJustification": "",
       "image": "/assets/project-image1.png",
       "members": 8,
       "rnc": 3,
-      "pending": 5
+      "pending": 5,
+      "statusLogs": [
+        {
+          "id": "log-01",
+          "status": "Planificación",
+          "date": "2026-01-01",
+          "justification": "Creación inicial del proyecto e hitos iniciales.",
+          "progress": 12
+        },
+        {
+          "id": "log-02",
+          "status": "En ejecución",
+          "date": "2026-02-15",
+          "justification": "Se iniciaron las excavaciones de cimientos y habilitación de acero.",
+          "progress": 45
+        },
+        {
+          "id": "log-1779284892213",
+          "status": "Paralizada",
+          "date": "2026-05-20",
+          "justification": "Para",
+          "progress": 45
+        },
+        {
+          "id": "log-1779284983046",
+          "status": "En ejecución",
+          "date": "2026-05-20",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 45
+        },
+        {
+          "id": "log-1779284989022",
+          "status": "Paralizada",
+          "date": "2026-05-20",
+          "justification": "123",
+          "progress": 45
+        },
+        {
+          "id": "log-1779284991524",
+          "status": "Planificación",
+          "date": "2026-05-20",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 12
+        }
+      ],
+      "documents": [
+        {
+          "id": "doc-proj-01-01",
+          "name": "Plano de Cimentaciones Estructurales",
+          "type": "Plano",
+          "version": "v1.0",
+          "uploadDate": "2026-01-05",
+          "isSigned": true,
+          "deadline": "2026-03-01"
+        },
+        {
+          "id": "doc-proj-01-02",
+          "name": "Expediente Técnico de Instalaciones",
+          "type": "Expediente",
+          "version": "v1.2",
+          "uploadDate": "2026-02-10",
+          "isSigned": false,
+          "deadline": "2026-06-30"
+        }
+      ]
     },
     {
       "id": "proj-02",
@@ -711,7 +775,27 @@
       "image": "/assets/project-image2.png",
       "members": 15,
       "rnc": 9,
-      "pending": 8
+      "pending": 8,
+      "statusLogs": [
+        {
+          "id": "log-03",
+          "status": "Planificación",
+          "date": "2026-03-15",
+          "justification": "Proyecto aprobado e inicio de la fase de planificación.",
+          "progress": 12
+        }
+      ],
+      "documents": [
+        {
+          "id": "doc-proj-02-01",
+          "name": "Plano de Arquitectura General",
+          "type": "Plano",
+          "version": "v1.0",
+          "uploadDate": "2026-03-20",
+          "isSigned": false,
+          "deadline": "2026-05-30"
+        }
+      ]
     }
   ],
   "identities": [
@@ -749,6 +833,27 @@
       "password": "kipu1234",
       "role": "Gestor Operativo",
       "id": "PjaiuHE"
+    },
+    {
+      "name": "Armando Paredes",
+      "email": "armando@hotmail.com",
+      "password": "armando123",
+      "role": "Logística y Administración",
+      "id": "fKx6c-S"
+    },
+    {
+      "name": "Armando Casas",
+      "email": "armando2@hotmail.com",
+      "password": "kipu1234",
+      "role": "Gestor Operativo",
+      "id": "T2oXDcM"
+    },
+    {
+      "name": "Armando Barrios",
+      "email": "armando3@hotmail.com",
+      "password": "kipu1234",
+      "role": "Logística y Administración",
+      "id": "f6wdJZH"
     },
     {
       "name": "Pau Mon",
