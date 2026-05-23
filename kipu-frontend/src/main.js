@@ -24,10 +24,11 @@ import Button from 'primevue/button';
 import Message from 'primevue/message';
 import Dialog from 'primevue/dialog';
 import InputOtp from 'primevue/inputotp';
+import GoogleSignInPlugin from 'vue3-google-signin';
 // Styles
 import 'primeicons/primeicons.css';
 import './style.css';
-import {Toast} from "primevue";
+import { Toast } from "primevue";
 import ToastService from 'primevue/toastservice';
 const app = createApp(App);
 const pinia = createPinia();
@@ -40,6 +41,9 @@ app.use(PrimeVue, {
             darkModeSelector: '.app-dark'
         }
     }
+});
+app.use(GoogleSignInPlugin, {
+    clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
 });
 app.use(pinia);
 app.use(ConfirmationService);
@@ -66,4 +70,9 @@ app.component('pv-message', Message);
 app.component('pv-dialog', Dialog);
 app.component('pv-inputotp', InputOtp);
 app.directive('ripple', Ripple);
-app.mount('#app');
+
+if (window.opener && window.opener !== window && window.name && window.name.startsWith('msal.')) {
+    console.log("MSAL popup window detected. Skipping Vue app mount to prevent routing concurrency.");
+} else {
+    app.mount('#app');
+}

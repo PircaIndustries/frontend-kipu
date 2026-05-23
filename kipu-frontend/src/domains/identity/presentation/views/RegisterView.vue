@@ -2,6 +2,9 @@
 /**
  * RegisterView — User registration page.
  */
+import { onMounted } from 'vue';
+import { PublicClientApplication } from '@azure/msal-browser';
+import { useTokenClient } from 'vue3-google-signin';
 import { ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -11,9 +14,9 @@ import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import Select from 'primevue/select';
 import Button from 'primevue/button';
-import Checkbox from 'primevue/checkbox';
 import Divider from 'primevue/divider';
 import Dialog from 'primevue/dialog';
+import axios from 'axios';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -33,6 +36,169 @@ const roleOptions = computed(() => [
     { label: t('identity.role_manager'), value: 'Gestor Operativo' },
     { label: t('identity.role_logistics'), value: 'Logística y Administración' }
 ]);
+
+const handleOnSuccess = async (response) => {
+  console.log("Google Token obtained:", response.access_token);
+  try {
+    const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${response.access_token}` }
+    });
+    console.log("Google user info:", userInfo.data);
+    await handleOAuthSuccess({
+      name: userInfo.data.name,
+      email: userInfo.data.email,
+      givenName: userInfo.data.given_name,
+      familyName: userInfo.data.family_name,
+      provider: 'google'
+    });
+  } catch (error) {
+    console.error("Error getting Google user info:", error);
+  }
+};
+
+const handleOnError = (errorResponse) => {
+  console.error("Error on Google authentication:", errorResponse);
+};
+
+const { isReady, login } = useTokenClient({
+  onSuccess: handleOnSuccess,
+  onError: handleOnError,
+});
+
+const msalConfig = {
+    auth: {
+        clientId: import.meta.env.VITE_MICROSOFT_CLIENT_ID,
+        authority: "https://login.microsoftonline.com/common",
+        redirectUri: window.location.origin,
+    },
+    cache: {
+        cacheLocation: "sessionStorage",
+        storeAuthStateInCookie: false,
+    }
+};
+
+const msalInstance = new PublicClientApplication(msalConfig);
+
+onMounted(async () => {
+    try {
+        await msalInstance.initialize();
+        const response = await msalInstance.handleRedirectPromise();
+        if (response) {
+            console.log("Microsoft Token obtained via redirect:", response.accessToken);
+            const account = response.account;
+            await handleOAuthSuccess({
+                name: account.name,
+                email: account.username,
+                provider: 'microsoft'
+            });
+        }
+    } catch (error) {
+        console.error("Error on MSAL initialization/redirect:", error);
+    }
+
+    const oauthUser = history.state?.oauthUser;
+    if (oauthUser) {
+        oauthEmail.value = oauthUser.email;
+        oauthProvider.value = oauthUser.provider;
+        if (oauthUser.givenName && oauthUser.familyName) {
+            oauthFirstName.value = oauthUser.givenName;
+            oauthLastName.value = oauthUser.familyName;
+        } else {
+            const nameParts = (oauthUser.name || '').trim().split(/\s+/);
+            oauthFirstName.value = nameParts[0] || '';
+            oauthLastName.value = nameParts.slice(1).join(' ') || '';
+        }
+        oauthRole.value = '';
+        showOAuthRegister.value = true;
+    }
+});
+
+const loginWithMicrosoft = async () => {
+    try {
+        const loginRequest = {
+            scopes: ["user.read"]
+        };
+        await msalInstance.loginRedirect(loginRequest);
+    } catch (error) {
+        console.error("Error on Microsoft redirect authentication:", error);
+    }
+};
+
+// --- First-time OAuth Registration ---
+const showOAuthRegister = ref(false);
+const oauthFirstName = ref('');
+const oauthLastName = ref('');
+const oauthEmail = ref('');
+const oauthRole = ref('');
+const oauthProvider = ref('');
+const isSubmittingOAuth = ref(false);
+
+async function handleOAuthSuccess(userInfo) {
+    const emailVal = userInfo.email;
+    try {
+        // 1. Check if email exists in system database
+        const exists = await identityApi.checkEmailExists(emailVal);
+        if (exists) {
+            // Log in normally
+            const response = await axios.get(`${import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:3000/api/v1'}/identities`, {
+                params: { email: emailVal }
+            });
+            const user = response.data.find(u => u.email === emailVal);
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                router.push('/projects');
+                return;
+            }
+        }
+        
+        // 2. Not registered yet: Show profile details confirmation form
+        oauthEmail.value = emailVal;
+        oauthProvider.value = userInfo.provider;
+        
+        if (userInfo.givenName && userInfo.familyName) {
+            oauthFirstName.value = userInfo.givenName;
+            oauthLastName.value = userInfo.familyName;
+        } else {
+            const nameParts = (userInfo.name || '').trim().split(/\s+/);
+            oauthFirstName.value = nameParts[0] || '';
+            oauthLastName.value = nameParts.slice(1).join(' ') || '';
+        }
+        
+        oauthRole.value = '';
+        showOAuthRegister.value = true;
+    } catch (error) {
+        console.error("Error handling OAuth success flow:", error);
+    }
+}
+
+function handleBackToLogin() {
+    showOAuthRegister.value = false;
+    router.push('/login');
+}
+
+const isOAuthRegisterFormValid = computed(() => {
+    return oauthFirstName.value.trim() && oauthLastName.value.trim() && oauthRole.value;
+});
+
+async function onOAuthRegisterSubmit() {
+    if (!isOAuthRegisterFormValid.value) return;
+    isSubmittingOAuth.value = true;
+    try {
+        const newUser = {
+            name: `${oauthFirstName.value.trim()} ${oauthLastName.value.trim()}`,
+            email: oauthEmail.value,
+            password: `OAuth-${oauthProvider.value}-${Math.random().toString(36).slice(-8)}`,
+            role: oauthRole.value
+        };
+        const createdUser = await identityApi.register(newUser);
+        localStorage.setItem('currentUser', JSON.stringify(createdUser));
+        router.push('/projects');
+    } catch (error) {
+        console.error("Error registering OAuth user:", error);
+    } finally {
+        isSubmittingOAuth.value = false;
+    }
+}
 
 const nameError = computed(() => (!touched.value.name || name.value.trim()) ? '' : t('identity.err_name_required'));
 const emailError = computed(() => {
@@ -88,9 +254,14 @@ function onSuccessClose() { showSuccessDialog.value = false; router.push('/login
             <AuthBanner />
             <div class="auth-panel">
                 <div class="auth-panel__body">
-                    <h2 class="auth-panel__title">{{ t('identity.register_title') }}</h2>
-                    <p class="auth-panel__subtitle">{{ t('identity.register_description') }}</p>
-                    <form class="auth-form" @submit.prevent="onSubmit">
+                    <h2 class="auth-panel__title">
+                        {{ showOAuthRegister ? t('identity.oauth_register_title') : t('identity.register_title') }}
+                    </h2>
+                    <p class="auth-panel__subtitle">
+                        {{ showOAuthRegister ? t('identity.oauth_register_desc') : t('identity.register_description') }}
+                    </p>
+
+                    <form v-if="!showOAuthRegister" class="auth-form" @submit.prevent="onSubmit">
                         <div class="auth-form__field">
                             <label for="register-name">{{ t('identity.name') }}</label>
                             <InputText id="register-name" v-model="name" :placeholder="t('identity.name_placeholder')" fluid :invalid="!!nameError" @blur="touched.name = true" />
@@ -117,13 +288,67 @@ function onSuccessClose() { showSuccessDialog.value = false; router.push('/login
                             <Divider /><span class="auth-form__divider-text">{{ t('identity.continue') }}</span><Divider />
                         </div>
                         <div class="auth-form__social">
-                            <Button type="button" outlined class="auth-form__social-btn"><span class="auth-form__social-letter">G</span> Google</Button>
-                            <Button type="button" outlined class="auth-form__social-btn"><span class="auth-form__social-letter">M</span> Microsoft</Button>
+                            <Button type="button" outlined class="auth-form__social-btn" @click="() => login()" :disabled="!isReady">
+                                <i class="pi pi-google auth-form__social-icon auth-form__social-icon--google"></i> Google
+                            </Button>
+                            <Button type="button" outlined class="auth-form__social-btn" @click="loginWithMicrosoft">
+                                <i class="pi pi-microsoft auth-form__social-icon auth-form__social-icon--microsoft"></i> Microsoft
+                            </Button>
                         </div>
                         <p class="auth-form__footer">
                             {{ t('identity.has_account') }}
                             <router-link to="/login" class="auth-form__link">{{ t('identity.login_link') }}</router-link>
                         </p>
+                    </form>
+
+                    <!-- OAuth First-Time Registration Form -->
+                    <form v-else class="auth-form" @submit.prevent="onOAuthRegisterSubmit">
+                        <div class="auth-form__field">
+                            <label for="oauth-first-name">{{ t('identity.oauth_first_name') }}</label>
+                            <InputText
+                                id="oauth-first-name"
+                                v-model="oauthFirstName"
+                                :placeholder="t('identity.name_placeholder')"
+                                fluid
+                            />
+                        </div>
+
+                        <div class="auth-form__field">
+                            <label for="oauth-last-name">{{ t('identity.oauth_last_name') }}</label>
+                            <InputText
+                                id="oauth-last-name"
+                                v-model="oauthLastName"
+                                :placeholder="t('identity.name_placeholder')"
+                                fluid
+                            />
+                        </div>
+
+                        <div class="auth-form__field">
+                            <label for="oauth-role">{{ t('identity.role') }}</label>
+                            <Select
+                                id="oauth-role"
+                                v-model="oauthRole"
+                                :options="roleOptions"
+                                optionLabel="label"
+                                optionValue="value"
+                                :placeholder="t('identity.role_placeholder')"
+                                fluid
+                            />
+                        </div>
+
+                        <Button
+                            type="submit"
+                            :label="t('identity.continue_button')"
+                            :disabled="!isOAuthRegisterFormValid"
+                            :loading="isSubmittingOAuth"
+                            class="auth-form__submit"
+                        />
+
+                        <div class="verification-box__back">
+                            <a href="#" @click.prevent="handleBackToLogin" class="verification-box__back-link">
+                                <i class="pi pi-arrow-left"></i> {{ t('identity.back_to_login') }}
+                            </a>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -158,7 +383,41 @@ function onSuccessClose() { showSuccessDialog.value = false; router.push('/login
 .auth-form__divider-text { font-size: 0.72rem; color: #9ca3af; white-space: nowrap; }
 .auth-form__social { display: flex; gap: 0.75rem; }
 .auth-form__social-btn { flex: 1; justify-content: center; font-size: 0.82rem; gap: 0.375rem; }
-.auth-form__social-letter { font-weight: 700; color: #374151; }
+.auth-form__social-icon {
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-form__social-icon--google {
+    color: #ea4335;
+}
+
+.auth-form__social-icon--microsoft {
+    color: #00a4ef;
+}
+
+.verification-box__back {
+    text-align: center;
+    margin-top: -0.25rem;
+}
+
+.verification-box__back-link {
+    font-size: 0.78rem;
+    color: #64748b;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: color 0.2s;
+}
+
+.verification-box__back-link:hover {
+    color: #0f172a;
+}
+
 .auth-form__footer { text-align: center; font-size: 0.78rem; color: #6c757d; margin: 0; }
 .auth-form__link { color: #3498db; text-decoration: none; font-weight: 500; font-size: 0.82rem; }
 .auth-form__link:hover { text-decoration: underline; }

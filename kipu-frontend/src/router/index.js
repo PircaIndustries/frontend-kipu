@@ -12,13 +12,17 @@ const PROJECT_WHITELIST = [
     'Login', 'Register', 'ForgotPassword', 'ResetPassword', 'Verification', 'Projects'
 ];
 
+const PUBLIC_ROUTES = [
+    'Login', 'Register', 'ForgotPassword', 'ResetPassword'
+];
+
 const routes = [
     ...logisticsRoutes,
     ...teamRoutes,
     ...signaturesRoutes,
     {
         path: '/',
-        redirect: '/login'
+        redirect: '/register'
     },
     // ── Identity routes (no sidebar) ──
     {
@@ -137,13 +141,23 @@ const router = createRouter({
 });
 
 /**
- * Navigation guard: redirect to /projects if no project is selected
- * and the target route requires one.
+ * Navigation guard: enforces authentication and project selection rules.
  */
 router.beforeEach((to) => {
     const routeName = to.name;
+    const isAuthenticated = !!localStorage.getItem('currentUser');
 
-    // Allow whitelisted routes without project selection
+    // 1. Authentication guard: if not authenticated and trying to access a protected route, redirect to login
+    if (!isAuthenticated && !PUBLIC_ROUTES.includes(routeName)) {
+        return { name: 'Login' };
+    }
+
+    // 2. Prevent authenticated users from going back to public identity routes
+    if (isAuthenticated && PUBLIC_ROUTES.includes(routeName)) {
+        return { name: 'Projects' };
+    }
+
+    // 3. Project selection guard: allow whitelisted routes without project selection
     if (PROJECT_WHITELIST.includes(routeName)) return true;
 
     // Check if a project is selected (read directly from localStorage for SSR-safe check
