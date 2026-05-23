@@ -3,6 +3,9 @@
  * LoginView — User authentication page.
  * Follows the same compact card layout as all identity views.
  */
+import { onMounted } from 'vue';
+import { PublicClientApplication } from '@azure/msal-browser';
+import { useTokenClient } from 'vue3-google-signin';
 import { ref, computed, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -13,6 +16,7 @@ import Password from 'primevue/password';
 import Button from 'primevue/button';
 import Checkbox from 'primevue/checkbox';
 import Divider from 'primevue/divider';
+import axios from 'axios';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -24,6 +28,116 @@ const loginError = ref('');
 const isSubmitting = ref(false);
 
 const touched = ref({ email: false, password: false });
+
+// --- Google OAuth Configuration ---
+
+const handleOnSuccess = async (response) => {
+  console.log("Google Token obtained:", response.access_token);
+  try {
+    const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${response.access_token}` }
+    });
+    console.log("Google user info:", userInfo.data);
+    await handleOAuthSuccess({
+      name: userInfo.data.name,
+      email: userInfo.data.email,
+      givenName: userInfo.data.given_name,
+      familyName: userInfo.data.family_name,
+      provider: 'google'
+    });
+  } catch (error) {
+    console.error("Error getting Google user info:", error);
+  }
+};
+
+const handleOnError = (errorResponse) => {
+  console.error("Error on Google authentication:", errorResponse);
+};
+
+const { isReady, login } = useTokenClient({
+  onSuccess: handleOnSuccess,
+  onError: handleOnError,
+});
+
+// --- Microsoft MSAL Configuration ---
+const msalConfig = {
+    auth: {
+        clientId: import.meta.env.VITE_MICROSOFT_CLIENT_ID,
+        authority: "https://login.microsoftonline.com/common",
+        redirectUri: window.location.origin,
+    },
+    cache: {
+        cacheLocation: "sessionStorage",
+        storeAuthStateInCookie: false,
+    }
+};
+
+const msalInstance = new PublicClientApplication(msalConfig);
+
+onMounted(async () => {
+    try {
+        await msalInstance.initialize();
+        const response = await msalInstance.handleRedirectPromise();
+        if (response) {
+            console.log("Microsoft Token obtained via redirect:", response.accessToken);
+            const account = response.account;
+            await handleOAuthSuccess({
+                name: account.name,
+                email: account.username,
+                provider: 'microsoft'
+            });
+        }
+    } catch (error) {
+        console.error("Error on MSAL initialization/redirect:", error);
+    }
+});
+
+const loginWithMicrosoft = async () => {
+    try {
+        const loginRequest = {
+            scopes: ["user.read"]
+        };
+        await msalInstance.loginRedirect(loginRequest);
+    } catch (error) {
+        console.error("Error on Microsoft redirect authentication:", error);
+    }
+};
+
+async function handleOAuthSuccess(userInfo) {
+    const emailVal = userInfo.email;
+    try {
+        // 1. Check if email exists in system database
+        const exists = await identityApi.checkEmailExists(emailVal);
+        if (exists) {
+            // Log in normally
+            const response = await axios.get(`${import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:3000/api/v1'}/identities`, {
+                params: { email: emailVal }
+            });
+            const user = response.data.find(u => u.email === emailVal);
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                router.push('/projects');
+                return;
+            }
+        }
+        
+        // 2. Not registered yet: Redirect to RegisterView passing user information in state
+        router.push({
+            name: 'Register',
+            state: {
+                oauthUser: {
+                    name: userInfo.name,
+                    email: userInfo.email,
+                    givenName: userInfo.givenName,
+                    familyName: userInfo.familyName,
+                    provider: userInfo.provider
+                }
+            }
+        });
+    } catch (error) {
+        console.error("Error handling OAuth success flow:", error);
+    }
+}
 
 // Verification States
 const showVerification = ref(false);
@@ -138,8 +252,12 @@ async function onSubmit() {
 
             <div class="auth-panel">
                 <div class="auth-panel__body">
-                    <h2 class="auth-panel__title">{{ t('identity.login_title') }}</h2>
-                    <p class="auth-panel__subtitle">{{ t('identity.login_description') }}</p>
+                    <h2 class="auth-panel__title">
+                        {{ t('identity.login_title') }}
+                    </h2>
+                    <p class="auth-panel__subtitle">
+                        {{ t('identity.login_description') }}
+                    </p>
 
                     <form v-if="!showVerification" class="auth-form" @submit.prevent="onSubmit">
                         <!-- Email -->
@@ -207,11 +325,11 @@ async function onSubmit() {
 
                         <!-- Social buttons -->
                         <div class="auth-form__social">
-                            <Button type="button" outlined class="auth-form__social-btn">
-                                <span class="auth-form__social-letter">G</span> Google
+                            <Button type="button" outlined class="auth-form__social-btn" @click="() => login()" :disabled="!isReady">
+                                <i class="pi pi-google auth-form__social-icon auth-form__social-icon--google"></i> Google
                             </Button>
-                            <Button type="button" outlined class="auth-form__social-btn">
-                                <span class="auth-form__social-letter">M</span> Microsoft
+                            <Button type="button" outlined class="auth-form__social-btn" @click="loginWithMicrosoft">
+                                <i class="pi pi-microsoft auth-form__social-icon auth-form__social-icon--microsoft"></i> Microsoft
                             </Button>
                         </div>
 
@@ -393,9 +511,19 @@ async function onSubmit() {
     gap: 0.375rem;
 }
 
-.auth-form__social-letter {
-    font-weight: 700;
-    color: #374151;
+.auth-form__social-icon {
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-form__social-icon--google {
+    color: #ea4335;
+}
+
+.auth-form__social-icon--microsoft {
+    color: #00a4ef;
 }
 
 .auth-form__footer {
