@@ -819,6 +819,27 @@
       "password": "kipu1234",
       "role": "Gestor Operativo",
       "id": "PjaiuHE"
+    },
+    {
+      "name": "Armando Paredes",
+      "email": "armando@hotmail.com",
+      "password": "armando123",
+      "role": "Logística y Administración",
+      "id": "fKx6c-S"
+    },
+    {
+      "name": "Armando Casas",
+      "email": "armando2@hotmail.com",
+      "password": "kipu1234",
+      "role": "Gestor Operativo",
+      "id": "T2oXDcM"
+    },
+    {
+      "name": "Armando Barrios",
+      "email": "armando3@hotmail.com",
+      "password": "kipu1234",
+      "role": "Logística y Administración",
+      "id": "f6wdJZH"
     }
   ],
   "team-users": [

@@ -3,7 +3,7 @@
  * LoginView — User authentication page.
  * Follows the same compact card layout as all identity views.
  */
-import { ref, computed } from 'vue';
+import { ref, computed, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { identityApi } from '../../infrastructure/identity.api';
@@ -24,6 +24,15 @@ const loginError = ref('');
 const isSubmitting = ref(false);
 
 const touched = ref({ email: false, password: false });
+
+// Verification States
+const showVerification = ref(false);
+const verificationCode = ref('');
+const isVerifying = ref(false);
+const timer = ref(0);
+const resendInterval = ref(null);
+const showResendDialog = ref(false);
+const authenticatedUser = ref(null);
 
 const emailError = computed(() => {
     if (!touched.value.email) return '';
@@ -46,6 +55,59 @@ const isFormValid = computed(() =>
     !isSubmitting.value
 );
 
+function startResendTimer() {
+    timer.value = 15;
+    if (resendInterval.value) clearInterval(resendInterval.value);
+    resendInterval.value = setInterval(() => {
+        if (timer.value > 0) {
+            timer.value--;
+        } else {
+            clearInterval(resendInterval.value);
+            resendInterval.value = null;
+        }
+    }, 1000);
+}
+
+function stopResendTimer() {
+    if (resendInterval.value) {
+        clearInterval(resendInterval.value);
+        resendInterval.value = null;
+    }
+    timer.value = 0;
+}
+
+onUnmounted(() => {
+    stopResendTimer();
+});
+
+function handleResend() {
+    if (timer.value > 0) return;
+    showResendDialog.value = true;
+    startResendTimer();
+}
+
+function handleBackToLogin() {
+    showVerification.value = false;
+    verificationCode.value = '';
+    stopResendTimer();
+}
+
+const isVerificationValid = computed(() => {
+    return verificationCode.value && verificationCode.value.length === 6 && !isVerifying.value;
+});
+
+async function onVerifySubmit() {
+    if (!isVerificationValid.value) return;
+    isVerifying.value = true;
+    setTimeout(() => {
+        isVerifying.value = false;
+        if (authenticatedUser.value) {
+            localStorage.setItem('currentUser', JSON.stringify(authenticatedUser.value));
+            router.push('/projects');
+        }
+    }, 800);
+}
+
 async function onSubmit() {
     touched.value = { email: true, password: true };
     loginError.value = '';
@@ -55,8 +117,9 @@ async function onSubmit() {
     try {
         const user = await identityApi.login({ email: email.value, password: password.value });
         if (user) {
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            router.push('/projects');
+            authenticatedUser.value = user;
+            showVerification.value = true;
+            startResendTimer();
         } else {
             loginError.value = t('identity.err_invalid_credentials');
         }
@@ -78,7 +141,7 @@ async function onSubmit() {
                     <h2 class="auth-panel__title">{{ t('identity.login_title') }}</h2>
                     <p class="auth-panel__subtitle">{{ t('identity.login_description') }}</p>
 
-                    <form class="auth-form" @submit.prevent="onSubmit">
+                    <form v-if="!showVerification" class="auth-form" @submit.prevent="onSubmit">
                         <!-- Email -->
                         <div class="auth-form__field">
                             <label for="login-email">{{ t('identity.email') }}</label>
@@ -100,6 +163,7 @@ async function onSubmit() {
                             <Password
                                 id="login-password"
                                 v-model="password"
+                                :placeholder="t('identity.password_placeholder')"
                                 :feedback="false"
                                 toggleMask
                                 fluid
@@ -157,9 +221,52 @@ async function onSubmit() {
                             <router-link to="/register" class="auth-form__link">{{ t('identity.register_link') }}</router-link>
                         </p>
                     </form>
+
+                    <!-- OTP Verification Container -->
+                    <form v-else class="verification-box" @submit.prevent="onVerifySubmit">
+                        <div class="verification-box__header">
+                            <h3 class="verification-box__code-title">{{ t('identity.verification_code_title') }}</h3>
+                            <p class="verification-box__code-desc">
+                                {{ t('identity.verification_code_desc') }}<br>
+                                <strong>{{ email }}</strong>
+                            </p>
+                        </div>
+                        
+                        <pv-inputotp v-model="verificationCode" :length="6" class="verification-box__otp" />
+                        
+                        <Button
+                            type="submit"
+                            :label="t('identity.verify_button')"
+                            :disabled="!isVerificationValid"
+                            :loading="isVerifying"
+                            class="verification-box__submit"
+                        />
+                        
+                        <div class="verification-box__footer">
+                            <span v-if="timer > 0" class="verification-box__wait-text">
+                                {{ t('identity.resend_code_wait') }}{{ timer }}s
+                            </span>
+                            <a v-else href="#" @click.prevent="handleResend" class="verification-box__link">
+                                {{ t('identity.resend_code') }}
+                            </a>
+                        </div>
+
+                        <div class="verification-box__back">
+                            <a href="#" @click.prevent="handleBackToLogin" class="verification-box__back-link">
+                                <i class="pi pi-arrow-left"></i> {{ t('identity.edit_email') }}
+                            </a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+
+        <pv-dialog v-model:visible="showResendDialog" modal :header="t('identity.resend_code_success_title')" :style="{ width: '22rem' }">
+            <p class="resend-desc">{{ t('identity.resend_code_success_desc') }}</p>
+            <template #footer>
+                <Button label="OK" @click="showResendDialog = false" autofocus />
+            </template>
+        </pv-dialog>
     </div>
 </template>
 
@@ -311,6 +418,118 @@ async function onSubmit() {
 
 .auth-form__link:hover {
     text-decoration: underline;
+}
+
+.verification-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.verification-box__header {
+    text-align: center;
+}
+
+.verification-box__code-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 0.25rem;
+}
+
+.verification-box__code-desc {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.verification-box__code-desc strong {
+    color: #0f172a;
+}
+
+.verification-box__otp {
+    justify-content: center;
+}
+
+:deep(.p-inputotp) {
+    gap: 0.375rem;
+}
+
+:deep(.p-inputotp-input) {
+    width: 2.25rem;
+    height: 2.75rem;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 0.375rem;
+    background-color: #ffffff;
+    color: #1e293b;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+:deep(.p-inputotp-input:focus) {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.verification-box__submit {
+    width: 100%;
+}
+
+.verification-box__footer {
+    text-align: center;
+}
+
+.verification-box__wait-text {
+    font-size: 0.78rem;
+    color: #94a3b8;
+}
+
+.verification-box__link {
+    font-size: 0.78rem;
+    color: #3b82f6;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.verification-box__link:hover {
+    color: #2563eb;
+}
+
+.verification-box__back {
+    text-align: center;
+    margin-top: -0.25rem;
+}
+
+.verification-box__back-link {
+    font-size: 0.78rem;
+    color: #64748b;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: color 0.2s;
+}
+
+.verification-box__back-link:hover {
+    color: #0f172a;
+}
+
+.resend-desc {
+    margin: 0;
+    color: #4b5563;
+    font-size: 0.875rem;
+    line-height: 1.5;
 }
 
 @media (max-width: 680px) {

@@ -23,6 +23,7 @@ import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 import Dialog from 'primevue/dialog';
+import InputOtp from 'primevue/inputotp';
 // Styles
 import 'primeicons/primeicons.css';
 import './style.css';
@@ -63,5 +64,6 @@ app.component('pv-button', Button);
 app.component('pv-toast', Toast);
 app.component('pv-message', Message);
 app.component('pv-dialog', Dialog);
+app.component('pv-inputotp', InputOtp);
 app.directive('ripple', Ripple);
 app.mount('#app');
