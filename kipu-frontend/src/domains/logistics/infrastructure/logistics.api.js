@@ -401,4 +401,21 @@ export class LogisticsApi extends BaseApi {
      * @returns {Promise<import('axios').AxiosResponse>}
      */
     deleteMachineryAssignment(id) { return this.#machineryAssignmentsEndpoint.delete(id); }
+
+    // ==========================================
+    // WASTE CLASSIFICATIONS
+    // ==========================================
+
+    /**
+     * Fetches all waste classifications.
+     * @returns {Promise<import('axios').AxiosResponse>}
+     */
+    getWasteClassifications() { return this.http.get('/wasteClassifications'); }
+
+    /**
+     * Creates a waste classification.
+     * @param {Object} resource
+     * @returns {Promise<import('axios').AxiosResponse>}
+     */
+    createWasteClassification(resource) { return this.http.post('/wasteClassifications', resource); }
 }

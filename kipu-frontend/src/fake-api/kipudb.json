@@ -41,6 +41,12 @@
       "name": "Equipos de Protección Personal (EPP)",
       "description": "Cascos, guantes, lentes, botas, tapones auditivos y arneses de seguridad.",
       "isActive": true
+    },
+    {
+      "id": "cat-1779757656831",
+      "name": "NuevaCategoria",
+      "description": "",
+      "isActive": true
     }
   ],
   "materialsCatalog": [
@@ -156,7 +162,7 @@
       "id": "inv-002",
       "projectId": "proj-02",
       "materialId": "mat-002",
-      "currentStock": 150,
+      "currentStock": 76,
       "miniumStock": 20,
       "location": "Sótano 1"
     },
@@ -164,7 +170,7 @@
       "id": "inv-003",
       "projectId": "proj-01",
       "materialId": "mat-003",
-      "currentStock": 800,
+      "currentStock": 700,
       "miniumStock": 100,
       "location": "Patio de Agregados"
     },
@@ -501,6 +507,65 @@
       "requestedBy": "Usuario actual",
       "status": "PENDING",
       "id": "iPVsW5E"
+    },
+    {
+      "items": [
+        {
+          "supplierOfferId": "soff-004",
+          "quantity": 10
+        }
+      ],
+      "suggestedSupplierId": "sup-002",
+      "budgetLineId": null,
+      "priority": "LOW",
+      "deliveryLocation": "a",
+      "purpose": "1 project 1",
+      "additionalNotes": "1 project 1",
+      "requestDate": "2026-05-26",
+      "deadline": "2026-05-13",
+      "requestedBy": "Usuario actual",
+      "status": "PENDING",
+      "id": "d-lYfZt"
+    },
+    {
+      "items": [
+        {
+          "supplierOfferId": "soff-006",
+          "quantity": 8
+        }
+      ],
+      "projectId": "proj-01",
+      "suggestedSupplierId": "sup-003",
+      "budgetLineId": "",
+      "priority": "LOW",
+      "deliveryLocation": "asdasd",
+      "purpose": "deberia ser 1 1 1",
+      "additionalNotes": "deberia ser 1 1 1",
+      "requestDate": "2026-05-26",
+      "deadline": "2026-05-07",
+      "requestedBy": "6NxPOLs",
+      "status": "PENDING",
+      "id": "z1R781B"
+    },
+    {
+      "items": [
+        {
+          "supplierOfferId": "soff-004",
+          "quantity": 1
+        }
+      ],
+      "projectId": "proj-02",
+      "suggestedSupplierId": "sup-002",
+      "budgetLineId": "",
+      "priority": "LOW",
+      "deliveryLocation": "asd",
+      "purpose": "deberia ser 222",
+      "additionalNotes": "deberia ser 222",
+      "requestDate": "2026-05-26",
+      "deadline": "2026-05-07",
+      "requestedBy": "6NxPOLs",
+      "status": "PENDING",
+      "id": "jtaFRGG"
     }
   ],
   "materialsWaste": [
@@ -524,6 +589,61 @@
       "date": "2026-05-06",
       "description": "Bolsas de cemento endurecidas por filtración de humedad en el sótano 1.",
       "reportedBy": "us-03",
+      "photoUrl": ""
+    },
+    {
+      "id": "rmt-1779758483175",
+      "projectId": "proj-01",
+      "materialId": "mat-003",
+      "quantity": 100,
+      "classificationType": "VENCIMIENTO",
+      "date": "2026-05-26",
+      "description": "Deberian ser 700",
+      "reportedBy": "6NxPOLs",
+      "photoUrl": ""
+    },
+    {
+      "id": "rmt-1779759316043",
+      "projectId": "proj-01",
+      "materialId": "mat-003",
+      "quantity": 100,
+      "classificationType": "VENCIMIENTO",
+      "date": "2026-05-26",
+      "description": "deberian ser 700 ahora si",
+      "reportedBy": "6NxPOLs",
+      "photoUrl": ""
+    },
+    {
+      "id": "rmt-1779759661935",
+      "projectId": "proj-01",
+      "materialId": "mat-002",
+      "quantity": 50,
+      "classificationType": "VENCIMIENTO",
+      "date": "2026-05-26",
+      "description": "seran 100",
+      "reportedBy": "6NxPOLs",
+      "photoUrl": ""
+    },
+    {
+      "id": "rmt-1779760868741",
+      "projectId": "proj-01",
+      "materialId": "mat-002",
+      "quantity": 12,
+      "classificationType": "VENCIMIENTO",
+      "date": "2026-05-26",
+      "description": "Deberia ser 1 1 1",
+      "reportedBy": "6NxPOLs",
+      "photoUrl": ""
+    },
+    {
+      "id": "rmt-1779760884179",
+      "projectId": "proj-02",
+      "materialId": "mat-002",
+      "quantity": 12,
+      "classificationType": "VENCIMIENTO",
+      "date": "2026-05-26",
+      "description": "Deberia ser 2 2 2",
+      "reportedBy": "6NxPOLs",
       "photoUrl": ""
     }
   ],
@@ -575,40 +695,109 @@
       "projectId": "proj-01",
       "machineryId": "maq-001",
       "status": "IN_USE",
-      "assignedTo": "us-01",
+      "assignedTo": "wkr-003",
       "registrationDate": "2026-05-01T08:30:00Z",
       "maintenanceHours": "1200",
-      "assignmentDetail": "Movimiento de tierras en el sector Norte."
+      "assignmentDetail": "a"
     },
     {
       "id": "asig-102",
       "projectId": "proj-01",
       "machineryId": "maq-003",
-      "status": "URGENT_MAINTENANCE",
-      "assignedTo": "us-02",
+      "status": "IN_USE",
+      "assignedTo": "wkr-003",
       "registrationDate": "2026-05-05T09:15:00Z",
       "maintenanceHours": "450",
-      "assignmentDetail": "Falla en el tambor rotatorio, requiere revisión del motor."
+      "assignmentDetail": "a"
     },
     {
       "id": "asig-103",
       "projectId": "proj-02",
       "machineryId": "maq-002",
-      "status": "IN_USE",
-      "assignedTo": "us-03",
+      "status": "AVAILABLE",
+      "assignedTo": null,
       "registrationDate": "2026-05-10T07:00:00Z",
       "maintenanceHours": "1150",
-      "assignmentDetail": "Excavación para cimientos profundos."
+      "assignmentDetail": null
     },
     {
       "id": "asig-104",
       "projectId": "proj-02",
       "machineryId": "maq-004",
       "status": "AVAILABLE",
-      "assignedTo": "us-04",
+      "assignedTo": null,
       "registrationDate": "2026-05-11T08:00:00Z",
       "maintenanceHours": "3200",
-      "assignmentDetail": "En espera de llegada de camiones volquete para carga."
+      "assignmentDetail": null,
+      "machineryName": "Cargador Frontal",
+      "machineryBrand": "Komatsu",
+      "machineryModel": "WA380-6",
+      "workerDni": "10293847",
+      "workerName": "10293847 - Luis Gómez"
+    },
+    {
+      "id": "asig-1779757834810",
+      "projectId": "proj-01",
+      "machineryId": "maq-001",
+      "status": "AVAILABLE",
+      "assignedTo": null,
+      "registrationDate": "2026-05-26T01:10:34.811Z",
+      "maintenanceHours": "0",
+      "assignmentDetail": null,
+      "machineryName": "Excavadora Hidráulica",
+      "machineryBrand": "Caterpillar",
+      "machineryModel": "320 GC",
+      "workerName": "Luis Gómez"
+    },
+    {
+      "id": "asig-1779758538793",
+      "projectId": "proj-01",
+      "machineryId": "maq-001",
+      "status": "MAINTENANCE",
+      "assignedTo": null,
+      "registrationDate": "2026-05-26T01:22:18.793Z",
+      "maintenanceHours": "1",
+      "assignmentDetail": null
+    },
+    {
+      "id": "asig-1779758761463",
+      "projectId": "proj-01",
+      "machineryId": "maq-002",
+      "status": "AVAILABLE",
+      "assignedTo": "wkr-003",
+      "registrationDate": "2026-05-26T01:26:01.463Z",
+      "maintenanceHours": "0",
+      "assignmentDetail": "a"
+    },
+    {
+      "id": "asig-1779758897539",
+      "projectId": "proj-01",
+      "machineryId": "maq-002",
+      "status": "IN_USE",
+      "assignedTo": "wkr-1778624246549",
+      "registrationDate": "2026-05-26T01:28:17.539Z",
+      "maintenanceHours": "0",
+      "assignmentDetail": "prueba2"
+    },
+    {
+      "id": "asig-1779760901404",
+      "projectId": "proj-01",
+      "machineryId": "maq-002",
+      "status": "IN_USE",
+      "assignedTo": "wkr-003",
+      "registrationDate": "2026-05-26T02:01:41.405Z",
+      "maintenanceHours": "0",
+      "assignmentDetail": "deberia ser 1 1 1"
+    },
+    {
+      "id": "asig-1779760915733",
+      "projectId": "proj-02",
+      "machineryId": "maq-001",
+      "status": "IN_USE",
+      "assignedTo": "wkr-003",
+      "registrationDate": "2026-05-26T02:01:55.733Z",
+      "maintenanceHours": "0",
+      "assignmentDetail": "deberia ser 222"
     }
   ],
   "budgets": [
@@ -1317,6 +1506,28 @@
           "fullName": "Laurel Pallo"
         }
       ]
+    }
+  ],
+  "wasteClassifications": [
+    {
+      "id": "wcls-001",
+      "name": "Rotura"
+    },
+    {
+      "id": "wcls-002",
+      "name": "Vencimiento"
+    },
+    {
+      "id": "wcls-003",
+      "name": "Hurto"
+    },
+    {
+      "id": "wcls-004",
+      "name": "Otro"
+    },
+    {
+      "name": "NuevaCategoria",
+      "id": "XYi-Xf6"
     }
   ]
 }

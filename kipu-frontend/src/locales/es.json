@@ -301,7 +301,13 @@
             "description": "Probá ajustando los filtros"
         },
         "category": {
-            "placeholder": "Seleccionar categoría"
+            "placeholder": "Seleccionar categoría",
+            "add-label": "Añadir",
+            "add-placeholder": "Nueva categoría...",
+            "added": {
+                "summary": "Añadida",
+                "detail": "Categoría \"{name}\" añadida."
+            }
         },
         "card": {
             "equipment": "Equipo",
@@ -659,8 +665,7 @@
             "title": "Sign Document",
             "description": "Ingresa el código de verificación",
             "token-sent": "Se ha enviado un código de 6 dígitos a tu correo",
-            "btn-confirm": "Confirmar Firma",
-            "btn-cancel": "Cancelar"
+            "btn-confirm": "Confirmar Firma"
         }
     },
     "budget": {
@@ -720,6 +725,241 @@
             "tableDate": "Fecha",
             "tableDesc": "Descripción",
             "tableAmount": "Monto"
+        }
+    },
+    "waste": {
+        "title": "Mermas de Material",
+        "subtitle": "{count} registros de merma cargados",
+        "button-register": "Registrar Merma",
+        "search": {
+            "placeholder": "Buscar por ID, material o descripción..."
+        },
+        "empty": {
+            "title": "Sin registros de merma",
+            "description": "No se encontraron registros con los filtros aplicados."
+        },
+        "summary": {
+            "title": "Resumen",
+            "total-records": "Registros",
+            "total-units": "Unidades Descontadas"
+        },
+        "filters": {
+            "classification": "FILTRAR POR CLASIFICACIÓN",
+            "classification-placeholder": "Seleccionar clasificación",
+            "material": "FILTRAR POR MATERIAL",
+            "material-placeholder": "Seleccionar material",
+            "date-range": "FILTRAR POR FECHA",
+            "date-placeholder": "MM/DD/YYYY - MM/DD/YYYY"
+        },
+        "classification": {
+            "breakage": "Rotura",
+            "expiration": "Vencimiento",
+            "theft": "Hurto",
+            "other": "Otro",
+            "add-label": "Añadir",
+            "add-placeholder": "Nuevo nombre...",
+            "added": {
+                "summary": "Añadida",
+                "detail": "Clasificación \"{name}\" añadida."
+            }
+        },
+        "create": {
+            "title": "Registrar Merma de Material",
+            "fields": {
+                "material": "Material Afectado",
+                "quantity": "Cantidad Descontada",
+                "unit": "Unidad",
+                "classification": "Clasificación",
+                "date": "Fecha del Reporte",
+                "reason": "Motivo del Descuento",
+                "stock": "Stock disponible"
+            },
+            "placeholders": {
+                "material": "Seleccionar material del inventario...",
+                "quantity": "Ingrese cantidad",
+                "unit": "Unidad aparecerá aquí",
+                "select-material": "Seleccione el material",
+                "classification": "Seleccionar clasificación...",
+                "reason": "Describa el motivo de la merma..."
+            },
+            "actions": {
+                "cancel": "Cancelar",
+                "submit": "Registrar Merma"
+            },
+            "errors": {
+                "material-required": "Debe seleccionar un material del inventario.",
+                "quantity-required": "La cantidad debe ser mayor a 0.",
+                "classification-required": "Debe seleccionar una clasificación.",
+                "reason-required": "Debe describir el motivo de la merma.",
+                "quantity-exceeds-stock": "La cantidad no puede superar el stock actual ({stock})."
+            },
+            "success": {
+                "summary": "Registrado",
+                "detail": "La merma se registró correctamente."
+            }
+        },
+        "delete": {
+            "title": "Eliminar Registro de Merma",
+            "message": "¿Estás seguro de eliminar el registro",
+            "cancel": "Cancelar",
+            "confirm": "Sí, eliminar",
+            "success": {
+                "summary": "Eliminado",
+                "detail": "El registro de merma se eliminó correctamente."
+            }
+        },
+        "card": {
+            "report-id": "ID Reporte",
+            "date": "Fecha",
+            "affected-material": "Material Afectado",
+            "discounted-quantity": "Cantidad Descontada",
+            "classification": "Clasificación",
+            "reason": "Motivo",
+            "no-reason": "Sin descripción de motivo."
+        }
+    },
+    "machinery": {
+        "title": "Maquinaria y Equipos",
+        "subtitle": "{count} equipos registrados",
+        "button-register": "Registrar Equipo",
+        "search": {
+            "placeholder": "Buscar por equipo o asignado..."
+        },
+        "empty": {
+            "title": "No hay equipos",
+            "description": "No se encontraron equipos para los filtros aplicados."
+        },
+        "summary": {
+            "title": "Resumen",
+            "total-tools": "Total Equipos",
+            "in-use": "En Uso",
+            "maintenance": "En Mantenimiento",
+            "available": "Disponibles"
+        },
+        "filters": {
+            "status": "FILTRAR POR ESTADO",
+            "status-placeholder": "Seleccionar estado",
+            "date": "FILTRAR POR FECHA",
+            "date-placeholder": "MM/DD/YYYY - MM/DD/YYYY"
+        },
+        "status": {
+            "available": "Disponible",
+            "in-use": "En Uso",
+            "maintenance": "Mantenimiento",
+            "urgent-maintenance": "Mantenimiento Urgente"
+        },
+        "create": {
+            "title": "Registrar Nuevo Equipo",
+            "fields": {
+                "machine": "Equipo",
+                "status": "Estado",
+                "registration-date": "Fecha de Registro",
+                "assigned-to": "Asignado a",
+                "detail": "Detalle de Asignación"
+            },
+            "placeholders": {
+                "machine": "Seleccionar del catálogo...",
+                "assigned-to": "Seleccionar obrero...",
+                "detail": "Describa la tarea o ubicación..."
+            },
+            "actions": {
+                "cancel": "Cancelar",
+                "submit": "Guardar Equipo"
+            },
+            "errors": {
+                "machine-required": "Debe seleccionar un equipo del catálogo.",
+                "status-required": "Debe seleccionar un estado.",
+                "detail-required": "Debe ingresar un detalle de asignación.",
+                "save-failed": "No se pudo registrar el equipo."
+            },
+            "success": {
+                "summary": "Registrado",
+                "detail": "El equipo se registró correctamente."
+            }
+        },
+        "assign": {
+            "title": "Asignar Equipo",
+            "fields": {
+                "machine": "Equipo",
+                "assigned-to": "Asignar a",
+                "detail": "Detalle de Asignación"
+            },
+            "placeholders": {
+                "assigned-to": "Seleccionar obrero...",
+                "detail": "Motivo / ubicación / tarea..."
+            },
+            "actions": {
+                "cancel": "Cancelar",
+                "submit": "Asignar Equipo"
+            },
+            "errors": {
+                "detail-required": "Debe ingresar un detalle de asignación.",
+                "save-failed": "No se pudo asignar el equipo."
+            },
+            "success": {
+                "summary": "Asignado",
+                "detail": "El equipo se asignó correctamente."
+            }
+        },
+        "maintenance": {
+            "title": "Registrar Mantenimiento",
+            "fields": {
+                "machine": "Equipo",
+                "hours": "Horas de Mantenimiento"
+            },
+            "actions": {
+                "cancel": "Cancelar",
+                "submit": "Registrar Mantenimiento"
+            },
+            "errors": {
+                "hours-invalid": "Debe ingresar horas de mantenimiento válidas.",
+                "save-failed": "No se pudo registrar el mantenimiento."
+            },
+            "success": {
+                "summary": "Registrado",
+                "detail": "El mantenimiento se registró correctamente."
+            }
+        },
+        "return": {
+            "success": {
+                "summary": "Devuelto",
+                "detail": "El equipo se devolvió correctamente."
+            },
+            "errors": {
+                "save-failed": "No se pudo devolver el equipo."
+            }
+        },
+        "delete": {
+            "title": "Eliminar Equipo",
+            "message": "¿Estás seguro de eliminar el equipo",
+            "cancel": "Cancelar",
+            "confirm": "Sí, eliminar",
+            "success": {
+                "summary": "Eliminado",
+                "detail": "El equipo se eliminó correctamente."
+            }
+        },
+        "card": {
+            "registration": "Fecha Registro",
+            "equipment": "Equipo",
+            "assigned-to": "Asignado a",
+            "maintenance-hours": "Horas Mantenimiento",
+            "assignment-detail": "Detalle de Asignación",
+            "no-detail": "Sin detalle de asignación",
+            "btn-assign": "Asignar",
+            "btn-return": "Devolver",
+            "btn-maintenance": "Mantenimiento",
+            "unassigned": "No asignado",
+            "btn-enable": "Habilitar"
+        },
+        "enable": {
+            "success": {
+                "summary": "Habilitado",
+                "detail": "Equipo habilitado correctamente."
+            },
+            "errors": {
+                "save-failed": "No se pudo habilitar el equipo."
+            }
         }
     }
 }

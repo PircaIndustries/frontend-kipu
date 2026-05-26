@@ -6,23 +6,23 @@
     "identity": {
         "login_title": "Log In",
         "login_description": "Enter your credentials to continue",
-        "email": "Email Address",
+        "email": "Email",
         "email_placeholder": "Enter your email",
         "password": "Password",
         "password_placeholder": "Enter your password",
         "remember_me": "Remember me",
         "forgot_password": "Forgot password?",
         "login_button": "Log In",
-        "continue": "or continue with",
+        "continue": "Or continue with",
         "no_account": "Don't have an account?",
         "register_link": "Register here",
-        "register_title": "Create Account",
+        "register_title": "Create an Account",
         "register_description": "Enter your credentials to continue",
         "name": "Full Name",
         "name_placeholder": "e.g., Juan Perez",
         "role": "Project Role",
         "role_placeholder": "Select a role",
-        "role_manager": "Operational Manager",
+        "role_manager": "Operations Manager",
         "role_logistics": "Logistics & Administration",
         "register_button": "Register",
         "has_account": "Already have an account?",
@@ -33,9 +33,9 @@
         "banner_platform_title": "Multiplatform",
         "banner_platform_desc": "Access from web or mobile, synchronized in real time",
         "banner_tracking_title": "Continuous Tracking",
-        "banner_tracking_desc": "Record progress, materials, NCRs, and more",
-        "forgot_title": "Reset Password",
-        "forgot_desc": "Enter your email to regain access.",
+        "banner_tracking_desc": "Log progress, materials, RNC and more",
+        "forgot_title": "Reset password",
+        "forgot_desc": "Enter your email to recover access.",
         "continue_button": "Continue",
         "back_to_login": "Back to Login",
         "reset_title": "Reset Password",
@@ -45,9 +45,9 @@
         "reset_button": "Reset Password",
         "back_to_home_1": "Click ",
         "back_to_home_link": "here",
-        "back_to_home_2": " to go back to home",
-        "reset_success_title": "Password reset successfully!",
-        "reset_success_desc": "A confirmation email was sent to you with the details of the changes",
+        "back_to_home_2": " to return to home",
+        "reset_success_title": "Password changed successfully!",
+        "reset_success_desc": "A confirmation email with the details of the changes has been sent to you",
         "verification_title": "Welcome back",
         "verification_desc": "Enter your credentials to continue",
         "verification_code_title": "Verification Code",
@@ -63,21 +63,21 @@
         "oauth_first_name": "First Name",
         "oauth_last_name": "Last Name",
         "register_success_title": "Registration successful!",
-        "register_success_desc": "Only one final step remains to start using the application",
-        "err_name_required": "Name is required.",
+        "register_success_desc": "Only one last step remains to start using the application",
+        "err_name_required": "Full Name is required.",
         "err_email_required": "Email is required.",
         "err_email_invalid": "Invalid email format.",
-        "err_email_taken": "This email is already active in the system.",
+        "err_email_taken": "This email is already in use in the system.",
         "err_password_required": "Password is required.",
         "err_password_min": "Must be at least 8 characters long.",
         "err_role_required": "You must select a role.",
         "err_password_mismatch": "Passwords do not match.",
-        "err_invalid_credentials": "Incorrect email or password.",
-        "hint_checking_email": "Checking availability..."
+        "err_invalid_credentials": "The email address or password is incorrect.",
+        "hint_checking_email": "Verifying availability..."
     },
     "logout": {
         "title": "Log out",
-        "description": "Logged out successfully.",
+        "description": "You have been successfully logged out of your account.",
         "continue": "Continue"
     },
     "projects_dashboard": {
@@ -87,24 +87,24 @@
         "in_progress": "In Progress",
         "average_advance": "Average Progress",
         "pending": "Pending",
-        "open_rncs": "Open NCRs",
+        "open_rncs": "Open RNCs",
         "total": "Total",
         "collaborators": "Collaborators",
         "search_placeholder": "Search project...",
         "new_project": "New Project",
         "empty_state_title": "No active projects",
         "empty_state_desc": "Start by creating your first construction project.",
-        "current_project": "Current active project",
+        "current_project": "Current working project",
         "progress": "Progress",
         "card_start": "Start",
         "card_end": "Estimated End",
         "card_undefined": "Undefined",
         "card_members": "members",
-        "card_rnc": "NCR",
+        "card_rnc": "RNC",
         "card_pending": "pending",
         "create_title": "New Construction Project",
         "create_name": "Project Name",
-        "create_name_placeholder": "e.g., Los Olivos Corporate Building",
+        "create_name_placeholder": "Eg: Corporate Building Los Olivos",
         "create_err_name_req": "Name is required.",
         "create_err_name_dup": "A project with this name already exists.",
         "create_hint_verify": "Checking availability...",
@@ -112,13 +112,13 @@
         "create_desc_placeholder": "Describe the project scope",
         "create_err_desc_req": "Description is required.",
         "create_loc": "Location",
-        "create_loc_placeholder": "e.g., 123 Main St, Lima",
+        "create_loc_placeholder": "Eg: Main St 123, Lima",
         "create_err_loc_req": "Location is required.",
         "create_status": "Initial Status",
         "create_status_planned": "Planned",
         "create_status_in_progress": "In Progress",
         "create_budget": "Estimated Budget",
-        "create_budget_placeholder": "e.g., 500000",
+        "create_budget_placeholder": "Eg: 500000",
         "create_start_date": "Start Date",
         "create_end_date": "End Date (Optional)",
         "create_err_req": "Required.",
@@ -140,8 +140,8 @@
     "navigation": {
         "dashboard": "Dashboard",
         "projects": "Projects",
-        "advances": "Progress",
-        "rnc": "NCR",
+        "advances": "Advances",
+        "rnc": "RNC",
         "logistics": "Logistics",
         "materials": "Materials",
         "blueprints": "Blueprints",
@@ -151,20 +151,19 @@
     },
     "execution": {
         "advances": {
-            "title": "Progress Monitoring",
-            "subtitle": "Daily records log and execution statuses.",
+            "title": "Work Progress Control",
+            "subtitle": "Daily records and execution status history.",
             "newBtn": "New Daily Progress",
-            "filterSpecialty": "Filter by: Specialty",
+            "filterSpecialty": "Filter by Specialty",
             "filterWeek": "Date range",
-            "filterProject": "Filter by: Project",
-            "weeklyReport": "You have recorded {count} progress items in this project.",
+            "weeklyReport": "You have registered {count} advances.",
             "specialties": {
                 "structures": "Structures",
                 "installations": "Installations",
                 "architecture": "Architecture"
             },
             "tabs": {
-                "registry": "Progress Registry (PPC)",
+                "registry": "Progress Log (PPC)",
                 "photoLog": "Photo Log"
             },
             "photoLog": {
@@ -187,7 +186,7 @@
             "progress": "In Progress",
             "blocked": "Blocked"
         },
-        "submitBtn": "Record Progress",
+        "submitBtn": "Register Progress",
         "table": {
             "date": "DATE",
             "activity": "ACTIVITY PERFORMED",
@@ -196,12 +195,12 @@
             "status": "STATUS",
             "project": "PROJECT"
         },
-        "taskLabel": "Work Item",
-        "title": "Daily Progress Record",
+        "taskLabel": "Task",
+        "title": "Daily Progress Registration",
         "create": {
             "title": "New Daily Progress",
             "submitBtn": "Save Progress",
-            "discardHeader": "Confirm discard",
+            "discardHeader": "Confirm Discard",
             "discardMessage": "You have unsaved changes. Are you sure you want to leave?",
             "fields": {
                 "date": "Progress Date",
@@ -214,12 +213,12 @@
                 "crewSize": "Crew Size",
                 "weather": "Weather Conditions",
                 "photos": "Progress Photos",
-                "project": "Assigned project"
+                "project": "Assigned Project"
             },
             "placeholders": {
-                "activity": "e.g., Slab pouring on the second level",
-                "location": "e.g., Level 2 - Axis A-B",
+                "activity": "e.g., Concrete pouring...",
                 "project": "Select a project",
+                "location": "e.g., Level 2 - Axis A-B",
                 "date": "Select date"
             },
             "photos": {
@@ -241,7 +240,7 @@
         "stats": {
             "active": "Active Projects",
             "average": "Average Progress",
-            "rnc": "Open NCRs",
+            "rnc": "Open RNC",
             "total": "Collaborators"
         },
         "create": {
@@ -301,14 +300,20 @@
             "description": "Try adjusting the filters"
         },
         "category": {
-            "placeholder": "Select category"
+            "placeholder": "Select category",
+            "add-label": "Add",
+            "add-placeholder": "New category...",
+            "added": {
+                "summary": "Added",
+                "detail": "Category \"{name}\" added."
+            }
         },
         "card": {
             "equipment": "Equipment",
             "min-limit": "Min Limit",
             "current-stock": "Current Stock"
         },
-        "low-stock": "Low stock"
+        "low-stock": "Low Stock"
     },
     "request": {
         "title": "Material Requests",
@@ -334,7 +339,7 @@
                 "requester": "Requester",
                 "budget-line": "Budget Line Item",
                 "required-date": "Required Date",
-                "in-days": "{days} days left",
+                "in-days": "{days} days remaining",
                 "time-exceeded": "Time exceeded"
             },
             "purpose": {
@@ -371,7 +376,7 @@
         },
         "detail": {
             "total-investment": "TOTAL INVESTMENT",
-            "remaining-days": "{days} days left",
+            "remaining-days": "{days} days remaining",
             "per-unit": "/unit",
             "budget-validated": "Budget Validated",
             "btn-close": "Close",
@@ -404,10 +409,10 @@
                 "quantity": "Enter quantity",
                 "unit-empty": "Unit will appear here",
                 "date": "Select a date",
-                "location": "e.g., Warehouse A",
+                "location": "e.g. Warehouse A",
                 "purpose": "Describe the reason for this request",
                 "additional-notes": "Any additional information",
-                "dropzone": "Drag files here or click to upload",
+                "dropzone": "Drag & drop files here or click to upload",
                 "dropzone-hint": "Accepted formats: PDF, images",
                 "requested-by": "Current user"
             },
@@ -423,7 +428,7 @@
                 "supplier-required": "Supplier is required",
                 "budget-line-required": "Budget line item is required",
                 "quantity-required": "Minimum quantity is 1",
-                "date-required": "Required date is mandatory",
+                "date-required": "Required date is required",
                 "location-required": "Delivery location is required",
                 "purpose-required": "Purpose is required",
                 "check-form": "Check the form fields"
@@ -436,7 +441,7 @@
             },
             "actions": {
                 "cancel": "Cancel",
-                "submit": "Send Request"
+                "submit": "Submit Request"
             },
             "success": {
                 "summary": "Success",
@@ -444,7 +449,7 @@
             }
         }
     },
-    "inventory-tabs": {
+    "logistics-tabs": {
         "tab-inventory": "Inventory",
         "tab-requests": "Requests",
         "tab-suppliers": "Suppliers",
@@ -464,7 +469,7 @@
             "search-ruc": "Search by RUC"
         },
         "card": {
-            "social-reason": "Company Name",
+            "social-reason": "Social Reason",
             "contact": "Contact",
             "phone": "Phone",
             "email": "Email",
@@ -481,9 +486,9 @@
             "ruc-label": "RUC",
             "ruc-placeholder": "Enter RUC",
             "ruc-required": "RUC is required (min. 8 characters)",
-            "social-reason-label": "Company Name",
-            "social-reason-placeholder": "Enter company name",
-            "social-reason-required": "Company name is required",
+            "social-reason-label": "Social Reason",
+            "social-reason-placeholder": "Enter social reason",
+            "social-reason-required": "Social reason is required",
             "contact-label": "Contact",
             "contact-placeholder": "Enter contact name",
             "contact-required": "Contact is required",
@@ -520,7 +525,7 @@
         },
         "delete": {
             "title": "Delete Supplier",
-            "message": "Are you sure you want to delete ",
+            "message": "Are you sure you want to delete",
             "confirm": "Yes, delete",
             "cancel": "Cancel"
         }
@@ -551,22 +556,22 @@
             "role-dictionary": {
                 "title": "Role Dictionary",
                 "administrator": "Administrator",
-                "administrator-description": "Full access to the system. Can manage works, baseline budgets, and permissions.",
-                "manager": "Operational Manager",
-                "manager-description": "Field focused. Records progress, NCRs, and requests materials. Views blueprints.",
+                "administrator-description": "Full system access. Can manage projects, base budgets and access controls.",
+                "manager": "Operations Manager",
+                "manager-description": "Field-focused. Records progress, RNCs and requests materials. Views blueprints.",
                 "logistics": "Logistics",
-                "logistics-description": "Office focused. Approves orders, edits inventories, and manages suppliers.",
+                "logistics-description": "Office-focused. Approves orders, edits inventory and manages suppliers.",
                 "client": "Client",
                 "client-description-1": "Strict access level of ",
                 "client-description-bold": "Read Only. ",
-                "client-description-2": "All creation or edition buttons are hidden in their view to protect data.",
+                "client-description-2": "All creation or editing buttons are hidden in their view to protect the data.",
                 "engineer": "Engineer"
             },
             "send-invitation": {
                 "title": "Invite new user",
                 "credentials": "An email will be sent with the credentials to access the system.",
                 "email": "EMAIL ADDRESS",
-                "email-placeholder": "company.com",
+                "email-placeholder": "user@company.com",
                 "name": "First Name",
                 "name-placeholder": "e.g., 'Juan'",
                 "lastname": "Last Name",
@@ -582,12 +587,12 @@
             "search-placeholder": "Search by DNI, name or position...",
             "register": {
                 "btn-add-worker": "+ New Worker",
-                "no-workers-found": "No registered workers found.",
-                "description": "Passive directory of operations personnel. It is used exclusively to associate their DNI in the Logistics Module.",
-                "tab-dni": "Document (DNI)",
-                "tab-name": "Full Names",
+                "no-workers-found": "No workers registered yet.",
+                "description": "Passive directory of operational personnel. Used exclusively to link ID numbers within the Logistics Module.",
+                "tab-dni": "ID Number",
+                "tab-name": "Full Name",
                 "tab-role": "Position / Crew",
-                "tab-status": "Status on Site",
+                "tab-status": "Work Status",
                 "tab-tools": "Assigned Tools",
                 "tab-action": "Action",
                 "tab-status-active": "ACTIVE",
@@ -596,17 +601,17 @@
                 "tab-btn-enable": "Enable",
                 "worker-count": "workers",
                 "flow-title": "Tools Flow",
-                "flow-description": "Personnel registered in this list do not have system access credentials. This directory is managed exclusively so that the Logistics and Warehouse area can search for the worker's DNI when registering temporary loans or permanent assignments of machinery on site.",
+                "flow-description": "Personnel registered in this list do not have access credentials to the Kipu system. This directory is managed exclusively so that the Logistics and Warehouse area can search for the worker's ID when registering temporary loans or permanent assignments of machinery on site.",
                 "go-to-materials": "Go to Materials Module"
             },
             "add-modal": {
                 "title": "Register New Worker",
-                "dni-label": "Document (DNI)",
+                "dni-label": "ID Number (DNI)",
                 "dni-placeholder": "8 digits",
-                "name-label": "Full Names",
+                "name-label": "Full Name",
                 "name-placeholder": "e.g., Juan Perez",
                 "role-label": "Position / Crew",
-                "role-placeholder": "e.g., Masonry Worker",
+                "role-placeholder": "e.g., Bricklaying Operator",
                 "tools-title": "Assigned Tools",
                 "tools-add": "+ Add Tool",
                 "tools-placeholder": "Equipment name...",
@@ -629,12 +634,12 @@
             "summary-pending": "Pending",
             "summary-signed": "Signed",
             "security-title": "Secure Digital Signature",
-            "security-description": "All signatures are encrypted and legally binding according to current regulations.",
+            "security-description": "All signatures are encrypted and have legal validity according to current regulations.",
             "howto-title": "How to sign?",
             "howto-step1": "Review the full document",
             "howto-step2": "Click on 'Sign Document'",
             "howto-step3": "Enter the verification code",
-            "howto-step4": "The signature is recorded automatically",
+            "howto-step4": "The signature is automatically recorded",
             "btn-create": "Create Document"
         },
         "dialog": {
@@ -661,6 +666,44 @@
             "token-sent": "A 6-digit verification code has been sent to your email",
             "btn-confirm": "Confirm Signature",
             "btn-cancel": "Cancel"
+        }
+    },
+    "progress-monitoring": {
+        "advances": {
+            "title": "Work Progress Control",
+            "subtitle": "Daily records and progress-monitoring status history.",
+            "newBtn": "New Daily Progress",
+            "filterProject": "Filter by: Project",
+            "filterSpecialty": "Filter by: Specialty",
+            "filterWeek": "Date range",
+            "weeklyReport": "You have registered {count} advances. Remember to attach photos in each report.",
+            "specialties": {
+                "structures": "Structures",
+                "installations": "Installations",
+                "architecture": "Architecture"
+            }
+        },
+        "table": {
+            "date": "Date",
+            "activity": "Activity Performed",
+            "specialty": "Specialty",
+            "progress": "Progress (%)",
+            "project": "Project",
+            "status": "Status"
+        },
+        "tabs": {
+            "log": "Progress Log (PPC)",
+            "photos": "Photo Log"
+        },
+        "actions": {
+            "export": "Export Report",
+            "upload": "Upload Photos"
+        },
+        "filters": {
+            "activity": "Search activity...",
+            "specialty": "Filter by: Specialty",
+            "start_date": "Start Date",
+            "end_date": "End Date"
         }
     },
     "budget": {
@@ -720,6 +763,241 @@
             "tableDate": "Date",
             "tableDesc": "Description",
             "tableAmount": "Amount"
+        }
+    },
+    "waste": {
+        "title": "Material Waste",
+        "subtitle": "{count} waste records loaded",
+        "button-register": "Register Waste",
+        "search": {
+            "placeholder": "Search by ID, material or description..."
+        },
+        "empty": {
+            "title": "No waste records",
+            "description": "No records found with the applied filters."
+        },
+        "summary": {
+            "title": "Summary",
+            "total-records": "Records",
+            "total-units": "Discarded Units"
+        },
+        "filters": {
+            "classification": "FILTER BY CLASSIFICATION",
+            "classification-placeholder": "Select classification",
+            "material": "FILTER BY MATERIAL",
+            "material-placeholder": "Select material",
+            "date-range": "FILTER BY DATE",
+            "date-placeholder": "MM/DD/YYYY - MM/DD/YYYY"
+        },
+        "classification": {
+            "breakage": "Breakage",
+            "expiration": "Expiration",
+            "theft": "Theft",
+            "other": "Other",
+            "add-label": "Add",
+            "add-placeholder": "New name...",
+            "added": {
+                "summary": "Added",
+                "detail": "Classification \"{name}\" added."
+            }
+        },
+        "create": {
+            "title": "Register Material Waste",
+            "fields": {
+                "material": "Affected Material",
+                "quantity": "Discarded Quantity",
+                "unit": "Unit",
+                "classification": "Classification",
+                "date": "Report Date",
+                "reason": "Waste Reason",
+                "stock": "Available stock"
+            },
+            "placeholders": {
+                "material": "Select inventory material...",
+                "quantity": "Enter quantity",
+                "unit": "Unit will appear here",
+                "classification": "Select classification...",
+                "reason": "Describe the waste reason...",
+                "select-material": "Select the material"
+            },
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Register Waste"
+            },
+            "errors": {
+                "material-required": "You must select an inventory material.",
+                "quantity-required": "Quantity must be greater than 0.",
+                "classification-required": "You must select a classification.",
+                "reason-required": "You must describe the waste reason.",
+                "quantity-exceeds-stock": "Quantity cannot exceed current stock ({stock})."
+            },
+            "success": {
+                "summary": "Registered",
+                "detail": "Waste record registered successfully."
+            }
+        },
+        "delete": {
+            "title": "Delete Waste Record",
+            "message": "Are you sure you want to delete record",
+            "cancel": "Cancel",
+            "confirm": "Yes, delete",
+            "success": {
+                "summary": "Deleted",
+                "detail": "Waste record deleted successfully."
+            }
+        },
+        "card": {
+            "report-id": "Report ID",
+            "date": "Date",
+            "affected-material": "Affected Material",
+            "discounted-quantity": "Discarded Quantity",
+            "classification": "Classification",
+            "reason": "Reason",
+            "no-reason": "No reason description."
+        }
+    },
+    "machinery": {
+        "title": "Machinery & Equipment",
+        "subtitle": "{count} registered equipment",
+        "button-register": "Register Equipment",
+        "search": {
+            "placeholder": "Search by equipment or assignee..."
+        },
+        "empty": {
+            "title": "No equipment",
+            "description": "No equipment found for the applied filters."
+        },
+        "summary": {
+            "title": "Summary",
+            "total-tools": "Total Equipment",
+            "in-use": "In Use",
+            "maintenance": "Under Maintenance",
+            "available": "Available"
+        },
+        "filters": {
+            "status": "FILTER BY STATUS",
+            "status-placeholder": "Select status",
+            "date": "FILTER BY DATE",
+            "date-placeholder": "MM/DD/YYYY - MM/DD/YYYY"
+        },
+        "status": {
+            "available": "Available",
+            "in-use": "In Use",
+            "maintenance": "Maintenance",
+            "urgent-maintenance": "Urgent Maintenance"
+        },
+        "create": {
+            "title": "Register New Equipment",
+            "fields": {
+                "machine": "Equipment",
+                "status": "Status",
+                "registration-date": "Registration Date",
+                "assigned-to": "Assigned To",
+                "detail": "Assignment Detail"
+            },
+            "placeholders": {
+                "machine": "Select from catalog...",
+                "assigned-to": "Select worker...",
+                "detail": "Describe task or location..."
+            },
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Save Equipment"
+            },
+            "errors": {
+                "machine-required": "You must select equipment from the catalog.",
+                "status-required": "You must select a status.",
+                "detail-required": "You must enter an assignment detail.",
+                "save-failed": "Could not register equipment."
+            },
+            "success": {
+                "summary": "Registered",
+                "detail": "Equipment registered successfully."
+            }
+        },
+        "assign": {
+            "title": "Assign Equipment",
+            "fields": {
+                "machine": "Equipment",
+                "assigned-to": "Assign To",
+                "detail": "Assignment Detail"
+            },
+            "placeholders": {
+                "assigned-to": "Select worker...",
+                "detail": "Reason / location / task..."
+            },
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Assign Equipment"
+            },
+            "errors": {
+                "detail-required": "You must enter an assignment detail.",
+                "save-failed": "Could not assign equipment."
+            },
+            "success": {
+                "summary": "Assigned",
+                "detail": "Equipment assigned successfully."
+            }
+        },
+        "maintenance": {
+            "title": "Register Maintenance",
+            "fields": {
+                "machine": "Equipment",
+                "hours": "Maintenance Hours"
+            },
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Register Maintenance"
+            },
+            "errors": {
+                "hours-invalid": "You must enter valid maintenance hours.",
+                "save-failed": "Could not register maintenance."
+            },
+            "success": {
+                "summary": "Registered",
+                "detail": "Maintenance registered successfully."
+            }
+        },
+        "return": {
+            "success": {
+                "summary": "Returned",
+                "detail": "Equipment returned successfully."
+            },
+            "errors": {
+                "save-failed": "Could not return equipment."
+            }
+        },
+        "delete": {
+            "title": "Delete Equipment",
+            "message": "Are you sure you want to delete equipment",
+            "cancel": "Cancel",
+            "confirm": "Yes, delete",
+            "success": {
+                "summary": "Deleted",
+                "detail": "Equipment deleted successfully."
+            }
+        },
+        "card": {
+            "registration": "Registration Date",
+            "equipment": "Equipment",
+            "assigned-to": "Assigned To",
+            "maintenance-hours": "Maintenance Hours",
+            "assignment-detail": "Assignment Detail",
+            "no-detail": "No assignment detail",
+            "btn-assign": "Assign",
+            "btn-return": "Return",
+            "btn-maintenance": "Maintenance",
+            "unassigned": "Unassigned",
+            "btn-enable": "Enable"
+        },
+        "enable": {
+            "success": {
+                "summary": "Enabled",
+                "detail": "Equipment enabled successfully."
+            },
+            "errors": {
+                "save-failed": "Could not enable equipment."
+            }
         }
     }
 }

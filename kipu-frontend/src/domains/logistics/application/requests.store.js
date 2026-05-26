@@ -85,8 +85,11 @@ const useRequestStore = defineStore('request', () => {
         const currentCategories = categories.value.filter(c => c.isActive);
         const currentSupplierOffers = supplierOffers.value;
         const currentBudgetLines = budgetLines.value;
+        const projectId = localStorage.getItem('currentProjectId') || 'proj-01';
 
-        return requests.value.map(request => {
+        return requests.value
+            .filter(request => request.projectId === projectId)
+            .map(request => {
             const enrichedItems = request.items.map(item => {
                 const offer = currentSupplierOffers.find(s => s.id === item.supplierOfferId);
                 const material = currentMaterials.find(m => m.id === offer?.materialId);
@@ -131,7 +134,6 @@ const useRequestStore = defineStore('request', () => {
     const filteredRequests = computed(() => {
         let result = requestDetailsView.value;
 
-        // ‣ Toggle filters (exclusive)
         if (pendingRequestFilter.value) result = result.filter(r => r.status === 'PENDING');
         if (approvedRequestFilter.value) result = result.filter(r => r.status === 'APPROVED');
         if (refusedRequestFilter.value) result = result.filter(r => r.status === 'REFUSED');
