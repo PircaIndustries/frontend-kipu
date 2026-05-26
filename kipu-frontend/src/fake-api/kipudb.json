@@ -162,7 +162,7 @@
       "id": "inv-002",
       "projectId": "proj-02",
       "materialId": "mat-002",
-      "currentStock": 100,
+      "currentStock": 76,
       "miniumStock": 20,
       "location": "Sótano 1"
     },
@@ -507,6 +507,65 @@
       "requestedBy": "Usuario actual",
       "status": "PENDING",
       "id": "iPVsW5E"
+    },
+    {
+      "items": [
+        {
+          "supplierOfferId": "soff-004",
+          "quantity": 10
+        }
+      ],
+      "suggestedSupplierId": "sup-002",
+      "budgetLineId": null,
+      "priority": "LOW",
+      "deliveryLocation": "a",
+      "purpose": "1 project 1",
+      "additionalNotes": "1 project 1",
+      "requestDate": "2026-05-26",
+      "deadline": "2026-05-13",
+      "requestedBy": "Usuario actual",
+      "status": "PENDING",
+      "id": "d-lYfZt"
+    },
+    {
+      "items": [
+        {
+          "supplierOfferId": "soff-006",
+          "quantity": 8
+        }
+      ],
+      "projectId": "proj-01",
+      "suggestedSupplierId": "sup-003",
+      "budgetLineId": "",
+      "priority": "LOW",
+      "deliveryLocation": "asdasd",
+      "purpose": "deberia ser 1 1 1",
+      "additionalNotes": "deberia ser 1 1 1",
+      "requestDate": "2026-05-26",
+      "deadline": "2026-05-07",
+      "requestedBy": "6NxPOLs",
+      "status": "PENDING",
+      "id": "z1R781B"
+    },
+    {
+      "items": [
+        {
+          "supplierOfferId": "soff-004",
+          "quantity": 1
+        }
+      ],
+      "projectId": "proj-02",
+      "suggestedSupplierId": "sup-002",
+      "budgetLineId": "",
+      "priority": "LOW",
+      "deliveryLocation": "asd",
+      "purpose": "deberia ser 222",
+      "additionalNotes": "deberia ser 222",
+      "requestDate": "2026-05-26",
+      "deadline": "2026-05-07",
+      "requestedBy": "6NxPOLs",
+      "status": "PENDING",
+      "id": "jtaFRGG"
     }
   ],
   "materialsWaste": [
@@ -564,6 +623,28 @@
       "description": "seran 100",
       "reportedBy": "6NxPOLs",
       "photoUrl": ""
+    },
+    {
+      "id": "rmt-1779760868741",
+      "projectId": "proj-01",
+      "materialId": "mat-002",
+      "quantity": 12,
+      "classificationType": "VENCIMIENTO",
+      "date": "2026-05-26",
+      "description": "Deberia ser 1 1 1",
+      "reportedBy": "6NxPOLs",
+      "photoUrl": ""
+    },
+    {
+      "id": "rmt-1779760884179",
+      "projectId": "proj-02",
+      "materialId": "mat-002",
+      "quantity": 12,
+      "classificationType": "VENCIMIENTO",
+      "date": "2026-05-26",
+      "description": "Deberia ser 2 2 2",
+      "reportedBy": "6NxPOLs",
+      "photoUrl": ""
     }
   ],
   "machineryCatalog": [
@@ -617,12 +698,7 @@
       "assignedTo": "wkr-003",
       "registrationDate": "2026-05-01T08:30:00Z",
       "maintenanceHours": "1200",
-      "assignmentDetail": "a",
-      "machineryName": "Excavadora Hidráulica",
-      "machineryBrand": "Caterpillar",
-      "machineryModel": "320 GC",
-      "workerDni": null,
-      "workerName": null
+      "assignmentDetail": "a"
     },
     {
       "id": "asig-102",
@@ -702,6 +778,26 @@
       "registrationDate": "2026-05-26T01:28:17.539Z",
       "maintenanceHours": "0",
       "assignmentDetail": "prueba2"
+    },
+    {
+      "id": "asig-1779760901404",
+      "projectId": "proj-01",
+      "machineryId": "maq-002",
+      "status": "IN_USE",
+      "assignedTo": "wkr-003",
+      "registrationDate": "2026-05-26T02:01:41.405Z",
+      "maintenanceHours": "0",
+      "assignmentDetail": "deberia ser 1 1 1"
+    },
+    {
+      "id": "asig-1779760915733",
+      "projectId": "proj-02",
+      "machineryId": "maq-001",
+      "status": "IN_USE",
+      "assignedTo": "wkr-003",
+      "registrationDate": "2026-05-26T02:01:55.733Z",
+      "maintenanceHours": "0",
+      "assignmentDetail": "deberia ser 222"
     }
   ],
   "budgets": [

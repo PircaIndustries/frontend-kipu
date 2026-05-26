@@ -20,15 +20,19 @@ const workerStore = useTeamWorkerStore()
 
 const { machineryView, assignmentsLoaded, catalogLoaded } = storeToRefs(machineryStore)
 
+const currentProjectId = computed(() => localStorage.getItem('currentProjectId') || 'proj-01');
+
 const enrichedView = computed(() =>
-  machineryView.value.map(a => {
-    const worker = workerStore.allWorkers.find(w => w.id === a.assignedTo)
-    return {
-      ...a,
-      workerDni: worker ? worker.dni : null,
-      workerName: worker ? worker.fullName : null,
-    }
-  })
+  machineryView.value
+    .filter(a => a.projectId === currentProjectId.value)
+    .map(a => {
+      const worker = workerStore.allWorkers.find(w => w.id === a.assignedTo)
+      return {
+        ...a,
+        workerDni: worker ? worker.dni : null,
+        workerName: worker ? worker.fullName : null,
+      }
+    })
 )
 
 const dateRange = ref(null)

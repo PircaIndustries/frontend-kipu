@@ -94,11 +94,17 @@ const onFormSubmit = () => {
 
   submitting.value = true;
 
+  const currentUserId = (() => {
+    try { return JSON.parse(localStorage.getItem('currentUser'))?.id || null; }
+    catch { return null; }
+  })();
+
   const request = {
     items: [{
       supplierOfferId: selectedSupplierOffer.value?.id ?? '',
       quantity: quantity.value
     }],
+    projectId: localStorage.getItem('currentProjectId') || 'proj-01',
     suggestedSupplierId: filteredSuppliers.value.find(s => s.socialReason === selectedSupplier.value)?.id ?? '',
     budgetLineId: selectedBudgetLine.value,
     priority: selectedPriority.value,
@@ -107,7 +113,7 @@ const onFormSubmit = () => {
     additionalNotes: additionalNotes.value,
     requestDate: new Date().toISOString().split('T')[0],
     deadline: requiredDate.value ? new Date(requiredDate.value).toISOString().split('T')[0] : '',
-    requestedBy: t('request.create.placeholders.requested-by'),
+    requestedBy: currentUserId,
     status: 'PENDING'
   };
 
