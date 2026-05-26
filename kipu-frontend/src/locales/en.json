@@ -298,7 +298,13 @@
             "description": "Try adjusting the filters"
         },
         "category": {
-            "placeholder": "Select category"
+            "placeholder": "Select category",
+            "add-label": "Add",
+            "add-placeholder": "New category...",
+            "added": {
+                "summary": "Added",
+                "detail": "Category \"{name}\" added."
+            }
         },
         "card": {
             "equipment": "Equipment",
@@ -656,8 +662,7 @@
             "title": "Sign Document",
             "description": "Enter the verification code",
             "token-sent": "A 6-digit code has been sent to your email",
-            "btn-confirm": "Confirm Signature",
-            "btn-cancel": "Cancel"
+            "btn-confirm": "Confirm Signature"
         }
     },
     "progress-monitoring": {
@@ -696,6 +701,241 @@
             "specialty": "Filter by: Specialty",
             "start_date": "Start Date",
             "end_date": "End Date"
+        }
+    },
+    "waste": {
+        "title": "Material Waste",
+        "subtitle": "{count} waste records loaded",
+        "button-register": "Register Waste",
+        "search": {
+            "placeholder": "Search by ID, material or description..."
+        },
+        "empty": {
+            "title": "No waste records",
+            "description": "No records found with the applied filters."
+        },
+        "summary": {
+            "title": "Summary",
+            "total-records": "Records",
+            "total-units": "Discarded Units"
+        },
+        "filters": {
+            "classification": "FILTER BY CLASSIFICATION",
+            "classification-placeholder": "Select classification",
+            "material": "FILTER BY MATERIAL",
+            "material-placeholder": "Select material",
+            "date-range": "FILTER BY DATE",
+            "date-placeholder": "MM/DD/YYYY - MM/DD/YYYY"
+        },
+        "classification": {
+            "breakage": "Breakage",
+            "expiration": "Expiration",
+            "theft": "Theft",
+            "other": "Other",
+            "add-label": "Add",
+            "add-placeholder": "New name...",
+            "added": {
+                "summary": "Added",
+                "detail": "Classification \"{name}\" added."
+            }
+        },
+        "create": {
+            "title": "Register Material Waste",
+            "fields": {
+                "material": "Affected Material",
+                "quantity": "Discarded Quantity",
+                "unit": "Unit",
+                "classification": "Classification",
+                "date": "Report Date",
+                "reason": "Waste Reason",
+                "stock": "Available stock"
+            },
+            "placeholders": {
+                "material": "Select inventory material...",
+                "quantity": "Enter quantity",
+                "unit": "Unit will appear here",
+                "classification": "Select classification...",
+                "reason": "Describe the waste reason...",
+                "select-material": "Select the material"
+            },
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Register Waste"
+            },
+            "errors": {
+                "material-required": "You must select an inventory material.",
+                "quantity-required": "Quantity must be greater than 0.",
+                "classification-required": "You must select a classification.",
+                "reason-required": "You must describe the waste reason.",
+                "quantity-exceeds-stock": "Quantity cannot exceed current stock ({stock})."
+            },
+            "success": {
+                "summary": "Registered",
+                "detail": "Waste record registered successfully."
+            }
+        },
+        "delete": {
+            "title": "Delete Waste Record",
+            "message": "Are you sure you want to delete record",
+            "cancel": "Cancel",
+            "confirm": "Yes, delete",
+            "success": {
+                "summary": "Deleted",
+                "detail": "Waste record deleted successfully."
+            }
+        },
+        "card": {
+            "report-id": "Report ID",
+            "date": "Date",
+            "affected-material": "Affected Material",
+            "discounted-quantity": "Discarded Quantity",
+            "classification": "Classification",
+            "reason": "Reason",
+            "no-reason": "No reason description."
+        }
+    },
+    "machinery": {
+        "title": "Machinery & Equipment",
+        "subtitle": "{count} registered equipment",
+        "button-register": "Register Equipment",
+        "search": {
+            "placeholder": "Search by equipment or assignee..."
+        },
+        "empty": {
+            "title": "No equipment",
+            "description": "No equipment found for the applied filters."
+        },
+        "summary": {
+            "title": "Summary",
+            "total-tools": "Total Equipment",
+            "in-use": "In Use",
+            "maintenance": "Under Maintenance",
+            "available": "Available"
+        },
+        "filters": {
+            "status": "FILTER BY STATUS",
+            "status-placeholder": "Select status",
+            "date": "FILTER BY DATE",
+            "date-placeholder": "MM/DD/YYYY - MM/DD/YYYY"
+        },
+        "status": {
+            "available": "Available",
+            "in-use": "In Use",
+            "maintenance": "Maintenance",
+            "urgent-maintenance": "Urgent Maintenance"
+        },
+        "create": {
+            "title": "Register New Equipment",
+            "fields": {
+                "machine": "Equipment",
+                "status": "Status",
+                "registration-date": "Registration Date",
+                "assigned-to": "Assigned To",
+                "detail": "Assignment Detail"
+            },
+            "placeholders": {
+                "machine": "Select from catalog...",
+                "assigned-to": "Select worker...",
+                "detail": "Describe task or location..."
+            },
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Save Equipment"
+            },
+            "errors": {
+                "machine-required": "You must select equipment from the catalog.",
+                "status-required": "You must select a status.",
+                "detail-required": "You must enter an assignment detail.",
+                "save-failed": "Could not register equipment."
+            },
+            "success": {
+                "summary": "Registered",
+                "detail": "Equipment registered successfully."
+            }
+        },
+        "assign": {
+            "title": "Assign Equipment",
+            "fields": {
+                "machine": "Equipment",
+                "assigned-to": "Assign To",
+                "detail": "Assignment Detail"
+            },
+            "placeholders": {
+                "assigned-to": "Select worker...",
+                "detail": "Reason / location / task..."
+            },
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Assign Equipment"
+            },
+            "errors": {
+                "detail-required": "You must enter an assignment detail.",
+                "save-failed": "Could not assign equipment."
+            },
+            "success": {
+                "summary": "Assigned",
+                "detail": "Equipment assigned successfully."
+            }
+        },
+        "maintenance": {
+            "title": "Register Maintenance",
+            "fields": {
+                "machine": "Equipment",
+                "hours": "Maintenance Hours"
+            },
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Register Maintenance"
+            },
+            "errors": {
+                "hours-invalid": "You must enter valid maintenance hours.",
+                "save-failed": "Could not register maintenance."
+            },
+            "success": {
+                "summary": "Registered",
+                "detail": "Maintenance registered successfully."
+            }
+        },
+        "return": {
+            "success": {
+                "summary": "Returned",
+                "detail": "Equipment returned successfully."
+            },
+            "errors": {
+                "save-failed": "Could not return equipment."
+            }
+        },
+        "delete": {
+            "title": "Delete Equipment",
+            "message": "Are you sure you want to delete equipment",
+            "cancel": "Cancel",
+            "confirm": "Yes, delete",
+            "success": {
+                "summary": "Deleted",
+                "detail": "Equipment deleted successfully."
+            }
+        },
+        "card": {
+            "registration": "Registration Date",
+            "equipment": "Equipment",
+            "assigned-to": "Assigned To",
+            "maintenance-hours": "Maintenance Hours",
+            "assignment-detail": "Assignment Detail",
+            "no-detail": "No assignment detail",
+            "btn-assign": "Assign",
+            "btn-return": "Return",
+            "btn-maintenance": "Maintenance",
+            "unassigned": "Unassigned",
+            "btn-enable": "Enable"
+        },
+        "enable": {
+            "success": {
+                "summary": "Enabled",
+                "detail": "Equipment enabled successfully."
+            },
+            "errors": {
+                "save-failed": "Could not enable equipment."
+            }
         }
     }
 }

@@ -56,6 +56,38 @@ const useInventoryStore = defineStore('logistics', () => {
      * Loads categories from infrastructure and updates the application state.
      * @returns {void}
      */
+    function fetchCategories() {
+        logisticsApi.getCategories().then(response => {
+            categories.value = CategoryAssembler.toEntitiesFromResponse(response);
+            categoriesLoaded.value = true;
+        }).catch(error => {
+            errors.value.push(error);
+        });
+    }
+    /**
+     * Loads materials from infrastructure and updates the application state.
+     * @returns {void}
+     */
+    function fetchMaterials() {
+        logisticsApi.getMaterials().then(response => {
+            materials.value = MaterialAssembler.toEntitiesFromResponse(response);
+            materialsLoaded.value = true;
+        }).catch(error => {
+            errors.value.push(error);
+        });
+    }
+    /**
+     * Loads inventory from infrastructure and updates the application state.
+     * @returns {void}
+     */
+    function fetchInventory() {
+        logisticsApi.getMaterialInventories().then(response => {
+            inventoryMaterials.value = MaterialInventoryAssembler.toEntitiesFromResponse(response);
+            inventoryLoaded.value = true;
+        }).catch(error => {
+            errors.value.push(error);
+        });
+    }
 
     // ── INVENTORY VIEW ────────────────────────────────────────────────────────────────
 
@@ -116,51 +148,43 @@ const useInventoryStore = defineStore('logistics', () => {
         clearInventoryIdFilter();
     }
 
-    // ── LOADERS ────────────────────────────────────────────────────────────────
+    function addCategory(name, onSuccess) {
+        logisticsApi.createCategory({
+            id: `cat-${Date.now()}`,
+            name,
+            description: '',
+            isActive: true
+        }).then(response => {
+            const newItems = CategoryAssembler.toEntitiesFromResponse(response);
+            if (newItems.length > 0) {
+                categories.value.push(...newItems);
+            } else {
+                categories.value.push(new CategoryEntity({ id: `cat-${Date.now()}`, name, description: '', isActive: true }));
+            }
+            filterByCategory(name);
+            onSuccess?.();
+        }).catch(() => {
+            categories.value.push(new CategoryEntity({ id: `cat-${Date.now()}`, name, description: '', isActive: true }));
+            filterByCategory(name);
+            onSuccess?.();
+        });
+    }
 
-    function fetchCategories() {
-        logisticsApi.getCategories().then(response => {
-            categories.value = CategoryAssembler.toEntitiesFromResponse(response);
-            categoriesLoaded.value = true;
-            /*
-            console.log(categoriesLoaded.value);
-            console.log(categories.value);
-            */
-        }).catch(error => {
-            errors.value.push(error);
-        });
-    }
-    /**
-     * Loads materials from infrastructure and updates the application state.
-     * @returns {void}
-     */
-    function fetchMaterials() {
-        logisticsApi.getMaterials().then(response => {
-            materials.value = MaterialAssembler.toEntitiesFromResponse(response);
-            materialsLoaded.value = true;
-            /*
-            console.log(materialsLoaded.value);
-            console.log(materials.value);
-            */
-        }).catch(error => {
-            errors.value.push(error);
-        });
-    }
-    /**
-     * Loads inventory from infrastructure and updates the application state.
-     * @returns {void}
-     */
-    function fetchInventory() {
-        logisticsApi.getMaterialInventories().then(response => {
-            inventoryMaterials.value = MaterialInventoryAssembler.toEntitiesFromResponse(response);
-            inventoryLoaded.value = true;
-            /*
-            console.log(inventoryLoaded.value);
-            console.log(inventoryMaterials.value);
-            */
-        }).catch(error => {
-            errors.value.push(error);
-        });
+    function deductStock(inventoryId, quantity) {
+        const item = inventoryMaterials.value.find(i => i.id === inventoryId);
+        if (!item) return;
+        const newStock = Math.max(0, item.currentStock - quantity);
+        logisticsApi.updateMaterialInventory({
+            id: item.id,
+            projectId: item.projectId,
+            materialId: item.materialId,
+            currentStock: newStock,
+            miniumStock: item.miniumStock,
+            location: item.location
+        }).then(() => {
+            const idx = inventoryMaterials.value.findIndex(i => i.id === inventoryId);
+            if (idx !== -1) inventoryMaterials.value[idx].currentStock = newStock;
+        }).catch(error => { errors.value.push(error); });
     }
 
     // ── RETURN ────────────────────────────────────────────────────────────────
@@ -190,6 +214,8 @@ const useInventoryStore = defineStore('logistics', () => {
         clearCategoryFilter,
         toggleCriticalFilter,
         resetAllFilters,
+        addCategory,
+        deductStock,
     };
 
 });
