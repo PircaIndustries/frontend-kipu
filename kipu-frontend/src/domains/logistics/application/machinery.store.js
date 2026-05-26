@@ -1,94 +1,94 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { LogisticsApi } from "@/domains/logistics/infrastructure/logistics.api.js";
 import { MachineryEntity } from "@/domains/logistics/domain/model/machinery/machinery.entity.js";
+import { MachineryAssignmentEntity } from "@/domains/logistics/domain/model/machinery/machineryAssignment.entity.js";
 import { MachineryAssembler } from "@/domains/logistics/infrastructure/machinery/machinery.assembler.js";
+import { MachineryAssignmentAssembler } from "@/domains/logistics/infrastructure/machinery/machineryAssignment.assembler.js";
 
 const logisticsApi = new LogisticsApi();
 
+const ENTITY_FIELDS = ['id', 'projectId', 'machineryId', 'status', 'assignedTo', 'registrationDate', 'maintenanceHours', 'assignmentDetail'];
+
+function stripExtraFields(obj) {
+    const clean = {};
+    for (const key of ENTITY_FIELDS) {
+        if (key in obj) clean[key] = obj[key];
+    }
+    return clean;
+}
+
 const useMachineryStore = defineStore('machinery', () => {
 
-    // ── RAW ──────────────────────────────────────────────────────────
-
-    /**
-     * List of Machinery entities.
-     * @type {import('vue').Ref<MachineryEntity[]>}
-     */
-    const machinery = ref([]);
-    /**
-     * List of errors encountered during API operations.
-     * @type {import('vue').Ref<Error[]>}
-     */
     const errors = ref([]);
-    /**
-     * Whether Machinery have been loaded from the API.
-     * @type {import('vue').Ref<boolean>}
-     */
-    const machineryLoaded = ref(false);
+    const assignments = ref([]);
+    const catalog = ref([]);
+    const assignmentsLoaded = ref(false);
+    const catalogLoaded = ref(false);
 
-    // ── LOADERS ──────────────────────────────────────────────────────
+    const machineryView = computed(() =>
+        assignments.value.map(a => {
+            const machine = catalog.value.find(c => c.id === a.machineryId);
+            return {
+                ...a,
+                machineryName: machine?.name ?? a.machineryId ?? '---',
+                machineryModel: machine?.model ?? '',
+            };
+        })
+    );
 
-    /**
-     * Fetches machinery from infrastructure and updates the application state.
-     * @returns {void}
-     */
-    function fetchMachinery() {
+    function fetchCatalog() {
         logisticsApi.getMachinery().then(response => {
-            machinery.value = MachineryAssembler.toEntitiesFromResponse(response);
-            machineryLoaded.value = true;
+            catalog.value = MachineryAssembler.toEntitiesFromResponse(response);
+            catalogLoaded.value = true;
         }).catch(error => { errors.value.push(error); });
     }
 
-    // ── CRUD ─────────────────────────────────────────────────────────
+    function fetchAssignments() {
+        logisticsApi.getMachineryAssignments().then(response => {
+            assignments.value = MachineryAssignmentAssembler.toEntitiesFromResponse(response);
+            assignmentsLoaded.value = true;
+        }).catch(error => { errors.value.push(error); });
+    }
 
-    /**
-     * Creates a new machinery record.
-     * @param {MachineryEntity} item
-     * @param {Function} [onSuccess]
-     */
-    function addMachinery(item, onSuccess) {
-        logisticsApi.createMachinery(item).then(response => {
-            const newItems = MachineryAssembler.toEntitiesFromResponse(response);
-            machinery.value.push(...newItems);
+    function fetchMachinery() {
+        fetchCatalog();
+        fetchAssignments();
+    }
+
+    function addAssignment(item, onSuccess, onError) {
+        return logisticsApi.createMachineryAssignment(stripExtraFields(item)).then(response => {
+            const newItems = MachineryAssignmentAssembler.toEntitiesFromResponse(response);
+            assignments.value.push(...newItems);
             onSuccess?.();
-        }).catch(error => { errors.value.push(error); });
+        }).catch(error => { errors.value.push(error); onError?.(error); });
     }
 
-    /**
-     * Updates an existing machinery record.
-     * @param {string} id
-     * @param {Partial<MachineryEntity>} updates
-     * @param {Function} [onSuccess]
-     */
-    function updateMachinery(id, updates, onSuccess) {
-        const payload = { id, ...updates };
-        logisticsApi.updateMachinery(payload).then(response => {
-            const [updated] = MachineryAssembler.toEntitiesFromResponse(response);
+    function updateAssignment(id, updates, onSuccess, onError) {
+        const payload = stripExtraFields(updates);
+        payload.id = id;
+        return logisticsApi.updateMachineryAssignment(payload).then(response => {
+            const [updated] = MachineryAssignmentAssembler.toEntitiesFromResponse(response);
             if (!updated) return;
-            const index = machinery.value.findIndex(m => m.id === id);
-            if (index !== -1) machinery.value[index] = updated;
+            const index = assignments.value.findIndex(a => a.id === id);
+            if (index !== -1) assignments.value[index] = updated;
             onSuccess?.();
-        }).catch(error => { errors.value.push(error); });
+        }).catch(error => { errors.value.push(error); onError?.(error); });
     }
 
-    /**
-     * Deletes a machinery record by its ID.
-     * @param {string} id
-     * @param {Function} [onSuccess]
-     */
-    function deleteMachinery(id, onSuccess) {
-        logisticsApi.deleteMachinery(id).then(() => {
-            machinery.value = machinery.value.filter(m => m.id !== id);
+    function deleteAssignment(id, onSuccess, onError) {
+        return logisticsApi.deleteMachineryAssignment(id).then(() => {
+            assignments.value = assignments.value.filter(a => a.id !== id);
             onSuccess?.();
-        }).catch(error => { errors.value.push(error); });
+        }).catch(error => { errors.value.push(error); onError?.(error); });
     }
-
-    // ── RETURN ───────────────────────────────────────────────────────
 
     return {
-        machinery, errors, machineryLoaded,
-        fetchMachinery,
-        addMachinery, updateMachinery, deleteMachinery,
+        assignments, catalog, errors,
+        assignmentsLoaded, catalogLoaded,
+        machineryView,
+        fetchMachinery, fetchCatalog, fetchAssignments,
+        addAssignment, updateAssignment, deleteAssignment,
     };
 });
 

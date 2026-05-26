@@ -1,10 +1,9 @@
-import {MaterialWasteEntity} from "@/domains/logistics/domain/model/waste/materialWaste.entity.js";
+import { WasteClassificationEntity } from "@/domains/logistics/domain/model/waste/wasteClassification.entity.js";
 
-export class MaterialWasteAssembler {
+export class WasteClassificationAssembler {
     static toEntityFromResource(resource) {
-        return new MaterialWasteEntity({...resource});
+        return new WasteClassificationEntity({ ...resource });
     }
-
     static toEntitiesFromResponse(response) {
         if (response.status !== 200 && response.status !== 201) {
             console.error(`${response.status}, ${response.statusText}`);
@@ -12,7 +11,7 @@ export class MaterialWasteAssembler {
         }
         let data = response.data;
         if (!Array.isArray(data)) {
-            data = data['materialsWaste'] || [data];
+            data = data['wasteClassifications'] || [data];
         }
         if (!Array.isArray(data)) {
             data = [data];

@@ -40,6 +40,7 @@ const search = (event) => {
 <template>
   <AutoComplete
       v-model="internalValue"
+      dropdown
       optionLabel="name"
       :suggestions="suggestions"
       @complete="search"

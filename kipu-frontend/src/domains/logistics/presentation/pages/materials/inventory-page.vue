@@ -1,51 +1,70 @@
 <script setup>
-import {onMounted, computed, ref} from 'vue'
+import {onMounted, computed} from 'vue'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
 import InventoryStore from "@/domains/logistics/application/inventory.store.js";
 import InventoryList from "@/domains/logistics/presentation/components/materials/inventory-list.vue";
 import AutocompleteComponent from "@/shared/presentation/components/autocompleteComponent.vue";
 import SummaryComponent from "@/shared/presentation/components/summaryComponent.vue";
+import SelectWithAddComponent from "@/shared/presentation/components/selectWithAddComponent.vue";
 
- const { t } = useI18n()
-  const inventoryStore = InventoryStore()
-  const {
-    filteredInventory,
-    criticalCount,
-    criticalStockFilter,
-    categories,
-    selectedInventoryId,
-    selectedCategory,
-    inventoryView,
-  } = storeToRefs(inventoryStore)
+const { t } = useI18n()
+const toast = useToast()
+const inventoryStore = InventoryStore()
+const {
+  filteredInventory,
+  criticalCount,
+  criticalStockFilter,
+  categories,
+  selectedInventoryId,
+  selectedCategory,
+  inventoryView,
+} = storeToRefs(inventoryStore)
 
-  const materialsCount = computed(() => filteredInventory.value.length)
-  const categoriesList = computed(() => categories.value)
+const materialsCount = computed(() => filteredInventory.value.length)
+const categoriesList = computed(() =>
+  categories.value.filter(c => c.isActive).map(c => ({ name: c.name }))
+)
 
-  const inventoryIdOptions = computed(() =>
-      inventoryView.value.map(item => ({
-        id: item.id,
-        name: `${item.id} - ${item.materialName}`
-      }))
-  )
-  const selectedInventoryModel = computed({
-    get: () => {
-      if (!selectedInventoryId.value) return null
-      return inventoryIdOptions.value.find(opt => opt.id === selectedInventoryId.value) ?? null
-    },
-    set: (inv) => inventoryStore.filterById(inv?.id ?? '')
+const inventoryIdOptions = computed(() =>
+    inventoryView.value.map(item => ({
+      id: item.id,
+      name: `${item.id} - ${item.materialName}`
+    }))
+)
+const selectedInventoryModel = computed({
+  get: () => {
+    if (!selectedInventoryId.value) return null
+    return inventoryIdOptions.value.find(opt => opt.id === selectedInventoryId.value) ?? null
+  },
+  set: (inv) => inventoryStore.filterById(inv?.id ?? '')
+})
+
+const selectedCategoryModel = computed({
+  get: () => {
+    if (!selectedCategory.value) return null
+    return categoriesList.value.find(c => c.name === selectedCategory.value) ?? null
+  },
+  set: (obj) => inventoryStore.filterByCategory(obj?.name ?? '')
+})
+
+function onAddCategory(name) {
+  inventoryStore.addCategory(name, () => {
+    toast.add({
+      severity: 'success',
+      summary: t('inventory.category.added.summary'),
+      detail: t('inventory.category.added.detail', { name }),
+      life: 2000
+    })
   })
+}
 
-  const selectedCategoryModel = computed({
-    get: () => categoriesList.value.find(c => c.name === selectedCategory.value) ?? null,
-    set: (cat) => inventoryStore.filterByCategory(cat?.name ?? '')
-  })
-
-  onMounted(() => {
-    inventoryStore.fetchCategories()
-    inventoryStore.fetchMaterials()
-    inventoryStore.fetchInventory()
-  })
+onMounted(() => {
+  inventoryStore.fetchCategories()
+  inventoryStore.fetchMaterials()
+  inventoryStore.fetchInventory()
+})
 </script>
 
 <template>
@@ -98,13 +117,14 @@ import SummaryComponent from "@/shared/presentation/components/summaryComponent.
           <h3 class="text-[10px] font-black text-neutral-border uppercase tracking-widest m-0 pb-2 border-b border-neutral-border/20">
             {{ t('inventory.filters.category') }}
           </h3>
-          <div class="flex flex-col gap-1">
-            <autocomplete-component
-                v-model="selectedCategoryModel"
-                :options="categoriesList"
-                :placeholder="t('inventory.category.placeholder')"
-            />
-          </div>
+          <SelectWithAddComponent
+            v-model="selectedCategoryModel"
+            :options="categoriesList"
+            :placeholder="t('inventory.category.placeholder')"
+            :add-label="t('inventory.category.add-label')"
+            :add-placeholder="t('inventory.category.add-placeholder')"
+            @add="onAddCategory"
+          />
         </div>
       </aside>
     </div>

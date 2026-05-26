@@ -25,6 +25,7 @@ import Message from 'primevue/message';
 import Dialog from 'primevue/dialog';
 import InputOtp from 'primevue/inputotp';
 import GoogleSignInPlugin from 'vue3-google-signin';
+import ConfirmDialog from 'primevue/confirmdialog';
 // Styles
 import 'primeicons/primeicons.css';
 import './style.css';
@@ -69,6 +70,7 @@ app.component('pv-toast', Toast);
 app.component('pv-message', Message);
 app.component('pv-dialog', Dialog);
 app.component('pv-inputotp', InputOtp);
+app.component('pv-confirmdialog', ConfirmDialog);
 app.directive('ripple', Ripple);
 
 if (window.opener && window.opener !== window && window.name && window.name.startsWith('msal.')) {
