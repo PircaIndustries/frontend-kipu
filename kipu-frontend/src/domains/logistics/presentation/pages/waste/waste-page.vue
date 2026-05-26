@@ -21,15 +21,19 @@ const inventoryStore = useInventoryStore();
 const { waste, wasteLoaded, classifications } = storeToRefs(wasteStore);
 const { materials } = storeToRefs(inventoryStore);
 
+const currentProjectId = computed(() => localStorage.getItem('currentProjectId') || 'proj-01');
+
 const enrichedWaste = computed(() =>
-  waste.value.map(w => {
-    const material = materials.value.find(m => m.id === w.materialId);
-    return {
-      ...w,
-      materialName: material?.name ?? w.materialId ?? '---',
-      materialUnit: material?.measureUnit ?? '---'
-    };
-  })
+  waste.value
+    .filter(w => w.projectId === currentProjectId.value)
+    .map(w => {
+      const material = materials.value.find(m => m.id === w.materialId);
+      return {
+        ...w,
+        materialName: material?.name ?? w.materialId ?? '---',
+        materialUnit: material?.measureUnit ?? '---'
+      };
+    })
 );
 
 const dateRange = ref(null);
@@ -169,7 +173,7 @@ onMounted(() => {
           {{ t('waste.title') }}
         </h1>
         <p v-if="wasteLoaded" class="text-sm text-neutral-border mt-1">
-          {{ t('waste.subtitle', { count: waste.length }) }}
+          {{ t('waste.subtitle', { count: enrichedWaste.length }) }}
         </p>
       </div>
       <button
