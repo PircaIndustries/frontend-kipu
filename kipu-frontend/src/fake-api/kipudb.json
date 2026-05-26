@@ -677,16 +677,11 @@
       "id": "asig-1779758538793",
       "projectId": "proj-01",
       "machineryId": "maq-001",
-      "status": "AVAILABLE",
+      "status": "MAINTENANCE",
       "assignedTo": null,
       "registrationDate": "2026-05-26T01:22:18.793Z",
-      "maintenanceHours": "0",
-      "assignmentDetail": null,
-      "machineryName": "Excavadora Hidráulica",
-      "machineryBrand": "Caterpillar",
-      "machineryModel": "320 GC",
-      "workerDni": "10293847",
-      "workerName": "10293847 - Luis Gómez"
+      "maintenanceHours": "1",
+      "assignmentDetail": null
     },
     {
       "id": "asig-1779758761463",
