@@ -276,6 +276,7 @@
     "common": {
         "management": "Gestión de Obras",
         "cancel": "Cancelar",
+        "confirm": "Confirmar",
         "yes": "Sí",
         "no": "No",
         "error": "Error"
@@ -443,7 +444,7 @@
             }
         }
     },
-    "logistics-tabs": {
+    "inventory-tabs": {
         "tab-inventory": "Inventario",
         "tab-requests": "Solicitudes",
         "tab-suppliers": "Proveedores",
@@ -593,7 +594,7 @@
                 "tab-status-inactive": "INACTIVO",
                 "tab-btn-disable": "Deshabilitar",
                 "tab-btn-enable": "Habilitar",
-                "worker-count": "trabajadores",
+                "worker-count": "workers",
                 "flow-title": "Flujo de Herramientas",
                 "flow-description": "El personal registrado en esta lista no cuenta con credenciales de acceso al sistema Kipu. Este directorio es administrado exclusivamente para que el área de Logística y Almacén pueda buscar el DNI del trabajador al momento de registrar préstamos temporales o asignaciones permanentes de maquinarias en obra.",
                 "go-to-materials": "Ir a Módulo Materiales"
@@ -664,54 +665,61 @@
     },
     "budget": {
         "title": "Gestión de Presupuesto",
-        "summary": {
-            "total-budget": "PRESUPUESTO TOTAL DEL PROYECTO",
-            "total-amount": "PRESUPUESTO TOTAL",
+        "overview": {
+            "total": "PRESUPUESTO TOTAL DEL PROYECTO",
             "executed": "EJECUTADO",
-            "available": "S/ {value} DISPONIBLES",
-            "executed-lower": "ejecutado"
+            "available": "DISPONIBLE",
+            "status": "Estado de Ejecución"
         },
-        "actions": {
-            "new-expense": "Nuevo Gasto",
-            "request-extension": "Solicitar Ampliación",
-            "view-detail": "Ver Detalle",
-            "view-expenses": "Ver Gastos",
-            "export": "Exportar",
-            "save": "Guardar",
-            "cancel": "Cancelar"
-        },
-        "table": {
+        "items": {
             "title": "Presupuesto por Partidas",
-            "search": "Buscar partida por código o nombre...",
             "budgeted": "PRESUPUESTADO",
-            "status": "ESTADO"
+            "executed": "EJECUTADO",
+            "newBadge": "Nuevo"
         },
-        "forms": {
-            "new-expense-title": "Registro Formal de Gasto",
-            "request-extension-title": "Solicitud de Ampliación de Presupuesto",
-            "item": "PARTIDA / AVANCE",
-            "concept": "CONCEPTO / NOMBRE",
-            "amount": "MONTO (S/)",
-            "authorized_person": "PERSONA AUTORIZADA",
-            "select_person": "-- Seleccionar Responsable --",
-            "extension_reason": "JUSTIFICACIÓN TÉCNICA DE AMPLIACIÓN",
-            "description": "DESCRIPCIÓN DETALLADA",
-            "responsible": "RESPONSABLE"
+        "recent": {
+            "title": "Movimientos Recientes",
+            "clickToLocate": "Haz clic para ubicar la partida",
+            "empty": "No hay movimientos recientes en este proyecto."
         },
-        "details": {
-            "list-title": "Historial de Gastos",
-            "no-expenses": "No hay gastos registrados para este ítem.",
-            "view-expenses-title": "Ver Gastos"
+        "register": {
+            "title": "Registro Formal de Gasto",
+            "btn": "+ Registrar Gasto",
+            "partida": "Partida Presupuestal / Avance",
+            "selectPartida": "-- Seleccionar Avance --",
+            "responsible": "Persona Autorizada",
+            "selectResponsible": "-- Seleccionar Responsable --",
+            "amount": "Monto (S/)",
+            "desc": "Descripción Detallada"
         },
-        "status": {
-            "normal": "Normal",
-            "risk": "Riesgo"
-        },
-        "sidebar": {
-            "recent-movements": "MOVIMIENTOS RECIENTES"
+        "extension": {
+            "title": "Solicitud de Extensión de Presupuesto",
+            "btn": "Solicitar Extensión",
+            "maxAvailable": "Disponible global del proyecto",
+            "reasonLabel": "Motivo de la Ampliación",
+            "authorizedLabel": "Persona Autorizada (Gestor)"
         },
         "errors": {
-            "insufficient-funds": "Gasto bloqueado: El monto excede el presupuesto disponible."
+            "selectPartida": "Por favor, seleccione una partida válida.",
+            "positiveAmount": "El monto ingresado debe ser un valor positivo.",
+            "insufficientFunds": "Operación rechazada. El monto excede el saldo disponible actual: S/ {available}",
+            "saveFailed": "Ocurrió un error inesperado al procesar la transacción en el servidor.",
+            "requiresBudget": "Esta partida es nueva y aún no tiene presupuesto. Por favor, asigne fondos mediante una extensión de presupuesto primero."
+        },
+        "detail": {
+            "back": "Volver al listado",
+            "breadcrumb": "Detalle de Partida",
+            "exportBtn": "Exportar PDF",
+            "assigned": "PRESUPUESTO ASIGNADO",
+            "executed": "EJECUCIÓN ACTUAL",
+            "available": "SALDO DISPONIBLE",
+            "status": "Estado de Ejecución",
+            "expensesTitle": "Historial de Gastos",
+            "recentTitle": "Movimientos Recientes",
+            "emptyExpenses": "Aún no se han registrado gastos en esta partida.",
+            "tableDate": "Fecha",
+            "tableDesc": "Descripción",
+            "tableAmount": "Monto"
         }
     }
 }

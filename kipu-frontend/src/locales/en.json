@@ -4,25 +4,25 @@
         "cancel": "Cancel"
     },
     "identity": {
-        "login_title": "Welcome Back",
+        "login_title": "Log In",
         "login_description": "Enter your credentials to continue",
-        "email": "Email",
+        "email": "Email Address",
         "email_placeholder": "Enter your email",
         "password": "Password",
         "password_placeholder": "Enter your password",
         "remember_me": "Remember me",
         "forgot_password": "Forgot password?",
         "login_button": "Log In",
-        "continue": "Or continue with",
+        "continue": "or continue with",
         "no_account": "Don't have an account?",
         "register_link": "Register here",
-        "register_title": "Create an Account",
+        "register_title": "Create Account",
         "register_description": "Enter your credentials to continue",
         "name": "Full Name",
-        "name_placeholder": "John Doe",
+        "name_placeholder": "e.g., Juan Perez",
         "role": "Project Role",
         "role_placeholder": "Select a role",
-        "role_manager": "Operations Manager",
+        "role_manager": "Operational Manager",
         "role_logistics": "Logistics & Administration",
         "register_button": "Register",
         "has_account": "Already have an account?",
@@ -33,51 +33,51 @@
         "banner_platform_title": "Multiplatform",
         "banner_platform_desc": "Access from web or mobile, synchronized in real time",
         "banner_tracking_title": "Continuous Tracking",
-        "banner_tracking_desc": "Log progress, materials, RNC and more",
-        "forgot_title": "Reset password",
-        "forgot_desc": "Enter your email to recover access.",
+        "banner_tracking_desc": "Record progress, materials, NCRs, and more",
+        "forgot_title": "Reset Password",
+        "forgot_desc": "Enter your email to regain access.",
         "continue_button": "Continue",
-        "back_to_login": "Back to login",
-        "reset_title": "Reset password",
+        "back_to_login": "Back to Login",
+        "reset_title": "Reset Password",
         "reset_desc": "Enter a new password",
         "new_password": "New password*",
         "confirm_password": "Confirm new password*",
         "reset_button": "Reset Password",
         "back_to_home_1": "Click ",
         "back_to_home_link": "here",
-        "back_to_home_2": " to return to home",
-        "reset_success_title": "Password changed successfully!",
-        "reset_success_desc": "A confirmation email with the details of the changes has been sent to you",
+        "back_to_home_2": " to go back to home",
+        "reset_success_title": "Password reset successfully!",
+        "reset_success_desc": "A confirmation email was sent to you with the details of the changes",
         "verification_title": "Welcome back",
         "verification_desc": "Enter your credentials to continue",
         "verification_code_title": "Verification Code",
         "verification_code_desc": "Enter the code sent to",
-        "verify_button": "Log in",
+        "verify_button": "Log In",
         "resend_code": "Resend code",
         "resend_code_wait": "Resend code in ",
         "resend_code_success_title": "Code Resent",
         "resend_code_success_desc": "The verification code has been resent to your email address",
         "edit_email": "Edit email",
-        "oauth_register_title": "Complete your Registration",
+        "oauth_register_title": "Complete Your Registration",
         "oauth_register_desc": "Confirm your details to finalize your account creation.",
         "oauth_first_name": "First Name",
-        "oauth_last_name": "First Surname",
+        "oauth_last_name": "Last Name",
         "register_success_title": "Registration successful!",
-        "register_success_desc": "Only one last step remains to start using the application",
-        "err_name_required": "Full Name is required.",
+        "register_success_desc": "Only one final step remains to start using the application",
+        "err_name_required": "Name is required.",
         "err_email_required": "Email is required.",
         "err_email_invalid": "Invalid email format.",
-        "err_email_taken": "This email is already in use in the system.",
+        "err_email_taken": "This email is already active in the system.",
         "err_password_required": "Password is required.",
-        "err_password_min": "Must be at least 8 characters.",
+        "err_password_min": "Must be at least 8 characters long.",
         "err_role_required": "You must select a role.",
         "err_password_mismatch": "Passwords do not match.",
-        "err_invalid_credentials": "The email address or password is incorrect.",
-        "hint_checking_email": "Verifying availability..."
+        "err_invalid_credentials": "Incorrect email or password.",
+        "hint_checking_email": "Checking availability..."
     },
     "logout": {
         "title": "Log out",
-        "description": "You have been successfully logged out of your account.",
+        "description": "Logged out successfully.",
         "continue": "Continue"
     },
     "projects_dashboard": {
@@ -85,40 +85,40 @@
         "active": "Active",
         "active_projects": "Active Projects",
         "in_progress": "In Progress",
-        "average_advance": "Average Advance",
+        "average_advance": "Average Progress",
         "pending": "Pending",
-        "open_rncs": "Open RNCs",
+        "open_rncs": "Open NCRs",
         "total": "Total",
         "collaborators": "Collaborators",
         "search_placeholder": "Search project...",
         "new_project": "New Project",
         "empty_state_title": "No active projects",
         "empty_state_desc": "Start by creating your first construction project.",
-        "current_project": "Current working project",
+        "current_project": "Current active project",
         "progress": "Progress",
         "card_start": "Start",
-        "card_end": "Estimated end",
+        "card_end": "Estimated End",
         "card_undefined": "Undefined",
         "card_members": "members",
-        "card_rnc": "RNC",
+        "card_rnc": "NCR",
         "card_pending": "pending",
         "create_title": "New Construction Project",
         "create_name": "Project Name",
-        "create_name_placeholder": "Eg: Corporate Building Los Olivos",
+        "create_name_placeholder": "e.g., Los Olivos Corporate Building",
         "create_err_name_req": "Name is required.",
         "create_err_name_dup": "A project with this name already exists.",
-        "create_hint_verify": "Verifying availability...",
+        "create_hint_verify": "Checking availability...",
         "create_desc": "Description",
         "create_desc_placeholder": "Describe the project scope",
         "create_err_desc_req": "Description is required.",
         "create_loc": "Location",
-        "create_loc_placeholder": "Eg: Main St 123, Lima",
+        "create_loc_placeholder": "e.g., 123 Main St, Lima",
         "create_err_loc_req": "Location is required.",
         "create_status": "Initial Status",
         "create_status_planned": "Planned",
         "create_status_in_progress": "In Progress",
         "create_budget": "Estimated Budget",
-        "create_budget_placeholder": "Eg: 500000",
+        "create_budget_placeholder": "e.g., 500000",
         "create_start_date": "Start Date",
         "create_end_date": "End Date (Optional)",
         "create_err_req": "Required.",
@@ -140,8 +140,8 @@
     "navigation": {
         "dashboard": "Dashboard",
         "projects": "Projects",
-        "advances": "Advances",
-        "rnc": "RNC",
+        "advances": "Progress",
+        "rnc": "NCR",
         "logistics": "Logistics",
         "materials": "Materials",
         "blueprints": "Blueprints",
@@ -151,25 +151,26 @@
     },
     "execution": {
         "advances": {
-            "title": "Work Progress Control",
-            "subtitle": "Daily records and execution status history.",
+            "title": "Progress Monitoring",
+            "subtitle": "Daily records log and execution statuses.",
             "newBtn": "New Daily Progress",
-            "filterSpecialty": "Filter by Specialty",
+            "filterSpecialty": "Filter by: Specialty",
             "filterWeek": "Date range",
-            "weeklyReport": "You have registered {count} advances.",
+            "filterProject": "Filter by: Project",
+            "weeklyReport": "You have recorded {count} progress items in this project.",
             "specialties": {
                 "structures": "Structures",
                 "installations": "Installations",
                 "architecture": "Architecture"
             },
             "tabs": {
-                "registry": "Progress Log (PPC)",
+                "registry": "Progress Registry (PPC)",
                 "photoLog": "Photo Log"
             },
             "photoLog": {
                 "title": "Evidence Gallery",
-                "noPhotos": "No photos registered for this period.",
-                "viewFull": "View full screen",
+                "noPhotos": "No photos recorded for this period.",
+                "viewFull": "View Fullscreen",
                 "filterBy": "Specialty:"
             }
         },
@@ -186,7 +187,7 @@
             "progress": "In Progress",
             "blocked": "Blocked"
         },
-        "submitBtn": "Register Progress",
+        "submitBtn": "Record Progress",
         "table": {
             "date": "DATE",
             "activity": "ACTIVITY PERFORMED",
@@ -195,12 +196,12 @@
             "status": "STATUS",
             "project": "PROJECT"
         },
-        "taskLabel": "Task",
-        "title": "Daily Progress Registration",
+        "taskLabel": "Work Item",
+        "title": "Daily Progress Record",
         "create": {
             "title": "New Daily Progress",
             "submitBtn": "Save Progress",
-            "discardHeader": "Confirm Discard",
+            "discardHeader": "Confirm discard",
             "discardMessage": "You have unsaved changes. Are you sure you want to leave?",
             "fields": {
                 "date": "Progress Date",
@@ -213,12 +214,13 @@
                 "crewSize": "Crew Size",
                 "weather": "Weather Conditions",
                 "photos": "Progress Photos",
-                "project": "Assigned Project"
+                "project": "Assigned project"
             },
             "placeholders": {
-                "activity": "e.g., Concrete pouring...",
+                "activity": "e.g., Slab pouring on the second level",
+                "location": "e.g., Level 2 - Axis A-B",
                 "project": "Select a project",
-                "location": "e.g., Level 2 - Axis A-B"
+                "date": "Select date"
             },
             "photos": {
                 "add": "Add photo",
@@ -239,7 +241,7 @@
         "stats": {
             "active": "Active Projects",
             "average": "Average Progress",
-            "rnc": "Open RNC",
+            "rnc": "Open NCRs",
             "total": "Collaborators"
         },
         "create": {
@@ -254,13 +256,13 @@
             "successHeader": "Project created successfully",
             "goToProject": "Go to project",
             "errors": {
-                "dateLogic": "The end date cannot be earlier than the start date."
+                "dateLogic": "End date cannot be earlier than start date."
             },
             "imageUrl": "Image URL",
             "status": "Status",
             "statusOptions": {
                 "planning": "Planning",
-                "execution": "In progress-monitoring",
+                "execution": "In Execution",
                 "paused": "Paused"
             },
             "discard": {
@@ -272,14 +274,15 @@
         }
     },
     "common": {
-        "management": "Works Management",
+        "management": "Construction Management",
         "cancel": "Cancel",
+        "confirm": "Confirm",
         "yes": "Yes",
         "no": "No",
         "error": "Error"
     },
     "roles": {
-        "resident": "Works Resident"
+        "resident": "Project Resident"
     },
     "inventory": {
         "title": "Inventory",
@@ -302,10 +305,10 @@
         },
         "card": {
             "equipment": "Equipment",
-            "min-limit": "Min. Limit",
+            "min-limit": "Min Limit",
             "current-stock": "Current Stock"
         },
-        "low-stock": "Low Stock"
+        "low-stock": "Low stock"
     },
     "request": {
         "title": "Material Requests",
@@ -329,9 +332,9 @@
             "fields": {
                 "material": "Material",
                 "requester": "Requester",
-                "budget-line": "Budget Line",
+                "budget-line": "Budget Line Item",
                 "required-date": "Required Date",
-                "in-days": "{days} days remaining",
+                "in-days": "{days} days left",
                 "time-exceeded": "Time exceeded"
             },
             "purpose": {
@@ -348,7 +351,7 @@
                 "out-budget": "Out of Budget",
                 "approved": "Approved",
                 "pending": "Pending",
-                "refused": "Refused"
+                "refused": "Rejected"
             },
             "actions": {
                 "modify": "Modify",
@@ -368,7 +371,7 @@
         },
         "detail": {
             "total-investment": "TOTAL INVESTMENT",
-            "remaining-days": "{days} days remaining",
+            "remaining-days": "{days} days left",
             "per-unit": "/unit",
             "budget-validated": "Budget Validated",
             "btn-close": "Close",
@@ -379,14 +382,14 @@
         },
         "create": {
             "title": "New Material Request",
-            "subtitle": "Fill in the details to request materials for your project.",
+            "subtitle": "Complete the details to request materials for your project.",
             "fields": {
                 "category": "Category",
                 "specific-material": "Specific Material",
                 "suggested-supplier": "Suggested Supplier",
                 "quantity": "Quantity",
                 "unit": "Unit",
-                "budget-line": "Budget Line",
+                "budget-line": "Budget Line Item",
                 "priority": "Priority",
                 "required-date": "Required Date",
                 "delivery-location": "Delivery Location",
@@ -401,10 +404,10 @@
                 "quantity": "Enter quantity",
                 "unit-empty": "Unit will appear here",
                 "date": "Select a date",
-                "location": "e.g. Warehouse A",
+                "location": "e.g., Warehouse A",
                 "purpose": "Describe the reason for this request",
                 "additional-notes": "Any additional information",
-                "dropzone": "Drag & drop files here or click to upload",
+                "dropzone": "Drag files here or click to upload",
                 "dropzone-hint": "Accepted formats: PDF, images",
                 "requested-by": "Current user"
             },
@@ -418,12 +421,12 @@
                 "category-required": "Category is required",
                 "material-required": "Material is required",
                 "supplier-required": "Supplier is required",
-                "budget-line-required": "Budget line is required",
+                "budget-line-required": "Budget line item is required",
                 "quantity-required": "Minimum quantity is 1",
-                "date-required": "Required date is required",
+                "date-required": "Required date is mandatory",
                 "location-required": "Delivery location is required",
                 "purpose-required": "Purpose is required",
-                "check-form": "Please review the form fields"
+                "check-form": "Check the form fields"
             },
             "budget-verification": {
                 "title": "BUDGET VERIFICATION",
@@ -433,7 +436,7 @@
             },
             "actions": {
                 "cancel": "Cancel",
-                "submit": "Submit Request"
+                "submit": "Send Request"
             },
             "success": {
                 "summary": "Success",
@@ -441,7 +444,7 @@
             }
         }
     },
-    "logistics-tabs": {
+    "inventory-tabs": {
         "tab-inventory": "Inventory",
         "tab-requests": "Requests",
         "tab-suppliers": "Suppliers",
@@ -461,7 +464,7 @@
             "search-ruc": "Search by RUC"
         },
         "card": {
-            "social-reason": "Social Reason",
+            "social-reason": "Company Name",
             "contact": "Contact",
             "phone": "Phone",
             "email": "Email",
@@ -478,9 +481,9 @@
             "ruc-label": "RUC",
             "ruc-placeholder": "Enter RUC",
             "ruc-required": "RUC is required (min. 8 characters)",
-            "social-reason-label": "Social Reason",
-            "social-reason-placeholder": "Enter social reason",
-            "social-reason-required": "Social reason is required",
+            "social-reason-label": "Company Name",
+            "social-reason-placeholder": "Enter company name",
+            "social-reason-required": "Company name is required",
             "contact-label": "Contact",
             "contact-placeholder": "Enter contact name",
             "contact-required": "Contact is required",
@@ -517,7 +520,7 @@
         },
         "delete": {
             "title": "Delete Supplier",
-            "message": "Are you sure you want to delete",
+            "message": "Are you sure you want to delete ",
             "confirm": "Yes, delete",
             "cancel": "Cancel"
         }
@@ -536,7 +539,7 @@
             "assigned-roles": {
                 "title": "Role Assignment",
                 "user-tab": "User",
-                "email-tab": "Email",
+                "email-tab": "Email Address",
                 "assigned-role-tab": "Assigned Role",
                 "action-tab": "Action",
                 "user-profile-you": "You",
@@ -548,25 +551,25 @@
             "role-dictionary": {
                 "title": "Role Dictionary",
                 "administrator": "Administrator",
-                "administrator-description": "Full system access. Can manage projects, base budgets and access controls.",
-                "manager": "Operations Manager",
-                "manager-description": "Field-focused. Records progress, RNCs and requests materials. Views blueprints.",
+                "administrator-description": "Full access to the system. Can manage works, baseline budgets, and permissions.",
+                "manager": "Operational Manager",
+                "manager-description": "Field focused. Records progress, NCRs, and requests materials. Views blueprints.",
                 "logistics": "Logistics",
-                "logistics-description": "Office-focused. Approves orders, edits inventory and manages suppliers.",
+                "logistics-description": "Office focused. Approves orders, edits inventories, and manages suppliers.",
                 "client": "Client",
                 "client-description-1": "Strict access level of ",
                 "client-description-bold": "Read Only. ",
-                "client-description-2": "All creation or editing buttons are hidden in their view to protect the data.",
+                "client-description-2": "All creation or edition buttons are hidden in their view to protect data.",
                 "engineer": "Engineer"
             },
             "send-invitation": {
                 "title": "Invite new user",
-                "credentials": "An email with system access credentials will be sent.",
+                "credentials": "An email will be sent with the credentials to access the system.",
                 "email": "EMAIL ADDRESS",
-                "email-placeholder": "user@company.com",
-                "name": "Name",
+                "email-placeholder": "company.com",
+                "name": "First Name",
                 "name-placeholder": "e.g., 'Juan'",
-                "lastname": "Lastname",
+                "lastname": "Last Name",
                 "lastname-placeholder": "e.g., 'Perez'",
                 "rol": "Role to assign",
                 "btn-cancel": "Cancel",
@@ -574,17 +577,17 @@
             }
         },
         "workers": {
-            "tab-workers": "Worker Directory",
-            "title": "Worker Directory",
-            "search-placeholder": "Search by ID, name or position...",
+            "tab-workers": "Workers Directory",
+            "title": "Workers Directory",
+            "search-placeholder": "Search by DNI, name or position...",
             "register": {
                 "btn-add-worker": "+ New Worker",
-                "no-workers-found": "No workers registered yet.",
-                "description": "Passive directory of operational personnel. Used exclusively to link ID numbers within the Logistics Module.",
-                "tab-dni": "ID Number",
-                "tab-name": "Full Name",
+                "no-workers-found": "No registered workers found.",
+                "description": "Passive directory of operations personnel. It is used exclusively to associate their DNI in the Logistics Module.",
+                "tab-dni": "Document (DNI)",
+                "tab-name": "Full Names",
                 "tab-role": "Position / Crew",
-                "tab-status": "Work Status",
+                "tab-status": "Status on Site",
                 "tab-tools": "Assigned Tools",
                 "tab-action": "Action",
                 "tab-status-active": "ACTIVE",
@@ -593,17 +596,17 @@
                 "tab-btn-enable": "Enable",
                 "worker-count": "workers",
                 "flow-title": "Tools Flow",
-                "flow-description": "Personnel registered in this list do not have access credentials to the Kipu system. This directory is managed exclusively so that the Logistics and Warehouse area can search for the worker's ID when registering temporary loans or permanent assignments of machinery on site.",
+                "flow-description": "Personnel registered in this list do not have system access credentials. This directory is managed exclusively so that the Logistics and Warehouse area can search for the worker's DNI when registering temporary loans or permanent assignments of machinery on site.",
                 "go-to-materials": "Go to Materials Module"
             },
             "add-modal": {
                 "title": "Register New Worker",
-                "dni-label": "ID Number (DNI)",
+                "dni-label": "Document (DNI)",
                 "dni-placeholder": "8 digits",
-                "name-label": "Full Name",
+                "name-label": "Full Names",
                 "name-placeholder": "e.g., Juan Perez",
                 "role-label": "Position / Crew",
-                "role-placeholder": "e.g., Bricklaying Operator",
+                "role-placeholder": "e.g., Masonry Worker",
                 "tools-title": "Assigned Tools",
                 "tools-add": "+ Add Tool",
                 "tools-placeholder": "Equipment name...",
@@ -626,12 +629,12 @@
             "summary-pending": "Pending",
             "summary-signed": "Signed",
             "security-title": "Secure Digital Signature",
-            "security-description": "All signatures are encrypted and have legal validity according to current regulations.",
+            "security-description": "All signatures are encrypted and legally binding according to current regulations.",
             "howto-title": "How to sign?",
-            "howto-step1": "Review the complete document",
+            "howto-step1": "Review the full document",
             "howto-step2": "Click on 'Sign Document'",
             "howto-step3": "Enter the verification code",
-            "howto-step4": "The signature is automatically recorded",
+            "howto-step4": "The signature is recorded automatically",
             "btn-create": "Create Document"
         },
         "dialog": {
@@ -655,47 +658,68 @@
             },
             "title": "Sign Document",
             "description": "Enter the verification code",
-            "token-sent": "A 6-digit code has been sent to your email",
+            "token-sent": "A 6-digit verification code has been sent to your email",
             "btn-confirm": "Confirm Signature",
             "btn-cancel": "Cancel"
         }
     },
-    "progress-monitoring": {
-        "advances": {
-            "title": "Work Progress Control",
-            "subtitle": "Daily records and progress-monitoring status history.",
-            "newBtn": "New Daily Progress",
-            "filterProject": "Filter by: Project",
-            "filterSpecialty": "Filter by: Specialty",
-            "filterWeek": "Date range",
-            "weeklyReport": "You have registered {count} advances. Remember to attach photos in each report.",
-            "specialties": {
-                "structures": "Structures",
-                "installations": "Installations",
-                "architecture": "Architecture"
-            }
+    "budget": {
+        "title": "Budget Management",
+        "overview": {
+            "total": "TOTAL PROJECT BUDGET",
+            "executed": "EXECUTED",
+            "available": "AVAILABLE",
+            "status": "Execution Status"
         },
-        "table": {
-            "date": "Date",
-            "activity": "Activity Performed",
-            "specialty": "Specialty",
-            "progress": "Progress (%)",
-            "project": "Project",
-            "status": "Status"
+        "items": {
+            "title": "Budget by Items",
+            "budgeted": "BUDGETED",
+            "executed": "EXECUTED",
+            "newBadge": "New"
         },
-        "tabs": {
-            "log": "Progress Log (PPC)",
-            "photos": "Photo Log"
+        "recent": {
+            "title": "Recent Movements",
+            "clickToLocate": "Click to locate item line",
+            "empty": "No recent movements for this project."
         },
-        "actions": {
-            "export": "Export Report",
-            "upload": "Upload Photos"
+        "register": {
+            "title": "Formal Expense Record",
+            "btn": "New Expense",
+            "partida": "Item / Progress",
+            "selectPartida": "-- Select Progress Advance --",
+            "responsible": "Authorized Person",
+            "selectResponsible": "-- Select Authorized Person --",
+            "amount": "Amount (S/)",
+            "desc": "Detailed Description"
         },
-        "filters": {
-            "activity": "Search activity...",
-            "specialty": "Filter by: Specialty",
-            "start_date": "Start Date",
-            "end_date": "End Date"
+        "extension": {
+            "title": "Budget Extension Request",
+            "btn": "Request Extension",
+            "maxAvailable": "Project global available balance",
+            "reasonLabel": "Extension Reason",
+            "authorizedLabel": "Authorized Person (Manager)"
+        },
+        "errors": {
+            "selectPartida": "Please select a valid line item.",
+            "positiveAmount": "The entered amount must be a positive value.",
+            "insufficientFunds": "Operation rejected. Amount exceeds current available balance: S/ {available}",
+            "saveFailed": "An unexpected error occurred while processing the transaction on the server.",
+            "requiresBudget": "This item is new and has no budget yet. Please allocate funds via a budget extension first."
+        },
+        "detail": {
+            "back": "Back to list",
+            "breadcrumb": "Item Detail",
+            "exportBtn": "Export PDF",
+            "assigned": "ASSIGNED BUDGET",
+            "executed": "CURRENT EXECUTION",
+            "available": "AVAILABLE BALANCE",
+            "status": "Execution Status",
+            "expensesTitle": "Expense History",
+            "recentTitle": "Recent Movements",
+            "emptyExpenses": "No expenses have been recorded for this item yet.",
+            "tableDate": "Date",
+            "tableDesc": "Description",
+            "tableAmount": "Amount"
         }
     }
 }

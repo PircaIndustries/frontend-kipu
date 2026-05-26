@@ -617,7 +617,7 @@
       "name": "Cimentación",
       "description": "Trabajos preliminares y cimentación",
       "budgeted": 80000,
-      "executed": 7100,
+      "executed": 7222,
       "status": "NORMAL",
       "alertMessage": null
     },
@@ -666,6 +666,34 @@
       "date": "2026-05-13",
       "description": "Estructuras",
       "id": 5
+    },
+    {
+      "budgetId": "01.01",
+      "amount": 122,
+      "date": "2026-05-24",
+      "description": "asd",
+      "id": 6
+    },
+    {
+      "budgetId": 7,
+      "amount": 12,
+      "date": "2026-05-26",
+      "description": "+",
+      "id": 7
+    },
+    {
+      "budgetId": 7,
+      "amount": 111989,
+      "date": "2026-05-26",
+      "description": "a",
+      "id": 8
+    },
+    {
+      "budgetId": 8,
+      "amount": 1,
+      "date": "2026-05-26",
+      "description": "a",
+      "id": 9
     }
   ],
   "ncrs": [
@@ -768,7 +796,7 @@
       "location": "Trujillo, Perú",
       "startDate": "2026-03-15",
       "endDate": "2027-06-30",
-      "budget": 4200000,
+      "budget": 900000,
       "progress": 12,
       "status": "Planificación",
       "statusJustification": "",
@@ -878,6 +906,137 @@
       "lastUpdate": "2026-05-07T05:00:00.000Z",
       "projectId": "1",
       "id": 1
+    },
+    {
+      "date": "2026-05-11",
+      "specialty": "Instalaciones",
+      "activityName": "Armado de columnas",
+      "location": "A nivel general",
+      "percentage": 67,
+      "description": "Se armó las columnas a nivel estructural de todo el edificio",
+      "responsible": "Juan Pérez",
+      "workers": 67,
+      "weather": "sunny",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-05-11T05:00:00.000Z",
+      "projectId": "1",
+      "id": 2
+    },
+    {
+      "date": "2026-05-07",
+      "specialty": "Instalaciones",
+      "activityName": "Calvicie",
+      "location": "Tercer piso",
+      "percentage": 67,
+      "description": "Si",
+      "responsible": "Juan Pérez",
+      "workers": 67,
+      "weather": "rainy",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-05-07T05:00:00.000Z",
+      "projectId": "1",
+      "apiId": "v1",
+      "id": 3
+    },
+    {
+      "date": "2026-05-14",
+      "specialty": "Estructuras",
+      "activityName": "SixSeven",
+      "location": "SixSeven",
+      "percentage": 67,
+      "description": "Six seven",
+      "responsible": "Juan Pérez",
+      "workers": 67,
+      "weather": "cloudy",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-05-14T05:00:00.000Z",
+      "projectId": "1",
+      "apiId": "v1",
+      "id": 4
+    },
+    {
+      "date": "2026-05-20",
+      "specialty": "Arquitectura",
+      "activityName": "Tilin",
+      "location": "Tilin",
+      "percentage": 67,
+      "description": "Tilin",
+      "responsible": "Juan Pérez",
+      "workers": 67,
+      "weather": "rainy",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-05-20T05:00:00.000Z",
+      "projectId": "1",
+      "apiId": "v1",
+      "id": 5
+    },
+    {
+      "date": "2026-05-14",
+      "specialty": "Estructuras",
+      "activityName": "Six seven",
+      "location": "Six seven",
+      "percentage": 67,
+      "description": "Six seven",
+      "responsible": "Juan Pérez",
+      "workers": 67,
+      "weather": "cloudy",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-05-14T05:00:00.000Z",
+      "projectId": "proj-01",
+      "apiId": "v1",
+      "id": 6
+    },
+    {
+      "date": "2026-05-07",
+      "specialty": "Arquitectura",
+      "activityName": "Tilin",
+      "location": "Tilin",
+      "percentage": 67,
+      "description": "Tilin",
+      "responsible": "Juan Pérez",
+      "workers": 67,
+      "weather": "sunny",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-05-07T05:00:00.000Z",
+      "projectId": "proj-02",
+      "apiId": "v1",
+      "id": 7,
+      "assignedBudget": 112012,
+      "executedAmount": 112001
+    },
+    {
+      "date": "2026-05-14",
+      "specialty": "Arquitectura",
+      "activityName": "Asuna Yuuki",
+      "location": "Pilin",
+      "percentage": 67,
+      "description": "Pilin",
+      "responsible": "Juan Pérez",
+      "workers": 67,
+      "weather": "cloudy",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-05-14T05:00:00.000Z",
+      "projectId": "proj-02",
+      "apiId": "v1",
+      "id": 8,
+      "assignedBudget": 67,
+      "executedAmount": 1
+    },
+    {
+      "date": "2026-05-14",
+      "specialty": "Instalaciones",
+      "activityName": "Jennifer Lawrence",
+      "location": "Filtrado de fotos",
+      "percentage": 67,
+      "description": "Gran pack",
+      "responsible": "Juan Pérez",
+      "workers": 67,
+      "weather": "sunny",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-05-14T05:00:00.000Z",
+      "projectId": "proj-02",
+      "apiId": "v1",
+      "id": 9
     }
   ],
   "team-users": [
@@ -922,6 +1081,102 @@
       "email": "waranza@gmail.com",
       "isActive": true,
       "role": "Logistica"
+    },
+    {
+      "id": "us-1779683016165",
+      "fullName": "Juan Perez",
+      "email": "juanperez@gmail.com",
+      "isActive": true,
+      "role": "Logistica",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1779683053929",
+      "fullName": "Zero Two",
+      "email": "zerotwo@gmail.com",
+      "isActive": true,
+      "role": "Administrador",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1779683075430",
+      "fullName": "Rem Rem",
+      "email": "rem@gmail.com",
+      "isActive": true,
+      "role": "Gestor",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1779683092149",
+      "fullName": "Emilia Rezero",
+      "email": "emilia@gmail.com",
+      "isActive": true,
+      "role": "Cliente",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1779683828650",
+      "fullName": "Emilia Rezero",
+      "email": "Tilin",
+      "isActive": true,
+      "role": "Gestor",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1779683925135",
+      "fullName": "Emilia Rezero",
+      "email": "aaa@gmail.com",
+      "isActive": true,
+      "role": "Logistica",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1779684677861",
+      "fullName": "Emilia Rezero",
+      "email": "emilia@gmail.com",
+      "isActive": true,
+      "role": "Gestor",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1779767817777",
+      "fullName": "Emilia Rezero",
+      "email": "pilin@gmail.com",
+      "isActive": true,
+      "role": "Gestor",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1779768943478",
+      "fullName": "Zero Two",
+      "email": "serotu@gmail.com",
+      "isActive": true,
+      "role": "Logistica",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1779769304248",
+      "fullName": "Emilia Rezero",
+      "email": "pilin@gmail.com",
+      "isActive": true,
+      "role": "Gestor",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1779769365560",
+      "fullName": "Emilia Rezero",
+      "email": "a@gmail.com",
+      "isActive": true,
+      "role": "Gestor",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1779769386339",
+      "fullName": "Zero Two",
+      "email": "p@gmail.com",
+      "isActive": true,
+      "role": "Logistica",
+      "apiId": "v1"
     }
   ],
   "team-workers": [

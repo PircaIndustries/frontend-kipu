@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useAdvanceStore } from '@/domains/progress-monitoring/application/advancesStore.js';
+import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore.js';
 
 import DatePicker from 'primevue/datepicker';
 import Select from 'primevue/select';
@@ -11,6 +12,7 @@ import InputText from 'primevue/inputtext';
 const { t } = useI18n();
 const router = useRouter();
 const store = useAdvanceStore();
+const projectsStore = useProjectsStore();
 
 // Calendar range state
 const dates = ref(null);
@@ -42,7 +44,19 @@ const getStatusBadgeClass = (s) => {
   return `${base} bg-blue-100 text-blue-500`;
 };
 
-const navigateToCreate = () => router.push('/advances/new');
+const navigateToCreate = () => {
+  // ADDED: Prevent navigation if no project is active
+  if (!projectsStore.currentProjectId) {
+    alert("Select a project first");
+    return;
+  }
+  router.push('/advances/new');
+};
+
+// ADDED: Navigate to edit mode
+const navigateToEdit = (id) => {
+  router.push(`/advances/edit/${id}`);
+};
 </script>
 
 <template>
@@ -99,7 +113,7 @@ const navigateToCreate = () => router.push('/advances/new');
         <tr v-if="store.filteredAdvances.length === 0">
           <td colspan="5" class="px-6 py-10 text-center text-gray-400 italic">No hay registros para este proyecto.</td>
         </tr>
-        <tr v-for="item in store.filteredAdvances" :key="item.id" class="hover:bg-gray-50 transition-colors">
+        <tr v-for="item in store.filteredAdvances" :key="item.id" class="hover:bg-gray-50 transition-colors cursor-pointer" @click="navigateToEdit(item.id)">
           <td class="px-6 py-4">{{ new Date(item.lastUpdate || item.date).toLocaleDateString() }}</td>
           <td class="px-6 py-4">
             <div class="font-bold text-gray-800">{{ item.activityName || item.activity }}</div>

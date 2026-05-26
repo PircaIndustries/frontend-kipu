@@ -1,7 +1,8 @@
 <script setup>
 import { reactive, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+// ADDED: Import useRoute
+import { useRouter, useRoute } from 'vue-router';
 import { useAdvanceStore } from '@/domains/progress-monitoring/application/advancesStore.js';
 import { useTeamUserStore } from '@/domains/team/application/team-user.store.js';
 import { useConfirm } from "primevue/useconfirm";
@@ -10,6 +11,8 @@ import DatePicker from 'primevue/datepicker';
 
 const { t } = useI18n();
 const router = useRouter();
+// ADDED: Initialize route
+const route = useRoute();
 const store = useAdvanceStore();
 const teamStore = useTeamUserStore();
 const confirm = useConfirm();
@@ -44,21 +47,53 @@ const form = reactive({
   weather: 'sunny'
 });
 
-onMounted(() => {
+// ADDED: Check if we are in edit mode based on route params
+const isEditMode = computed(() => !!route.params.id);
+
+onMounted(async () => {
   if (teamStore.fetchUsers) {
     teamStore.fetchUsers();
+  }
+
+  // ADDED: Load existing data if in edit mode
+  if (isEditMode.value) {
+    // Ensure advances are loaded
+    if (store.advances.length === 0) {
+      await store.loadAdvances();
+    }
+    const existingData = store.getAdvanceById(route.params.id);
+    if (existingData) {
+      form.date = existingData.date ? new Date(existingData.date) : null;
+      form.specialty = existingData.specialty;
+      form.activityName = existingData.activityName;
+      form.location = existingData.location || existingData.details;
+      form.percentage = existingData.currentPercentage;
+      form.description = existingData.description;
+      form.responsible = existingData.responsible;
+      form.workers = existingData.workers;
+      form.weather = existingData.weather;
+    } else {
+      // Fallback if ID is invalid
+      router.push('/advances/registry');
+    }
   }
 });
 
 const saveProgress = async () => {
-  const newEntry = {
+  const payload = {
     ...form,
     status: form.percentage >= 100 ? 'COMPLETED' : 'IN_PROGRESS',
     lastUpdate: form.date ? new Date(form.date) : new Date(),
     date: form.date ? new Date(form.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
   };
 
-  await store.addAdvance(newEntry);
+  // ADDED: Handle both create and update operations
+  if (isEditMode.value) {
+    await store.updateAdvance(route.params.id, payload);
+  } else {
+    await store.addAdvance(payload);
+  }
+
   router.push('/advances/registry');
 };
 
@@ -76,6 +111,22 @@ const cancelCreation = () => {
     router.push('/advances/registry');
   }
 };
+
+// ADDED: Delete action with confirmation
+const deleteProgress = () => {
+  confirm.require({
+    message: "Are you sure you want to delete this progress record? This action cannot be undone.",
+    header: "Confirm Deletion",
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: { label: t('common.cancel'), severity: 'secondary', outlined: true },
+    acceptProps: { label: "Delete", severity: 'danger' },
+    accept: async () => {
+      await store.deleteAdvance(route.params.id);
+      router.push('/advances/registry');
+    }
+  });
+};
+
 </script>
 
 <template>
@@ -84,7 +135,7 @@ const cancelCreation = () => {
 
     <div class="flex gap-6">
       <div class="flex-grow bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ t('execution.create.title') }}</h2>
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ isEditMode ? 'Edit Progress Record' : t('execution.create.title') }}</h2>
 
         <form @submit.prevent="saveProgress" class="grid grid-cols-2 gap-x-6 gap-y-4">
           <div class="flex flex-col gap-1">
@@ -149,7 +200,10 @@ const cancelCreation = () => {
 
         <div class="mt-10 flex gap-4">
           <button @click="saveProgress" class="bg-gray-800 text-white py-6 flex-grow rounded-lg text-lg font-bold hover:bg-gray-900 transition-colors">
-            {{ t('execution.submitBtn') }}
+            {{ isEditMode ? 'Save Changes' : t('execution.submitBtn') }}
+          </button>
+          <button v-if="isEditMode" @click="deleteProgress" class="w-1/4 text-red-600 border border-red-200 font-bold hover:bg-red-50 rounded-lg transition-colors">
+            Delete
           </button>
           <button @click="cancelCreation" class="w-1/4 text-gray-500 font-bold hover:bg-gray-100 rounded-lg transition-colors">
             {{ t('common.cancel') }}
