@@ -87,6 +87,12 @@ const routes = [
         name: 'CreateAdvance',
         component: () => import('@/domains/progress-monitoring/presentation/views/CreateAdvanceView.vue')
     },
+    // ADDED: Route for editing existing progress records
+    {
+        path: '/advances/edit/:id',
+        name: 'EditAdvance',
+        component: () => import('@/domains/progress-monitoring/presentation/views/CreateAdvanceView.vue')
+    },
     {
         path: '/rnc',
         children: [
@@ -120,11 +126,11 @@ const routes = [
                 component: () => import('@/domains/budget/presentation/views/BudgetDetailView.vue'),
                 props: true
             },
+            // ADDED: Route for allocating or updating funds via budget extension form
             {
-                path: 'edit/:id',
-                name: 'EditBudget',
-                component: () => import('@/domains/budget/presentation/views/EditBudgetView.vue'),
-                props: true
+                path: 'extension',
+                name: 'RequestExtension',
+                component: () => import('@/domains/budget/presentation/views/RequestExtensionView.vue')
             },
             {
                 path: 'transaction/new',
@@ -147,21 +153,16 @@ router.beforeEach((to) => {
     const routeName = to.name;
     const isAuthenticated = !!localStorage.getItem('currentUser');
 
-    // 1. Authentication guard: if not authenticated and trying to access a protected route, redirect to login
     if (!isAuthenticated && !PUBLIC_ROUTES.includes(routeName)) {
         return { name: 'Login' };
     }
 
-    // 2. Prevent authenticated users from going back to public identity routes
     if (isAuthenticated && PUBLIC_ROUTES.includes(routeName)) {
         return { name: 'Projects' };
     }
 
-    // 3. Project selection guard: allow whitelisted routes without project selection
     if (PROJECT_WHITELIST.includes(routeName)) return true;
 
-    // Check if a project is selected (read directly from localStorage for SSR-safe check
-    // before Pinia might be initialized)
     const hasProject = !!localStorage.getItem('currentProjectId');
     if (!hasProject) {
         return { name: 'Projects' };

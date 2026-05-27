@@ -22,4 +22,24 @@ export class AdvanceApi {
         const savedData = await res.json();
         return AdvanceAssembler.toEntity(savedData);
     }
+
+    // ADDED: Method to update an existing record
+    async update(id, data) {
+        const res = await fetch(`${this.baseUrl}/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        if (!res.ok) throw new Error(`Failed to update advance ${id}`);
+        const updatedData = await res.json();
+        return AdvanceAssembler.toEntity(updatedData);
+    }
+
+    // ADDED: Method to delete a record
+    async delete(id) {
+        const res = await fetch(`${this.baseUrl}/${id}`, {
+            method: 'DELETE'
+        });
+        if (!res.ok) throw new Error(`Failed to delete advance ${id}`);
+    }
 }

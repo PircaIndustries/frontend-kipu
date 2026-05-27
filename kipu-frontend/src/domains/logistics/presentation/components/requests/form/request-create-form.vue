@@ -48,7 +48,41 @@ const selectedUnit = computed(() => materialSelected.value?.measureUnit ?? '');
 const selectedPrice = computed(() => selectedSupplierOffer.value?.unitPrice ?? 0);
 const totalPrice = computed(() => quantity.value * selectedPrice.value);
 
-const budgetLineOptions = computed(() => []);
+// ADDED: Get all budget lines for the current project to calculate the correct sequential index
+const projectBudgetLines = computed(() => {
+  const projectId = localStorage.getItem('currentProjectId') || 'proj-01';
+  return requestStore.budgetLines.filter(b => String(b.projectId) === String(projectId));
+});
+
+// ADDED: Attach sequential ID and filter only those with assigned funds
+const activeBudgetLines = computed(() => {
+  return projectBudgetLines.value
+      .map((b, index) => ({
+        ...b,
+        sequentialId: String(index + 1).padStart(2, '0') // Generates 01, 02, 03...
+      }))
+      .filter(b => Number(b.assignedBudget || 0) > 0);
+});
+
+// ADDED: Map options for the autocomplete dropdown using the sequential ID
+const budgetLineOptions = computed(() =>
+    activeBudgetLines.value.map(b => ({
+      name: `${b.sequentialId} - ${b.activityName || b.activity}`
+    }))
+);
+
+// ADDED: Get the full object of the selected budget line to extract its financial data
+const selectedBudgetLineObj = computed(() => {
+  if (!selectedBudgetLine.value) return null;
+  return activeBudgetLines.value.find(b =>
+      `${b.sequentialId} - ${b.activityName || b.activity}` === selectedBudgetLine.value
+  );
+});
+
+// ADDED: Calculations for the Budget Verification cards
+const budgetLineAssigned = computed(() => Number(selectedBudgetLineObj.value?.assignedBudget || 0));
+const budgetLineExecuted = computed(() => Number(selectedBudgetLineObj.value?.executedAmount || 0));
+const budgetLineAvailable = computed(() => budgetLineAssigned.value - budgetLineExecuted.value);
 
 const filteredSuppliers = computed(() => {
   if (!materialSelected.value) return [];
@@ -106,7 +140,7 @@ const onFormSubmit = () => {
     }],
     projectId: localStorage.getItem('currentProjectId') || 'proj-01',
     suggestedSupplierId: filteredSuppliers.value.find(s => s.socialReason === selectedSupplier.value)?.id ?? '',
-    budgetLineId: selectedBudgetLine.value,
+    budgetLineId: selectedBudgetLineObj.value?.id ?? '',
     priority: selectedPriority.value,
     deliveryLocation: deliveryLocation.value,
     purpose: purpose.value,
@@ -336,27 +370,27 @@ onMounted(() => {
     </div>
 
     <div class="bg-white border border-neutral-border/20 rounded-m p-xl shadow-sm flex flex-col gap-l">
-      <h3 class="text-xs font-black text-primary uppercase tracking-widest">
+      <h3 class="text-xs font-black text-primary uppercase tracking-widest text-left">
         {{ t('request.create.budget-verification.title') }}
       </h3>
       <div class="grid grid-cols-3 gap-l">
         <div class="flex flex-col items-center p-m bg-neutral-bg rounded-s border border-neutral-border/20">
-          <span class="text-xs text-neutral-border uppercase font-bold">
-            {{ t('request.create.budget-verification.item-budget') }}
-          </span>
-          <span class="text-xl font-bold text-primary">S/ {{ totalPrice.toFixed(2) }}</span>
+      <span class="text-xs text-neutral-border uppercase font-bold text-center">
+        {{ t('request.create.budget-verification.item-budget') }}
+      </span>
+          <span class="text-xl font-bold text-primary mt-1">S/ {{ budgetLineAssigned.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
         </div>
         <div class="flex flex-col items-center p-m bg-neutral-bg rounded-s border border-neutral-border/20">
-          <span class="text-xs text-neutral-border uppercase font-bold">
-            {{ t('request.create.budget-verification.executed') }}
-          </span>
-          <span class="text-xl font-bold text-warning">S/ 0.00</span>
+      <span class="text-xs text-neutral-border uppercase font-bold text-center">
+        {{ t('request.create.budget-verification.executed') }}
+      </span>
+          <span class="text-xl font-bold text-warning mt-1">S/ {{ budgetLineExecuted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
         </div>
         <div class="flex flex-col items-center p-m bg-neutral-bg rounded-s border border-neutral-border/20">
-          <span class="text-xs text-neutral-border uppercase font-bold">
-            {{ t('request.create.budget-verification.available') }}
-          </span>
-          <span class="text-xl font-bold text-success">S/ 0.00</span>
+      <span class="text-xs text-neutral-border uppercase font-bold text-center">
+        {{ t('request.create.budget-verification.available') }}
+      </span>
+          <span class="text-xl font-bold text-success mt-1">S/ {{ budgetLineAvailable.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@
         "cancel": "Cancel"
     },
     "identity": {
-        "login_title": "Welcome Back",
+        "login_title": "Log In",
         "login_description": "Enter your credentials to continue",
         "email": "Email",
         "email_placeholder": "Enter your email",
@@ -19,7 +19,7 @@
         "register_title": "Create an Account",
         "register_description": "Enter your credentials to continue",
         "name": "Full Name",
-        "name_placeholder": "John Doe",
+        "name_placeholder": "e.g., Juan Perez",
         "role": "Project Role",
         "role_placeholder": "Select a role",
         "role_manager": "Operations Manager",
@@ -37,8 +37,8 @@
         "forgot_title": "Reset password",
         "forgot_desc": "Enter your email to recover access.",
         "continue_button": "Continue",
-        "back_to_login": "Back to login",
-        "reset_title": "Reset password",
+        "back_to_login": "Back to Login",
+        "reset_title": "Reset Password",
         "reset_desc": "Enter a new password",
         "new_password": "New password*",
         "confirm_password": "Confirm new password*",
@@ -52,16 +52,16 @@
         "verification_desc": "Enter your credentials to continue",
         "verification_code_title": "Verification Code",
         "verification_code_desc": "Enter the code sent to",
-        "verify_button": "Log in",
+        "verify_button": "Log In",
         "resend_code": "Resend code",
         "resend_code_wait": "Resend code in ",
         "resend_code_success_title": "Code Resent",
         "resend_code_success_desc": "The verification code has been resent to your email address",
         "edit_email": "Edit email",
-        "oauth_register_title": "Complete your Registration",
+        "oauth_register_title": "Complete Your Registration",
         "oauth_register_desc": "Confirm your details to finalize your account creation.",
         "oauth_first_name": "First Name",
-        "oauth_last_name": "First Surname",
+        "oauth_last_name": "Last Name",
         "register_success_title": "Registration successful!",
         "register_success_desc": "Only one last step remains to start using the application",
         "err_name_required": "Full Name is required.",
@@ -69,7 +69,7 @@
         "err_email_invalid": "Invalid email format.",
         "err_email_taken": "This email is already in use in the system.",
         "err_password_required": "Password is required.",
-        "err_password_min": "Must be at least 8 characters.",
+        "err_password_min": "Must be at least 8 characters long.",
         "err_role_required": "You must select a role.",
         "err_password_mismatch": "Passwords do not match.",
         "err_invalid_credentials": "The email address or password is incorrect.",
@@ -85,7 +85,7 @@
         "active": "Active",
         "active_projects": "Active Projects",
         "in_progress": "In Progress",
-        "average_advance": "Average Advance",
+        "average_advance": "Average Progress",
         "pending": "Pending",
         "open_rncs": "Open RNCs",
         "total": "Total",
@@ -97,7 +97,7 @@
         "current_project": "Current working project",
         "progress": "Progress",
         "card_start": "Start",
-        "card_end": "Estimated end",
+        "card_end": "Estimated End",
         "card_undefined": "Undefined",
         "card_members": "members",
         "card_rnc": "RNC",
@@ -107,7 +107,7 @@
         "create_name_placeholder": "Eg: Corporate Building Los Olivos",
         "create_err_name_req": "Name is required.",
         "create_err_name_dup": "A project with this name already exists.",
-        "create_hint_verify": "Verifying availability...",
+        "create_hint_verify": "Checking availability...",
         "create_desc": "Description",
         "create_desc_placeholder": "Describe the project scope",
         "create_err_desc_req": "Description is required.",
@@ -168,8 +168,8 @@
             },
             "photoLog": {
                 "title": "Evidence Gallery",
-                "noPhotos": "No photos registered for this period.",
-                "viewFull": "View full screen",
+                "noPhotos": "No photos recorded for this period.",
+                "viewFull": "View Fullscreen",
                 "filterBy": "Specialty:"
             }
         },
@@ -218,7 +218,8 @@
             "placeholders": {
                 "activity": "e.g., Concrete pouring...",
                 "project": "Select a project",
-                "location": "e.g., Level 2 - Axis A-B"
+                "location": "e.g., Level 2 - Axis A-B",
+                "date": "Select date"
             },
             "photos": {
                 "add": "Add photo",
@@ -254,13 +255,13 @@
             "successHeader": "Project created successfully",
             "goToProject": "Go to project",
             "errors": {
-                "dateLogic": "The end date cannot be earlier than the start date."
+                "dateLogic": "End date cannot be earlier than start date."
             },
             "imageUrl": "Image URL",
             "status": "Status",
             "statusOptions": {
                 "planning": "Planning",
-                "execution": "In progress-monitoring",
+                "execution": "In Execution",
                 "paused": "Paused"
             },
             "discard": {
@@ -272,14 +273,15 @@
         }
     },
     "common": {
-        "management": "Works Management",
+        "management": "Construction Management",
         "cancel": "Cancel",
+        "confirm": "Confirm",
         "yes": "Yes",
         "no": "No",
         "error": "Error"
     },
     "roles": {
-        "resident": "Works Resident"
+        "resident": "Project Resident"
     },
     "inventory": {
         "title": "Inventory",
@@ -308,7 +310,7 @@
         },
         "card": {
             "equipment": "Equipment",
-            "min-limit": "Min. Limit",
+            "min-limit": "Min Limit",
             "current-stock": "Current Stock"
         },
         "low-stock": "Low Stock"
@@ -335,7 +337,7 @@
             "fields": {
                 "material": "Material",
                 "requester": "Requester",
-                "budget-line": "Budget Line",
+                "budget-line": "Budget Line Item",
                 "required-date": "Required Date",
                 "in-days": "{days} days remaining",
                 "time-exceeded": "Time exceeded"
@@ -354,7 +356,7 @@
                 "out-budget": "Out of Budget",
                 "approved": "Approved",
                 "pending": "Pending",
-                "refused": "Refused"
+                "refused": "Rejected"
             },
             "actions": {
                 "modify": "Modify",
@@ -385,14 +387,14 @@
         },
         "create": {
             "title": "New Material Request",
-            "subtitle": "Fill in the details to request materials for your project.",
+            "subtitle": "Complete the details to request materials for your project.",
             "fields": {
                 "category": "Category",
                 "specific-material": "Specific Material",
                 "suggested-supplier": "Suggested Supplier",
                 "quantity": "Quantity",
                 "unit": "Unit",
-                "budget-line": "Budget Line",
+                "budget-line": "Budget Line Item",
                 "priority": "Priority",
                 "required-date": "Required Date",
                 "delivery-location": "Delivery Location",
@@ -424,12 +426,12 @@
                 "category-required": "Category is required",
                 "material-required": "Material is required",
                 "supplier-required": "Supplier is required",
-                "budget-line-required": "Budget line is required",
+                "budget-line-required": "Budget line item is required",
                 "quantity-required": "Minimum quantity is 1",
                 "date-required": "Required date is required",
                 "location-required": "Delivery location is required",
                 "purpose-required": "Purpose is required",
-                "check-form": "Please review the form fields"
+                "check-form": "Check the form fields"
             },
             "budget-verification": {
                 "title": "BUDGET VERIFICATION",
@@ -542,7 +544,7 @@
             "assigned-roles": {
                 "title": "Role Assignment",
                 "user-tab": "User",
-                "email-tab": "Email",
+                "email-tab": "Email Address",
                 "assigned-role-tab": "Assigned Role",
                 "action-tab": "Action",
                 "user-profile-you": "You",
@@ -567,12 +569,12 @@
             },
             "send-invitation": {
                 "title": "Invite new user",
-                "credentials": "An email with system access credentials will be sent.",
+                "credentials": "An email will be sent with the credentials to access the system.",
                 "email": "EMAIL ADDRESS",
                 "email-placeholder": "user@company.com",
-                "name": "Name",
+                "name": "First Name",
                 "name-placeholder": "e.g., 'Juan'",
-                "lastname": "Lastname",
+                "lastname": "Last Name",
                 "lastname-placeholder": "e.g., 'Perez'",
                 "rol": "Role to assign",
                 "btn-cancel": "Cancel",
@@ -580,9 +582,9 @@
             }
         },
         "workers": {
-            "tab-workers": "Worker Directory",
-            "title": "Worker Directory",
-            "search-placeholder": "Search by ID, name or position...",
+            "tab-workers": "Workers Directory",
+            "title": "Workers Directory",
+            "search-placeholder": "Search by DNI, name or position...",
             "register": {
                 "btn-add-worker": "+ New Worker",
                 "no-workers-found": "No workers registered yet.",
@@ -634,7 +636,7 @@
             "security-title": "Secure Digital Signature",
             "security-description": "All signatures are encrypted and have legal validity according to current regulations.",
             "howto-title": "How to sign?",
-            "howto-step1": "Review the complete document",
+            "howto-step1": "Review the full document",
             "howto-step2": "Click on 'Sign Document'",
             "howto-step3": "Enter the verification code",
             "howto-step4": "The signature is automatically recorded",
@@ -661,8 +663,9 @@
             },
             "title": "Sign Document",
             "description": "Enter the verification code",
-            "token-sent": "A 6-digit code has been sent to your email",
-            "btn-confirm": "Confirm Signature"
+            "token-sent": "A 6-digit verification code has been sent to your email",
+            "btn-confirm": "Confirm Signature",
+            "btn-cancel": "Cancel"
         }
     },
     "progress-monitoring": {
@@ -701,6 +704,65 @@
             "specialty": "Filter by: Specialty",
             "start_date": "Start Date",
             "end_date": "End Date"
+        }
+    },
+    "budget": {
+        "title": "Budget Management",
+        "overview": {
+            "total": "TOTAL PROJECT BUDGET",
+            "executed": "EXECUTED",
+            "available": "AVAILABLE",
+            "status": "Execution Status"
+        },
+        "items": {
+            "title": "Budget by Items",
+            "budgeted": "BUDGETED",
+            "executed": "EXECUTED",
+            "newBadge": "New"
+        },
+        "recent": {
+            "title": "Recent Movements",
+            "clickToLocate": "Click to locate item line",
+            "empty": "No recent movements for this project."
+        },
+        "register": {
+            "title": "Formal Expense Record",
+            "btn": "New Expense",
+            "partida": "Item / Progress",
+            "selectPartida": "-- Select Progress Advance --",
+            "responsible": "Authorized Person",
+            "selectResponsible": "-- Select Authorized Person --",
+            "amount": "Amount (S/)",
+            "desc": "Detailed Description"
+        },
+        "extension": {
+            "title": "Budget Extension Request",
+            "btn": "Request Extension",
+            "maxAvailable": "Project global available balance",
+            "reasonLabel": "Extension Reason",
+            "authorizedLabel": "Authorized Person (Manager)"
+        },
+        "errors": {
+            "selectPartida": "Please select a valid line item.",
+            "positiveAmount": "The entered amount must be a positive value.",
+            "insufficientFunds": "Operation rejected. Amount exceeds current available balance: S/ {available}",
+            "saveFailed": "An unexpected error occurred while processing the transaction on the server.",
+            "requiresBudget": "This item is new and has no budget yet. Please allocate funds via a budget extension first."
+        },
+        "detail": {
+            "back": "Back to list",
+            "breadcrumb": "Item Detail",
+            "exportBtn": "Export PDF",
+            "assigned": "ASSIGNED BUDGET",
+            "executed": "CURRENT EXECUTION",
+            "available": "AVAILABLE BALANCE",
+            "status": "Execution Status",
+            "expensesTitle": "Expense History",
+            "recentTitle": "Recent Movements",
+            "emptyExpenses": "No expenses have been recorded for this item yet.",
+            "tableDate": "Date",
+            "tableDesc": "Description",
+            "tableAmount": "Amount"
         }
     },
     "waste": {
@@ -937,5 +999,12 @@
                 "save-failed": "Could not enable equipment."
             }
         }
+    },
+    "logistics-tabs": {
+        "tab-inventory": "Inventory",
+        "tab-requests": "Requests",
+        "tab-suppliers": "Suppliers",
+        "tab-waste": "Waste",
+        "tab-machinery": "Machinery"
     }
 }

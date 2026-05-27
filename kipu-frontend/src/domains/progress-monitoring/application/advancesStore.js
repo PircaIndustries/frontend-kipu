@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { AdvanceApi } from '../infrastructure/advance-api.js';
-import { allProjects } from '@/domains/project-management/data/projectsStore.js';
+import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore.js';
 
 export const useAdvanceStore = defineStore('advances', () => {
     const api = new AdvanceApi();
+    const projectsStore = useProjectsStore();
 
     const advances = ref([]);
     const isLoading = ref(false);
@@ -12,10 +13,11 @@ export const useAdvanceStore = defineStore('advances', () => {
     const searchFilter = ref('');
     const dateRange = ref({ start: null, end: null });
 
-    // Strictly filter by current project context
+    // ADDED: Strictly filter by current project context using useProjectsStore
     const currentProjectAdvances = computed(() => {
-        const currentId = allProjects.value.length > 0 ? String(allProjects.value[0].id) : null;
-        return advances.value.filter(item => String(item.projectId) === currentId);
+        const currentId = projectsStore.currentProjectId;
+        if (!currentId) return [];
+        return advances.value.filter(item => String(item.projectId) === String(currentId));
     });
 
     const filteredAdvances = computed(() => {
@@ -47,10 +49,41 @@ export const useAdvanceStore = defineStore('advances', () => {
 
     const addAdvance = async (newEntry) => {
         try {
-            const currentId = allProjects.value.length > 0 ? String(allProjects.value[0].id) : null;
+            // ADDED: Assign current project ID to the new entry
+            const currentId = projectsStore.currentProjectId;
+            if (!currentId) throw new Error("No active project selected");
+
             newEntry.projectId = currentId;
             const savedEntry = await api.create(newEntry);
             advances.value = [savedEntry, ...advances.value];
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    // ADDED: Action to retrieve a single advance for editing
+    const getAdvanceById = (id) => {
+        return advances.value.find(item => String(item.id) === String(id));
+    };
+
+    // ADDED: Action to update an existing advance
+    const updateAdvance = async (id, updatedData) => {
+        try {
+            const updatedEntry = await api.update(id, updatedData);
+            const index = advances.value.findIndex(item => String(item.id) === String(id));
+            if (index !== -1) {
+                advances.value[index] = updatedEntry;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    // ADDED: Action to delete an advance
+    const deleteAdvance = async (id) => {
+        try {
+            await api.delete(id);
+            advances.value = advances.value.filter(item => String(item.id) !== String(id));
         } catch (error) {
             console.error(error);
         }
@@ -60,5 +93,19 @@ export const useAdvanceStore = defineStore('advances', () => {
     const setSearchFilter = (v) => searchFilter.value = v;
     const setDateRange = (start, end) => dateRange.value = { start, end };
 
-    return { advances, isLoading, currentProjectAdvances, filteredAdvances, loadAdvances, addAdvance, setSpecialtyFilter, setSearchFilter, setDateRange };
+    return {
+        advances,
+        isLoading,
+        currentProjectAdvances,
+        filteredAdvances,
+        loadAdvances,
+        addAdvance,
+        // ADDED: Export new actions
+        getAdvanceById,
+        updateAdvance,
+        deleteAdvance,
+        setSpecialtyFilter,
+        setSearchFilter,
+        setDateRange
+    };
 });
