@@ -999,5 +999,12 @@
                 "save-failed": "Could not enable equipment."
             }
         }
+    },
+    "logistics-tabs": {
+        "tab-inventory": "Inventory",
+        "tab-requests": "Requests",
+        "tab-suppliers": "Suppliers",
+        "tab-waste": "Waste",
+        "tab-machinery": "Machinery"
     }
 }

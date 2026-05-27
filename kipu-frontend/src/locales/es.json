@@ -961,5 +961,12 @@
                 "save-failed": "No se pudo habilitar el equipo."
             }
         }
+    },
+    "logistics-tabs": {
+        "tab-inventory": "Inventario",
+        "tab-requests": "Solicitudes",
+        "tab-suppliers": "Proveedores",
+        "tab-waste": "Mermas",
+        "tab-machinery": "Maquinaria"
     }
 }
