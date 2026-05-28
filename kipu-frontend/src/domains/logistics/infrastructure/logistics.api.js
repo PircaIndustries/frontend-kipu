@@ -272,11 +272,16 @@ export class LogisticsApi extends BaseApi {
     createMaterialRequest(resource) { return this.#materialRequestsEndpoint.create(resource); }
 
     /**
-     * Updates a material request resource.
-     * @param {Object} resource
+     * Updates a material request resource using a partial HTTP PATCH request.
+     * This ensures fake APIs (like json-server) only update the provided fields (e.g., status)
+     * without deleting the rest of the existing payload data.
+     * * @param {Object} resource
      * @returns {Promise<import('axios').AxiosResponse>}
      */
-    updateMaterialRequest(resource) { return this.#materialRequestsEndpoint.update(resource.id, resource); }
+    updateMaterialRequest(resource) {
+        const { id, ...updates } = resource;
+        return this.http.patch(`${materialRequestsEndpointPath}/${id}`, updates);
+    }
 
     /**
      * Deletes a material request by its ID.

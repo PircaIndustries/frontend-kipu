@@ -469,7 +469,7 @@
       "projectId": "proj-02",
       "requestDate": "2026-05-08",
       "deadline": "2026-05-15",
-      "status": "PENDING",
+      "status": "APPROVED",
       "priority": "LOW",
       "deliveryLocation": "Oficina de Obra",
       "budgetLineId": "PP-2026-07",
@@ -564,8 +564,28 @@
       "requestDate": "2026-05-26",
       "deadline": "2026-05-07",
       "requestedBy": "6NxPOLs",
-      "status": "PENDING",
+      "status": "REFUSED",
       "id": "jtaFRGG"
+    },
+    {
+      "items": [
+        {
+          "supplierOfferId": "soff-005",
+          "quantity": 20
+        }
+      ],
+      "projectId": "proj-02",
+      "suggestedSupplierId": "sup-003",
+      "budgetLineId": 8,
+      "priority": "LOW",
+      "deliveryLocation": "Av. Espinar 3201",
+      "purpose": "Se requiere ladrillos urgente para finalizar una pared que quedó pendiente",
+      "additionalNotes": "lo mas pronto posible",
+      "requestDate": "2026-05-28",
+      "deadline": "2026-05-31",
+      "requestedBy": "T2oXDcM",
+      "status": "PENDING",
+      "id": "YOJW66Q"
     }
   ],
   "materialsWaste": [
@@ -953,6 +973,27 @@
           "id": "log-1779284991524",
           "status": "Planificación",
           "date": "2026-05-20",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 12
+        },
+        {
+          "id": "log-1779982799009",
+          "status": "Finalizada",
+          "date": "2026-05-28",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 100
+        },
+        {
+          "id": "log-1779982803057",
+          "status": "En ejecución",
+          "date": "2026-05-28",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 45
+        },
+        {
+          "id": "log-1779982805793",
+          "status": "Planificación",
+          "date": "2026-05-28",
           "justification": "Cambio de estado del proyecto.",
           "progress": 12
         }

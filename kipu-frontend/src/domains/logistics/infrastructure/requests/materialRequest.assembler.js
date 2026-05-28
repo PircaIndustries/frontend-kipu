@@ -21,11 +21,17 @@ export class MaterialRequestAssembler {
      * @returns {MaterialRequestEntity[]} MaterialRequest entities.
      */
     static toEntitiesFromResponse(response) {
-        if (response.status !== 200) {
+        if (response.status !== 200 && response.status !== 201) {
             console.error(`${response.status}, ${response.statusText}`);
             return [];
         }
-        let resources = response.data instanceof Array ? response.data : response.data['materialsRequests'];
+
+        let data = response.data;
+        if (data && data['materialsRequests']) {
+            data = data['materialsRequests'];
+        }
+
+        let resources = Array.isArray(data) ? data : [data];
         return resources.map(resource => this.toEntityFromResource(resource));
     }
 }

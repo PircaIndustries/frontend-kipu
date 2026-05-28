@@ -383,7 +383,9 @@
             "section": {
                 "material-info": "Material Information",
                 "logistics": "Logistics"
-            }
+            },
+            "btn-approve": "Approve",
+            "btn-reject": "Reject"
         },
         "create": {
             "title": "New Material Request",

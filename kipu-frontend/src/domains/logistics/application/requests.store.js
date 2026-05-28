@@ -90,33 +90,33 @@ const useRequestStore = defineStore('request', () => {
         return requests.value
             .filter(request => request.projectId === projectId)
             .map(request => {
-            const enrichedItems = request.items.map(item => {
-                const offer = currentSupplierOffers.find(s => s.id === item.supplierOfferId);
-                const material = currentMaterials.find(m => m.id === offer?.materialId);
-                const category = currentCategories.find(c => c.id === material?.categoryId);
+                const enrichedItems = request.items.map(item => {
+                    const offer = currentSupplierOffers.find(s => s.id === item.supplierOfferId);
+                    const material = currentMaterials.find(m => m.id === offer?.materialId);
+                    const category = currentCategories.find(c => c.id === material?.categoryId);
+
+                    return {
+                        ...item,
+                        materialName: material?.name ?? 'Unknown Name',
+                        categoryName: category?.name ?? 'Unknown Category',
+                        materialUnit: material?.measureUnit ?? 'Without unit',
+                        pricePerUnit: offer?.unitPrice ?? 0,
+                    };
+                });
+
+                const totalAmount = enrichedItems.reduce((sum, item) => sum + item.quantity * item.pricePerUnit, 0);
+                const budgetLine = currentBudgetLines.find(b => b.id === request.budgetLineId);
+                const budgetAvailable = budgetLine ? budgetLine.budgeted - budgetLine.executed : 0;
+                const isWithinBudget = budgetLine ? totalAmount <= budgetAvailable : true;
 
                 return {
-                    ...item,
-                    materialName: material?.name ?? 'Unknown Name',
-                    categoryName: category?.name ?? 'Unknown Category',
-                    materialUnit: material?.measureUnit ?? 'Without unit',
-                    pricePerUnit: offer?.unitPrice ?? 0,
+                    ...request,
+                    items: enrichedItems,
+                    totalAmount,
+                    budgetAvailable,
+                    isWithinBudget,
                 };
             });
-
-            const totalAmount = enrichedItems.reduce((sum, item) => sum + item.quantity * item.pricePerUnit, 0);
-            const budgetLine = currentBudgetLines.find(b => b.id === request.budgetLineId);
-            const budgetAvailable = budgetLine ? budgetLine.budgeted - budgetLine.executed : 0;
-            const isWithinBudget = budgetLine ? totalAmount <= budgetAvailable : true;
-
-            return {
-                ...request,
-                items: enrichedItems,
-                totalAmount,
-                budgetAvailable,
-                isWithinBudget,
-            };
-        });
     });
 
     // ── FILTERS ─────────────────────────────────────────────────────────────
@@ -266,6 +266,48 @@ const useRequestStore = defineStore('request', () => {
         });
     }
 
+    /**
+     * Approves a pending material request.
+     * @param {string} id
+     * @returns {Promise<void>}
+     */
+    function rejectRequest(id) {
+        return logisticsApi.updateMaterialRequest({ id, status: 'REFUSED' })
+            .then(response => {
+                const [updated] = MaterialRequestAssembler.toEntitiesFromResponse(response);
+                if (!updated) return;
+                const index = requests.value.findIndex(r => r.id === id);
+                if (index !== -1) {
+                    requests.value[index] = { ...requests.value[index], ...updated };
+                }
+            })
+            .catch(error => {
+                errors.value.push(error);
+                throw error;
+            });
+    }
+
+    /**
+     * Rejects a pending material request.
+     * @param {string} id
+     * @returns {Promise<void>}
+     */
+    function approveRequest(id) {
+        return logisticsApi.updateMaterialRequest({ id, status: 'APPROVED' })
+            .then(response => {
+                const [updated] = MaterialRequestAssembler.toEntitiesFromResponse(response);
+                if (!updated) return;
+                const index = requests.value.findIndex(r => r.id === id);
+                if (index !== -1) {
+                    requests.value[index] = { ...requests.value[index], ...updated };
+                }
+            })
+            .catch(error => {
+                errors.value.push(error);
+                throw error;
+            });
+    }
+
     // ── RETURN ─────────────────────────────────────────────────────────────
 
     return {
@@ -277,7 +319,7 @@ const useRequestStore = defineStore('request', () => {
         setSelectedRequestFilter,
         togglePendingRequestFilter, toggleApprovedRequestFilter, toggleRefusedRequestFilter,
         fetchMaterials, fetchCategories, fetchSupplierOffers, fetchRequests, fetchBudgetLines,
-        createRequest, updateRequest,
+        createRequest, updateRequest, approveRequest, rejectRequest
     };
 });
 

@@ -384,7 +384,9 @@
             "section": {
                 "material-info": "Información del Material",
                 "logistics": "Logística"
-            }
+            },
+            "btn-approve": "Aceptar",
+            "btn-reject": "Rechazar"
         },
         "create": {
             "title": "Nueva Solicitud de Material",

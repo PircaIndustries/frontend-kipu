@@ -7,36 +7,38 @@ const props = defineProps({
   visible: { type: Boolean, default: false }
 })
 
-const emit = defineEmits(['update:visible', 'close'])
+const emit = defineEmits(['update:visible', 'close', 'approve', 'reject'])
 
 const { t } = useI18n()
 
+const isPending = computed(() => props.request?.status === 'PENDING')
+
 const remainingDays = computed(() => {
-  if (!props.request.deadline) return 0
+  if (!props.request?.deadline) return 0
   const diff = new Date(props.request.deadline).getTime() - Date.now()
   return Math.ceil(diff / (1000 * 60 * 60 * 24))
 })
 
 const totalRequested = computed(() => {
-  return props.request.totalAmount ?? 0
+  return props.request?.totalAmount ?? 0
 })
 
 const isWithinBudget = computed(() => {
-  return props.request.isWithinBudget ?? true
+  return props.request?.isWithinBudget ?? true
 })
 
 const budgetStatusLabel = computed(() => {
   return isWithinBudget.value
-    ? t('request.card.status.within-budget')
-    : t('request.card.status.out-budget')
+      ? t('request.card.status.within-budget')
+      : t('request.card.status.out-budget')
 })
 
-const firstItem = computed(() => props.request.items?.[0] || {})
+const firstItem = computed(() => props.request?.items?.[0] || {})
 
-const statusLabel = computed(() => t(`request.card.status.${props.request.status?.toLowerCase()}`))
+const statusLabel = computed(() => t(`request.card.status.${props.request?.status?.toLowerCase()}`))
 
 const priorityStyle = computed(() => {
-  const p = props.request.priority
+  const p = props.request?.priority
   return {
     'bg-danger text-danger-soft border-danger': p === 'CRITICAL',
     'bg-warning text-neutral-bg border-warning': p === 'HIGH',
@@ -47,6 +49,16 @@ const priorityStyle = computed(() => {
 function close() {
   emit('update:visible', false)
   emit('close')
+}
+
+function handleApprove() {
+  emit('approve', props.request)
+  close()
+}
+
+function handleReject() {
+  emit('reject', props.request)
+  close()
 }
 </script>
 
@@ -160,22 +172,22 @@ function close() {
             </div>
           </div>
           <div
-            class="px-4 py-2 rounded-lg flex items-center justify-center border"
-            :class="{
+              class="px-4 py-2 rounded-lg flex items-center justify-center border"
+              :class="{
               'bg-success-soft border-success': isWithinBudget,
               'bg-danger-soft border-danger': !isWithinBudget
             }"
           >
             <span
-              class="text-xs font-bold flex items-center gap-2 leading-none"
-              :class="{
+                class="text-xs font-bold flex items-center gap-2 leading-none"
+                :class="{
                 'text-success': isWithinBudget,
                 'text-danger': !isWithinBudget
               }"
             >
               <i
-                class="text-sm"
-                :class="{
+                  class="text-sm"
+                  :class="{
                   'pi pi-check-circle': isWithinBudget,
                   'pi pi-times-circle': !isWithinBudget
                 }"
@@ -188,12 +200,29 @@ function close() {
     </div>
 
     <template #footer>
-      <pv-button
-          :label="t('request.detail.btn-close')"
-          class="w-40"
-          severity="secondary"
-          @click="close"
-      />
+      <div class="flex justify-end gap-2 w-full">
+        <template v-if="isPending">
+          <pv-button
+              :label="t('request.detail.btn-reject')"
+              severity="danger"
+              outlined
+              class="w-32"
+              @click="handleReject"
+          />
+          <pv-button
+              :label="t('request.detail.btn-approve')"
+              severity="success"
+              class="w-32"
+              @click="handleApprove"
+          />
+        </template>
+        <pv-button
+            :label="t('request.detail.btn-close')"
+            class="w-32"
+            severity="secondary"
+            @click="close"
+        />
+      </div>
     </template>
   </pv-dialog>
 </template>

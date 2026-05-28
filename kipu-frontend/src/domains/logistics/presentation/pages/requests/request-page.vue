@@ -139,6 +139,8 @@ const handleModify = (request) => {
     <RequestDetailDialog
         v-model:visible="showDetailDialog"
         :request="selectedRequest"
+        @approve="requestStore.approveRequest($event.id).then(() => requestStore.fetchRequests())"
+        @reject="requestStore.rejectRequest($event.id).then(() => requestStore.fetchRequests())"
     />
     <RequestModifyDialog
         v-model:visible="showModifyDialog"
