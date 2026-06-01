@@ -151,12 +151,21 @@ const statusProject = ref(null);
 const newStatus = ref('');
 const statusJustification = ref('');
 
-const allStatusOptions = computed(() => [
-  { label: t('projects_dashboard.create_status_planned'), value: 'Planificación' },
-  { label: t('projects_dashboard.create_status_in_progress'), value: 'En ejecución' },
-  { label: 'Paralizada', value: 'Paralizada' },
-  { label: 'Finalizada', value: 'Finalizada' }
-]);
+const allStatusOptions = computed(() => {
+  const currentStatus = statusProject.value?.status;
+
+  // If the project is currently 'Paralizada', only allow resuming to 'En ejecución'
+  if (currentStatus === 'Paralizada') {
+    return [
+      { label: t('projects_dashboard.create_status_in_progress'), value: 'En ejecución' }
+    ];
+  }
+
+  // If the project is NOT 'Paralizada', only allow setting it to 'Paralizada'
+  return [
+    { label: 'Paralizada', value: 'Paralizada' }
+  ];
+});
 
 function openStatusDialog(project) {
   statusProject.value = project;
@@ -172,26 +181,17 @@ const isStatusValid = computed(() => {
   return true;
 });
 
-/** Map status to automatic progress value. */
-const STATUS_PROGRESS_MAP = {
-  'Planificación': 12,
-  'En ejecución': 45,
-  'Finalizada': 100,
-  'Paralizada': null  // keeps current progress, bar turns gray
-};
 
 async function confirmStatusChange() {
   if (!isStatusValid.value || !statusProject.value) return;
   try {
-    const progress = STATUS_PROGRESS_MAP[newStatus.value];
     await store.updateProjectStatus(
-      statusProject.value.id,
-      newStatus.value,
+      statusProject.value.id, newStatus.value,
       statusJustification.value.trim() || undefined,
-      progress
+      null
     );
     showStatusDialog.value = false; statusProject.value = null;
-  } catch { /* error handled in store */ }
+  } catch { console.error("Error al cambiar estado:", err); }
 }
 
 // ── Active Project Details Helpers & Document Form ──
@@ -319,13 +319,16 @@ onMounted(() => { store.loadProjects(); });
 
           <p v-if="p.description" class="project-card__desc">{{ p.description }}</p>
 
-          <!-- Progress -->
+          <!-- Project Progress Row -->
           <div class="project-card__progress-row">
-            <span class="project-card__progress-label">{{ t('projects_dashboard.progress') }}</span>
-            <span class="project-card__progress-value">{{ p.progress }}%</span>
+            <span>{{ t('projects_dashboard.progress') }}</span>
+            <!-- Dynamically computed progress from currentProject getter -->
+            <span>{{ store.currentProject?.id === p.id ? store.currentProject.progress : p.progress }}%</span>
           </div>
-          <div class="project-card__progress-bar" :class="{ 'project-card__progress-bar--gray': p.status === 'Paralizada' }">
-            <div :style="{ width: p.progress + '%' }"></div>
+
+          <!-- Single Progress Bar -->
+          <div class="project-card__progress-bar" :class="{ 'project-card__progress-bar--gray': (store.currentProject?.id === p.id ? store.currentProject.status : p.status) === 'Paralizada' }">
+            <div :style="{ width: (store.currentProject?.id === p.id ? store.currentProject.progress : (p.progress || 0)) + '%' }"></div>
           </div>
 
           <!-- Footer -->

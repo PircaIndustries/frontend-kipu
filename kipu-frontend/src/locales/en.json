@@ -150,6 +150,11 @@
         "team": "Team"
     },
     "execution": {
+        "calendar": {
+            "today": "Go to today",
+            "detailTitle": "Progress History: {activity}"
+        },
+
         "advances": {
             "title": "Work Progress Control",
             "subtitle": "Daily records and execution status history.",
@@ -162,9 +167,47 @@
                 "installations": "Installations",
                 "architecture": "Architecture"
             },
+            "activityHistory": {
+                "title": "Progress History: {activity}",
+                "date": "DATE",
+                "percentage": "PROGRESS (%)",
+                "edit": "Edit",
+                "addVersion": "Register new mini-advance",
+                "editMain": "Edit main activity"
+            },
+            "create": {
+                "title": "New Daily Progress",
+                "editTitle": "Edit Progress Record",
+                "submitBtn": "Save Progress",
+                "discardHeader": "Confirm Discard",
+                "discardMessage": "You have unsaved changes. Are you sure you want to leave?",
+                "deleteHeader": "Confirm Deletion",
+                "deleteMessage": "Are you sure you want to delete this progress record? This action cannot be undone.",
+                "fields": {
+                    "date": "Progress Date",
+                    "specialty": "Specialty",
+                    "activity": "Activity Performed",
+                    "location": "Location/Sector",
+                    "progress": "Progress Percentage",
+                    "weight": "Activity weight",
+                    "description": "Detailed Description",
+                    "responsible": "Responsible",
+                    "crewSize": "Crew Size",
+                    "weather": "Weather Conditions",
+                    "photos": "Progress Photos",
+                    "project": "Assigned Project"
+                },
+                "placeholders": {
+                    "activity": "e.g., Concrete pouring",
+                    "location": "e.g., Level 2",
+                    "select_specialty": "Select specialty",
+                    "select_responsible": "Select a manager"
+                }
+            },
             "tabs": {
                 "registry": "Progress Log (PPC)",
-                "photoLog": "Photo Log"
+                "photoLog": "Photo Log",
+                "calendar": "Calendar"
             },
             "photoLog": {
                 "title": "Evidence Gallery",
@@ -192,6 +235,7 @@
             "activity": "ACTIVITY PERFORMED",
             "specialty": "SPECIALTY",
             "progress": "PROGRESS (%)",
+            "weight": "WEIGHT",
             "status": "STATUS",
             "project": "PROJECT"
         },
@@ -202,10 +246,13 @@
             "submitBtn": "Save Progress",
             "discardHeader": "Confirm Discard",
             "discardMessage": "You have unsaved changes. Are you sure you want to leave?",
+            "deleteHeader": "Confirm Deletion",
+            "deleteMessage": "Are you sure you want to delete this progress record? This action cannot be undone.",
             "fields": {
                 "date": "Progress Date",
                 "specialty": "Specialty",
                 "activity": "Activity Performed",
+                "weight": "Weight",
                 "location": "Location/Sector",
                 "progress": "Progress Percentage",
                 "description": "Detailed Description",
@@ -275,10 +322,12 @@
     "common": {
         "management": "Construction Management",
         "cancel": "Cancel",
+        "delete": "Delete",
         "confirm": "Confirm",
         "yes": "Yes",
         "no": "No",
-        "error": "Error"
+        "error": "Error",
+        "back": "← Back"
     },
     "roles": {
         "resident": "Project Resident"
@@ -690,6 +739,7 @@
             "activity": "Activity Performed",
             "specialty": "Specialty",
             "progress": "Progress (%)",
+            "weight": "Weight",
             "project": "Project",
             "status": "Status"
         },

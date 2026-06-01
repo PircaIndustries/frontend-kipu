@@ -882,41 +882,9 @@
       "date": "2026-05-24",
       "description": "asd",
       "id": 6
-    },
-    {
-      "budgetId": 7,
-      "amount": 12,
-      "date": "2026-05-26",
-      "description": "+",
-      "id": 7
-    },
-    {
-      "budgetId": 7,
-      "amount": 111989,
-      "date": "2026-05-26",
-      "description": "a",
-      "id": 8
-    },
-    {
-      "budgetId": 8,
-      "amount": 1,
-      "date": "2026-05-26",
-      "description": "a",
-      "id": 9
     }
   ],
-  "ncrs": [
-    {
-      "id": "1",
-      "projectId": "1",
-      "date": "2026-04-20T10:00:00.000Z",
-      "ncrTitle": "Fisura en Losa N3",
-      "ncrDescription": "Se detectó una fisura longitudinal tras el desencofrado.",
-      "specialty": "Estructuras",
-      "severityLevel": "Alto",
-      "photoUrl": "https://i.pinimg.com/736x/29/7b/a1/297ba161005c3fef3978dd086c8bc76.jpg"
-    }
-  ],
+  "ncrs": [],
   "projects": [
     {
       "id": "proj-01",
@@ -926,9 +894,9 @@
       "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "budget": 1500000,
-      "progress": 12,
-      "status": "Planificación",
-      "statusJustification": "",
+      "progress": 7,
+      "status": "En ejecución",
+      "statusJustification": "Actualización automática por avance diario",
       "image": "/assets/project-image1.png",
       "members": 8,
       "rnc": 3,
@@ -996,6 +964,48 @@
           "date": "2026-05-28",
           "justification": "Cambio de estado del proyecto.",
           "progress": 12
+        },
+        {
+          "id": "log-1780233905297",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 5
+        },
+        {
+          "id": "log-1780234342048",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 0
+        },
+        {
+          "id": "log-1780234439125",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 54
+        },
+        {
+          "id": "log-1780235224310",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 2
+        },
+        {
+          "id": "log-1780236037151",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 45
+        },
+        {
+          "id": "log-1780236047126",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 7
         }
       ],
       "documents": [
@@ -1027,9 +1037,9 @@
       "startDate": "2026-03-15",
       "endDate": "2027-06-30",
       "budget": 900000,
-      "progress": 12,
-      "status": "Planificación",
-      "statusJustification": "",
+      "progress": 59,
+      "status": "En ejecución",
+      "statusJustification": "Actualización automática por avance diario",
       "image": "/assets/project-image2.png",
       "members": 15,
       "rnc": 9,
@@ -1041,6 +1051,349 @@
           "date": "2026-03-15",
           "justification": "Proyecto aprobado e inicio de la fase de planificación.",
           "progress": 12
+        },
+        {
+          "id": "log-1780091242819",
+          "status": "Finalizada",
+          "date": "2026-05-29",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 100
+        },
+        {
+          "id": "log-1780091245912",
+          "status": "En ejecución",
+          "date": "2026-05-29",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 45
+        },
+        {
+          "id": "log-1780091326367",
+          "status": "Planificación",
+          "date": "2026-05-29",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 12
+        },
+        {
+          "id": "log-1780091335776",
+          "status": "En ejecución",
+          "date": "2026-05-29",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 45
+        },
+        {
+          "id": "log-1780091348681",
+          "status": "Paralizada",
+          "date": "2026-05-29",
+          "justification": "s",
+          "progress": 45
+        },
+        {
+          "id": "log-1780091359899",
+          "status": "Planificación",
+          "date": "2026-05-29",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 12
+        },
+        {
+          "id": "log-1780091364136",
+          "status": "Paralizada",
+          "date": "2026-05-29",
+          "justification": "s",
+          "progress": 12
+        },
+        {
+          "id": "log-1780091368029",
+          "status": "Finalizada",
+          "date": "2026-05-29",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 100
+        },
+        {
+          "id": "log-1780209534789",
+          "status": "Planificación",
+          "date": "2026-05-31",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 12
+        },
+        {
+          "id": "log-1780210906187",
+          "status": "Finalizada",
+          "date": "2026-05-31",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 100
+        },
+        {
+          "id": "log-1780210913359",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 91
+        },
+        {
+          "id": "log-1780233494778",
+          "status": "Finalizada",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 100
+        },
+        {
+          "id": "log-1780233504727",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 15
+        },
+        {
+          "id": "log-1780233510819",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 10
+        },
+        {
+          "id": "log-1780233513972",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 0
+        },
+        {
+          "id": "log-1780233713661",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 90
+        },
+        {
+          "id": "log-1780234432178",
+          "status": "Paralizada",
+          "date": "2026-05-31",
+          "justification": "s",
+          "progress": 90
+        },
+        {
+          "id": "log-1780234447415",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 45
+        },
+        {
+          "id": "log-1780235236866",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 97
+        },
+        {
+          "id": "log-1780235591908",
+          "status": "Paralizada",
+          "date": "2026-05-31",
+          "justification": "s",
+          "progress": 97
+        },
+        {
+          "id": "log-1780235595740",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 45
+        },
+        {
+          "id": "log-1780235600890",
+          "status": "Finalizada",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 100
+        },
+        {
+          "id": "log-1780235605305",
+          "status": "Paralizada",
+          "date": "2026-05-31",
+          "justification": "s",
+          "progress": 100
+        },
+        {
+          "id": "log-1780235608170",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 45
+        },
+        {
+          "id": "log-1780235839077",
+          "status": "Paralizada",
+          "date": "2026-05-31",
+          "justification": "l",
+          "progress": 45
+        },
+        {
+          "id": "log-1780235842043",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 45
+        },
+        {
+          "id": "log-1780235928502",
+          "status": "Finalizada",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 100
+        },
+        {
+          "id": "log-1780235933673",
+          "status": "Finalizada",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 100
+        },
+        {
+          "id": "log-1780236638044",
+          "status": "Paralizada",
+          "date": "2026-05-31",
+          "justification": "s",
+          "progress": 100
+        },
+        {
+          "id": "log-1780236644611",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 45
+        },
+        {
+          "id": "log-1780236653140",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 91
+        },
+        {
+          "id": "log-1780236656187",
+          "status": "Finalizada",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 100
+        },
+        {
+          "id": "log-1780237197315",
+          "status": "Paralizada",
+          "date": "2026-05-31",
+          "justification": "f",
+          "progress": 100
+        },
+        {
+          "id": "log-1780237201544",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 100
+        },
+        {
+          "id": "log-1780237231419",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 97
+        },
+        {
+          "id": "log-1780237237219",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 97
+        },
+        {
+          "id": "log-1780237240105",
+          "status": "Paralizada",
+          "date": "2026-05-31",
+          "justification": "s",
+          "progress": 97
+        },
+        {
+          "id": "log-1780237247665",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Cambio de estado del proyecto.",
+          "progress": 97
+        },
+        {
+          "id": "log-1780243232530",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 97
+        },
+        {
+          "id": "log-1780243410784",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 97
+        },
+        {
+          "id": "log-1780244583684",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 97
+        },
+        {
+          "id": "log-1780264919586",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 85
+        },
+        {
+          "id": "log-1780265546042",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 83
+        },
+        {
+          "id": "log-1780268588390",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 79
+        },
+        {
+          "id": "log-1780268637664",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 75
+        },
+        {
+          "id": "log-1780269849268",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 60
+        },
+        {
+          "id": "log-1780271540729",
+          "status": "En ejecución",
+          "date": "2026-05-31",
+          "justification": "Actualización automática por avance diario",
+          "progress": 61
+        },
+        {
+          "id": "log-1780272500948",
+          "status": "En ejecución",
+          "date": "2026-06-01",
+          "justification": "Actualización automática por avance diario",
+          "progress": 73
+        },
+        {
+          "id": "log-1780272516755",
+          "status": "En ejecución",
+          "date": "2026-06-01",
+          "justification": "Actualización automática por avance diario",
+          "progress": 59
         }
       ],
       "documents": [
@@ -1123,150 +1476,106 @@
   ],
   "progress": [
     {
-      "date": "2026-05-07",
-      "specialty": "execution.advances.specialties.installations",
-      "activityName": "sadas",
-      "location": "asdasd",
-      "percentage": 12,
-      "description": "adsad",
-      "responsible": "Juan Pérez",
-      "workers": 12,
-      "weather": "sunny",
-      "status": "IN_PROGRESS",
-      "lastUpdate": "2026-05-07T05:00:00.000Z",
-      "projectId": "1",
-      "id": 1
-    },
-    {
-      "date": "2026-05-11",
-      "specialty": "Instalaciones",
-      "activityName": "Armado de columnas",
-      "location": "A nivel general",
-      "percentage": 67,
-      "description": "Se armó las columnas a nivel estructural de todo el edificio",
-      "responsible": "Juan Pérez",
-      "workers": 67,
-      "weather": "sunny",
-      "status": "IN_PROGRESS",
-      "lastUpdate": "2026-05-11T05:00:00.000Z",
-      "projectId": "1",
-      "id": 2
-    },
-    {
-      "date": "2026-05-07",
-      "specialty": "Instalaciones",
-      "activityName": "Calvicie",
-      "location": "Tercer piso",
-      "percentage": 67,
-      "description": "Si",
-      "responsible": "Juan Pérez",
-      "workers": 67,
-      "weather": "rainy",
-      "status": "IN_PROGRESS",
-      "lastUpdate": "2026-05-07T05:00:00.000Z",
-      "projectId": "1",
-      "apiId": "v1",
-      "id": 3
-    },
-    {
-      "date": "2026-05-14",
-      "specialty": "Estructuras",
-      "activityName": "SixSeven",
-      "location": "SixSeven",
-      "percentage": 67,
-      "description": "Six seven",
-      "responsible": "Juan Pérez",
-      "workers": 67,
-      "weather": "cloudy",
-      "status": "IN_PROGRESS",
-      "lastUpdate": "2026-05-14T05:00:00.000Z",
-      "projectId": "1",
-      "apiId": "v1",
-      "id": 4
-    },
-    {
-      "date": "2026-05-20",
-      "specialty": "Arquitectura",
-      "activityName": "Tilin",
-      "location": "Tilin",
-      "percentage": 67,
-      "description": "Tilin",
-      "responsible": "Juan Pérez",
-      "workers": 67,
-      "weather": "rainy",
-      "status": "IN_PROGRESS",
-      "lastUpdate": "2026-05-20T05:00:00.000Z",
-      "projectId": "1",
-      "apiId": "v1",
-      "id": 5
-    },
-    {
-      "date": "2026-05-14",
+      "date": null,
       "specialty": "Estructuras",
       "activityName": "Six seven",
-      "location": "Six seven",
-      "percentage": 67,
-      "description": "Six seven",
+      "location": "",
+      "percentage": 7,
+      "description": "",
       "responsible": "Juan Pérez",
       "workers": 67,
       "weather": "cloudy",
       "status": "IN_PROGRESS",
-      "lastUpdate": "2026-05-14T05:00:00.000Z",
+      "lastUpdate": "2026-05-31T14:00:47.087Z",
       "projectId": "proj-01",
       "apiId": "v1",
-      "id": 6
+      "id": 6,
+      "weight": 1,
+      "currentPercentage": 7,
+      "details": "",
+      "startDate": "2026-05-31T14:00:47.087Z"
     },
     {
-      "date": "2026-05-07",
+      "date": null,
       "specialty": "Arquitectura",
       "activityName": "Tilin",
-      "location": "Tilin",
-      "percentage": 67,
-      "description": "Tilin",
+      "location": "",
+      "percentage": 100,
+      "description": "",
       "responsible": "Juan Pérez",
       "workers": 67,
       "weather": "sunny",
-      "status": "IN_PROGRESS",
-      "lastUpdate": "2026-05-07T05:00:00.000Z",
+      "status": "COMPLETED",
+      "lastUpdate": "2026-05-31T13:21:53.627Z",
       "projectId": "proj-02",
       "apiId": "v1",
       "id": 7,
       "assignedBudget": 112012,
-      "executedAmount": 112001
+      "executedAmount": 112001,
+      "currentPercentage": 100,
+      "details": "",
+      "startDate": "2026-05-31T13:21:53.627Z",
+      "weight": 9
     },
     {
-      "date": "2026-05-14",
+      "date": null,
       "specialty": "Arquitectura",
-      "activityName": "Asuna Yuuki",
-      "location": "Pilin",
-      "percentage": 67,
-      "description": "Pilin",
+      "activityName": "aaaaa",
+      "location": "dale dale don dale\n",
+      "percentage": 69,
+      "description": "ese se",
       "responsible": "Juan Pérez",
-      "workers": 67,
-      "weather": "cloudy",
-      "status": "IN_PROGRESS",
-      "lastUpdate": "2026-05-14T05:00:00.000Z",
-      "projectId": "proj-02",
-      "apiId": "v1",
-      "id": 8,
-      "assignedBudget": 67,
-      "executedAmount": 1
-    },
-    {
-      "date": "2026-05-14",
-      "specialty": "Instalaciones",
-      "activityName": "Jennifer Lawrence",
-      "location": "Filtrado de fotos",
-      "percentage": 67,
-      "description": "Gran pack",
-      "responsible": "Juan Pérez",
-      "workers": 67,
+      "workers": 12,
       "weather": "sunny",
       "status": "IN_PROGRESS",
-      "lastUpdate": "2026-05-14T05:00:00.000Z",
+      "lastUpdate": "2026-05-31T16:23:03.648Z",
       "projectId": "proj-02",
       "apiId": "v1",
-      "id": 9
+      "id": 10,
+      "currentPercentage": 69,
+      "startDate": "2026-05-31T16:23:03.648Z",
+      "details": "ese se",
+      "weight": 1
+    },
+    {
+      "date": "2026-05-19T05:00:00.000Z",
+      "specialty": "Arquitectura",
+      "activityName": "Juan Juan",
+      "location": "Aca",
+      "percentage": 12,
+      "weight": 4,
+      "description": "Alla",
+      "responsible": "Zero Two",
+      "workers": 12,
+      "weather": "sunny",
+      "isMiniAdvance": false,
+      "currentPercentage": 12,
+      "details": "Alla",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-05-19T05:00:00.000Z",
+      "startDate": "2026-05-19T05:00:00.000Z",
+      "projectId": "proj-02",
+      "id": 11
+    },
+    {
+      "date": "2026-05-26T05:00:00.000Z",
+      "specialty": "Arquitectura",
+      "activityName": "Juan Juan",
+      "location": "Alla",
+      "percentage": 12,
+      "weight": 4,
+      "description": "Aca",
+      "responsible": "Zero Two",
+      "workers": 12,
+      "weather": "sunny",
+      "isMiniAdvance": true,
+      "currentPercentage": 12,
+      "details": "Aca",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-05-26T05:00:00.000Z",
+      "startDate": "2026-05-26T05:00:00.000Z",
+      "projectId": "proj-02",
+      "id": 12
     }
   ],
   "team-users": [
@@ -1402,6 +1711,46 @@
     },
     {
       "id": "us-1779769386339",
+      "fullName": "Zero Two",
+      "email": "p@gmail.com",
+      "isActive": true,
+      "role": "Logistica",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1780264897132",
+      "fullName": "Zero Two",
+      "email": "p@gmail.com",
+      "isActive": true,
+      "role": "Gestor",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1780269823761",
+      "fullName": "Zero Two",
+      "email": "p@gmail.com",
+      "isActive": true,
+      "role": "Gestor",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1780271216387",
+      "fullName": "Zero Two",
+      "email": "p@gmail.com",
+      "isActive": true,
+      "role": "Gestor",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1780272467175",
+      "fullName": "Zero Two",
+      "email": "p@gmail.com",
+      "isActive": true,
+      "role": "Gestor",
+      "apiId": "v1"
+    },
+    {
+      "id": "us-1780272475046",
       "fullName": "Zero Two",
       "email": "p@gmail.com",
       "isActive": true,

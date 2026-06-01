@@ -2,7 +2,7 @@
  * Domain entity representing a Daily Progress record.
  */
 export class DailyProgressEntity {
-    constructor({ id, projectId, projectName, activityName, details, specialty, status, currentPercentage, startDate, endDate, lastUpdate, responsible, workers, weather }) {
+    constructor({ id, projectId, projectName, activityName, details, specialty, status, currentPercentage, weight, startDate, endDate, lastUpdate, responsible, workers, weather }) {
         this.id = id;
         this.projectId = projectId;
         this.projectName = projectName;
@@ -11,6 +11,7 @@ export class DailyProgressEntity {
         this.specialty = specialty;
         this.status = status;
         this.currentPercentage = currentPercentage;
+        this.weight = weight || 1;
         this.startDate = startDate;
         this.endDate = endDate;
         this.lastUpdate = lastUpdate;

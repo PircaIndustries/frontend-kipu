@@ -150,8 +150,48 @@
         "team": "Equipo"
     },
     "execution": {
+        "calendar":{
+            "today": "Ir al día de hoy",
+            "detailTitle": "Historial de Avances: {activity}"
+         },
+
         "advances": {
             "title": "Control de Avances",
+            "activityHistory": {
+                "title": "Historial de Avances: {activity}",
+                "date": "FECHA",
+                "percentage": "AVANCE (%)",
+                "edit": "Editar",
+                "addVersion": "Registrar nuevo miniavance",
+                "editMain": "Editar actividad principal"
+            },
+            "create": {
+                "title": "Nuevo Avance Diario",
+                "editTitle": "Editar Registro de Avance",
+                "submitBtn": "Guardar Avance",
+                "deleteHeader": "Confirmar Eliminación",
+                "deleteMessage": "¿Estás seguro?",
+                "discardHeader": "Confirmar descarte",
+                "discardMessage": "¿Seguro que quieres salir?",
+                "fields": {
+                    "date": "Fecha",
+                    "specialty": "Especialidad",
+                    "activity": "Actividad",
+                    "location": "Ubicación",
+                    "progress": "Avance",
+                    "weight": "Peso",
+                    "description": "Descripción",
+                    "responsible": "Responsable",
+                    "crewSize": "Personal de Cuadrilla",
+                    "weather": "Clima"
+                },
+                "placeholders": {
+                    "activity": "Ej: Vaciado",
+                    "location": "Ej: Nivel 2",
+                    "select_specialty": "Seleccione especialidad",
+                    "select_responsible": "Seleccione un Gestor"
+                }
+            },
             "subtitle": "Historial de registros diarios y estados de ejecución.",
             "newBtn": "Nuevo Avance Diario",
             "filterSpecialty": "Filtrar por: Especialidad",
@@ -163,9 +203,11 @@
                 "installations": "Instalaciones",
                 "architecture": "Arquitectura"
             },
+
             "tabs": {
                 "registry": "Registro de Avance (PPC)",
-                "photoLog": "Bitácora Fotográfica"
+                "photoLog": "Bitácora Fotográfica",
+                "calendar": "Calendario de Avances"
             },
             "photoLog": {
                 "title": "Galería de Evidencias",
@@ -193,6 +235,7 @@
             "activity": "ACTIVIDAD REALIZADA",
             "specialty": "ESPECIALIDAD",
             "progress": "AVANCE (%)",
+            "weight": "PESO",
             "status": "ESTADO",
             "project": "PROYECTO"
         },
@@ -210,6 +253,7 @@
                 "location": "Ubicación/Sector",
                 "progress": "Porcentaje de Avance",
                 "description": "Descripción Detallada",
+                "weight": "Peso",
                 "responsible": "Responsable",
                 "crewSize": "Personal de Cuadrilla",
                 "weather": "Condiciones Climáticas",
@@ -277,9 +321,11 @@
         "management": "Gestión de Obras",
         "cancel": "Cancelar",
         "confirm": "Confirmar",
+        "delete": "Eliminar",
         "yes": "Sí",
         "no": "No",
-        "error": "Error"
+        "error": "Error",
+        "back": "← Volver"
     },
     "roles": {
         "resident": "Residente de Obra"

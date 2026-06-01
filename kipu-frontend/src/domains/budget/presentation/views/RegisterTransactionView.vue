@@ -43,7 +43,10 @@ onMounted(async () => {
   await teamStore.fetchUsers();
 
   const allItems = await repository.findAll();
-  budgetOptions.value = allItems.filter(item => String(item.projectId) === String(projectsStore.currentProjectId));
+  budgetOptions.value = allItems.filter(item =>
+      String(item.projectId) === String(projectsStore.currentProjectId) &&
+      !item.isMiniAdvance
+  );
 
   if (form.value.partidaId) onPartidaChange();
 });

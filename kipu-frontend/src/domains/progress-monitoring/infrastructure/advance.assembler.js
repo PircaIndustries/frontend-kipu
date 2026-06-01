@@ -14,6 +14,7 @@ export class AdvanceAssembler {
             specialty: response.specialty,
             status: response.status,
             currentPercentage: response.currentPercentage || response.progress || 0,
+            weight: response.weight || 1,
             startDate: response.startDate ? new Date(response.startDate) : new Date(),
             endDate: response.endDate ? new Date(response.endDate) : new Date(),
             lastUpdate: response.lastUpdate ? new Date(response.lastUpdate) : new Date(),
