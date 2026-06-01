@@ -79,6 +79,11 @@ const routes = [
                 path: 'photos',
                 name: 'PhotoLog',
                 component: () => import('@/domains/progress-monitoring/presentation/views/PhotoLogView.vue')
+            },
+            {
+                path: 'calendar',
+                name: 'Calendar',
+                component: () => import('@/domains/progress-monitoring/presentation/views/CalendarView.vue')
             }
         ]
     },
@@ -92,6 +97,11 @@ const routes = [
         path: '/advances/edit/:id',
         name: 'EditAdvance',
         component: () => import('@/domains/progress-monitoring/presentation/views/CreateAdvanceView.vue')
+    },
+    {
+        path: '/advances/activity-history/:activityName',
+        name: 'ActivityHistory',
+        component: () => import('@/domains/progress-monitoring/presentation/views/ActivityHistoryView.vue')
     },
     {
         path: '/rnc',

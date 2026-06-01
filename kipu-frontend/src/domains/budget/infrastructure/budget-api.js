@@ -7,7 +7,7 @@ const API_URL = 'http://localhost:3000';
 export class BudgetApi {
     async findAll() {
         const { data } = await axios.get(`${API_URL}/progress`);
-        return data;
+        return data.filter(item => !item.isMiniAdvance);
     }
 
     async findById(id) {
@@ -47,6 +47,10 @@ export class BudgetApi {
         try {
             const item = await this.findById(id);
             if (!item) throw new Error("Item not found");
+
+            if (item.isMiniAdvance) {
+                throw new Error("No puedes registrar gastos en un miniavance.");
+            }
 
             const numAmount = Number(amount);
             const newExecuted = Number(item.executedAmount || 0) + numAmount;

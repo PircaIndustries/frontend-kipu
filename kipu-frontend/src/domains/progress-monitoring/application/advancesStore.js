@@ -48,6 +48,10 @@ export const useAdvanceStore = defineStore('advances', () => {
     };
 
     const addAdvance = async (newEntry) => {
+        if (!newEntry.isMiniAdvance) {
+            const duplicate = advances.value.find(a => a.activityName === newEntry.activityName);
+            if (duplicate) {throw new Error("Ya existe una actividad con este nombre."); return;}
+        }
         try {
             // ADDED: Assign current project ID to the new entry
             const currentId = projectsStore.currentProjectId;
@@ -89,6 +93,52 @@ export const useAdvanceStore = defineStore('advances', () => {
         }
     };
 
+    const calendarEvents = computed(() => {
+        console.log("Avances actuales:", advances.value);
+        return currentProjectAdvances.value.map(a => ({
+            id: a.id,
+            title: `${a.activityName} (${a.currentPercentage}%)`,
+            start: a.lastUpdate,
+            backgroundColor: a.currentPercentage >= 100 ? '#10B981' : '#3B82F6',
+            extendedProps: {
+                specialty: a.specialty,
+                percentage: a.currentPercentage
+            }
+        }));
+    });
+
+    const addMiniAdvance = async (newEntry) => {
+        const activityAdvances = advances.value.filter(a => a.activityName === newEntry.activityName);
+
+        const currentSum = activityAdvances.reduce((sum, a) => sum + (a.currentPercentage || 0), 0);
+
+        if (currentSum + newEntry.currentPercentage > 100) {
+            throw new Error('Progress sum exceeds 100%');
+        }
+
+        return await addAdvance(newEntry);
+    };
+
+    const groupedAdvances = computed(() => {
+        const groups = {};
+        advances.value.forEach(a => {
+            if (!groups[a.activityName]) {
+                groups[a.activityName] = {
+                    activityName: a.activityName,
+                    specialty: a.specialty,
+                    totalWeight: Number(a.weight || 0),
+                    totalProgress: 0,
+                    lastUpdate: a.lastUpdate
+                };
+            }
+            groups[a.activityName].totalProgress += Number(a.currentPercentage || 0);
+            if (new Date(a.lastUpdate) > new Date(groups[a.activityName].lastUpdate)) {
+                groups[a.activityName].lastUpdate = a.lastUpdate;
+            }
+        });
+        return Object.values(groups);
+    });
+
     const setSpecialtyFilter = (v) => specialtyFilter.value = v;
     const setSearchFilter = (v) => searchFilter.value = v;
     const setDateRange = (start, end) => dateRange.value = { start, end };
@@ -106,6 +156,9 @@ export const useAdvanceStore = defineStore('advances', () => {
         deleteAdvance,
         setSpecialtyFilter,
         setSearchFilter,
-        setDateRange
+        setDateRange,
+        calendarEvents,
+        groupedAdvances,
+        addMiniAdvance
     };
 });
