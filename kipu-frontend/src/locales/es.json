@@ -662,7 +662,7 @@
                 "role-label": "Cargo / Cuadrilla",
                 "role-placeholder": "Ejm. Operario de Albañilería",
                 "tools-title": "Herramientas Asignadas",
-                "tools-add": "+ Añadir Herramienta",
+                "tools-add": "Selecciona una maquinaria real...",
                 "tools-placeholder": "Nombre del equipo...",
                 "btn-save": "Guardar Obrero",
                 "btn-cancel": "Cancelar"
@@ -676,7 +676,7 @@
             "signed-title": "Documentos Firmados",
             "deadline": "Vence",
             "signers": "Firmantes",
-            "btn-sign": "Sign Document",
+            "btn-sign": "Firmar Documento",
             "empty-pending": "No hay documentos pendientes",
             "empty-signed": "No hay documentos firmados",
             "summary-title": "Resumen",

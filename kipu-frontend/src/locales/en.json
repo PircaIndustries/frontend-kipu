@@ -664,7 +664,7 @@
                 "role-label": "Position / Crew",
                 "role-placeholder": "e.g., Bricklaying Operator",
                 "tools-title": "Assigned Tools",
-                "tools-add": "+ Add Tool",
+                "tools-add": "Select a real equipment",
                 "tools-placeholder": "Equipment name...",
                 "btn-save": "Save Worker",
                 "btn-cancel": "Cancel"

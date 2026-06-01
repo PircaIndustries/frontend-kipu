@@ -1,4 +1,4 @@
-<!-- src/domains/signatures/presentation/components/DocumentCreateDialog.vue -->
+
 <template>
   <Dialog
       :visible="visible"
@@ -9,7 +9,6 @@
       class="w-[600px]"
   >
     <form @submit.prevent="onConfirm" class="flex flex-col gap-4">
-      <!-- Tipo de documento -->
       <div class="flex flex-col gap-1">
         <label class="text-xs font-bold text-text-main uppercase tracking-wider">
           {{ $t('signatures.dialog.document-type') }}
@@ -26,7 +25,6 @@
         </p>
       </div>
 
-      <!-- Fecha límite -->
       <div class="flex flex-col gap-1">
         <label class="text-xs font-bold text-text-main uppercase tracking-wider">
           {{ $t('signatures.dialog.deadline') }}
@@ -43,7 +41,6 @@
         </p>
       </div>
 
-      <!-- Selector de usuarios -->
       <div class="flex flex-col gap-1">
         <label class="text-xs font-bold text-text-main uppercase tracking-wider">
           {{ $t('signatures.dialog.assign-users') }}
@@ -75,7 +72,6 @@
         </p>
       </div>
 
-      <!-- Dropzone (solo UI) -->
       <div class="flex flex-col gap-1 mt-2">
         <label class="text-xs font-bold text-text-main uppercase tracking-wider">
           {{ $t('signatures.dialog.attach-document') }}
@@ -89,10 +85,13 @@
         </div>
       </div>
 
-      <!-- Resumen -->
-      <div v-if="formData.selectedUsers.length > 0" class="bg-success-soft p-3 rounded-lg mt-2">
-        <p class="text-sm text-success">
-          {{ $t('signatures.dialog.selected-count') }}: {{ formData.selectedUsers.length }}
+      <div class="bg-success-soft p-3 rounded-lg mt-2 flex flex-col gap-1">
+        <p class="text-sm text-success font-medium flex items-center gap-1">
+          <i class="pi pi-user-edit"></i>
+          Tú firmarás este documento automáticamente como: <strong>{{ creatorUser?.name || 'Creador' }}</strong>
+        </p>
+        <p v-if="formData.selectedUsers.length > 0" class="text-xs text-text-main">
+          Firmantes adicionales seleccionados: {{ formData.selectedUsers.length }}
         </p>
       </div>
     </form>
@@ -142,12 +141,25 @@ const errors = ref({
   selectedUsers: false
 })
 
-const availableUsers = computed(() => teamUsersStore.allUsers.filter(u => u.isActive))
+const creatorUser = computed(() => {
+  try {
+    const userJson = localStorage.getItem('currentUser')
+    return userJson ? JSON.parse(userJson) : null
+  } catch (e) {
+    console.error('Error parseando currentUser de localStorage', e)
+    return null
+  }
+})
+
+const availableUsers = computed(() => {
+  const current = creatorUser.value
+  if (!current) return teamUsersStore.allUsers.filter(u => u.isActive)
+
+  return teamUsersStore.allUsers.filter(u => u.isActive && u.id !== current.id && u.email !== current.email)
+})
 
 const isFormValid = computed(() => {
-  return formData.value.documentType &&
-      formData.value.deadline &&
-      formData.value.selectedUsers.length > 0
+  return formData.value.documentType && formData.value.deadline
 })
 
 const getInitials = (fullName) => {
@@ -161,7 +173,7 @@ const validateForm = () => {
   errors.value = {
     documentType: !formData.value.documentType,
     deadline: !formData.value.deadline,
-    selectedUsers: formData.value.selectedUsers.length === 0
+    selectedUsers: false // Ya no es obligatorio seleccionar a otros dado que el creador está incluido
   }
   return !Object.values(errors.value).some(Boolean)
 }
@@ -169,13 +181,24 @@ const validateForm = () => {
 const onConfirm = async () => {
   if (!validateForm()) return
 
-  const assignedUsers = formData.value.selectedUsers.map(userId => {
+  const assignedUsers = []
+  const current = creatorUser.value
+
+  if (current) {
+    assignedUsers.push({
+      id: current.id,
+      fullName: current.name,
+      signedAt: undefined
+    })
+  }
+
+  formData.value.selectedUsers.forEach(userId => {
     const user = teamUsersStore.allUsers.find(u => u.id === userId)
-    return {
+    assignedUsers.push({
       id: userId,
       fullName: user?.fullName || 'Usuario',
       signedAt: undefined
-    }
+    })
   })
 
   try {

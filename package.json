@@ -2,6 +2,7 @@
   "dependencies": {
     "@azure/msal-browser": "^5.11.0",
     "@primeuix/themes": "^2.0.3",
+    "axios": "^1.16.1",
     "pinia": "^3.0.4",
     "primevue": "^4.5.5",
     "vue3-google-signin": "^2.1.1"

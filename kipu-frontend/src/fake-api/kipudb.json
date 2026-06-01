@@ -734,26 +734,21 @@
       "id": "asig-103",
       "projectId": "proj-02",
       "machineryId": "maq-002",
-      "status": "AVAILABLE",
-      "assignedTo": null,
-      "registrationDate": "2026-05-10T07:00:00Z",
+      "status": "IN_USE",
+      "assignedTo": "wkr-1780350701456",
+      "registrationDate": "2026-06-01",
       "maintenanceHours": "1150",
-      "assignmentDetail": null
+      "assignmentDetail": "Asignado automáticamente al registrar al obrero Pepe sito"
     },
     {
       "id": "asig-104",
       "projectId": "proj-02",
       "machineryId": "maq-004",
-      "status": "AVAILABLE",
-      "assignedTo": null,
-      "registrationDate": "2026-05-11T08:00:00Z",
+      "status": "IN_USE",
+      "assignedTo": "wkr-1780350745895",
+      "registrationDate": "2026-06-01",
       "maintenanceHours": "3200",
-      "assignmentDetail": null,
-      "machineryName": "Cargador Frontal",
-      "machineryBrand": "Komatsu",
-      "machineryModel": "WA380-6",
-      "workerDni": "10293847",
-      "workerName": "10293847 - Luis Gómez"
+      "assignmentDetail": "Asignado automáticamente al registrar al obrero Juan Bodoque"
     },
     {
       "id": "asig-1779757834810",
@@ -1472,6 +1467,13 @@
       "password": "paupau707",
       "role": "Logística y Administración",
       "id": "6NxPOLs"
+    },
+    {
+      "name": "Neo Ramos",
+      "email": "neoramos@gmail.com",
+      "password": "123456789",
+      "role": "Gestor Operativo",
+      "id": "cVW0O6a"
     }
   ],
   "progress": [
@@ -1760,44 +1762,26 @@
   ],
   "team-workers": [
     {
-      "id": "wkr-001",
-      "dni": "70123456",
-      "fullName": "Carlos Ruiz",
-      "role": "Capataz - Estructuras",
-      "isActive": false,
-      "assignedTools": [
-        "Excavadora CAT 320",
-        "Mezcladora de Concreto"
-      ]
-    },
-    {
-      "id": "wkr-002",
-      "dni": "45678901",
-      "fullName": "Miguel Santos",
-      "role": "Operario - Vaciado",
-      "isActive": false,
-      "assignedTools": [
-        "Vibrador de Concreto"
-      ]
-    },
-    {
-      "id": "wkr-003",
-      "dni": "10293847",
-      "fullName": "Luis Gómez",
-      "role": "Peón",
-      "isActive": true,
-      "assignedTools": []
-    },
-    {
-      "id": "wkr-1778624246549",
-      "dni": "9823311",
-      "fullName": "Juan Perez",
-      "role": "Operario de Cuadrilla",
+      "id": "wkr-1780350701456",
+      "dni": "74500834",
+      "fullName": "Pepe sito",
+      "role": "Operario",
       "isActive": true,
       "assignedTools": [
-        "Pico",
-        "Pala"
-      ]
+        "Excavadora Hidráulica"
+      ],
+      "apiId": "v1"
+    },
+    {
+      "id": "wkr-1780350745895",
+      "dni": "95622314",
+      "fullName": "Juan Bodoque",
+      "role": "Albañil",
+      "isActive": true,
+      "assignedTools": [
+        "Cargador Frontal"
+      ],
+      "apiId": "v1"
     }
   ],
   "documents": [
@@ -1894,6 +1878,27 @@
         {
           "id": "us-07",
           "fullName": "Laurel Pallo"
+        }
+      ]
+    },
+    {
+      "id": "doc-1780351241074-3ptukb",
+      "type": "Acta de actualización",
+      "isSigned": true,
+      "digitalSignatureToken": "123456",
+      "deadLine": "2026-06-16T05:00:00.000Z",
+      "assignedTo": [
+        {
+          "id": "cVW0O6a",
+          "fullName": "Neo Ramos"
+        },
+        {
+          "id": "us-1779683053929",
+          "fullName": "Zero Two"
+        },
+        {
+          "id": "us-1779683016165",
+          "fullName": "Juan Perez"
         }
       ]
     }
