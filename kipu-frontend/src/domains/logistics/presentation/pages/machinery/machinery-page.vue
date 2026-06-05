@@ -6,6 +6,7 @@ import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
 import useMachineryStore from '@/domains/logistics/application/machinery.store.js'
 import { useTeamWorkerStore } from '@/domains/team/application/team-worker.store.js'
+import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore.js'
 import MachineryList from '@/domains/logistics/presentation/components/machinery/machinery-list.vue'
 import FilterSummaryBar from '@/shared/presentation/components/FilterSummaryBar.vue'
 import MachineryCreateForm from '@/domains/logistics/presentation/components/machinery/form/machinery-create-form.vue'
@@ -17,10 +18,11 @@ const toast = useToast()
 const confirm = useConfirm()
 const machineryStore = useMachineryStore()
 const workerStore = useTeamWorkerStore()
+const projectsStore = useProjectsStore()
 
 const { machineryView, assignmentsLoaded, catalogLoaded } = storeToRefs(machineryStore)
 
-const currentProjectId = computed(() => localStorage.getItem('currentProjectId') || 'proj-01');
+const currentProjectId = computed(() => projectsStore.currentProjectId);
 
 const enrichedView = computed(() =>
   machineryView.value

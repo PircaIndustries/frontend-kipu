@@ -3,11 +3,14 @@ import { ref, computed } from 'vue'
 import { teamWorkerApi } from '../infrastructure/team-worker.api.js'
 import { TeamWorkerAssembler } from '../infrastructure/team-worker.assembler.js'
 import { TeamWorkerEntity } from '../domain/model/team-worker.entity.js'
+import { useProjectsStore } from '../../project-management/data/useProjectsStore.js'
 
 /**
  * Team Workers Store - Manages team worker state and operations
  */
 export const useTeamWorkerStore = defineStore('teamWorker', () => {
+    const projectsStore = useProjectsStore()
+
     // ========== STATE ==========
 
     /** @type {import('vue').Ref<TeamWorkerEntity[]>} */
@@ -25,13 +28,17 @@ export const useTeamWorkerStore = defineStore('teamWorker', () => {
      * All workers
      * @returns {TeamWorkerEntity[]}
      */
-    const allWorkers = computed(() => workers.value)
+    const allWorkers = computed(() => {
+        const currentId = projectsStore.currentProjectId
+        if (!currentId) return []
+        return workers.value.filter(worker => String(worker.projectId) === String(currentId))
+    })
 
     /**
      * Active workers only
      * @returns {TeamWorkerEntity[]}
      */
-    const activeWorkers = computed(() => workers.value.filter(worker => worker.isActive))
+    const activeWorkers = computed(() => allWorkers.value.filter(worker => worker.isActive))
 
     /**
      * Filtered workers based on search term
@@ -39,9 +46,9 @@ export const useTeamWorkerStore = defineStore('teamWorker', () => {
      */
     const filteredWorkers = computed(() => {
         const term = searchTerm.value.toLowerCase().trim()
-        if (!term) return workers.value
+        if (!term) return allWorkers.value
 
-        return workers.value.filter(worker =>
+        return allWorkers.value.filter(worker =>
             worker.dni.toLowerCase().includes(term) ||
             worker.fullName.toLowerCase().includes(term) ||
             worker.role.toLowerCase().includes(term)
@@ -133,6 +140,7 @@ export const useTeamWorkerStore = defineStore('teamWorker', () => {
         newWorker.role = workerData.role
         newWorker.isActive = true
         newWorker.assignedTools = workerData.assignedTools || []
+        newWorker.projectId = projectsStore.currentProjectId
 
         workers.value.push(newWorker)
 

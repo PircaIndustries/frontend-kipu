@@ -6,6 +6,7 @@ import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import useWasteStore from '@/domains/logistics/application/waste.store.js';
 import useInventoryStore from '@/domains/logistics/application/inventory.store.js';
+import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore.js';
 import WasteList from '@/domains/logistics/presentation/components/waste/waste-list.vue';
 import FilterSummaryBar from '@/shared/presentation/components/FilterSummaryBar.vue';
 import AutocompleteComponent from '@/shared/presentation/components/autocompleteComponent.vue';
@@ -17,11 +18,12 @@ const toast = useToast();
 const confirm = useConfirm();
 const wasteStore = useWasteStore();
 const inventoryStore = useInventoryStore();
+const projectsStore = useProjectsStore();
 
 const { waste, wasteLoaded, classifications } = storeToRefs(wasteStore);
 const { materials } = storeToRefs(inventoryStore);
 
-const currentProjectId = computed(() => localStorage.getItem('currentProjectId') || 'proj-01');
+const currentProjectId = computed(() => projectsStore.currentProjectId);
 
 const enrichedWaste = computed(() =>
   waste.value

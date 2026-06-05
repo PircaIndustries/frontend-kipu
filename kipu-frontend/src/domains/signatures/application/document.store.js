@@ -3,15 +3,22 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { documentApi } from '../infrastructure/document.api.js'
 import { DocumentEntity } from '../domain/model/document.entity.js'
+import { useProjectsStore } from '../../project-management/data/useProjectsStore.js'
 
 export const useDocumentStore = defineStore('document', () => {
+    const projectsStore = useProjectsStore()
+
     // ========== STATE ==========
     const documents = ref([])
     const currentToken = ref(null)
     const currentDocumentId = ref(null)
 
     // ========== GETTERS ==========
-    const documents$ = computed(() => documents.value)
+    const documents$ = computed(() => {
+        const currentId = projectsStore.currentProjectId
+        if (!currentId) return []
+        return documents.value.filter(doc => String(doc.projectId) === String(currentId))
+    })
     const currentToken$ = computed(() => currentToken.value)
 
     // ========== ACTIONS ==========
@@ -108,15 +115,15 @@ export const useDocumentStore = defineStore('document', () => {
     }
 
     const getPendingDocuments = () => {
-        return documents.value.filter(doc => !doc.isSigned)
+        return documents$.value.filter(doc => !doc.isSigned)
     }
 
     const getSignedDocuments = () => {
-        return documents.value.filter(doc => doc.isSigned)
+        return documents$.value.filter(doc => doc.isSigned)
     }
 
     const getDocumentsByType = (type) => {
-        return documents.value.filter(doc => doc.type === type)
+        return documents$.value.filter(doc => doc.type === type)
     }
 
     const createDocument = async (data) => {
@@ -127,6 +134,7 @@ export const useDocumentStore = defineStore('document', () => {
         newDocument.isSigned = false
         newDocument.digitalSignatureToken = null
         newDocument.assignedTo = data.assignedTo
+        newDocument.projectId = projectsStore.currentProjectId
 
         documents.value.push(newDocument)
 

@@ -59,3 +59,291 @@ cdk-overlay-backdrop {
     backdrop-filter: blur(6px) !important;
     -webkit-backdrop-filter: blur(6px);
 }
+
+/* ==========================================================================
+   ACCESSIBILITY & INCLUSIVITY OVERRIDES
+   ========================================================================== */
+
+/* High Contrast Mode */
+body.accessibility-high-contrast {
+    --color-primary: #000000 !important;
+    --color-accent: #ffd700 !important;
+    --color-text-main: #ffffff !important;
+    --color-neutral-bg: #121212 !important;
+    --color-neutral-border: #ffffff !important;
+    
+    --color-success: #00ff00 !important;
+    --color-warning: #ffcc00 !important;
+    --color-danger:  #ff3333 !important;
+    --color-info:    #00ffff !important;
+    
+    --color-success-soft: #1b4d1b !important;
+    --color-warning-soft: #4d3d1b !important;
+    --color-danger-soft:  #4d1b1b !important;
+    --color-info-soft:    #1b3d4d !important;
+
+    background-color: #121212 !important;
+    color: #ffffff !important;
+
+    /* Global Tailwind Variable Overrides */
+    --color-white: #000000 !important;
+    --color-slate-50: #000000 !important;
+    --color-slate-100: #121212 !important;
+    --color-slate-200: #222222 !important;
+    --color-slate-300: #333333 !important;
+    --color-slate-400: #bbbbbb !important;
+    --color-slate-500: #dddddd !important;
+    --color-slate-600: #eeeeee !important;
+    --color-slate-700: #ffffff !important;
+    --color-slate-800: #ffffff !important;
+    --color-slate-900: #ffffff !important;
+
+    --color-gray-50: #000000 !important;
+    --color-gray-100: #121212 !important;
+    --color-gray-200: #222222 !important;
+    --color-gray-300: #333333 !important;
+    --color-gray-400: #bbbbbb !important;
+    --color-gray-500: #dddddd !important;
+    --color-gray-600: #eeeeee !important;
+    --color-gray-700: #ffffff !important;
+    --color-gray-800: #ffffff !important;
+    --color-gray-900: #ffffff !important;
+
+    --color-neutral-50: #000000 !important;
+    --color-neutral-100: #121212 !important;
+    --color-neutral-200: #222222 !important;
+    --color-neutral-800: #ffffff !important;
+    --color-neutral-900: #ffffff !important;
+
+    --color-rose-50: #3a1315 !important;
+    --color-rose-100: #5c1e22 !important;
+    --color-rose-200: #7e2a2e !important;
+    --color-rose-400: #ff5c62 !important;
+    --color-rose-500: #ff333d !important;
+    --color-rose-700: #ff999d !important;
+    --color-rose-800: #ffffff !important;
+}
+
+body.accessibility-high-contrast .bg-white,
+body.accessibility-high-contrast header,
+body.accessibility-high-contrast .side-navigation,
+body.accessibility-high-contrast .p-dialog,
+body.accessibility-high-contrast .p-card,
+body.accessibility-high-contrast .settings-card,
+body.accessibility-high-contrast .details-card,
+body.accessibility-high-contrast .empty-state-card,
+body.accessibility-high-contrast .timeline-item-card,
+body.accessibility-high-contrast .notification-card,
+body.accessibility-high-contrast .card-read,
+body.accessibility-high-contrast .card-unread,
+body.accessibility-high-contrast .p-select,
+body.accessibility-high-contrast .p-select-overlay,
+body.accessibility-high-contrast .p-selectbutton,
+body.accessibility-high-contrast .p-togglebutton,
+body.accessibility-high-contrast .project-card,
+body.accessibility-high-contrast .stat-card,
+body.accessibility-high-contrast .details-panel,
+body.accessibility-high-contrast .ncr-item-container,
+body.accessibility-high-contrast .ncr-details-panel,
+body.accessibility-high-contrast .budget-container,
+body.accessibility-high-contrast .p-message,
+body.accessibility-high-contrast .p-progressbar,
+body.accessibility-high-contrast .p-tabs,
+body.accessibility-high-contrast .p-tablist,
+body.accessibility-high-contrast .p-tab,
+body.accessibility-high-contrast .p-tabpanel,
+body.accessibility-high-contrast .p-datatable,
+body.accessibility-high-contrast .p-datatable-header,
+body.accessibility-high-contrast .p-datatable-thead th,
+body.accessibility-high-contrast .p-datatable-tbody td,
+body.accessibility-high-contrast .p-inputtext,
+body.accessibility-high-contrast .p-datepicker,
+body.accessibility-high-contrast .p-datepicker-input,
+body.accessibility-high-contrast input,
+body.accessibility-high-contrast select,
+body.accessibility-high-contrast textarea,
+body.accessibility-high-contrast button,
+body.accessibility-high-contrast .animate-slide-up,
+body.accessibility-high-contrast .animate-slide-up div,
+body.accessibility-high-contrast .bg-slate-50,
+body.accessibility-high-contrast .bg-gray-50,
+body.accessibility-high-contrast .border-slate-100,
+body.accessibility-high-contrast .border-slate-200,
+body.accessibility-high-contrast .border-gray-100 {
+    background-color: #000000 !important;
+    background-image: none !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+body.accessibility-high-contrast .text-gray-800,
+body.accessibility-high-contrast .text-text-main,
+body.accessibility-high-contrast .text-gray-500,
+body.accessibility-high-contrast .text-gray-600,
+body.accessibility-high-contrast .text-slate-900,
+body.accessibility-high-contrast .text-slate-700,
+body.accessibility-high-contrast .text-slate-500,
+body.accessibility-high-contrast .text-slate-400,
+body.accessibility-high-contrast .settings-title,
+body.accessibility-high-contrast .settings-subtitle,
+body.accessibility-high-contrast .field-label,
+body.accessibility-high-contrast .field-hint,
+body.accessibility-high-contrast .page-title,
+body.accessibility-high-contrast .page-subtitle,
+body.accessibility-high-contrast .value,
+body.accessibility-high-contrast .main-val,
+body.accessibility-high-contrast .sub-val,
+body.accessibility-high-contrast .notif-title,
+body.accessibility-high-contrast .notif-desc,
+body.accessibility-high-contrast .description-text p,
+body.accessibility-high-contrast span,
+body.accessibility-high-contrast h1,
+body.accessibility-high-contrast h2,
+body.accessibility-high-contrast h3,
+body.accessibility-high-contrast h4,
+body.accessibility-high-contrast p,
+body.accessibility-high-contrast label,
+body.accessibility-high-contrast strong,
+body.accessibility-high-contrast b,
+body.accessibility-high-contrast th,
+body.accessibility-high-contrast td {
+    color: #ffffff !important;
+}
+
+body.accessibility-high-contrast .menu-link:hover,
+body.accessibility-high-contrast .menu-link.active-link {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+body.accessibility-high-contrast .menu-link.active-link i,
+body.accessibility-high-contrast .menu-link.active-link span {
+    color: #000000 !important;
+}
+
+body.accessibility-high-contrast .p-button {
+    border: 2px solid #ffffff !important;
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+body.accessibility-high-contrast .p-button:hover,
+body.accessibility-high-contrast .p-button-active,
+body.accessibility-high-contrast .p-togglebutton-checked,
+body.accessibility-high-contrast .p-select-option:hover,
+body.accessibility-high-contrast .p-select-option-selected,
+body.accessibility-high-contrast .p-tab.p-tab-active,
+body.accessibility-high-contrast .p-tab:hover,
+body.accessibility-high-contrast .p-datepicker td span:hover,
+body.accessibility-high-contrast .p-datepicker td.p-datepicker-active span,
+body.accessibility-high-contrast .p-datepicker td.p-datepicker-today span {
+    background-color: #ffd700 !important;
+    color: #000000 !important;
+    border-color: #ffd700 !important;
+}
+
+body.accessibility-high-contrast .p-button:hover *,
+body.accessibility-high-contrast .p-button-active *,
+body.accessibility-high-contrast .p-togglebutton-checked *,
+body.accessibility-high-contrast .p-select-option-selected *,
+body.accessibility-high-contrast .p-select-option:hover *,
+body.accessibility-high-contrast .p-tab.p-tab-active *,
+body.accessibility-high-contrast .p-tab:hover *,
+body.accessibility-high-contrast .p-datepicker td span:hover *,
+body.accessibility-high-contrast .p-datepicker td.p-datepicker-active span * {
+    color: #000000 !important;
+}
+
+body.accessibility-high-contrast .p-datatable th,
+body.accessibility-high-contrast .p-datatable td {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border-bottom: 2px solid #ffffff !important;
+}
+
+body.accessibility-high-contrast .separator {
+    border-top: 1px solid #ffffff !important;
+}
+
+body.accessibility-high-contrast .text-accent,
+body.accessibility-high-contrast .pi {
+    color: #ffd700 !important;
+}
+
+body.accessibility-high-contrast * {
+    scrollbar-color: #ffffff transparent !important;
+}
+
+body.accessibility-high-contrast .card-icon-wrap {
+    background-color: #000000 !important;
+    border: 1px solid #ffffff !important;
+}
+
+body.accessibility-high-contrast .p-tablist-active-bar {
+    background-color: #ffd700 !important;
+    height: 4px !important;
+}
+
+/* Font Resizing Scale */
+body.accessibility-font-large {
+    --text-xs: 0.9rem;
+    --text-sm: 1.0rem;
+    --text-base: 1.15rem;
+    --text-lg: 1.3rem;
+    --text-xl: 1.45rem;
+    --text-2xl: 1.7rem;
+}
+body.accessibility-font-large .p-button,
+body.accessibility-font-large .menu-link,
+body.accessibility-font-large input,
+body.accessibility-font-large label {
+    font-size: 1.1rem !important;
+}
+
+body.accessibility-font-xlarge {
+    --text-xs: 1.05rem;
+    --text-sm: 1.15rem;
+    --text-base: 1.3rem;
+    --text-lg: 1.5rem;
+    --text-xl: 1.7rem;
+    --text-2xl: 2.0rem;
+}
+body.accessibility-font-xlarge .p-button,
+body.accessibility-font-xlarge .menu-link,
+body.accessibility-font-xlarge input,
+body.accessibility-font-xlarge label {
+    font-size: 1.25rem !important;
+}
+
+/* Dyslexic Font Adjustment */
+body.accessibility-font-dyslexic {
+    font-family: 'Courier New', Courier, monospace, sans-serif !important;
+    letter-spacing: 0.12em !important;
+    word-spacing: 0.1em !important;
+    line-height: 1.65 !important;
+}
+body.accessibility-font-dyslexic * {
+    font-family: 'Courier New', Courier, monospace, sans-serif !important;
+}
+
+/* Color Blindness Shifting Filters */
+body.accessibility-protanopia {
+    filter: contrast(110%) saturate(85%) hue-rotate(-12deg) !important;
+}
+body.accessibility-deuteranopia {
+    filter: contrast(110%) saturate(85%) hue-rotate(12deg) !important;
+}
+body.accessibility-tritanopia {
+    filter: contrast(115%) saturate(90%) hue-rotate(180deg) !important;
+}
+
+/* Reduced Motion Override */
+body.accessibility-reduced-motion,
+body.accessibility-reduced-motion *,
+body.accessibility-reduced-motion *::before,
+body.accessibility-reduced-motion *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+}

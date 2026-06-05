@@ -2,6 +2,7 @@
 import {onMounted, computed, ref} from 'vue'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
 import useRequestStore from '@/domains/logistics/application/requests.store.js'
 import RequestList from '@/domains/logistics/presentation/components/requests/request-list.vue'
 import FilterMenu from "@/shared/presentation/components/FilterMenu.vue"
@@ -9,9 +10,11 @@ import FilterSummaryBar from "@/shared/presentation/components/FilterSummaryBar.
 import { useRouter } from 'vue-router'
 import RequestDetailDialog from "@/domains/logistics/presentation/components/requests/request-detail-dialog.vue";
 import RequestModifyDialog from "@/domains/logistics/presentation/components/requests/form/request-modify-dialog.vue";
+
 const { t } = useI18n()
 const requestStore = useRequestStore()
 const router = useRouter()
+const toast = useToast()
 const {
   requestDetailsView,
   pendingRequestFilter,
@@ -95,9 +98,35 @@ const handleModify = (request) => {
   selectedModifyRequest.value = request
   showModifyDialog.value = true
 }
+
+const handleApproveRequest = async (event) => {
+  const request = requestDetailsView.value.find(r => r.id === event.id);
+  if (request && !request.isWithinBudget) {
+    toast.add({
+      severity: 'warn',
+      summary: 'Desviación Presupuestaria Detectada',
+      detail: `La solicitud (Monto: S/ ${request.totalAmount.toFixed(2)}) supera el saldo disponible de la línea de presupuesto (Saldo: S/ ${request.budgetAvailable.toFixed(2)}).`,
+      life: 8000
+    });
+  }
+  
+  try {
+    await requestStore.approveRequest(event.id);
+    await requestStore.fetchRequests();
+    toast.add({
+      severity: 'success',
+      summary: 'Solicitud Aprobada',
+      detail: 'La solicitud ha sido aprobada con éxito.',
+      life: 3000
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
 </script>
 
 <template>
+  <pv-toast />
   <section class="flex flex-col gap-6 p-6 h-full">
     <header class="flex items-center justify-between">
       <div class="flex flex-col gap-0.5">
@@ -139,7 +168,7 @@ const handleModify = (request) => {
     <RequestDetailDialog
         v-model:visible="showDetailDialog"
         :request="selectedRequest"
-        @approve="requestStore.approveRequest($event.id).then(() => requestStore.fetchRequests())"
+        @approve="handleApproveRequest"
         @reject="requestStore.rejectRequest($event.id).then(() => requestStore.fetchRequests())"
     />
     <RequestModifyDialog

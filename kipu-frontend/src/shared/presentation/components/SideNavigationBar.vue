@@ -27,7 +27,6 @@ const menuItems = [
   { label: 'navigation.advances', icon: 'pi pi-calendar', to: '/advances' },
   { label: 'navigation.rnc', icon: 'pi pi-exclamation-triangle', to: '/rnc' },
   { label: 'navigation.logistics', icon: 'pi pi-box', to: '/logistics' },
-  { label: 'navigation.blueprints', icon: 'pi pi-map', to: '/blueprints' },
   { label: 'navigation.signatures', icon: 'pi pi-pencil', to: '/signatures' },
   { label: 'navigation.budget', icon: 'pi pi-money-bill', to: '/budget' },
   { label: 'navigation.team', icon: 'pi pi-users', to: '/team' }

@@ -15,37 +15,31 @@
     {
       "id": "cat-003",
       "name": "Agregados",
-      "description": "Arena fina, arena gruesa, piedra chancada, confitillo y hormigón.",
+      "description": "Arena fina, arena gruesa, piedra chancada y hormigón.",
       "isActive": true
     },
     {
       "id": "cat-004",
       "name": "Metales y Acero",
-      "description": "Acero corrugado, alambres, clavos, mallas electrosoldadas y perfiles metálicos.",
+      "description": "Acero corrugado, alambres, clavos y mallas electrosoldadas.",
       "isActive": true
     },
     {
       "id": "cat-005",
       "name": "Maderas y Encofrados",
-      "description": "Tableros, triplay fenólico, listones y madera para encofrado.",
+      "description": "Tableros, triplay fenólico y listones para encofrado.",
       "isActive": true
     },
     {
       "id": "cat-006",
       "name": "Consumibles y Varios",
-      "description": "Discos de corte, lijas, aditivos para concreto, soldadura, etc.",
+      "description": "Discos de corte, aditivos para concreto y soldadura.",
       "isActive": true
     },
     {
       "id": "cat-007",
       "name": "Equipos de Protección Personal (EPP)",
-      "description": "Cascos, guantes, lentes, botas, tapones auditivos y arneses de seguridad.",
-      "isActive": true
-    },
-    {
-      "id": "cat-1779757656831",
-      "name": "NuevaCategoria",
-      "description": "",
+      "description": "Cascos, guantes, lentes, botas y arneses de seguridad.",
       "isActive": true
     }
   ],
@@ -98,55 +92,6 @@
       "categoryId": "cat-007",
       "subcategory": "Protección de cabeza",
       "measureUnit": "und"
-    },
-    {
-      "id": "mat-008",
-      "name": "Clavos 3\" para madera",
-      "categoryId": "cat-004",
-      "subcategory": "Clavos y pernos",
-      "measureUnit": "kg"
-    },
-    {
-      "id": "mat-009",
-      "name": "Piedra Chancada 1/2\"",
-      "categoryId": "cat-003",
-      "subcategory": "Piedras",
-      "measureUnit": "m3"
-    },
-    {
-      "id": "mat-010",
-      "name": "Bloque de Concreto 20x20x40",
-      "categoryId": "cat-001",
-      "subcategory": "Bloques",
-      "measureUnit": "und"
-    },
-    {
-      "id": "mat-011",
-      "name": "Cal Hidratada",
-      "categoryId": "cat-002",
-      "subcategory": "Cal",
-      "measureUnit": "bolsa"
-    },
-    {
-      "id": "mat-012",
-      "name": "Guantes de Cuero",
-      "categoryId": "cat-007",
-      "subcategory": "Protección de manos",
-      "measureUnit": "par"
-    },
-    {
-      "id": "mat-013",
-      "name": "Listón de Madera 2x3x300cm",
-      "categoryId": "cat-005",
-      "subcategory": "Maderas",
-      "measureUnit": "und"
-    },
-    {
-      "id": "mat-014",
-      "name": "Soldadura 6011 1/8\"",
-      "categoryId": "cat-006",
-      "subcategory": "Soldadura",
-      "measureUnit": "kg"
     }
   ],
   "materialsInventory": [
@@ -154,113 +99,49 @@
       "id": "inv-001",
       "projectId": "proj-01",
       "materialId": "mat-001",
-      "currentStock": 5400,
+      "currentStock": 5000,
       "miniumStock": 1000,
-      "location": "Almacén Principal"
+      "location": "Almacén Central - Sector A"
     },
     {
       "id": "inv-002",
-      "projectId": "proj-02",
+      "projectId": "proj-01",
       "materialId": "mat-002",
-      "currentStock": 76,
-      "miniumStock": 20,
-      "location": "Sótano 1"
+      "currentStock": 250,
+      "miniumStock": 50,
+      "location": "Silo de Cemento A"
     },
     {
       "id": "inv-003",
       "projectId": "proj-01",
-      "materialId": "mat-003",
-      "currentStock": 700,
+      "materialId": "mat-004",
+      "currentStock": 120,
       "miniumStock": 100,
-      "location": "Patio de Agregados"
+      "location": "Patio de Aceros"
     },
     {
       "id": "inv-004",
       "projectId": "proj-02",
-      "materialId": "mat-004",
-      "currentStock": 20,
-      "miniumStock": 30,
-      "location": "Almacén Techado"
+      "materialId": "mat-002",
+      "currentStock": 45,
+      "miniumStock": 100,
+      "location": "Almacén Provisional Norte"
     },
     {
       "id": "inv-005",
-      "projectId": "proj-01",
+      "projectId": "proj-02",
       "materialId": "mat-005",
-      "currentStock": 45,
-      "miniumStock": 10,
-      "location": "Almacén Principal"
+      "currentStock": 80,
+      "miniumStock": 20,
+      "location": "Zona de Encofrados"
     },
     {
       "id": "inv-006",
       "projectId": "proj-02",
-      "materialId": "mat-006",
-      "currentStock": 200,
-      "miniumStock": 50,
-      "location": "Estante 4B"
-    },
-    {
-      "id": "inv-007",
-      "projectId": "proj-01",
       "materialId": "mat-007",
-      "currentStock": 12,
-      "miniumStock": 25,
-      "location": "Almacén Principal"
-    },
-    {
-      "id": "inv-008",
-      "projectId": "proj-02",
-      "materialId": "mat-008",
-      "currentStock": 5,
-      "miniumStock": 10,
-      "location": "Estante 2A"
-    },
-    {
-      "id": "inv-009",
-      "projectId": "proj-01",
-      "materialId": "mat-009",
-      "currentStock": 300,
-      "miniumStock": 50,
-      "location": "Patio de Agregados"
-    },
-    {
-      "id": "inv-010",
-      "projectId": "proj-02",
-      "materialId": "mat-010",
-      "currentStock": 0,
-      "miniumStock": 50,
-      "location": "Patio Exterior"
-    },
-    {
-      "id": "inv-011",
-      "projectId": "proj-01",
-      "materialId": "mat-011",
-      "currentStock": 60,
-      "miniumStock": 15,
-      "location": "Sótano 2"
-    },
-    {
-      "id": "inv-012",
-      "projectId": "proj-02",
-      "materialId": "mat-012",
-      "currentStock": 35,
-      "miniumStock": 10,
-      "location": "Almacén Principal"
-    },
-    {
-      "id": "inv-013",
-      "projectId": "proj-01",
-      "materialId": "mat-013",
-      "currentStock": 120,
-      "miniumStock": 30,
-      "location": "Patio de Maderas"
-    },
-    {
-      "id": "inv-014",
-      "projectId": "proj-02",
-      "materialId": "mat-014",
-      "currentStock": 18,
-      "miniumStock": 5,
-      "location": "Estante 3C"
+      "currentStock": 15,
+      "miniumStock": 20,
+      "location": "Oficina de Seguridad"
     }
   ],
   "supplierOffers": [
@@ -268,174 +149,112 @@
       "id": "soff-001",
       "supplierId": "sup-001",
       "materialId": "mat-004",
-      "unitPrice": 35.5
+      "unitPrice": 48.5,
+      "deliveryDays": 2,
+      "isActive": true
     },
     {
       "id": "soff-002",
       "supplierId": "sup-001",
-      "materialId": "mat-008",
-      "unitPrice": 8.2
+      "materialId": "mat-005",
+      "unitPrice": 75,
+      "deliveryDays": 3,
+      "isActive": true
     },
     {
       "id": "soff-003",
       "supplierId": "sup-002",
       "materialId": "mat-002",
-      "unitPrice": 28
+      "unitPrice": 28,
+      "deliveryDays": 1,
+      "isActive": true
     },
     {
       "id": "soff-004",
       "supplierId": "sup-002",
-      "materialId": "mat-011",
-      "unitPrice": 15.5
+      "materialId": "mat-001",
+      "unitPrice": 1.2,
+      "deliveryDays": 2,
+      "isActive": true
     },
     {
       "id": "soff-005",
       "supplierId": "sup-003",
       "materialId": "mat-001",
-      "unitPrice": 1.2
+      "unitPrice": 1.3,
+      "deliveryDays": 1,
+      "isActive": true
     },
     {
       "id": "soff-006",
       "supplierId": "sup-003",
-      "materialId": "mat-010",
-      "unitPrice": 4.5
-    },
-    {
-      "id": "soff-007",
-      "supplierId": "sup-004",
-      "materialId": "mat-005",
-      "unitPrice": 62
-    },
-    {
-      "id": "soff-008",
-      "supplierId": "sup-004",
-      "materialId": "mat-013",
-      "unitPrice": 18.5
-    },
-    {
-      "id": "soff-009",
-      "supplierId": "sup-005",
-      "materialId": "mat-006",
-      "unitPrice": 12.8
+      "materialId": "mat-003",
+      "unitPrice": 65,
+      "deliveryDays": 1,
+      "isActive": true
     },
     {
       "id": "soff-010",
       "supplierId": "sup-005",
       "materialId": "mat-007",
-      "unitPrice": 8.5
-    },
-    {
-      "id": "soff-011",
-      "supplierId": "sup-005",
-      "materialId": "mat-012",
-      "unitPrice": 15
-    },
-    {
-      "id": "soff-012",
-      "supplierId": "sup-005",
-      "materialId": "mat-014",
-      "unitPrice": 9.3
-    },
-    {
-      "id": "soff-013",
-      "supplierId": "sup-006",
-      "materialId": "mat-003",
-      "unitPrice": 45
-    },
-    {
-      "id": "soff-014",
-      "supplierId": "sup-006",
-      "materialId": "mat-009",
-      "unitPrice": 55
+      "unitPrice": 35,
+      "deliveryDays": 2,
+      "isActive": true
     }
   ],
   "materialsSuppliers": [
     {
       "id": "sup-001",
-      "ruc": "20100200300",
-      "onboarded": "2023-11-15",
-      "socialReason": "Aceros Arequipa S.A.",
-      "contact": "Ventas Corporativas",
-      "phone": "01-517-1800",
-      "email": "ventas@acerosarequipa.pe",
-      "paymentTerms": "NET 30",
-      "status": "ACTIVE"
+      "name": "Aceros Arequipa S.A.",
+      "ruc": "20100045612",
+      "phone": "+51 1 513-0000",
+      "email": "ventas@acerosarequipa.com",
+      "address": "Av. Industrial 450, Callao"
     },
     {
       "id": "sup-002",
-      "ruc": "20457896324",
-      "onboarded": "2024-02-20",
-      "socialReason": "Cementos Pacasmayo S.A.",
-      "contact": "Atención al Cliente",
-      "phone": "01-614-0400",
-      "email": "atencioncliente@cementospacasmayo.pe",
-      "paymentTerms": "NET 45",
-      "status": "ACTIVE"
+      "name": "Unicon Concretos S.A.",
+      "ruc": "20501234991",
+      "phone": "+51 1 217-2700",
+      "email": "pedidos@unicon.com.pe",
+      "address": "Carretera Panamericana Sur Km 11.5, Villa El Salvador"
     },
     {
       "id": "sup-003",
-      "ruc": "20601234567",
-      "onboarded": "2024-03-10",
-      "socialReason": "Ladrillera Santa Rosa S.A.C.",
-      "contact": "Área de Ventas",
-      "phone": "054-225500",
-      "email": "ventas@ladrillerasantarosa.pe",
-      "paymentTerms": "NET 30",
-      "status": "ACTIVE"
-    },
-    {
-      "id": "sup-004",
-      "ruc": "20123456789",
-      "onboarded": "2024-05-05",
-      "socialReason": "Maderas del Norte S.A.C.",
-      "contact": "Carlos Mendoza",
-      "phone": "01-225-3344",
-      "email": "ventas@maderasnorte.pe",
-      "paymentTerms": "NET 30",
-      "status": "ACTIVE"
+      "name": "Corporación Aceros y Materiales SAC",
+      "ruc": "20448123985",
+      "phone": "+51 1 425-9874",
+      "email": "ventas@corpaceros.pe",
+      "address": "Av. Argentina 1890, Cercado de Lima"
     },
     {
       "id": "sup-005",
-      "ruc": "20567890123",
-      "onboarded": "2025-01-12",
-      "socialReason": "Ferretería Industrial EIRL",
-      "contact": "Luisa Fernández",
-      "phone": "01-778-9900",
-      "email": "ventas@ferreteriaindustrial.pe",
-      "paymentTerms": "NET 15",
-      "status": "INACTIVE"
-    },
-    {
-      "id": "sup-006",
-      "ruc": "20789012345",
-      "onboarded": "2025-03-01",
-      "socialReason": "Agregados del Sur EIRL",
-      "contact": "Roberto Gutiérrez",
-      "phone": "084-225678",
-      "email": "ventas@agregadossur.pe",
-      "paymentTerms": "NET 30",
-      "status": "ACTIVE"
+      "name": "Distribuidora de EPP Industrial S.A.C.",
+      "ruc": "20601548792",
+      "phone": "+51 1 332-1548",
+      "email": "contacto@distriepp.pe",
+      "address": "Av. Guillermo Dansey 412, Lima"
     }
   ],
   "materialsRequests": [
     {
       "id": "req-001",
       "projectId": "proj-01",
-      "requestDate": "2026-05-01",
-      "deadline": "2026-05-10",
-      "status": "PENDING",
+      "requestDate": "2026-05-15",
+      "deadline": "2026-05-20",
+      "status": "APPROVED",
       "priority": "MEDIUM",
-      "deliveryLocation": "Sótano 2",
-      "budgetLineId": "PP-2026-05",
-      "purpose": "esotilin",
-      "additionalNotes": "aaasdasd",
+      "deliveryLocation": "Sótano 1 - Zona de Mezcla",
+      "budgetLineId": "bl-01-02",
+      "purpose": "Habilitación de contrapisos y tarrajeo de muros interiores",
+      "additionalNotes": "Entregar temprano para no detener la cuadrilla de acabados.",
       "suggestedSupplierId": "sup-002",
       "attachments": [],
       "requestedBy": "us-01",
       "items": [
         {
           "supplierOfferId": "soff-003",
-          "quantity": 70
+          "quantity": 100
         }
       ]
     },
@@ -446,13 +265,11 @@
       "deadline": "2026-05-12",
       "status": "APPROVED",
       "priority": "HIGH",
-      "deliveryLocation": "Almacén Techado",
-      "budgetLineId": "PP-2026-06",
-      "purpose": "Habilitación de aceros para columnas",
-      "additionalNotes": "Entregar a primera hora",
+      "deliveryLocation": "Almacén Central Trujillo",
+      "budgetLineId": "bl-02-01",
+      "purpose": "Armado de columnas del primer bloque estructural",
+      "additionalNotes": "Validar calidad del acero corrugado al descargar.",
       "suggestedSupplierId": "sup-001",
-      "attachments": [],
-      "requestedBy": "us-01",
       "items": [
         {
           "supplierOfferId": "soff-001",
@@ -471,121 +288,36 @@
       "deadline": "2026-05-15",
       "status": "APPROVED",
       "priority": "LOW",
-      "deliveryLocation": "Oficina de Obra",
-      "budgetLineId": "PP-2026-07",
-      "purpose": "Renovación de EPP",
-      "additionalNotes": "Tallas variadas",
+      "deliveryLocation": "Oficina de Control",
+      "budgetLineId": "bl-02-03",
+      "purpose": "Equipamiento de cascos de seguridad para nuevos obreros contratados",
+      "additionalNotes": "Cascos de color blanco e incorporar logo del consorcio.",
       "suggestedSupplierId": "sup-005",
-      "attachments": [],
-      "requestedBy": "us-03",
       "items": [
         {
           "supplierOfferId": "soff-010",
-          "quantity": 15
-        },
-        {
-          "supplierOfferId": "soff-011",
           "quantity": 15
         }
       ]
     },
     {
-      "items": [
-        {
-          "supplierOfferId": "soff-001",
-          "quantity": 9
-        }
-      ],
-      "suggestedSupplierId": "sup-001",
-      "budgetLineId": null,
-      "priority": "LOW",
-      "deliveryLocation": "a",
-      "purpose": "xd",
-      "additionalNotes": "",
-      "requestDate": "2026-05-12",
-      "deadline": "2026-05-13",
-      "requestedBy": "Usuario actual",
-      "status": "PENDING",
-      "id": "iPVsW5E"
-    },
-    {
-      "items": [
-        {
-          "supplierOfferId": "soff-004",
-          "quantity": 10
-        }
-      ],
-      "suggestedSupplierId": "sup-002",
-      "budgetLineId": null,
-      "priority": "LOW",
-      "deliveryLocation": "a",
-      "purpose": "1 project 1",
-      "additionalNotes": "1 project 1",
-      "requestDate": "2026-05-26",
-      "deadline": "2026-05-13",
-      "requestedBy": "Usuario actual",
-      "status": "PENDING",
-      "id": "d-lYfZt"
-    },
-    {
-      "items": [
-        {
-          "supplierOfferId": "soff-006",
-          "quantity": 8
-        }
-      ],
+      "id": "req-004",
       "projectId": "proj-01",
-      "suggestedSupplierId": "sup-003",
-      "budgetLineId": "",
-      "priority": "LOW",
-      "deliveryLocation": "asdasd",
-      "purpose": "deberia ser 1 1 1",
-      "additionalNotes": "deberia ser 1 1 1",
-      "requestDate": "2026-05-26",
-      "deadline": "2026-05-07",
-      "requestedBy": "6NxPOLs",
+      "requestDate": "2026-05-25",
+      "deadline": "2026-05-30",
       "status": "PENDING",
-      "id": "z1R781B"
-    },
-    {
-      "items": [
-        {
-          "supplierOfferId": "soff-004",
-          "quantity": 1
-        }
-      ],
-      "projectId": "proj-02",
-      "suggestedSupplierId": "sup-002",
-      "budgetLineId": "",
-      "priority": "LOW",
-      "deliveryLocation": "asd",
-      "purpose": "deberia ser 222",
-      "additionalNotes": "deberia ser 222",
-      "requestDate": "2026-05-26",
-      "deadline": "2026-05-07",
-      "requestedBy": "6NxPOLs",
-      "status": "REFUSED",
-      "id": "jtaFRGG"
-    },
-    {
+      "priority": "HIGH",
+      "deliveryLocation": "Frente de Trabajo Sector B",
+      "budgetLineId": "bl-01-01",
+      "purpose": "Asentado de muros de ladrillo para fachadas",
+      "additionalNotes": "Urgente, la grúa torre estará disponible solo en la mañana.",
+      "suggestedSupplierId": "sup-003",
       "items": [
         {
           "supplierOfferId": "soff-005",
-          "quantity": 20
+          "quantity": 2000
         }
-      ],
-      "projectId": "proj-02",
-      "suggestedSupplierId": "sup-003",
-      "budgetLineId": 8,
-      "priority": "LOW",
-      "deliveryLocation": "Av. Espinar 3201",
-      "purpose": "Se requiere ladrillos urgente para finalizar una pared que quedó pendiente",
-      "additionalNotes": "lo mas pronto posible",
-      "requestDate": "2026-05-28",
-      "deadline": "2026-05-31",
-      "requestedBy": "T2oXDcM",
-      "status": "PENDING",
-      "id": "YOJW66Q"
+      ]
     }
   ],
   "materialsWaste": [
@@ -593,78 +325,21 @@
       "id": "rmt-001",
       "projectId": "proj-01",
       "materialId": "mat-001",
-      "quantity": 50,
+      "quantity": 80,
       "classificationType": "ROTURA",
-      "date": "2026-05-02",
-      "description": "Ladrillos rotos durante maniobra de descarga del camión en obra. Material inutilizable.",
-      "reportedBy": "us-01",
-      "photoUrl": ""
+      "date": "2026-05-10",
+      "description": "Ladrillos fracturados durante la manipulación y transporte en carretillas.",
+      "reportedBy": "us-01"
     },
     {
       "id": "rmt-002",
       "projectId": "proj-02",
       "materialId": "mat-002",
-      "quantity": 8,
+      "quantity": 5,
       "classificationType": "VENCIMIENTO",
-      "date": "2026-05-06",
-      "description": "Bolsas de cemento endurecidas por filtración de humedad en el sótano 1.",
-      "reportedBy": "us-03",
-      "photoUrl": ""
-    },
-    {
-      "id": "rmt-1779758483175",
-      "projectId": "proj-01",
-      "materialId": "mat-003",
-      "quantity": 100,
-      "classificationType": "VENCIMIENTO",
-      "date": "2026-05-26",
-      "description": "Deberian ser 700",
-      "reportedBy": "6NxPOLs",
-      "photoUrl": ""
-    },
-    {
-      "id": "rmt-1779759316043",
-      "projectId": "proj-01",
-      "materialId": "mat-003",
-      "quantity": 100,
-      "classificationType": "VENCIMIENTO",
-      "date": "2026-05-26",
-      "description": "deberian ser 700 ahora si",
-      "reportedBy": "6NxPOLs",
-      "photoUrl": ""
-    },
-    {
-      "id": "rmt-1779759661935",
-      "projectId": "proj-01",
-      "materialId": "mat-002",
-      "quantity": 50,
-      "classificationType": "VENCIMIENTO",
-      "date": "2026-05-26",
-      "description": "seran 100",
-      "reportedBy": "6NxPOLs",
-      "photoUrl": ""
-    },
-    {
-      "id": "rmt-1779760868741",
-      "projectId": "proj-01",
-      "materialId": "mat-002",
-      "quantity": 12,
-      "classificationType": "VENCIMIENTO",
-      "date": "2026-05-26",
-      "description": "Deberia ser 1 1 1",
-      "reportedBy": "6NxPOLs",
-      "photoUrl": ""
-    },
-    {
-      "id": "rmt-1779760884179",
-      "projectId": "proj-02",
-      "materialId": "mat-002",
-      "quantity": 12,
-      "classificationType": "VENCIMIENTO",
-      "date": "2026-05-26",
-      "description": "Deberia ser 2 2 2",
-      "reportedBy": "6NxPOLs",
-      "photoUrl": ""
+      "date": "2026-05-18",
+      "description": "Sacos de cemento humedecidos y endurecidos debido a filtraciones de lluvia.",
+      "reportedBy": "us-03"
     }
   ],
   "machineryCatalog": [
@@ -715,171 +390,163 @@
       "projectId": "proj-01",
       "machineryId": "maq-001",
       "status": "IN_USE",
-      "assignedTo": "wkr-003",
+      "assignedTo": "wkr-101",
       "registrationDate": "2026-05-01T08:30:00Z",
       "maintenanceHours": "1200",
-      "assignmentDetail": "a"
+      "assignmentDetail": "Excavaciones masivas para cimentación profunda del Edificio."
     },
     {
       "id": "asig-102",
       "projectId": "proj-01",
       "machineryId": "maq-003",
       "status": "IN_USE",
-      "assignedTo": "wkr-003",
+      "assignedTo": "wkr-102",
       "registrationDate": "2026-05-05T09:15:00Z",
       "maintenanceHours": "450",
-      "assignmentDetail": "a"
+      "assignmentDetail": "Vaciado manual de columnas en pisos superiores."
     },
     {
       "id": "asig-103",
       "projectId": "proj-02",
       "machineryId": "maq-002",
       "status": "IN_USE",
-      "assignedTo": "wkr-1780350701456",
-      "registrationDate": "2026-06-01",
+      "assignedTo": "wkr-103",
+      "registrationDate": "2026-06-01T08:00:00Z",
       "maintenanceHours": "1150",
-      "assignmentDetail": "Asignado automáticamente al registrar al obrero Pepe sito"
-    },
-    {
-      "id": "asig-104",
-      "projectId": "proj-02",
-      "machineryId": "maq-004",
-      "status": "IN_USE",
-      "assignedTo": "wkr-1780350745895",
-      "registrationDate": "2026-06-01",
-      "maintenanceHours": "3200",
-      "assignmentDetail": "Asignado automáticamente al registrar al obrero Juan Bodoque"
-    },
-    {
-      "id": "asig-1779757834810",
-      "projectId": "proj-01",
-      "machineryId": "maq-001",
-      "status": "AVAILABLE",
-      "assignedTo": null,
-      "registrationDate": "2026-05-26T01:10:34.811Z",
-      "maintenanceHours": "0",
-      "assignmentDetail": null,
-      "machineryName": "Excavadora Hidráulica",
-      "machineryBrand": "Caterpillar",
-      "machineryModel": "320 GC",
-      "workerName": "Luis Gómez"
-    },
-    {
-      "id": "asig-1779758538793",
-      "projectId": "proj-01",
-      "machineryId": "maq-001",
-      "status": "MAINTENANCE",
-      "assignedTo": null,
-      "registrationDate": "2026-05-26T01:22:18.793Z",
-      "maintenanceHours": "1",
-      "assignmentDetail": null
-    },
-    {
-      "id": "asig-1779758761463",
-      "projectId": "proj-01",
-      "machineryId": "maq-002",
-      "status": "AVAILABLE",
-      "assignedTo": "wkr-003",
-      "registrationDate": "2026-05-26T01:26:01.463Z",
-      "maintenanceHours": "0",
-      "assignmentDetail": "a"
-    },
-    {
-      "id": "asig-1779758897539",
-      "projectId": "proj-01",
-      "machineryId": "maq-002",
-      "status": "IN_USE",
-      "assignedTo": "wkr-1778624246549",
-      "registrationDate": "2026-05-26T01:28:17.539Z",
-      "maintenanceHours": "0",
-      "assignmentDetail": "prueba2"
-    },
-    {
-      "id": "asig-1779760901404",
-      "projectId": "proj-01",
-      "machineryId": "maq-002",
-      "status": "IN_USE",
-      "assignedTo": "wkr-003",
-      "registrationDate": "2026-05-26T02:01:41.405Z",
-      "maintenanceHours": "0",
-      "assignmentDetail": "deberia ser 1 1 1"
-    },
-    {
-      "id": "asig-1779760915733",
-      "projectId": "proj-02",
-      "machineryId": "maq-001",
-      "status": "IN_USE",
-      "assignedTo": "wkr-003",
-      "registrationDate": "2026-05-26T02:01:55.733Z",
-      "maintenanceHours": "0",
-      "assignmentDetail": "deberia ser 222"
+      "assignmentDetail": "Remoción de tierra para el tendido de tuberías principales."
     }
   ],
   "budgets": [
     {
-      "id": "01.01",
-      "name": "Cimentación",
-      "description": "Trabajos preliminares y cimentación",
-      "budgeted": 80000,
-      "executed": 7222,
-      "status": "NORMAL",
-      "alertMessage": null
+      "id": "bg-01",
+      "projectId": "proj-01",
+      "totalAmount": 1500000,
+      "items": [
+        {
+          "id": "bl-01-01",
+          "name": "Estructura y Cimientos",
+          "description": "Zapatas, vigas de cimentación y losas aligeradas.",
+          "assignedBudget": 800000,
+          "executedAmount": 450000,
+          "status": "NORMAL",
+          "alertMessage": null
+        },
+        {
+          "id": "bl-01-02",
+          "name": "Albañilería y Tarrajeos",
+          "description": "Levantamiento de muros de ladrillo y revoques.",
+          "assignedBudget": 400000,
+          "executedAmount": 120000,
+          "status": "NORMAL",
+          "alertMessage": null
+        },
+        {
+          "id": "bl-01-03",
+          "name": "Equipos de Protección Personal (EPP)",
+          "description": "Presupuesto destinado a la seguridad de la cuadrilla.",
+          "assignedBudget": 300000,
+          "executedAmount": 290000,
+          "status": "NORMAL",
+          "alertMessage": null
+        }
+      ]
     },
     {
-      "id": "01.02",
-      "name": "Estructura",
-      "description": "Columnas, vigas y losas",
-      "budgeted": 70000,
-      "executed": 3300,
-      "status": "NORMAL",
-      "alertMessage": null
+      "id": "bg-02",
+      "projectId": "proj-02",
+      "totalAmount": 900000,
+      "items": [
+        {
+          "id": "bl-02-01",
+          "name": "Estructuras de Concreto",
+          "description": "Columnas principales, losa de cimentación y vigas estructurales.",
+          "assignedBudget": 500000,
+          "executedAmount": 380000,
+          "status": "NORMAL",
+          "alertMessage": null
+        },
+        {
+          "id": "bl-02-02",
+          "name": "Instalaciones Eléctricas y Sanitarias",
+          "description": "Redes de agua, desagüe, tuberías de luz y tableros.",
+          "assignedBudget": 300000,
+          "executedAmount": 280000,
+          "status": "NORMAL",
+          "alertMessage": null
+        },
+        {
+          "id": "bl-02-03",
+          "name": "Seguridad e Insumos EPP",
+          "description": "Cascos, botas dieléctricas y señalización vial.",
+          "assignedBudget": 100000,
+          "executedAmount": 95000,
+          "status": "NORMAL",
+          "alertMessage": null
+        }
+      ]
     }
   ],
   "transactions": [
     {
       "id": 1,
-      "budgetId": "01.01",
+      "budgetId": "bl-01-01",
       "amount": 5000,
       "date": "2026-05-12",
-      "description": "Compra de cemento"
+      "description": "Compra de Fierro Corrugado de 1/2"
     },
     {
-      "budgetId": "01.02",
+      "id": 2,
+      "budgetId": "bl-01-02",
       "amount": 9000,
       "date": "2026-05-13",
-      "description": "",
-      "id": 2
+      "description": "Adquisición de Ladrillos de 18 huecos"
     },
     {
-      "budgetId": "01.02",
+      "id": 3,
+      "budgetId": "bl-02-01",
       "amount": 8750,
       "date": "2026-05-13",
-      "description": "materiales urgentes",
-      "id": 3
-    },
-    {
-      "budgetId": "01.01",
-      "amount": 100,
-      "date": "2026-05-13",
-      "description": "Cimentación importante",
-      "id": 4
-    },
-    {
-      "budgetId": "01.02",
-      "amount": 300,
-      "date": "2026-05-13",
-      "description": "Estructuras",
-      "id": 5
-    },
-    {
-      "budgetId": "01.01",
-      "amount": 122,
-      "date": "2026-05-24",
-      "description": "asd",
-      "id": 6
+      "description": "Suministro de Concreto Premezclado f'c=210kg/cm2"
     }
   ],
-  "ncrs": [],
+  "ncrs": [
+    {
+      "id": "ncr-001",
+      "projectId": "proj-01",
+      "code": "RNC-2026-001",
+      "title": "Cangrejeras en Placa P-2 (Sótano 1)",
+      "description": "Se detectaron espacios vacíos (cangrejeras) en la base de la Placa P-2 debido a una vibración deficiente del concreto fresco.",
+      "reportedBy": "us-02",
+      "reportedDate": "2026-05-15",
+      "status": "OPEN",
+      "severity": "MEDIUM",
+      "remediationPlan": "Picado del concreto defectuoso, aplicación de puente de adherencia epóxico y vaciado con mortero de reparación sin contracción."
+    },
+    {
+      "id": "ncr-002",
+      "projectId": "proj-01",
+      "code": "RNC-2026-002",
+      "title": "Desviación de Plomada en Muro de Ascensor",
+      "description": "El muro del cajón de ascensores presenta un desplome de 15 mm en el nivel 4, superando la tolerancia permitida de 8 mm.",
+      "reportedBy": "us-02",
+      "reportedDate": "2026-05-20",
+      "status": "OPEN",
+      "severity": "HIGH",
+      "remediationPlan": "Evaluación por parte del calculista estructural para autorizar el tarrajeo de compensación con malla electrosoldada."
+    },
+    {
+      "id": "ncr-003",
+      "projectId": "proj-02",
+      "code": "RNC-2026-003",
+      "title": "Fisuras por Contracción Plástica en Losa",
+      "description": "Aparición de fisuras superficiales en la losa de cimentación debido a una evaporación acelerada de agua antes del curado.",
+      "reportedBy": "us-03",
+      "reportedDate": "2026-06-02",
+      "status": "OPEN",
+      "severity": "LOW",
+      "remediationPlan": "Sellado de fisuras mediante inyección de resina epóxica de baja viscosidad para evitar la corrosión de la armadura."
+    }
+  ],
   "projects": [
     {
       "id": "proj-01",
@@ -889,138 +556,45 @@
       "startDate": "2026-01-01",
       "endDate": "2026-12-31",
       "budget": 1500000,
-      "progress": 7,
+      "progress": 35,
       "status": "En ejecución",
-      "statusJustification": "Actualización automática por avance diario",
+      "statusJustification": "Seguimiento del cronograma mensual con vaciado de losas de los pisos 4 y 5.",
       "image": "/assets/project-image1.png",
-      "members": 8,
-      "rnc": 3,
-      "pending": 5,
+      "members": 6,
+      "rnc": 2,
+      "pending": 2,
       "statusLogs": [
         {
           "id": "log-01",
           "status": "Planificación",
           "date": "2026-01-01",
-          "justification": "Creación inicial del proyecto e hitos iniciales.",
-          "progress": 12
+          "justification": "Creación inicial del proyecto y asignación de hitos estructurales principales.",
+          "progress": 0
         },
         {
           "id": "log-02",
           "status": "En ejecución",
           "date": "2026-02-15",
-          "justification": "Se iniciaron las excavaciones de cimientos y habilitación de acero.",
-          "progress": 45
+          "justification": "Inicio de excavaciones masivas y colocación del solado de cimentación.",
+          "progress": 15
         },
         {
-          "id": "log-1779284892213",
-          "status": "Paralizada",
-          "date": "2026-05-20",
-          "justification": "Para",
-          "progress": 45
-        },
-        {
-          "id": "log-1779284983046",
+          "id": "log-03",
           "status": "En ejecución",
           "date": "2026-05-20",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 45
-        },
-        {
-          "id": "log-1779284989022",
-          "status": "Paralizada",
-          "date": "2026-05-20",
-          "justification": "123",
-          "progress": 45
-        },
-        {
-          "id": "log-1779284991524",
-          "status": "Planificación",
-          "date": "2026-05-20",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 12
-        },
-        {
-          "id": "log-1779982799009",
-          "status": "Finalizada",
-          "date": "2026-05-28",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 100
-        },
-        {
-          "id": "log-1779982803057",
-          "status": "En ejecución",
-          "date": "2026-05-28",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 45
-        },
-        {
-          "id": "log-1779982805793",
-          "status": "Planificación",
-          "date": "2026-05-28",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 12
-        },
-        {
-          "id": "log-1780233905297",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 5
-        },
-        {
-          "id": "log-1780234342048",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 0
-        },
-        {
-          "id": "log-1780234439125",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 54
-        },
-        {
-          "id": "log-1780235224310",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 2
-        },
-        {
-          "id": "log-1780236037151",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 45
-        },
-        {
-          "id": "log-1780236047126",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 7
+          "justification": "Actualización periódica del cronograma físico-financiero de la obra.",
+          "progress": 35
         }
       ],
       "documents": [
         {
-          "id": "doc-proj-01-01",
-          "name": "Plano de Cimentaciones Estructurales",
+          "id": "doc-proj-1780679321284-0ao7",
+          "name": "Plano 1",
           "type": "Plano",
           "version": "v1.0",
-          "uploadDate": "2026-01-05",
-          "isSigned": true,
-          "deadline": "2026-03-01"
-        },
-        {
-          "id": "doc-proj-01-02",
-          "name": "Expediente Técnico de Instalaciones",
-          "type": "Expediente",
-          "version": "v1.2",
-          "uploadDate": "2026-02-10",
+          "uploadDate": "2026-06-05",
           "isSigned": false,
-          "deadline": "2026-06-30"
+          "deadline": "2026-06-11"
         }
       ]
     },
@@ -1032,552 +606,96 @@
       "startDate": "2026-03-15",
       "endDate": "2027-06-30",
       "budget": 900000,
-      "progress": 59,
+      "progress": 10,
       "status": "En ejecución",
-      "statusJustification": "Actualización automática por avance diario",
+      "statusJustification": "Obras preliminares completadas. Iniciando cimentaciones del bloque central.",
       "image": "/assets/project-image2.png",
-      "members": 15,
-      "rnc": 9,
-      "pending": 8,
+      "members": 4,
+      "rnc": 1,
+      "pending": 1,
       "statusLogs": [
         {
-          "id": "log-03",
+          "id": "log-10",
           "status": "Planificación",
           "date": "2026-03-15",
-          "justification": "Proyecto aprobado e inicio de la fase de planificación.",
-          "progress": 12
-        },
-        {
-          "id": "log-1780091242819",
-          "status": "Finalizada",
-          "date": "2026-05-29",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 100
-        },
-        {
-          "id": "log-1780091245912",
-          "status": "En ejecución",
-          "date": "2026-05-29",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 45
-        },
-        {
-          "id": "log-1780091326367",
-          "status": "Planificación",
-          "date": "2026-05-29",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 12
-        },
-        {
-          "id": "log-1780091335776",
-          "status": "En ejecución",
-          "date": "2026-05-29",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 45
-        },
-        {
-          "id": "log-1780091348681",
-          "status": "Paralizada",
-          "date": "2026-05-29",
-          "justification": "s",
-          "progress": 45
-        },
-        {
-          "id": "log-1780091359899",
-          "status": "Planificación",
-          "date": "2026-05-29",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 12
-        },
-        {
-          "id": "log-1780091364136",
-          "status": "Paralizada",
-          "date": "2026-05-29",
-          "justification": "s",
-          "progress": 12
-        },
-        {
-          "id": "log-1780091368029",
-          "status": "Finalizada",
-          "date": "2026-05-29",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 100
-        },
-        {
-          "id": "log-1780209534789",
-          "status": "Planificación",
-          "date": "2026-05-31",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 12
-        },
-        {
-          "id": "log-1780210906187",
-          "status": "Finalizada",
-          "date": "2026-05-31",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 100
-        },
-        {
-          "id": "log-1780210913359",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 91
-        },
-        {
-          "id": "log-1780233494778",
-          "status": "Finalizada",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 100
-        },
-        {
-          "id": "log-1780233504727",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 15
-        },
-        {
-          "id": "log-1780233510819",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 10
-        },
-        {
-          "id": "log-1780233513972",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
+          "justification": "Aprobación de expedientes técnicos y coordinación del plan ambiental.",
           "progress": 0
         },
         {
-          "id": "log-1780233713661",
+          "id": "log-11",
           "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 90
-        },
-        {
-          "id": "log-1780234432178",
-          "status": "Paralizada",
-          "date": "2026-05-31",
-          "justification": "s",
-          "progress": 90
-        },
-        {
-          "id": "log-1780234447415",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 45
-        },
-        {
-          "id": "log-1780235236866",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 97
-        },
-        {
-          "id": "log-1780235591908",
-          "status": "Paralizada",
-          "date": "2026-05-31",
-          "justification": "s",
-          "progress": 97
-        },
-        {
-          "id": "log-1780235595740",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 45
-        },
-        {
-          "id": "log-1780235600890",
-          "status": "Finalizada",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 100
-        },
-        {
-          "id": "log-1780235605305",
-          "status": "Paralizada",
-          "date": "2026-05-31",
-          "justification": "s",
-          "progress": 100
-        },
-        {
-          "id": "log-1780235608170",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 45
-        },
-        {
-          "id": "log-1780235839077",
-          "status": "Paralizada",
-          "date": "2026-05-31",
-          "justification": "l",
-          "progress": 45
-        },
-        {
-          "id": "log-1780235842043",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 45
-        },
-        {
-          "id": "log-1780235928502",
-          "status": "Finalizada",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 100
-        },
-        {
-          "id": "log-1780235933673",
-          "status": "Finalizada",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 100
-        },
-        {
-          "id": "log-1780236638044",
-          "status": "Paralizada",
-          "date": "2026-05-31",
-          "justification": "s",
-          "progress": 100
-        },
-        {
-          "id": "log-1780236644611",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 45
-        },
-        {
-          "id": "log-1780236653140",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 91
-        },
-        {
-          "id": "log-1780236656187",
-          "status": "Finalizada",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 100
-        },
-        {
-          "id": "log-1780237197315",
-          "status": "Paralizada",
-          "date": "2026-05-31",
-          "justification": "f",
-          "progress": 100
-        },
-        {
-          "id": "log-1780237201544",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 100
-        },
-        {
-          "id": "log-1780237231419",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 97
-        },
-        {
-          "id": "log-1780237237219",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 97
-        },
-        {
-          "id": "log-1780237240105",
-          "status": "Paralizada",
-          "date": "2026-05-31",
-          "justification": "s",
-          "progress": 97
-        },
-        {
-          "id": "log-1780237247665",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Cambio de estado del proyecto.",
-          "progress": 97
-        },
-        {
-          "id": "log-1780243232530",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 97
-        },
-        {
-          "id": "log-1780243410784",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 97
-        },
-        {
-          "id": "log-1780244583684",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 97
-        },
-        {
-          "id": "log-1780264919586",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 85
-        },
-        {
-          "id": "log-1780265546042",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 83
-        },
-        {
-          "id": "log-1780268588390",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 79
-        },
-        {
-          "id": "log-1780268637664",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 75
-        },
-        {
-          "id": "log-1780269849268",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 60
-        },
-        {
-          "id": "log-1780271540729",
-          "status": "En ejecución",
-          "date": "2026-05-31",
-          "justification": "Actualización automática por avance diario",
-          "progress": 61
-        },
-        {
-          "id": "log-1780272500948",
-          "status": "En ejecución",
-          "date": "2026-06-01",
-          "justification": "Actualización automática por avance diario",
-          "progress": 73
-        },
-        {
-          "id": "log-1780272516755",
-          "status": "En ejecución",
-          "date": "2026-06-01",
-          "justification": "Actualización automática por avance diario",
-          "progress": 59
-        }
-      ],
-      "documents": [
-        {
-          "id": "doc-proj-02-01",
-          "name": "Plano de Arquitectura General",
-          "type": "Plano",
-          "version": "v1.0",
-          "uploadDate": "2026-03-20",
-          "isSigned": false,
-          "deadline": "2026-05-30"
+          "date": "2026-04-10",
+          "justification": "Movilización de maquinaria pesada e inicio de demoliciones de estructuras existentes.",
+          "progress": 10
         }
       ]
     }
   ],
   "identities": [
     {
-      "id": "id-001",
-      "name": "Carlos Medina",
-      "email": "carlos@kipu.pe",
-      "password": "12345678",
-      "role": "Gestor Operativo"
-    },
-    {
-      "id": "id-002",
-      "name": "Ana Torres",
-      "email": "ana@kipu.pe",
-      "password": "12345678",
-      "role": "Logística y Administración"
-    },
-    {
-      "id": "id-003",
-      "name": "Usuario Demo",
-      "email": "demo@kipu.pe",
-      "password": "12345678",
-      "role": "Gestor Operativo"
-    },
-    {
-      "name": "Mario Perez",
-      "email": "kipu4@hotmail.com",
-      "password": "kipu1234",
-      "role": "Logística y Administración",
-      "id": "zLRgEqI"
-    },
-    {
-      "name": "Mario Perez",
-      "email": "kipu0@hotmail.com",
-      "password": "kipu1234",
-      "role": "Gestor Operativo",
-      "id": "PjaiuHE"
-    },
-    {
-      "name": "Armando Paredes",
-      "email": "armando@hotmail.com",
-      "password": "armando123",
-      "role": "Logística y Administración",
-      "id": "fKx6c-S"
-    },
-    {
-      "name": "Armando Casas",
-      "email": "armando2@hotmail.com",
-      "password": "kipu1234",
-      "role": "Gestor Operativo",
-      "id": "T2oXDcM"
-    },
-    {
-      "name": "Armando Barrios",
-      "email": "armando3@hotmail.com",
-      "password": "kipu1234",
-      "role": "Logística y Administración",
-      "id": "f6wdJZH"
-    },
-    {
-      "name": "Pau Mon",
-      "email": "pau@gmail.com",
-      "password": "paupau707",
-      "role": "Logística y Administración",
-      "id": "6NxPOLs"
-    },
-    {
-      "name": "Neo Ramos",
-      "email": "neoramos@gmail.com",
-      "password": "123456789",
-      "role": "Gestor Operativo",
-      "id": "cVW0O6a"
+      "id": "id-01",
+      "email": "admin@pirca.com",
+      "password": "password123",
+      "role": "Administrador"
     }
   ],
   "progress": [
     {
-      "date": null,
-      "specialty": "Estructuras",
-      "activityName": "Six seven",
-      "location": "",
-      "percentage": 7,
-      "description": "",
-      "responsible": "Juan Pérez",
-      "workers": 67,
-      "weather": "cloudy",
-      "status": "IN_PROGRESS",
-      "lastUpdate": "2026-05-31T14:00:47.087Z",
+      "id": 1,
       "projectId": "proj-01",
-      "apiId": "v1",
-      "id": 6,
-      "weight": 1,
-      "currentPercentage": 7,
-      "details": "",
-      "startDate": "2026-05-31T14:00:47.087Z"
-    },
-    {
-      "date": null,
-      "specialty": "Arquitectura",
-      "activityName": "Tilin",
-      "location": "",
+      "specialty": "Estructuras",
+      "activityName": "Excavación de Cimientos y Solados",
+      "location": "Sector A - Zapatas",
       "percentage": 100,
-      "description": "",
-      "responsible": "Juan Pérez",
-      "workers": 67,
+      "description": "Excavación con retroexcavadora y vaciado de solado de 4 pulgadas.",
+      "responsible": "Ana Torres",
+      "workers": 8,
       "weather": "sunny",
       "status": "COMPLETED",
-      "lastUpdate": "2026-05-31T13:21:53.627Z",
-      "projectId": "proj-02",
-      "apiId": "v1",
-      "id": 7,
-      "assignedBudget": 112012,
-      "executedAmount": 112001,
+      "lastUpdate": "2026-02-20T10:00:00Z",
+      "weight": 20,
       "currentPercentage": 100,
-      "details": "",
-      "startDate": "2026-05-31T13:21:53.627Z",
-      "weight": 9
+      "assignedBudget": 150000,
+      "executedAmount": 145000,
+      "startDate": "2026-02-15"
     },
     {
-      "date": null,
-      "specialty": "Arquitectura",
-      "activityName": "aaaaa",
-      "location": "dale dale don dale\n",
-      "percentage": 69,
-      "description": "ese se",
+      "id": 2,
+      "projectId": "proj-01",
+      "specialty": "Estructuras",
+      "activityName": "Armado y Vaciado de Columnas L1-L4",
+      "location": "Pisos 1 al 4",
+      "percentage": 85,
+      "description": "Colocación de acero corrugado de 3/4 pulgadas y vaciado de concreto premezclado.",
+      "responsible": "Ana Torres",
+      "workers": 12,
+      "weather": "cloudy",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-05-30T16:00:00Z",
+      "weight": 40,
+      "currentPercentage": 85,
+      "assignedBudget": 300000,
+      "executedAmount": 280000,
+      "startDate": "2026-03-01"
+    },
+    {
+      "id": 3,
+      "projectId": "proj-02",
+      "specialty": "Estructuras",
+      "activityName": "Tendido y Vaciado de Losa de Cimentación",
+      "location": "Bloque Central",
+      "percentage": 45,
+      "description": "Colocación de doble malla de acero y tendido de concreto premezclado de alta resistencia.",
       "responsible": "Juan Pérez",
-      "workers": 12,
+      "workers": 20,
       "weather": "sunny",
       "status": "IN_PROGRESS",
-      "lastUpdate": "2026-05-31T16:23:03.648Z",
-      "projectId": "proj-02",
-      "apiId": "v1",
-      "id": 10,
-      "currentPercentage": 69,
-      "startDate": "2026-05-31T16:23:03.648Z",
-      "details": "ese se",
-      "weight": 1
-    },
-    {
-      "date": "2026-05-19T05:00:00.000Z",
-      "specialty": "Arquitectura",
-      "activityName": "Juan Juan",
-      "location": "Aca",
-      "percentage": 12,
-      "weight": 4,
-      "description": "Alla",
-      "responsible": "Zero Two",
-      "workers": 12,
-      "weather": "sunny",
-      "isMiniAdvance": false,
-      "currentPercentage": 12,
-      "details": "Alla",
-      "status": "IN_PROGRESS",
-      "lastUpdate": "2026-05-19T05:00:00.000Z",
-      "startDate": "2026-05-19T05:00:00.000Z",
-      "projectId": "proj-02",
-      "id": 11
-    },
-    {
-      "date": "2026-05-26T05:00:00.000Z",
-      "specialty": "Arquitectura",
-      "activityName": "Juan Juan",
-      "location": "Alla",
-      "percentage": 12,
-      "weight": 4,
-      "description": "Aca",
-      "responsible": "Zero Two",
-      "workers": 12,
-      "weather": "sunny",
-      "isMiniAdvance": true,
-      "currentPercentage": 12,
-      "details": "Aca",
-      "status": "IN_PROGRESS",
-      "lastUpdate": "2026-05-26T05:00:00.000Z",
-      "startDate": "2026-05-26T05:00:00.000Z",
-      "projectId": "proj-02",
-      "id": 12
+      "lastUpdate": "2026-06-03T11:00:00Z",
+      "weight": 60,
+      "currentPercentage": 45,
+      "assignedBudget": 400000,
+      "executedAmount": 180000,
+      "startDate": "2026-05-15"
     }
   ],
   "team-users": [
@@ -1586,319 +704,139 @@
       "fullName": "Admin Demo",
       "email": "admin@pirca.com",
       "isActive": true,
-      "role": "Administrador"
+      "role": "Administrador",
+      "projectId": "proj-01"
     },
     {
       "id": "us-02",
       "fullName": "Ana Torres",
       "email": "ana.torres@pirca.com",
-      "isActive": false,
-      "role": "Ingeniero"
+      "isActive": true,
+      "role": "Ingeniero Residente",
+      "projectId": "proj-01"
     },
     {
       "id": "us-03",
       "fullName": "Juan Pérez",
       "email": "jperez.logistica@pirca.com",
-      "isActive": false,
-      "role": "Gestor"
+      "isActive": true,
+      "role": "Gestor de Logística",
+      "projectId": "proj-02"
     },
     {
       "id": "us-04",
-      "fullName": "Inversor Centro SAC",
-      "email": "gerencia@inversorcentro.pe",
+      "fullName": "Carlos Mendoza",
+      "email": "carlos.mendoza@pirca.com",
       "isActive": true,
-      "role": "Logistica"
-    },
-    {
-      "id": "us-07",
-      "fullName": "Laurel Pallo",
-      "email": "LauPallo@pirca.com",
-      "isActive": true,
-      "role": "Cliente"
-    },
-    {
-      "id": "us-1778611326049",
-      "fullName": "Neto Pepon",
-      "email": "waranza@gmail.com",
-      "isActive": true,
-      "role": "Logistica"
-    },
-    {
-      "id": "us-1779683016165",
-      "fullName": "Juan Perez",
-      "email": "juanperez@gmail.com",
-      "isActive": true,
-      "role": "Logistica",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1779683053929",
-      "fullName": "Zero Two",
-      "email": "zerotwo@gmail.com",
-      "isActive": true,
-      "role": "Administrador",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1779683075430",
-      "fullName": "Rem Rem",
-      "email": "rem@gmail.com",
-      "isActive": true,
-      "role": "Gestor",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1779683092149",
-      "fullName": "Emilia Rezero",
-      "email": "emilia@gmail.com",
-      "isActive": true,
-      "role": "Cliente",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1779683828650",
-      "fullName": "Emilia Rezero",
-      "email": "Tilin",
-      "isActive": true,
-      "role": "Gestor",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1779683925135",
-      "fullName": "Emilia Rezero",
-      "email": "aaa@gmail.com",
-      "isActive": true,
-      "role": "Logistica",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1779684677861",
-      "fullName": "Emilia Rezero",
-      "email": "emilia@gmail.com",
-      "isActive": true,
-      "role": "Gestor",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1779767817777",
-      "fullName": "Emilia Rezero",
-      "email": "pilin@gmail.com",
-      "isActive": true,
-      "role": "Gestor",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1779768943478",
-      "fullName": "Zero Two",
-      "email": "serotu@gmail.com",
-      "isActive": true,
-      "role": "Logistica",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1779769304248",
-      "fullName": "Emilia Rezero",
-      "email": "pilin@gmail.com",
-      "isActive": true,
-      "role": "Gestor",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1779769365560",
-      "fullName": "Emilia Rezero",
-      "email": "a@gmail.com",
-      "isActive": true,
-      "role": "Gestor",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1779769386339",
-      "fullName": "Zero Two",
-      "email": "p@gmail.com",
-      "isActive": true,
-      "role": "Logistica",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1780264897132",
-      "fullName": "Zero Two",
-      "email": "p@gmail.com",
-      "isActive": true,
-      "role": "Gestor",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1780269823761",
-      "fullName": "Zero Two",
-      "email": "p@gmail.com",
-      "isActive": true,
-      "role": "Gestor",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1780271216387",
-      "fullName": "Zero Two",
-      "email": "p@gmail.com",
-      "isActive": true,
-      "role": "Gestor",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1780272467175",
-      "fullName": "Zero Two",
-      "email": "p@gmail.com",
-      "isActive": true,
-      "role": "Gestor",
-      "apiId": "v1"
-    },
-    {
-      "id": "us-1780272475046",
-      "fullName": "Zero Two",
-      "email": "p@gmail.com",
-      "isActive": true,
-      "role": "Logistica",
-      "apiId": "v1"
+      "role": "Supervisor de Calidad",
+      "projectId": "proj-01"
     }
   ],
   "team-workers": [
     {
-      "id": "wkr-1780350701456",
-      "dni": "74500834",
-      "fullName": "Pepe sito",
-      "role": "Operario",
+      "id": "wkr-101",
+      "dni": "72098451",
+      "fullName": "Manuel Ramos",
+      "role": "Operador de Maquinaria",
       "isActive": true,
       "assignedTools": [
         "Excavadora Hidráulica"
       ],
-      "apiId": "v1"
+      "projectId": "proj-01"
     },
     {
-      "id": "wkr-1780350745895",
-      "dni": "95622314",
-      "fullName": "Juan Bodoque",
-      "role": "Albañil",
+      "id": "wkr-102",
+      "dni": "45698123",
+      "fullName": "Pedro Quispe",
+      "role": "Fierrero Principal",
       "isActive": true,
       "assignedTools": [
-        "Cargador Frontal"
+        "Cizalla",
+        "Dobladora de Fierro"
       ],
-      "apiId": "v1"
+      "projectId": "proj-01"
+    },
+    {
+      "id": "wkr-103",
+      "dni": "95622314",
+      "fullName": "Juan Bodoque",
+      "role": "Albañil Especializado",
+      "isActive": true,
+      "assignedTools": [
+        "Nivel de burbuja",
+        "Amoladora"
+      ],
+      "projectId": "proj-02"
     }
   ],
   "documents": [
     {
       "id": "doc-001",
-      "type": "Acta de Conformidad - Estructura",
+      "type": "Acta de Conformidad - Excavación de Cimientos",
       "isSigned": true,
-      "digitalSignatureToken": "123456",
-      "deadLine": "2024-12-31T23:59:59.000Z",
+      "digitalSignatureToken": "SIG-TOK-872A9",
+      "deadLine": "2026-03-01T00:00:00Z",
+      "projectId": "proj-01",
       "assignedTo": [
         {
           "id": "us-01",
           "fullName": "Admin Demo",
-          "signedAt": "2024-12-30T10:30:00.000Z"
+          "signedAt": "2026-02-22T10:30:00Z"
         },
         {
           "id": "us-02",
           "fullName": "Ana Torres",
-          "signedAt": "2024-12-29T14:45:00.000Z"
+          "signedAt": "2026-02-21T14:45:00Z"
         }
       ]
     },
     {
       "id": "doc-002",
-      "type": "Acta de Conformidad - Instalaciones Eléctricas",
+      "type": "Certificado de Calidad de Acero Corrugado",
       "isSigned": true,
-      "digitalSignatureToken": "123456",
-      "deadLine": "2025-01-15T23:59:59.000Z",
+      "digitalSignatureToken": "SIG-TOK-551C0",
+      "deadLine": "2026-05-15T00:00:00Z",
+      "projectId": "proj-01",
       "assignedTo": [
         {
-          "id": "us-01",
-          "fullName": "Admin Demo"
-        },
-        {
-          "id": "us-03",
-          "fullName": "Juan Pérez"
+          "id": "us-02",
+          "fullName": "Ana Torres",
+          "signedAt": "2026-05-12T09:15:00Z"
         }
       ]
     },
     {
       "id": "doc-003",
-      "type": "RNC - Fisura en losa de cimentación",
+      "type": "Ficha Técnica - Solución RNC-2026-001",
       "isSigned": false,
       "digitalSignatureToken": null,
-      "deadLine": "2025-06-20T23:59:59.000Z",
+      "deadLine": "2026-06-15T00:00:00Z",
+      "projectId": "proj-01",
       "assignedTo": [
         {
-          "id": "us-02",
-          "fullName": "Ana Torres",
+          "id": "us-01",
+          "fullName": "Admin Demo",
           "signedAt": null
         },
         {
           "id": "us-04",
-          "fullName": "Inversor Centro SAC",
+          "fullName": "Carlos Mendoza",
           "signedAt": null
         }
       ]
     },
     {
       "id": "doc-004",
-      "type": "Liquidación de Obra - Proyecto Los Olivos",
+      "type": "Acta de Liberación de Losa L-1",
       "isSigned": false,
       "digitalSignatureToken": null,
-      "deadLine": "2025-02-28T23:59:59.000Z",
+      "deadLine": "2026-06-10T00:00:00Z",
+      "projectId": "proj-02",
       "assignedTo": [
-        {
-          "id": "us-01",
-          "fullName": "Admin Demo",
-          "signedAt": null
-        },
         {
           "id": "us-03",
           "fullName": "Juan Pérez",
           "signedAt": null
-        },
-        {
-          "id": "us-07",
-          "fullName": "Laurel Pallo",
-          "signedAt": null
-        }
-      ]
-    },
-    {
-      "id": "doc-1778630190036-37vn6i",
-      "type": "Acta de Conformidad - Tolvas petromagnéticas",
-      "isSigned": true,
-      "digitalSignatureToken": "123456",
-      "deadLine": "2026-05-13T05:00:00.000Z",
-      "assignedTo": [
-        {
-          "id": "us-04",
-          "fullName": "Inversor Centro SAC"
-        },
-        {
-          "id": "us-07",
-          "fullName": "Laurel Pallo"
-        }
-      ]
-    },
-    {
-      "id": "doc-1780351241074-3ptukb",
-      "type": "Acta de actualización",
-      "isSigned": true,
-      "digitalSignatureToken": "123456",
-      "deadLine": "2026-06-16T05:00:00.000Z",
-      "assignedTo": [
-        {
-          "id": "cVW0O6a",
-          "fullName": "Neo Ramos"
-        },
-        {
-          "id": "us-1779683053929",
-          "fullName": "Zero Two"
-        },
-        {
-          "id": "us-1779683016165",
-          "fullName": "Juan Perez"
         }
       ]
     }
@@ -1918,11 +856,7 @@
     },
     {
       "id": "wcls-004",
-      "name": "Otro"
-    },
-    {
-      "name": "NuevaCategoria",
-      "id": "XYi-Xf6"
+      "name": "Mala manipulación"
     }
   ]
 }

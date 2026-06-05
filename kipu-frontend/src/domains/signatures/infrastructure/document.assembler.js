@@ -13,6 +13,7 @@ export class DocumentAssembler {
         entity.digitalSignatureToken = resource.digitalSignatureToken;
         entity.deadLine = new Date(resource.deadLine);
         entity.assignedTo = resource.assignedTo.map((user) => this.toUserDocumentEntity(user));
+        entity.projectId = resource.projectId || '';
         return entity;
     }
 
@@ -28,6 +29,7 @@ export class DocumentAssembler {
             digitalSignatureToken: entity.digitalSignatureToken,
             deadLine: entity.deadLine.toISOString(),
             assignedTo: entity.assignedTo.map((user) => this.toUserDocumentResource(user)),
+            projectId: entity.projectId,
         };
     }
 

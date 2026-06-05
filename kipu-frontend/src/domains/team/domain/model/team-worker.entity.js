@@ -30,5 +30,8 @@ export class TeamWorkerEntity {
 
         /** @type {string[]} */
         this.assignedTools = []
+
+        /** @type {string} */
+        this.projectId = ''
     }
 }

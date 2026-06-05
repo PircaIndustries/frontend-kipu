@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import {LogisticsApi} from "@/domains/logistics/infrastructure/logistics.api.js"
+import { useProjectsStore } from "@/domains/project-management/data/useProjectsStore.js";
 
 import {CategoryEntity} from "@/domains/logistics/domain/model/materials/category.entity.js";
 import {MaterialEntity} from "@/domains/logistics/domain/model/materials/material.entity.js";
@@ -12,6 +13,7 @@ import {MaterialInventoryAssembler} from "@/domains/logistics/infrastructure/mat
 const logisticsApi = new LogisticsApi();
 
 const useInventoryStore = defineStore('logistics', () => {
+    const projectsStore = useProjectsStore();
 
     // ── RAW ────────────────────────────────────────────────────────────────
 
@@ -93,7 +95,11 @@ const useInventoryStore = defineStore('logistics', () => {
 
     const inventoryView = computed(() => {
         const activeCategories = categories.value.filter(c => c.isActive);
-        return inventoryMaterials.value.map(invItem => {
+        const currentId = projectsStore.currentProjectId;
+        const filteredItems = currentId
+            ? inventoryMaterials.value.filter(item => String(item.projectId) === String(currentId))
+            : [];
+        return filteredItems.map(invItem => {
             const material = materials.value.find(m => m.id === invItem.materialId);
             const category = activeCategories.find(c => c.id === material?.categoryId);
 

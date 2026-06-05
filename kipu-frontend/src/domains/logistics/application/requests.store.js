@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { LogisticsApi } from "@/domains/logistics/infrastructure/logistics.api.js";
 import { BudgetApi } from "@/domains/budget/infrastructure/budget-api.js";
+import { useProjectsStore } from "@/domains/project-management/data/useProjectsStore.js";
 import {MaterialRequestEntity} from "@/domains/logistics/domain/model/requests/materialRequest.entity.js";
 import { MaterialEntity } from "@/domains/logistics/domain/model/materials/material.entity.js";
 import { CategoryEntity } from "@/domains/logistics/domain/model/materials/category.entity.js";
@@ -16,6 +17,7 @@ const budgetApi = new BudgetApi();
 
 
 const useRequestStore = defineStore('request', () => {
+    const projectsStore = useProjectsStore();
 
     // ── RAW ──────────────────────────────────────────────────────────
 
@@ -85,10 +87,10 @@ const useRequestStore = defineStore('request', () => {
         const currentCategories = categories.value.filter(c => c.isActive);
         const currentSupplierOffers = supplierOffers.value;
         const currentBudgetLines = budgetLines.value;
-        const projectId = localStorage.getItem('currentProjectId') || 'proj-01';
+        const projectId = projectsStore.currentProjectId;
 
         return requests.value
-            .filter(request => request.projectId === projectId)
+            .filter(request => String(request.projectId) === String(projectId))
             .map(request => {
                 const enrichedItems = request.items.map(item => {
                     const offer = currentSupplierOffers.find(s => s.id === item.supplierOfferId);
@@ -105,8 +107,10 @@ const useRequestStore = defineStore('request', () => {
                 });
 
                 const totalAmount = enrichedItems.reduce((sum, item) => sum + item.quantity * item.pricePerUnit, 0);
-                const budgetLine = currentBudgetLines.find(b => b.id === request.budgetLineId);
-                const budgetAvailable = budgetLine ? budgetLine.budgeted - budgetLine.executed : 0;
+                const budgetLine = currentBudgetLines.find(b => String(b.id) === String(request.budgetLineId));
+                const budgetAssigned = budgetLine ? Number(budgetLine.assignedBudget || 0) : 0;
+                const budgetExecuted = budgetLine ? Number(budgetLine.executedAmount || 0) : 0;
+                const budgetAvailable = budgetAssigned - budgetExecuted;
                 const isWithinBudget = budgetLine ? totalAmount <= budgetAvailable : true;
 
                 return {
@@ -233,12 +237,10 @@ const useRequestStore = defineStore('request', () => {
 
     // ── CRUD ────────────────────────────────────────────────────────────────
 
-    /**
-     * Creates a new request.
-     * @param {MaterialRequestEntity} request
-     * @param {Function} [onSuccess]
-     */
     function createRequest(request, onSuccess) {
+        if (!request.projectId) {
+            request.projectId = projectsStore.currentProjectId;
+        }
         logisticsApi.createMaterialRequest(request).then(response => {
             const newRequests = MaterialRequestAssembler.toEntitiesFromResponse(response);
             requests.value.push(...newRequests);

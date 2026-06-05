@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
 import { NcrRepository } from '../../infrastructure/NcrRepository.js';
+import { useProjectsStore } from '../../../project-management/data/useProjectsStore.js';
 
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -13,8 +13,8 @@ import Message from 'primevue/message';
 
 const router = useRouter();
 const repository = new NcrRepository();
+const projectsStore = useProjectsStore();
 
-const projectOptions = ref([]);
 const photoError = ref(false);
 
 const form = ref({
@@ -28,16 +28,18 @@ const form = ref({
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:3000/projects');
-    projectOptions.value = response.data;
-    console.log("Proyectos cargados:", response.data); // Añade este log para depurar
+    await projectsStore.loadProjects();
+    const currentProj = projectsStore.projects.find(p => String(p.id) === String(projectsStore.currentProjectId));
+    if (currentProj) {
+      form.value.project = currentProj;
+    }
   } catch (error) {
     console.error("Error al cargar proyectos:", error);
   }
 });
 
 const handleSave = async () => {
-  if (!form.value.title || !form.value.project || !form.value.photo) {
+  if (!form.value.title || !projectsStore.currentProjectId || !form.value.photo) {
     photoError.value = true;
     return;
   }
@@ -54,7 +56,7 @@ const handleSave = async () => {
       date: new Date().toISOString(),
       severityLevel: form.value.severity,
       ncrDescription: form.value.description,
-      projectId: form.value.project.id,
+      projectId: projectsStore.currentProjectId,
       photoUrl: base64Image
     };
 
@@ -82,13 +84,7 @@ const handleSave = async () => {
       <section class="main-form">
         <div class="field">
           <label>Proyecto</label>
-          <Select
-              v-model="form.project"
-              :options="projectOptions"
-              optionLabel="name"
-              placeholder="Seleccione proyecto real"
-              fluid
-          />
+          <InputText :value="projectsStore.currentProjectName" disabled fluid />
         </div>
 
         <div class="field">
