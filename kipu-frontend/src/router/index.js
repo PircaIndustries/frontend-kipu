@@ -9,7 +9,7 @@ import { useProjectsStore } from '@/domains/project-management/data/useProjectsS
  * Used by the navigation guard to avoid infinite redirects.
  */
 const PROJECT_WHITELIST = [
-    'Login', 'Register', 'ForgotPassword', 'ResetPassword', 'Verification', 'Projects'
+    'Login', 'Register', 'ForgotPassword', 'ResetPassword', 'Verification', 'Projects', 'Settings', 'Notifications'
 ];
 
 const PUBLIC_ROUTES = [
@@ -60,6 +60,18 @@ const routes = [
         path: '/projects',
         name: 'Projects',
         component: () => import('@/domains/project-management/presentation/views/ProjectsView.vue')
+    },
+    // ── Settings ──
+    {
+        path: '/settings',
+        name: 'Settings',
+        component: () => import('@/domains/identity/presentation/views/SettingsView.vue')
+    },
+    // ── Notifications ──
+    {
+        path: '/notifications',
+        name: 'Notifications',
+        component: () => import('@/domains/identity/presentation/views/NotificationsView.vue')
     },
     // ── Progress Monitoring ──
     {

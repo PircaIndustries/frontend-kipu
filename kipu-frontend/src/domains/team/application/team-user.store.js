@@ -3,11 +3,14 @@ import { ref, computed } from 'vue'
 import { teamUserApi } from '../infrastructure/team-user.api.js'
 import { TeamUserAssembler } from '../infrastructure/team-user.assembler.js'
 import { TeamUserEntity } from '../domain/model/team-user.entity.js'
+import { useProjectsStore } from '../../project-management/data/useProjectsStore.js'
 
 /**
  * Team Users Store - Manages team user state and operations
  */
 export const useTeamUserStore = defineStore('teamUser', () => {
+    const projectsStore = useProjectsStore()
+
     // ========== STATE ==========
 
     /** @type {import('vue').Ref<TeamUserEntity[]>} */
@@ -28,13 +31,17 @@ export const useTeamUserStore = defineStore('teamUser', () => {
      * All team users
      * @returns {TeamUserEntity[]}
      */
-    const allUsers = computed(() => teamUsers.value)
+    const allUsers = computed(() => {
+        const currentId = projectsStore.currentProjectId
+        if (!currentId) return []
+        return teamUsers.value.filter(user => String(user.projectId) === String(currentId))
+    })
 
     /**
      * Active users only
      * @returns {TeamUserEntity[]}
      */
-    const activeUsers = computed(() => teamUsers.value.filter(user => user.isActive))
+    const activeUsers = computed(() => allUsers.value.filter(user => user.isActive))
 
     /**
      * Filtered users based on search term
@@ -42,9 +49,9 @@ export const useTeamUserStore = defineStore('teamUser', () => {
      */
     const filteredUsers = computed(() => {
         const term = searchTerm.value.toLowerCase().trim()
-        if (!term) return teamUsers.value
+        if (!term) return allUsers.value
 
-        return teamUsers.value.filter(user =>
+        return allUsers.value.filter(user =>
             user.fullName.toLowerCase().includes(term) ||
             user.email.toLowerCase().includes(term) ||
             user.role.toLowerCase().includes(term)
@@ -62,7 +69,7 @@ export const useTeamUserStore = defineStore('teamUser', () => {
      * @returns {number}
      */
     const totalManagers = computed(() =>
-        teamUsers.value.filter(user =>
+        allUsers.value.filter(user =>
             user.isActive && (user.role === 'Gestor' || user.role === 'Gestor Operativo')
         ).length
     )
@@ -72,7 +79,7 @@ export const useTeamUserStore = defineStore('teamUser', () => {
      * @returns {number}
      */
     const totalLogistics = computed(() =>
-        teamUsers.value.filter(user => user.isActive && user.role === 'Logistica').length
+        allUsers.value.filter(user => user.isActive && user.role === 'Logistica').length
     )
 
     /**
@@ -80,7 +87,7 @@ export const useTeamUserStore = defineStore('teamUser', () => {
      * @returns {number}
      */
     const totalClients = computed(() =>
-        teamUsers.value.filter(user => user.isActive && user.role === 'Cliente').length
+        allUsers.value.filter(user => user.isActive && user.role === 'Cliente').length
     )
 
     // ========== ACTIONS ==========
@@ -169,6 +176,7 @@ export const useTeamUserStore = defineStore('teamUser', () => {
         newUser.email = userData.email
         newUser.isActive = true
         newUser.role = userData.role
+        newUser.projectId = projectsStore.currentProjectId
 
         try {
             const created = await teamUserApi.createUser(newUser)

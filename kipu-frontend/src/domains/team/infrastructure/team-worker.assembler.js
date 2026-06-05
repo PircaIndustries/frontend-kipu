@@ -17,6 +17,7 @@ export class TeamWorkerAssembler {
         entity.role = resource.role
         entity.isActive = resource.isActive
         entity.assignedTools = resource.assignedTools || []
+        entity.projectId = resource.projectId || ''
         return entity
     }
 
@@ -32,7 +33,8 @@ export class TeamWorkerAssembler {
             fullName: entity.fullName,
             role: entity.role,
             isActive: entity.isActive,
-            assignedTools: entity.assignedTools
+            assignedTools: entity.assignedTools,
+            projectId: entity.projectId
         }
     }
 

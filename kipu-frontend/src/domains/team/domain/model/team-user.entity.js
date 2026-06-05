@@ -26,5 +26,8 @@ export class TeamUserEntity {
 
         /** @type {string} */
         this.role = ''
+
+        /** @type {string} */
+        this.projectId = ''
     }
 }

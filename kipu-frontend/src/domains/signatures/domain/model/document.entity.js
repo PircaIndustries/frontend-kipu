@@ -13,6 +13,7 @@ export class DocumentEntity {
         this.digitalSignatureToken = null;
         this.deadLine = new Date();
         this.assignedTo = [];
+        this.projectId = '';
     }
 
     /**

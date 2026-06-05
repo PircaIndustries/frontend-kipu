@@ -121,7 +121,7 @@ export const useAdvanceStore = defineStore('advances', () => {
 
     const groupedAdvances = computed(() => {
         const groups = {};
-        advances.value.forEach(a => {
+        currentProjectAdvances.value.forEach(a => {
             if (!groups[a.activityName]) {
                 groups[a.activityName] = {
                     activityName: a.activityName,

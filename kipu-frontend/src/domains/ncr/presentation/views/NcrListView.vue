@@ -2,28 +2,29 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { NcrRepository } from '../../infrastructure/NcrRepository.js';
-import { allProjects } from '../../../project-management/data/projectsStore.js';
+import { useProjectsStore } from '../../../project-management/data/useProjectsStore.js';
 import NcrListItem from './NcrListItem.vue';
 import Button from 'primevue/button';
-import Select from 'primevue/select';
 
 const router = useRouter();
 const repository = new NcrRepository();
-const selectedProject = ref(null);
+const projectsStore = useProjectsStore();
 const ncrs = ref([]);
 
 onMounted(async () => {
+  await projectsStore.loadProjects();
   ncrs.value = await repository.getAll();
 });
 
 const getProjectName = (id) => {
-  const project = allProjects.value.find(p => p.id === id);
+  const project = projectsStore.projects.find(p => p.id === id);
   return project ? project.name : '-';
 };
 
 const filteredNcrs = computed(() => {
-  if (!selectedProject.value) return ncrs.value;
-  return ncrs.value.filter(item => item.projectId === selectedProject.value.id);
+  const currentId = projectsStore.currentProjectId;
+  if (!currentId) return [];
+  return ncrs.value.filter(item => String(item.projectId) === String(currentId));
 });
 
 const handleCreateNew = () => {
@@ -46,16 +47,7 @@ const handleCreateNew = () => {
       />
     </header>
 
-    <div class="filters-bar">
-      <Select
-          v-model="selectedProject"
-          :options="allProjects"
-          optionLabel="name"
-          placeholder="Filtrar por Proyecto"
-          class="project-selector"
-          showClear
-      />
-    </div>
+
 
     <div class="ncr-cards-list">
       <NcrListItem

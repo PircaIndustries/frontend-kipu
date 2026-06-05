@@ -128,6 +128,19 @@ const onFormSubmit = () => {
 
   submitting.value = true;
 
+  if (selectedBudgetLineObj.value) {
+    const totalAmount = totalPrice.value;
+    const available = budgetLineAvailable.value;
+    if (totalAmount > available) {
+      toast.add({
+        severity: 'warn',
+        summary: 'Desviación Presupuestaria Detectada',
+        detail: `Esta solicitud (Monto: S/ ${totalAmount.toFixed(2)}) supera el saldo disponible de la línea de presupuesto (Saldo: S/ ${available.toFixed(2)}).`,
+        life: 8000
+      });
+    }
+  }
+
   const currentUserId = (() => {
     try { return JSON.parse(localStorage.getItem('currentUser'))?.id || null; }
     catch { return null; }

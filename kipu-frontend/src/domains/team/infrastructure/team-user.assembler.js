@@ -16,7 +16,8 @@ export class TeamUserAssembler {
         entity.email = resource.email
         entity.isActive = resource.isActive
         entity.role = resource.role
-        return entity
+        entity.projectId = resource.projectId || ''
+        return entity;
     }
 
     /**
@@ -30,7 +31,8 @@ export class TeamUserAssembler {
             fullName: entity.fullName,
             email: entity.email,
             isActive: entity.isActive,
-            role: entity.role
+            role: entity.role,
+            projectId: entity.projectId
         }
     }
 
