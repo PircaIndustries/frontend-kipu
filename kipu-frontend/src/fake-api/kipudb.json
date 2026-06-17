@@ -915,6 +915,26 @@
       "specialty": "Estructuras",
       "severityLevel": "Alto",
       "photoUrl": "https://i.pinimg.com/736x/29/7b/a1/297ba161005c3fef3978dd086c8bc76.jpg"
+    },
+    {
+      "ncrTitle": "Tuberia rotaa",
+      "specialty": "Servicios",
+      "date": "2026-06-17T19:59:19.251Z",
+      "severityLevel": "Alto",
+      "ncrDescription": "Tuberias llenas de moho, oxido y sarro",
+      "projectId": "proj-02",
+      "photoUrl": "",
+      "id": "aAsiGOS"
+    },
+    {
+      "ncrTitle": "Tuberia rotaa",
+      "specialty": "Servicios",
+      "date": "2026-06-17T19:59:22.450Z",
+      "severityLevel": "Alto",
+      "ncrDescription": "Tuberias llenas de moho, oxido y sarro",
+      "projectId": "proj-02",
+      "photoUrl": "",
+      "id": "3FThwrQ"
     }
   ],
   "projects": [
