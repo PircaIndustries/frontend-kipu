@@ -2,7 +2,6 @@
  * @typedef {Object} UserDocumentResource
  * @property {string} id - User identifier
  * @property {string} fullName - User full name
- * @property {string|Date} [signedAt] - Date when user signed
  */
 
 /**
