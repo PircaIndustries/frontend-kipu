@@ -3,13 +3,11 @@ import { ref, computed } from 'vue'
 import { teamUserApi } from '../infrastructure/team-user.api.js'
 import { TeamUserAssembler } from '../infrastructure/team-user.assembler.js'
 import { TeamUserEntity } from '../domain/model/team-user.entity.js'
-import { useProjectsStore } from '../../project-management/data/useProjectsStore.js'
 
 /**
  * Team Users Store - Manages team user state and operations
  */
 export const useTeamUserStore = defineStore('teamUser', () => {
-    const projectsStore = useProjectsStore()
 
     // ========== STATE ==========
 
@@ -32,7 +30,7 @@ export const useTeamUserStore = defineStore('teamUser', () => {
      * @returns {TeamUserEntity[]}
      */
     const allUsers = computed(() => {
-        const currentId = projectsStore.currentProjectId
+        const currentId = localStorage.getItem('currentProjectId')
         if (!currentId) return []
         return teamUsers.value.filter(user => String(user.projectId) === String(currentId))
     })
@@ -97,9 +95,15 @@ export const useTeamUserStore = defineStore('teamUser', () => {
      * @returns {Promise<void>}
      */
     const fetchUsers = async () => {
+        const currentProjectId = localStorage.getItem('currentProjectId')
+        if (!currentProjectId) {
+            console.warn("No hay un proyecto seleccionado. No se pueden traer usuarios.");
+            return;
+        }
+
         loading.value = true
         try {
-            const response = await teamUserApi.getAllUsers()
+            const response = await teamUserApi.getAllUsers(currentProjectId)
             teamUsers.value = TeamUserAssembler.toEntitiesFromResponse(response)
             console.log(`Loaded ${teamUsers.value.length} team users`)
         } catch (error) {
@@ -111,14 +115,25 @@ export const useTeamUserStore = defineStore('teamUser', () => {
 
     /**
      * Load current user from localStorage
-     * @returns {void}
+     * Mapea de forma segura 'name' a 'fullName' si es necesario.
      */
     const loadCurrentUser = () => {
         const stored = localStorage.getItem('currentUser')
         if (stored) {
             try {
-                const user = JSON.parse(stored)
-                currentUser.value = TeamUserAssembler.toEntityFromResource(user)
+                const userRaw = JSON.parse(stored)
+
+                // Si el objeto del localStorage usa 'name', lo adaptamos a 'fullName'
+                if (userRaw.name && !userRaw.fullName) {
+                    userRaw.fullName = userRaw.name
+                }
+                // Si no tiene project id de forma nativa en la sesion, le asociamos el actual para el renderizado local
+                if (!userRaw.projectId) {
+                    userRaw.projectId = localStorage.getItem('currentProjectId') || ''
+                }
+
+                currentUser.value = TeamUserAssembler.toEntityFromResource(userRaw)
+                console.log('Current user loaded successfully:', currentUser.value)
             } catch (error) {
                 console.error('Error parsing current user:', error)
             }
@@ -154,11 +169,18 @@ export const useTeamUserStore = defineStore('teamUser', () => {
      * @returns {Promise<void>}
      */
     const toggleUserStatus = async (user) => {
-        const updatedUser = { ...user, isActive: !user.isActive }
-
         try {
-            await teamUserApi.updateUser(updatedUser.id, updatedUser)
-            updateLocalUser(updatedUser)
+            let updatedResource;
+
+            if (user.isActive) {
+                updatedResource = await teamUserApi.deactivateUser(user.id)
+            } else {
+                updatedResource = await teamUserApi.activateUser(user.id)
+            }
+
+            const updatedEntity = TeamUserAssembler.toEntityFromResource(updatedResource)
+            updateLocalUser(updatedEntity)
+
         } catch (error) {
             console.error('Error toggling user status:', error)
         }
@@ -170,22 +192,26 @@ export const useTeamUserStore = defineStore('teamUser', () => {
      * @returns {Promise<TeamUserEntity|null>}
      */
     const inviteUser = async (userData) => {
-        const newUser = new TeamUserEntity()
-        newUser.id = `us-${Date.now()}`
-        newUser.fullName = `${userData.firstName} ${userData.lastName}`
-        newUser.email = userData.email
-        newUser.isActive = true
-        newUser.role = userData.role
-        newUser.projectId = projectsStore.currentProjectId
+        const currentProjectId = localStorage.getItem('currentProjectId');
+        if (!currentProjectId) return null;
+
+        const createResource = {
+            fullName: `${userData.firstName} ${userData.lastName}`,
+            email: userData.email,
+            role: userData.role,
+            projectId: currentProjectId
+        }
 
         try {
-            const created = await teamUserApi.createUser(newUser)
+            const created = await teamUserApi.createUser(createResource)
+
             const entity = TeamUserAssembler.toEntityFromResource(created)
             teamUsers.value.push(entity)
             console.log('User invited successfully:', entity)
             return entity
+
         } catch (error) {
-            console.error('Error inviting user:', error)
+            console.error('Error inviting user:', error.response?.data || error.message)
             return null
         }
     }

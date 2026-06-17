@@ -637,6 +637,13 @@
       "email": "admin@pirca.com",
       "password": "password123",
       "role": "Administrador"
+    },
+    {
+      "name": "Pepe",
+      "email": "pepe@gmail.com",
+      "password": "123456789",
+      "role": "Gestor Operativo",
+      "id": "tlsrIVs"
     }
   ],
   "progress": [
