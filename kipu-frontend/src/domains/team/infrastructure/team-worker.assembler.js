@@ -1,59 +1,52 @@
 import { TeamWorkerEntity } from '../domain/model/team-worker.entity.js'
 
-/**
- * Maps team worker resources to domain entities and vice versa
- */
 export class TeamWorkerAssembler {
+
     /**
-     * Converts a resource to a TeamWorkerEntity
-     * @param {TeamWorkerResource} resource - Team worker resource
-     * @returns {TeamWorkerEntity} Team worker entity
+     * Desde el JSON de C# hacia el Modelo de JS
      */
     static toEntityFromResource(resource) {
         const entity = new TeamWorkerEntity()
         entity.id = resource.id
         entity.dni = resource.dni
-        entity.fullName = resource.fullName
-        entity.role = resource.role
-        entity.isActive = resource.isActive
-        entity.assignedTools = resource.assignedTools || []
-        entity.projectId = resource.projectId || ''
+
+        // C# puede devolver "FullName" con F mayúscula por defecto si no hay policy
+        entity.fullName = resource.fullName || resource.FullName
+        entity.role = resource.role || resource.Role
+        entity.isActive = resource.isActive !== undefined ? resource.isActive : resource.IsActive
+
+        // Mapeo especial para Maquinarias: Extraemos solo los nombres
+        const rawMachineries = resource.machineries || resource.Machineries || []
+        entity.assignedTools = rawMachineries.map(m => m.fullName || m.FullName)
+
+        entity.projectId = resource.projectId || resource.ProjectId || ''
         return entity
     }
 
     /**
-     * Converts a TeamWorkerEntity to a resource
-     * @param {TeamWorkerEntity} entity - Team worker entity
-     * @returns {TeamWorkerResource} Team worker resource
+     * Desde el Modelo de JS hacia el DTO de C# (CreateTeamWorkerResource)
      */
-    static toResourceFromEntity(entity) {
+    static toCreateResourceFromEntity(entity, toolsList = []) {
+
+        // C# espera una lista de objetos { MachineryId, FullName }
+        const mappedMachineries = toolsList.map(t => ({
+            machineryId: t.id,
+            fullName: t.machineryName || t.fullName || 'Herramienta'
+        }))
+
         return {
-            id: entity.id,
             dni: entity.dni,
             fullName: entity.fullName,
+            // Split simple para mandar el apellido al backend como pide el DTO
+            lastName: entity.fullName.split(' ').slice(1).join(' ') || 'Apellidos',
             role: entity.role,
-            isActive: entity.isActive,
-            assignedTools: entity.assignedTools,
-            projectId: entity.projectId
+            projectId: entity.projectId,
+            machineries: mappedMachineries
         }
     }
 
-    /**
-     * Converts an API response to an array of TeamWorkerEntities
-     * @param {TeamWorkerResponse} response - API response
-     * @returns {TeamWorkerEntity[]} Array of team worker entities
-     */
     static toEntitiesFromResponse(response) {
         if (!Array.isArray(response)) return []
         return response.map(resource => this.toEntityFromResource(resource))
-    }
-
-    /**
-     * Converts an array of TeamWorkerEntities to an API response
-     * @param {TeamWorkerEntity[]} entities - Array of team worker entities
-     * @returns {TeamWorkerResponse} API response
-     */
-    static toResponseFromEntities(entities) {
-        return entities.map(entity => this.toResourceFromEntity(entity))
     }
 }
