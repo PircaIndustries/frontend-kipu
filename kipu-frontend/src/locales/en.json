@@ -496,6 +496,10 @@
             "success": {
                 "summary": "Success",
                 "message": "Request created successfully"
+            },
+            "error": {
+                "summary": "Error",
+                "message": "Could not create the request. Please check the data and try again."
             }
         }
     },

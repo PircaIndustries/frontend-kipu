@@ -7,7 +7,6 @@ const { t } = useI18n()
 
 const props = defineProps({
   request: {
-    /** @type {import('vue').Prop<EnrichedRequest>} */
     type: Object,
     required: true
   }
@@ -25,28 +24,12 @@ const remainingDaysText = computed(() => {
   return t('request.card.fields.in-days', { days: remainingDays.value })
 })
 
-const requestedAmount = computed(() => {
-  return props.request.totalAmount ?? 0
-})
-
-const isAmountValid = computed(() => {
-  return props.request.isWithinBudget ?? true
-})
-
-const budgetAvailable = computed(() => {
-  return props.request.budgetAvailable ?? 0
-})
-
 const firstItem = computed(() => props.request.items[0] ?? {})
 
 const requestFields = computed(() => [
   {
     label: t('request.card.fields.material'),
     value: firstItem.value.materialName ?? '---'
-  },
-  {
-    label: t('request.card.fields.requester'),
-    value: props.request.requestedBy
   },
   {
     label: t('request.card.fields.budget-line'),
@@ -63,46 +46,23 @@ const requestFields = computed(() => [
 <template>
   <card-component
       :id="request.id"
-      :badge-text="request.status"
+      :badge-text="request.requestStatus"
       :badge-severity="
-      request.status === 'APPROVED' ? 'success' :
-      request.status === 'REFUSED' ? 'danger' : 'warning'
+      request.requestStatus === 'Accepted' ? 'success' :
+      request.requestStatus === 'Refused' ? 'danger' : 'warning'
     "
       :fields="requestFields"
       :show-footer="true"
   >
     <template #content>
-      <div class="grid grid-cols-2 gap-4 mt-4">
-        <div class="border border-neutral-border rounded-lg p-4 bg-neutral-bg flex flex-col gap-2">
-          <p class="font-bold text-primary">{{ t('request.card.purpose.title') }}</p>
-          <p class="text-sm text-primary">{{ request.purpose }}</p>
-        </div>
-        <div class="border border-neutral-border rounded-lg p-4 bg-neutral-bg flex flex-col gap-2">
-          <p class="font-bold text-primary">{{ t('request.card.budget-verification.title') }}</p>
-          <div class="flex justify-between text-sm text-primary">
-            <span>{{ t('request.card.budget-verification.requested-amount') }}</span>
-            <span class="font-bold">{{ requestedAmount }}</span>
-          </div>
-          <div class="flex justify-between text-sm text-primary">
-            <span>{{ t('request.card.budget-verification.available-budget') }}</span>
-            <span class="font-bold">{{ budgetAvailable }}</span>
-          </div>
-          <hr class="border-t-2 border-primary my-2 opacity-20" />
-          <div class="flex justify-between items-center text-sm">
-            <span class="text-primary">{{ t('request.card.budget-verification.status') }}</span>
-            <span
-                class="font-bold text-xs"
-                :class="isAmountValid ? 'text-success' : 'text-danger'"
-            >
-              {{ isAmountValid ? t('request.card.status.within-budget') : t('request.card.status.out-budget') }}
-            </span>
-          </div>
-        </div>
+      <div class="border border-neutral-border rounded-lg p-4 bg-neutral-bg flex flex-col gap-2">
+        <p class="font-bold text-primary">{{ t('request.card.purpose.title') }}</p>
+        <p class="text-sm text-primary">{{ request.purpose }}</p>
       </div>
     </template>
     <template #footer>
       <div class="flex items-center justify-between w-full gap-4">
-        <button
+        <button v-if="request.requestStatus === 'Pending'"
             class="flex-1 bg-neutral-border/40 text-primary font-medium rounded-lg py-2 hover:brightness-95 transition"
             @click="emit('modify')"
         >
@@ -118,6 +78,3 @@ const requestFields = computed(() => [
     </template>
   </card-component>
 </template>
-<style scoped>
-
-</style>
