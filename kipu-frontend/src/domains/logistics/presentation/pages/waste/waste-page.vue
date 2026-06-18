@@ -12,6 +12,7 @@ import FilterSummaryBar from '@/shared/presentation/components/FilterSummaryBar.
 import AutocompleteComponent from '@/shared/presentation/components/autocompleteComponent.vue';
 import SelectWithAddComponent from '@/shared/presentation/components/selectWithAddComponent.vue';
 import WasteReportForm from '@/domains/logistics/presentation/components/waste/form/waste-report-form.vue';
+import {getMeasureUnitLabel} from "@/domains/logistics/domain/model/materials/measureUnit.map.js";
 
 const { t } = useI18n();
 const toast = useToast();
@@ -33,7 +34,7 @@ const enrichedWaste = computed(() =>
       return {
         ...w,
         materialName: material?.name ?? w.materialId ?? '---',
-        materialUnit: material?.measureUnit ?? '---'
+        materialUnit: getMeasureUnitLabel(material?.measureUnit)
       };
     })
 );

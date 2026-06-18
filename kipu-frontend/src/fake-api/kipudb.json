@@ -644,6 +644,13 @@
       "password": "123456789",
       "role": "Gestor Operativo",
       "id": "tlsrIVs"
+    },
+    {
+      "name": "Paula",
+      "email": "paula@gmail.com",
+      "password": "12345678",
+      "role": "Logística y Administración",
+      "id": "miEpHu0"
     }
   ],
   "progress": [

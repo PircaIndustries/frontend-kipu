@@ -494,6 +494,10 @@
             "success": {
                 "summary": "Éxito",
                 "message": "Solicitud creada exitosamente"
+            },
+            "error": {
+                "summary": "Error",
+                "message": "No se pudo crear la solicitud. Verifique los datos e intente nuevamente."
             }
         }
     },

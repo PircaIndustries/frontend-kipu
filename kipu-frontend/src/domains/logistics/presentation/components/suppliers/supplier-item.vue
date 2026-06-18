@@ -15,14 +15,14 @@ const supplierFields = computed(() => [
 ])
 
 const statusSeverity = computed(() =>
-    props.supplier.status === 'ACTIVE' ? 'success' : 'danger'
+    props.supplier.isActive === true ? 'success' : 'danger'
 )
 </script>
 
 <template>
   <CardComponent
       :id="supplier.ruc"
-      :badge-text="supplier.status"
+      :badge-text="supplier.isActive ? 'ACTIVE' : 'INACTIVE'"
       :badge-severity="statusSeverity"
       :fields="supplierFields"
       :show-footer="true"

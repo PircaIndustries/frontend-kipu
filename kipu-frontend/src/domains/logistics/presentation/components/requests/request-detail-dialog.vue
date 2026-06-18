@@ -11,7 +11,7 @@ const emit = defineEmits(['update:visible', 'close', 'approve', 'reject'])
 
 const { t } = useI18n()
 
-const isPending = computed(() => props.request?.status === 'PENDING')
+const isPending = computed(() => props.request?.requestStatus === 'Pending')
 
 const remainingDays = computed(() => {
   if (!props.request?.deadline) return 0
@@ -19,30 +19,16 @@ const remainingDays = computed(() => {
   return Math.ceil(diff / (1000 * 60 * 60 * 24))
 })
 
-const totalRequested = computed(() => {
-  return props.request?.totalAmount ?? 0
-})
-
-const isWithinBudget = computed(() => {
-  return props.request?.isWithinBudget ?? true
-})
-
-const budgetStatusLabel = computed(() => {
-  return isWithinBudget.value
-      ? t('request.card.status.within-budget')
-      : t('request.card.status.out-budget')
-})
-
 const firstItem = computed(() => props.request?.items?.[0] || {})
 
-const statusLabel = computed(() => t(`request.card.status.${props.request?.status?.toLowerCase()}`))
+const statusLabel = computed(() => t(`request.card.status.${props.request?.requestStatus?.toLowerCase()}`))
 
 const priorityStyle = computed(() => {
-  const p = props.request?.priority
+  const p = props.request?.requestPriority
   return {
-    'bg-danger text-danger-soft border-danger': p === 'CRITICAL',
-    'bg-warning text-neutral-bg border-warning': p === 'HIGH',
-    'bg-neutral-border text-primary border-neutral-border': p === 'MEDIUM' || p === 'LOW'
+    'bg-danger text-danger-soft border-danger': p === 'Critical',
+    'bg-warning text-neutral-bg border-warning': p === 'High',
+    'bg-neutral-border text-primary border-neutral-border': p === 'Medium' || p === 'Low'
   }
 })
 
@@ -50,50 +36,26 @@ function close() {
   emit('update:visible', false)
   emit('close')
 }
-
-function handleApprove() {
-  emit('approve', props.request)
-  close()
-}
-
-function handleReject() {
-  emit('reject', props.request)
-  close()
-}
+function handleApprove() { emit('approve', props.request); close() }
+function handleReject() { emit('reject', props.request); close() }
 </script>
 
 <template>
-  <pv-dialog
-      :visible="visible"
-      @update:visible="(val) => emit('update:visible', val)"
-      modal
-      :header="request ? '#' + request.id : ''"
-      :style="{ width: '700px' }"
-  >
+  <pv-dialog v-if="request" :visible="visible" @update:visible="(val) => emit('update:visible', val)" modal :header="'#' + request.id" :style="{ width: '700px' }">
     <div class="flex flex-col gap-6">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <span
-              class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border"
-              :class="{
-              'bg-success-soft text-success border-success': request.status === 'APPROVED',
-              'bg-warning-soft text-warning border-warning': request.status === 'PENDING',
-              'bg-danger-soft text-danger border-danger': request.status === 'REFUSED'
-            }"
-          >
+          <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border" :class="{
+            'bg-success-soft text-success border-success': request.requestStatus === 'Accepted',
+            'bg-warning-soft text-warning border-warning': request.requestStatus === 'Pending',
+            'bg-danger-soft text-danger border-danger': request.requestStatus === 'Refused'
+          }">
             {{ statusLabel }}
           </span>
-          <span
-              class="px-3 py-1 rounded-full text-[10px] uppercase tracking-widest border font-bold"
-              :class="priorityStyle"
-          >
-            {{ t(`request.create.priority.${request.priority?.toLowerCase()}`) }}
+          <span class="px-3 py-1 rounded-full text-[10px] uppercase tracking-widest border font-bold" :class="priorityStyle">
+            {{ t(`request.create.priority.${request.requestPriority?.toLowerCase()}`) }}
           </span>
         </div>
-        <span class="text-xs text-primary font-semibold flex items-center gap-1 opacity-70">
-          <i class="pi pi-calendar text-sm"></i>
-          {{ t('request.card.header.request-date') }} {{ request.requestDate }}
-        </span>
       </div>
 
       <div v-if="remainingDays <= 3 && remainingDays > 0" class="flex items-center gap-2 bg-warning-soft text-warning px-3 py-1.5 rounded-lg border border-warning w-fit">
@@ -102,9 +64,7 @@ function handleReject() {
       </div>
 
       <section class="flex flex-col gap-4">
-        <h3 class="text-[10px] font-black text-neutral-border uppercase tracking-widest border-b pb-2">
-          {{ t('request.detail.section.material-info') }}
-        </h3>
+        <h3 class="text-[10px] font-black text-neutral-border uppercase tracking-widest border-b pb-2">{{ t('request.detail.section.material-info') }}</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="p-6 border border-neutral-border/30 rounded-xl flex items-center gap-4">
             <div class="p-3 bg-neutral-bg rounded-lg">
@@ -122,8 +82,7 @@ function handleReject() {
             </div>
             <div class="flex flex-col">
               <span class="text-xs text-neutral-border font-bold uppercase tracking-tighter">{{ t('request.create.fields.quantity') }}</span>
-              <span class="text-lg font-black text-primary">{{ firstItem.quantity }} {{ firstItem.materialUnit }}</span>
-              <span class="text-xs text-primary opacity-60">S/ {{ firstItem.pricePerUnit?.toFixed(2) }} {{ t('request.detail.per-unit') }}</span>
+              <span class="text-lg font-black text-primary">{{ firstItem.quantity }}</span>
             </div>
           </div>
         </div>
@@ -132,10 +91,6 @@ function handleReject() {
       <section class="flex flex-col gap-4">
         <h3 class="text-[10px] font-black text-neutral-border uppercase tracking-widest border-b pb-2">{{ t('request.detail.section.logistics') }}</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="flex flex-col gap-1">
-            <span class="text-[10px] font-bold text-neutral-border uppercase tracking-wider">{{ t('request.card.fields.requester') }}</span>
-            <span class="text-base font-bold text-primary">{{ request.requestedBy }}</span>
-          </div>
           <div class="flex flex-col gap-1">
             <span class="text-[10px] font-bold text-neutral-border uppercase tracking-wider">{{ t('request.create.fields.delivery-location') }}</span>
             <span class="text-base font-bold text-primary">{{ request.deliveryLocation || '-' }}</span>
@@ -161,67 +116,15 @@ function handleReject() {
           <p class="text-sm text-primary opacity-80">{{ request.additionalNotes }}</p>
         </div>
       </section>
-
-      <section>
-        <div class="bg-primary rounded-xl p-8 flex flex-row justify-between items-center">
-          <div class="flex flex-col gap-1">
-            <span class="text-[10px] text-neutral-border uppercase font-black tracking-widest">{{ t('request.detail.total-investment') }}</span>
-            <div class="flex items-baseline gap-2">
-              <span class="text-xs text-success font-bold">S/</span>
-              <span class="text-4xl font-black text-white tracking-tighter">{{ totalRequested.toFixed(2) }}</span>
-            </div>
-          </div>
-          <div
-              class="px-4 py-2 rounded-lg flex items-center justify-center border"
-              :class="{
-              'bg-success-soft border-success': isWithinBudget,
-              'bg-danger-soft border-danger': !isWithinBudget
-            }"
-          >
-            <span
-                class="text-xs font-bold flex items-center gap-2 leading-none"
-                :class="{
-                'text-success': isWithinBudget,
-                'text-danger': !isWithinBudget
-              }"
-            >
-              <i
-                  class="text-sm"
-                  :class="{
-                  'pi pi-check-circle': isWithinBudget,
-                  'pi pi-times-circle': !isWithinBudget
-                }"
-              ></i>
-              {{ budgetStatusLabel }}
-            </span>
-          </div>
-        </div>
-      </section>
     </div>
 
     <template #footer>
       <div class="flex justify-end gap-2 w-full">
         <template v-if="isPending">
-          <pv-button
-              :label="t('request.detail.btn-reject')"
-              severity="danger"
-              outlined
-              class="w-32"
-              @click="handleReject"
-          />
-          <pv-button
-              :label="t('request.detail.btn-approve')"
-              severity="success"
-              class="w-32"
-              @click="handleApprove"
-          />
+          <pv-button :label="t('request.detail.btn-reject')" severity="danger" outlined class="w-32" @click="handleReject" />
+          <pv-button :label="t('request.detail.btn-approve')" severity="success" class="w-32" @click="handleApprove" />
         </template>
-        <pv-button
-            :label="t('request.detail.btn-close')"
-            class="w-32"
-            severity="secondary"
-            @click="close"
-        />
+        <pv-button :label="t('request.detail.btn-close')" class="w-32" severity="secondary" @click="close" />
       </div>
     </template>
   </pv-dialog>

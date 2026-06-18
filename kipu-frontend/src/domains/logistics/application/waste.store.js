@@ -5,8 +5,9 @@ import { MaterialWasteEntity } from "@/domains/logistics/domain/model/waste/mate
 import { MaterialWasteAssembler } from "@/domains/logistics/infrastructure/waste/materialWaste.assembler.js";
 import { WasteClassificationEntity } from "@/domains/logistics/domain/model/waste/wasteClassification.entity.js";
 import { WasteClassificationAssembler } from "@/domains/logistics/infrastructure/waste/wasteClassification.assembler.js";
+import {WasteApi} from "../infrastructure/waste.api.js";
 
-const logisticsApi = new LogisticsApi();
+const wasteApi = new WasteApi();
 
 const DEFAULT_CLASSIFICATIONS = [
   new WasteClassificationEntity({ id: 'wcls-001', name: 'Rotura' }),
@@ -25,14 +26,14 @@ const useWasteStore = defineStore('waste', () => {
     const classificationsLoaded = ref(false);
 
     function fetchWaste() {
-        logisticsApi.getMaterialWastes().then(response => {
+        wasteApi.getMaterialWastes().then(response => {
             waste.value = MaterialWasteAssembler.toEntitiesFromResponse(response);
             wasteLoaded.value = true;
         }).catch(error => { errors.value.push(error); });
     }
 
     function fetchClassifications() {
-        logisticsApi.getWasteClassifications().then(response => {
+        wasteApi.getWasteClassifications().then(response => {
             const fetched = WasteClassificationAssembler.toEntitiesFromResponse(response);
             if (fetched.length > 0) {
                 classifications.value = fetched;
@@ -44,7 +45,7 @@ const useWasteStore = defineStore('waste', () => {
     }
 
     function addClassification(name, onSuccess) {
-        logisticsApi.createWasteClassification({ name }).then(response => {
+        wasteApi.createWasteClassification({ name }).then(response => {
             const newItems = WasteClassificationAssembler.toEntitiesFromResponse(response);
             if (newItems.length > 0) {
                 classifications.value.push(...newItems);
@@ -59,7 +60,7 @@ const useWasteStore = defineStore('waste', () => {
     }
 
     function addWaste(item, onSuccess) {
-        logisticsApi.createMaterialWaste(item).then(response => {
+        wasteApi.createMaterialWaste(item).then(response => {
             const newItems = MaterialWasteAssembler.toEntitiesFromResponse(response);
             waste.value.push(...newItems);
             onSuccess?.();
@@ -68,7 +69,7 @@ const useWasteStore = defineStore('waste', () => {
 
     function updateWaste(id, updates, onSuccess) {
         const payload = { id, ...updates };
-        logisticsApi.updateMaterialWaste(payload).then(response => {
+        wasteApi.updateMaterialWaste(payload).then(response => {
             const [updated] = MaterialWasteAssembler.toEntitiesFromResponse(response);
             if (!updated) return;
             const index = waste.value.findIndex(w => w.id === id);
@@ -78,7 +79,7 @@ const useWasteStore = defineStore('waste', () => {
     }
 
     function deleteWaste(id, onSuccess) {
-        logisticsApi.deleteMaterialWaste(id).then(() => {
+        wasteApi.deleteMaterialWaste(id).then(() => {
             waste.value = waste.value.filter(w => w.id !== id);
             onSuccess?.();
         }).catch(error => { errors.value.push(error); });

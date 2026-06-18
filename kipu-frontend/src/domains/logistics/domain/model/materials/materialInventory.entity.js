@@ -13,12 +13,12 @@ export class MaterialInventoryEntity {
      * @param {number} [params.miniumStock=0] - Minimum required stock to trigger alerts.
      * @param {string} [params.location=''] - Physical storage location.
      */
-    constructor({ id = null, projectId = null, materialId = null, currentStock = 0, miniumStock = 0, location = '' } = {}) {
+    constructor({ id = null, projectId = null, materialId = null, currentStock = 0, miniumStock = 0, location = '', minimumStock } = {}) {
         this.id = id;
         this.projectId = projectId;
         this.materialId = materialId;
         this.currentStock = currentStock;
-        this.miniumStock = miniumStock;
+        this.miniumStock = minimumStock ?? miniumStock;
         this.location = location;
     }
 }
