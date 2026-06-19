@@ -26,6 +26,7 @@ import Dialog from 'primevue/dialog';
 import InputOtp from 'primevue/inputotp';
 import GoogleSignInPlugin from 'vue3-google-signin';
 import ConfirmDialog from 'primevue/confirmdialog';
+import Tooltip from 'primevue/tooltip';
 // Styles
 import 'primeicons/primeicons.css';
 import './style.css';
@@ -72,6 +73,7 @@ app.component('pv-dialog', Dialog);
 app.component('pv-inputotp', InputOtp);
 app.component('pv-confirmdialog', ConfirmDialog);
 app.directive('ripple', Ripple);
+app.directive('tooltip', Tooltip);
 
 if (window.opener && window.opener !== window && window.name && window.name.startsWith('msal.')) {
     console.log("MSAL popup window detected. Skipping Vue app mount to prevent routing concurrency.");

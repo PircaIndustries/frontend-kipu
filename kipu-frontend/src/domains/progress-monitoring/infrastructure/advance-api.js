@@ -2,7 +2,7 @@ import { AdvanceAssembler } from './advance.assembler.js';
 
 export class AdvanceApi {
     constructor() {
-        this.baseUrl = 'http://localhost:3000/api/v1/progress';
+        this.baseUrl = 'http://localhost:3000/progress';
     }
 
     async getAll() {
@@ -35,11 +35,18 @@ export class AdvanceApi {
         return AdvanceAssembler.toEntity(updatedData);
     }
 
-    // ADDED: Method to delete a record
+    // UPDATED: Improved delete method for debugging
     async delete(id) {
+        if (!id) throw new Error("ID is required for deletion");
+
         const res = await fetch(`${this.baseUrl}/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
         });
-        if (!res.ok) throw new Error(`Failed to delete advance ${id}`);
+
+        if (!res.ok) {
+            const errorText = await res.text();
+            throw new Error(`Failed to delete advance ${id}: ${errorText}`);
+        }
     }
 }

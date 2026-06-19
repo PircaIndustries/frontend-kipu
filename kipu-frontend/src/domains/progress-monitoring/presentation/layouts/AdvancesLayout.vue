@@ -18,7 +18,8 @@ const activeTab = ref(route.path.includes('photos') ? '1' : '0');
 
 const onTabChange = (value) => {
   if (value === '0') router.push('/advances/registry');
-  else router.push('/advances/photos');
+  else if (value === '1') router.push('/advances/photos');
+  else router.push('/advances/calendar');
 };
 </script>
 
@@ -28,8 +29,11 @@ const onTabChange = (value) => {
       <TabList>
         <Tab value="0">{{ t('execution.advances.tabs.registry') }}</Tab>
         <Tab value="1">{{ t('execution.advances.tabs.photoLog') }}</Tab>
+        <Tab value="2">{{ t('execution.advances.tabs.calendar') }}</Tab>
       </TabList>
     </Tabs>
-    <router-view />
+    <div class="p-4">
+      <router-view />
+    </div>
   </div>
 </template>

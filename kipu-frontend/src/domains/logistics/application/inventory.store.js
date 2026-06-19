@@ -1,17 +1,22 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import {LogisticsApi} from "@/domains/logistics/infrastructure/logistics.api.js"
-
+import {InventoryApi} from "../infrastructure/inventory.api.js";
+import { useProjectsStore } from "@/domains/project-management/data/useProjectsStore.js";
 import {CategoryEntity} from "@/domains/logistics/domain/model/materials/category.entity.js";
 import {MaterialEntity} from "@/domains/logistics/domain/model/materials/material.entity.js";
 import {MaterialInventoryEntity} from "@/domains/logistics/domain/model/materials/materialInventory.entity.js";
 import {CategoryAssembler} from "@/domains/logistics/infrastructure/materials/category.assembler.js";
 import {MaterialAssembler} from "@/domains/logistics/infrastructure/materials/material.assembler.js";
 import {MaterialInventoryAssembler} from "@/domains/logistics/infrastructure/materials/materialInventory.assembler.js";
+import {CategoriesApi} from "../infrastructure/categories.api.js";
+import {MaterialsApi} from "../infrastructure/materials.api.js";
+import {getMeasureUnitLabel} from "@/domains/logistics/domain/model/materials/measureUnit.map.js";
 
-const logisticsApi = new LogisticsApi();
-
+const inventoryApi = new InventoryApi();
+const categoryApi = new CategoriesApi();
+const materialsApi = new MaterialsApi();
 const useInventoryStore = defineStore('logistics', () => {
+    const projectsStore = useProjectsStore();
 
     // ── RAW ────────────────────────────────────────────────────────────────
 
@@ -57,7 +62,7 @@ const useInventoryStore = defineStore('logistics', () => {
      * @returns {void}
      */
     function fetchCategories() {
-        logisticsApi.getCategories().then(response => {
+        categoryApi.getCategories().then(response => {
             categories.value = CategoryAssembler.toEntitiesFromResponse(response);
             categoriesLoaded.value = true;
         }).catch(error => {
@@ -69,7 +74,7 @@ const useInventoryStore = defineStore('logistics', () => {
      * @returns {void}
      */
     function fetchMaterials() {
-        logisticsApi.getMaterials().then(response => {
+        materialsApi.getMaterials().then(response => {
             materials.value = MaterialAssembler.toEntitiesFromResponse(response);
             materialsLoaded.value = true;
         }).catch(error => {
@@ -81,7 +86,7 @@ const useInventoryStore = defineStore('logistics', () => {
      * @returns {void}
      */
     function fetchInventory() {
-        logisticsApi.getMaterialInventories().then(response => {
+        inventoryApi.getMaterialInventories().then(response => {
             inventoryMaterials.value = MaterialInventoryAssembler.toEntitiesFromResponse(response);
             inventoryLoaded.value = true;
         }).catch(error => {
@@ -93,7 +98,9 @@ const useInventoryStore = defineStore('logistics', () => {
 
     const inventoryView = computed(() => {
         const activeCategories = categories.value.filter(c => c.isActive);
-        return inventoryMaterials.value.map(invItem => {
+        // const currentId = projectsStore.currentProjectId;
+        const filteredItems = inventoryMaterials.value;
+        return filteredItems.map(invItem => {
             const material = materials.value.find(m => m.id === invItem.materialId);
             const category = activeCategories.find(c => c.id === material?.categoryId);
 
@@ -101,8 +108,7 @@ const useInventoryStore = defineStore('logistics', () => {
                 ...invItem,
                 materialName:        material?.name        ?? 'Unknown',
                 materialCategory:    category?.name        ?? 'Without category',
-                materialSubcategory: material?.subcategory ?? 'Without Subcategory',
-                materialUnit:        material?.measureUnit ?? 'Without Unit'
+                materialUnit:        getMeasureUnitLabel(material?.measureUnit)
             };
         });
     });
@@ -126,7 +132,7 @@ const useInventoryStore = defineStore('logistics', () => {
             result = result.filter(i => i.currentStock <= i.miniumStock);
         }
         if (selectedInventoryId.value) {
-            result = result.filter(i => i.id === selectedInventoryId.value);
+            result = result.filter(i => String(i.id) === String(selectedInventoryId.value));
         }
         return result;
     });
@@ -149,7 +155,7 @@ const useInventoryStore = defineStore('logistics', () => {
     }
 
     function addCategory(name, onSuccess) {
-        logisticsApi.createCategory({
+        categoryApi.createCategory({
             id: `cat-${Date.now()}`,
             name,
             description: '',
@@ -174,7 +180,7 @@ const useInventoryStore = defineStore('logistics', () => {
         const item = inventoryMaterials.value.find(i => i.id === inventoryId);
         if (!item) return;
         const newStock = Math.max(0, item.currentStock - quantity);
-        logisticsApi.updateMaterialInventory({
+        inventoryApi.updateMaterialInventory({
             id: item.id,
             projectId: item.projectId,
             materialId: item.materialId,

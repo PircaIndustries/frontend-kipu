@@ -1,4 +1,3 @@
-<!-- src/domains/signatures/presentation/components/SignatureDialog.vue -->
 <template>
   <Dialog
       :visible="visible"

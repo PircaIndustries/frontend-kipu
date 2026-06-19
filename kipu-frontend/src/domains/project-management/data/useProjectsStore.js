@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, computed, watch } from 'vue';
 import { projectsApi } from '../infrastructure/projects.api';
 import { ProjectEntity, getRandomProjectImage } from '../domain/models/project.entity';
+import { useAdvanceStore } from '../../progress-monitoring/application/advancesStore.js';
 
 /**
  * Pinia store for project management.
@@ -18,10 +19,45 @@ export const useProjectsStore = defineStore('projects', () => {
     const currentProjectId = ref(localStorage.getItem('currentProjectId') || null);
 
     // ── Getters ──
-    /** Full entity of the currently selected project. */
-    const currentProject = computed(() =>
-        projects.value.find(p => p.id === currentProjectId.value) || null
-    );
+    /**
+     * Computed property to calculate the project status and progress dynamically.
+     * It ensures a single source of truth for the project's progress and status.
+     */
+    const currentProject = computed(() => {
+        const baseProject = projects.value.find(p => p.id === currentProjectId.value);
+        if (!baseProject) return null;
+
+        const advanceStore = useAdvanceStore();
+        const projectAdvances = advanceStore.advances.filter(a => a.projectId === baseProject.id);
+
+        // If no advances exist, it is in 'Planning' status with 0% progress
+        if (projectAdvances.length === 0) {
+            return {
+                ...baseProject,
+                progress: 0,
+                status: 'Planificación' // Note: Ensure your i18n keys match this value
+            };
+        }
+
+        // Weighted progress calculation: Sum(percentage * weight) / Sum(weights)
+        const totalWeightedSum = projectAdvances.reduce((sum, item) =>
+            sum + (Number(item.currentPercentage || 0) * Number(item.weight || 1)), 0);
+
+        const totalWeight = projectAdvances.reduce((sum, item) =>
+            sum + Number(item.weight || 1), 0);
+
+        const calculatedProgress = totalWeight > 0 ? Math.round(totalWeightedSum / totalWeight) : 0;
+
+        // Determine status: 100% means 'Finalizada', otherwise 'En ejecución'
+        const calculatedStatus = calculatedProgress >= 100 ? 'Finalizada' : 'En ejecución';
+
+        // Return the object, respecting the 'Paralizada' state if it was manually set
+        return {
+            ...baseProject,
+            progress: calculatedProgress,
+            status: baseProject.status === 'Paralizada' ? 'Paralizada' : calculatedStatus
+        };
+    });
 
     /** Name of the currently selected project (convenience getter for other modules). */
     const currentProjectName = computed(() => currentProject.value?.name || '');
@@ -216,6 +252,25 @@ export const useProjectsStore = defineStore('projects', () => {
         }
     }
 
+    /**
+     * Helper to sync the calculated progress to the backend.
+     * Call this after adding or updating an advance.
+     */
+    async function syncProjectProgress() {
+        if (!currentProject.value) return;
+
+        try {
+            await updateProjectStatus(
+                currentProject.value.id,
+                currentProject.value.status,
+                'Auto-sync weighted progress',
+                currentProject.value.progress
+            );
+        } catch (error) {
+            console.error('Failed to sync progress:', error);
+        }
+    }
+
     return {
         // State
         projects,
@@ -233,6 +288,7 @@ export const useProjectsStore = defineStore('projects', () => {
         checkNameExists,
         updateProjectStatus,
         addProjectDocument,
-        deleteProject
+        deleteProject,
+        syncProjectProgress
     };
 });

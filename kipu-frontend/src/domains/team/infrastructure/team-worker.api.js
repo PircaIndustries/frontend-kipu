@@ -1,18 +1,19 @@
 import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1'
-const TEAMWORKERS_URL = import.meta.env.VITE_TEAMWORKERS_ENDPOINT_PATH || '/team-workers'
-/**
- * Team Workers API service
- */
+// Usamos el puerto local de .NET Core
+const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL_LOCAL || 'http://localhost:5230/api/v1'
+const TEAMWORKERS_URL = '/team-workers'
+
 export const teamWorkerApi = {
     /**
-     * Fetches all team workers
-     * @returns {Promise<TeamWorkerEntity[]>} Promise resolving to team workers
+     * Consume el endpoint: GET /api/v1/teamworkers?projectId=...
      */
-    async getAllWorkers() {
+    async getAllWorkers(projectId, globalSearch = '') {
         try {
-            const response = await axios.get(`${API_BASE_URL}${TEAMWORKERS_URL}`)
+            const params = { projectId }
+            if (globalSearch) params.globalSearch = globalSearch
+
+            const response = await axios.get(`${API_BASE_URL}${TEAMWORKERS_URL}`, { params })
             return response.data
         } catch (error) {
             console.error('Error fetching team workers:', error)
@@ -20,11 +21,6 @@ export const teamWorkerApi = {
         }
     },
 
-    /**
-     * Fetches a team worker by ID
-     * @param {string} id - Worker identifier
-     * @returns {Promise<TeamWorkerEntity>} Promise resolving to team worker
-     */
     async getWorkerById(id) {
         try {
             const response = await axios.get(`${API_BASE_URL}${TEAMWORKERS_URL}/${id}`)
@@ -36,13 +32,11 @@ export const teamWorkerApi = {
     },
 
     /**
-     * Creates a new team worker
-     * @param {TeamWorkerEntity} worker - Team worker to create
-     * @returns {Promise<TeamWorkerEntity>} Promise resolving to created worker
+     * Envía CreateTeamWorkerResource
      */
-    async createWorker(worker) {
+    async createWorker(workerResource) {
         try {
-            const response = await axios.post(`${API_BASE_URL}${TEAMWORKERS_URL}`, worker)
+            const response = await axios.post(`${API_BASE_URL}${TEAMWORKERS_URL}`, workerResource)
             return response.data
         } catch (error) {
             console.error('Error creating worker:', error)
@@ -51,31 +45,39 @@ export const teamWorkerApi = {
     },
 
     /**
-     * Updates an existing team worker
-     * @param {string} id - Worker identifier
-     * @param {TeamWorkerEntity} worker - Updated worker application
-     * @returns {Promise<TeamWorkerEntity>} Promise resolving to updated worker
-     */
-    async updateWorker(id, worker) {
-        try {
-            const response = await axios.put(`${API_BASE_URL}${TEAMWORKERS_URL}/${id}`, worker)
-            return response.data
-        } catch (error) {
-            console.error(`Error updating worker ${id}:`, error)
-            throw error
-        }
-    },
-
-    /**
-     * Deletes a team worker
-     * @param {string} id - Worker identifier
-     * @returns {Promise<void>} Promise resolving when deleted
+     * Consume el endpoint DELETE de C#
      */
     async deleteWorker(id) {
         try {
             await axios.delete(`${API_BASE_URL}${TEAMWORKERS_URL}/${id}`)
         } catch (error) {
             console.error(`Error deleting worker ${id}:`, error)
+            throw error
+        }
+    },
+
+    /**
+     * Command: POST /api/v1/teamworkers/{id}/machineries
+     */
+    async assignMachinery(teamWorkerId, machineryResource) {
+        try {
+            const response = await axios.post(`${API_BASE_URL}${TEAMWORKERS_URL}/${teamWorkerId}/machineries`, machineryResource)
+            return response.data
+        } catch (error) {
+            console.error(`Error assigning machinery to worker ${teamWorkerId}:`, error)
+            throw error
+        }
+    },
+
+    /**
+     * Command: DELETE /api/v1/teamworkers/{id}/machineries/{id}
+     */
+    async removeMachinery(teamWorkerId, machineryId) {
+        try {
+            const response = await axios.delete(`${API_BASE_URL}${TEAMWORKERS_URL}/${teamWorkerId}/machineries/${machineryId}`)
+            return response.data
+        } catch (error) {
+            console.error(`Error removing machinery from worker ${teamWorkerId}:`, error)
             throw error
         }
     }

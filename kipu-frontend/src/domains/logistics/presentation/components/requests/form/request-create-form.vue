@@ -7,6 +7,7 @@ import { useToast } from 'primevue/usetoast';
 import AutocompleteComponent from '@/shared/presentation/components/autocompleteComponent.vue';
 import useRequestStore from '@/domains/logistics/application/requests.store.js';
 import useSupplierStore from '@/domains/logistics/application/supplier.store.js';
+import { getMeasureUnitLabel } from '@/domains/logistics/domain/model/materials/measureUnit.map.js';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -22,8 +23,7 @@ const categoryOptions = computed(() =>
 const selectedCategory = ref('');
 const selectedMaterial = ref('');
 const selectedSupplier = ref('');
-const selectedBudgetLine = ref('');
-const selectedPriority = ref('LOW');
+const selectedPriority = ref('Low');
 
 const quantity = ref(1);
 const requiredDate = ref(null);
@@ -44,45 +44,6 @@ const materialOptions = computed(() =>
 const materialSelected = computed(() =>
     requestStore.materials.find(m => m.name === selectedMaterial.value)
 );
-const selectedUnit = computed(() => materialSelected.value?.measureUnit ?? '');
-const selectedPrice = computed(() => selectedSupplierOffer.value?.unitPrice ?? 0);
-const totalPrice = computed(() => quantity.value * selectedPrice.value);
-
-// ADDED: Get all budget lines for the current project to calculate the correct sequential index
-const projectBudgetLines = computed(() => {
-  const projectId = localStorage.getItem('currentProjectId') || 'proj-01';
-  return requestStore.budgetLines.filter(b => String(b.projectId) === String(projectId));
-});
-
-// ADDED: Attach sequential ID and filter only those with assigned funds
-const activeBudgetLines = computed(() => {
-  return projectBudgetLines.value
-      .map((b, index) => ({
-        ...b,
-        sequentialId: String(index + 1).padStart(2, '0') // Generates 01, 02, 03...
-      }))
-      .filter(b => Number(b.assignedBudget || 0) > 0);
-});
-
-// ADDED: Map options for the autocomplete dropdown using the sequential ID
-const budgetLineOptions = computed(() =>
-    activeBudgetLines.value.map(b => ({
-      name: `${b.sequentialId} - ${b.activityName || b.activity}`
-    }))
-);
-
-// ADDED: Get the full object of the selected budget line to extract its financial data
-const selectedBudgetLineObj = computed(() => {
-  if (!selectedBudgetLine.value) return null;
-  return activeBudgetLines.value.find(b =>
-      `${b.sequentialId} - ${b.activityName || b.activity}` === selectedBudgetLine.value
-  );
-});
-
-// ADDED: Calculations for the Budget Verification cards
-const budgetLineAssigned = computed(() => Number(selectedBudgetLineObj.value?.assignedBudget || 0));
-const budgetLineExecuted = computed(() => Number(selectedBudgetLineObj.value?.executedAmount || 0));
-const budgetLineAvailable = computed(() => budgetLineAssigned.value - budgetLineExecuted.value);
 
 const filteredSuppliers = computed(() => {
   if (!materialSelected.value) return [];
@@ -92,10 +53,16 @@ const supplierOptions = computed(() =>
     filteredSuppliers.value.map(s => ({ name: s.socialReason }))
 );
 
-const selectedSupplierOffer = computed(() => {
-  if (!materialSelected.value || !selectedSupplier.value) return null;
-  return supplierStore.getSupplierOffer(materialSelected.value.id, selectedSupplier.value);
-});
+const selectedSupplierObj = computed(() =>
+    supplierStore.suppliers.find(s => s.socialReason === selectedSupplier.value)
+);
+
+const selectedOffer = computed(() =>
+    supplierStore.getSupplierOffer(materialSelected.value?.id, selectedSupplier.value)
+);
+const selectedUnit = computed(() => materialSelected.value ? getMeasureUnitLabel(materialSelected.value.measureUnit) : '');
+const selectedPrice = computed(() => selectedOffer.value?.unitPrice ?? 0);
+const totalPrice = computed(() => quantity.value * selectedPrice.value);
 
 function onCategoryChange() {
   selectedMaterial.value = '';
@@ -123,37 +90,34 @@ const submitting = ref(false);
 const onFormSubmit = () => {
   if (submitting.value) return;
   submitted.value = true;
-
   if (!allFieldsValid.value) return;
-
   submitting.value = true;
 
   const currentUserId = (() => {
-    try { return JSON.parse(localStorage.getItem('currentUser'))?.id || null; }
-    catch { return null; }
+    try { return Number(JSON.parse(localStorage.getItem('currentUser'))?.id) || 1; }
+    catch { return 1; }
   })();
 
   const request = {
-    items: [{
-      supplierOfferId: selectedSupplierOffer.value?.id ?? '',
-      quantity: quantity.value
-    }],
-    projectId: localStorage.getItem('currentProjectId') || 'proj-01',
-    suggestedSupplierId: filteredSuppliers.value.find(s => s.socialReason === selectedSupplier.value)?.id ?? '',
-    budgetLineId: selectedBudgetLineObj.value?.id ?? '',
-    priority: selectedPriority.value,
+    deadline: requiredDate.value ? new Date(requiredDate.value).toISOString() : new Date().toISOString(),
+    requestPriority: selectedPriority.value,
     deliveryLocation: deliveryLocation.value,
     purpose: purpose.value,
-    additionalNotes: additionalNotes.value,
-    requestDate: new Date().toISOString().split('T')[0],
-    deadline: requiredDate.value ? new Date(requiredDate.value).toISOString().split('T')[0] : '',
+    additionalNotes: additionalNotes.value || null,
     requestedBy: currentUserId,
-    status: 'PENDING'
+    items: [{
+        materialCatalogId: Number(materialSelected.value?.id),
+        supplierId: Number(selectedSupplierObj.value?.id),
+        quantity: quantity.value,
+        unitPrice: selectedPrice.value
+    }]
   };
-
   requestStore.createRequest(request, () => {
     toast.add({ severity: 'success', summary: t('request.create.success.summary'), detail: t('request.create.success.message'), life: 3000 });
     router.push({ name: 'requests-list' });
+  }, () => {
+    toast.add({ severity: 'error', summary: t('common.error'), detail: t('request.create.error.message'), life: 4000 });
+    submitting.value = false;
   });
   setTimeout(() => { submitting.value = false; }, 8000);
 };
@@ -161,9 +125,8 @@ const onFormSubmit = () => {
 onMounted(() => {
   requestStore.fetchCategories();
   requestStore.fetchMaterials();
-  requestStore.fetchSupplierOffers();
-  supplierStore.fetchSupplierOffers();
   supplierStore.fetchSuppliers();
+  supplierStore.fetchSupplierOffers();
 });
 </script>
 
@@ -241,7 +204,7 @@ onMounted(() => {
           </span>
           <pv-inputnumber
               v-model="quantity"
-              :min="0"
+              :min="1"
               showButtons
               buttonLayout="horizontal"
               :placeholder="t('request.create.placeholders.quantity')"
@@ -261,15 +224,11 @@ onMounted(() => {
         </div>
 
         <div class="flex flex-col gap-1">
-          <span class="text-xs font-bold text-primary/80 uppercase tracking-wider">
-            {{ t('request.create.fields.unit') }}
-          </span>
+          <span class="text-xs font-bold text-primary/80 uppercase tracking-wider">{{ t('request.create.fields.unit') }}</span>
           <div class="w-full min-h-[2.5rem] flex items-center gap-2 px-4 rounded-m border border-neutral-border/20 bg-white text-sm">
             <span v-if="selectedUnit" class="text-primary font-medium">{{ selectedUnit }}</span>
             <span v-else class="text-neutral-border">{{ t('request.create.placeholders.unit-empty') }}</span>
-            <span v-if="selectedPrice" class="ml-auto text-accent font-bold">
-              S/ {{ selectedPrice.toFixed(2) }} / {{ selectedUnit }}
-            </span>
+            <span v-if="selectedPrice" class="ml-auto text-accent font-bold">S/ {{ selectedPrice }} / {{ selectedUnit }}</span>
           </div>
         </div>
       </div>
@@ -277,27 +236,11 @@ onMounted(() => {
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-l">
         <div class="flex flex-col gap-1">
           <span class="text-xs font-bold text-primary/80 uppercase tracking-wider">
-            {{ t('request.create.fields.budget-line') }}
-          </span>
-          <autocomplete-component
-              v-model="selectedBudgetLine"
-              :options="budgetLineOptions"
-              :placeholder="t('request.create.placeholders.select')"
-              :return-object="false"
-              :invalid="submitted && !selectedBudgetLine"
-          />
-          <span v-if="submitted && !selectedBudgetLine" class="text-xs text-danger">
-            {{ t('request.create.validation.budget-line-required') }}
-          </span>
-        </div>
-
-        <div class="flex flex-col gap-1">
-          <span class="text-xs font-bold text-primary/80 uppercase tracking-wider">
             {{ t('request.create.fields.priority') }}
           </span>
           <pv-select
               v-model="selectedPriority"
-              :options="['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']"
+              :options="['Low', 'Medium', 'High', 'Critical']"
               fluid
           >
             <template #value="slotProps">
@@ -310,6 +253,11 @@ onMounted(() => {
         </div>
       </div>
 
+      <div v-if="totalPrice > 0" class="border-t pt-4 flex items-center justify-between px-2">
+        <span class="text-sm font-bold text-primary/80 uppercase tracking-wider">Total Estimado</span>
+        <span class="text-lg font-bold text-accent">S/ {{ totalPrice.toFixed(2) }}</span>
+      </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-l">
         <div class="flex flex-col gap-1">
           <span class="text-xs font-bold text-primary/80 uppercase tracking-wider">
@@ -317,6 +265,7 @@ onMounted(() => {
           </span>
           <pv-datepicker
               v-model="requiredDate"
+              :min-date="new Date()"
               :placeholder="t('request.create.placeholders.date')"
               :invalid="submitted && !requiredDate"
               fluid
@@ -366,45 +315,6 @@ onMounted(() => {
             rows="2"
             :placeholder="t('request.create.placeholders.additional-notes')"
         />
-      </div>
-    </div>
-
-    <div class="bg-white border border-neutral-border/20 rounded-m p-xl shadow-sm flex flex-col gap-l">
-      <h3 class="text-xs font-black text-primary uppercase tracking-widest text-left">
-        {{ t('request.create.budget-verification.title') }}
-      </h3>
-      <div class="grid grid-cols-3 gap-l">
-        <div class="flex flex-col items-center p-m bg-neutral-bg rounded-s border border-neutral-border/20">
-      <span class="text-xs text-neutral-border uppercase font-bold text-center">
-        {{ t('request.create.budget-verification.item-budget') }}
-      </span>
-          <span class="text-xl font-bold text-primary mt-1">S/ {{ budgetLineAssigned.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
-        </div>
-        <div class="flex flex-col items-center p-m bg-neutral-bg rounded-s border border-neutral-border/20">
-      <span class="text-xs text-neutral-border uppercase font-bold text-center">
-        {{ t('request.create.budget-verification.executed') }}
-      </span>
-          <span class="text-xl font-bold text-warning mt-1">S/ {{ budgetLineExecuted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
-        </div>
-        <div class="flex flex-col items-center p-m bg-neutral-bg rounded-s border border-neutral-border/20">
-      <span class="text-xs text-neutral-border uppercase font-bold text-center">
-        {{ t('request.create.budget-verification.available') }}
-      </span>
-          <span class="text-xl font-bold text-success mt-1">S/ {{ budgetLineAvailable.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="bg-white border border-neutral-border/20 rounded-m p-xl shadow-sm flex flex-col gap-l">
-      <div class="flex flex-col gap-1">
-        <span class="text-xs font-bold text-primary/80 uppercase tracking-wider">
-          {{ t('request.create.fields.attachments') }}
-        </span>
-        <div class="border-2 border-dashed border-neutral-border/30 rounded-m p-xl flex flex-col items-center gap-m text-center cursor-pointer hover:border-accent hover:bg-accent/5 transition-all">
-          <i class="pi pi-cloud-upload text-3xl text-neutral-border"></i>
-          <span class="text-sm font-bold text-primary">{{ t('request.create.placeholders.dropzone') }}</span>
-          <span class="text-xs text-neutral-border">{{ t('request.create.placeholders.dropzone-hint') }}</span>
-        </div>
       </div>
     </div>
 

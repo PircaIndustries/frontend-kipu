@@ -1,7 +1,5 @@
-<!-- src/domains/team/presentation/pages/team-users/team-users-page.vue -->
 <template>
   <div class="p-6">
-    <!-- Header -->
     <div class="flex justify-between items-center mb-8">
       <h1 class="text-2xl font-bold text-text-main">{{ $t('team.users.title') }}</h1>
       <Button
@@ -12,7 +10,6 @@
       />
     </div>
 
-    <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
       <Card>
         <template #content>
@@ -51,9 +48,7 @@
       </Card>
     </div>
 
-    <!-- Users Table + Sidebar (Role Dictionary) -->
     <div class="flex gap-6">
-      <!-- Tabla de usuarios -->
       <div class="flex-1">
         <Card>
           <template #title>
@@ -75,13 +70,13 @@
             </div>
           </template>
           <template #content>
-            <DataTable :value="store.filteredUsers" class="w-full">
+            <DataTable :value="sortedUsers" class="w-full">
               <Column field="fullName" :header="$t('team.users.assigned-roles.user-tab')">
                 <template #body="{ data }">
                   <div class="flex items-center gap-2">
                     <Avatar :label="getInitials(data.fullName)" class="bg-accent/10 text-accent" size="large" />
                     <span class="text-text-main">{{ data.fullName }}</span>
-                    <span v-if="isCurrentUser(data)" class="text-xs text-neutral-border ml-1">
+                    <span v-if="isCurrentUser(data)" class="text-xs text-neutral-border ml-1 font-semibold italic">
                       ({{ $t('team.users.assigned-roles.user-profile-you') }})
                     </span>
                   </div>
@@ -102,33 +97,37 @@
 
               <Column :header="$t('team.users.assigned-roles.action-tab')">
                 <template #body="{ data }">
-                  <Button
-                      v-if="data.isActive && !isCurrentUser(data)"
-                      @click="toggleStatus(data)"
-                      :label="$t('team.users.assigned-roles.btn-action')"
-                      severity="danger"
-                      text
-                      size="small"
-                  />
-                  <Button
-                      v-else-if="!data.isActive && !isCurrentUser(data)"
-                      @click="toggleStatus(data)"
-                      :label="$t('team.users.assigned-roles.btn-action-done')"
-                      text
-                      size="small"
-                  />
+                  <div v-if="isCurrentUser(data)" class="text-neutral-border text-xs italic p-2">
+                    -
+                  </div>
+                  <div v-else>
+                    <Button
+                        v-if="data.isActive"
+                        @click="toggleStatus(data)"
+                        :label="$t('team.users.assigned-roles.btn-action')"
+                        severity="danger"
+                        text
+                        size="small"
+                    />
+                    <Button
+                        v-else
+                        @click="toggleStatus(data)"
+                        :label="$t('team.users.assigned-roles.btn-action-done')"
+                        text
+                        size="small"
+                    />
+                  </div>
                 </template>
               </Column>
             </DataTable>
 
             <div class="text-right text-sm text-neutral-border mt-4">
-              {{ store.filteredUsers.length }} / {{ store.allUsers.length }} {{ $t('team.users.assigned-roles.user-count') }}
+              {{ sortedUsers.length }} / {{ store.allUsers.length }} {{ $t('team.users.assigned-roles.user-count') }}
             </div>
           </template>
         </Card>
       </div>
 
-      <!-- Sidebar: Diccionario de Roles -->
       <div class="w-80 flex flex-col gap-4">
         <Card>
           <template #title>
@@ -139,28 +138,24 @@
           </template>
           <template #content>
             <div class="flex flex-col gap-4">
-              <!-- Administrador -->
               <div>
                 <h3 class="text-base font-bold text-primary">{{ $t('team.users.role-dictionary.administrator') }}</h3>
                 <p class="text-sm text-text-main mt-1 leading-relaxed">
                   {{ $t('team.users.role-dictionary.administrator-description') }}
                 </p>
               </div>
-              <!-- Gestor Operativo -->
               <div>
                 <h3 class="text-base font-bold text-primary">{{ $t('team.users.role-dictionary.manager') }}</h3>
                 <p class="text-sm text-text-main mt-1 leading-relaxed">
                   {{ $t('team.users.role-dictionary.manager-description') }}
                 </p>
               </div>
-              <!-- Logística -->
               <div>
                 <h3 class="text-base font-bold text-primary">{{ $t('team.users.role-dictionary.logistics') }}</h3>
                 <p class="text-sm text-text-main mt-1 leading-relaxed">
                   {{ $t('team.users.role-dictionary.logistics-description') }}
                 </p>
               </div>
-              <!-- Cliente (destacado) -->
               <div class="bg-neutral-bg p-3 rounded-md border border-neutral-border">
                 <h3 class="text-base font-bold text-primary">{{ $t('team.users.role-dictionary.client') }}</h3>
                 <p class="text-sm text-text-main mt-1 leading-relaxed">
@@ -175,7 +170,6 @@
       </div>
     </div>
 
-    <!-- Invite Dialog -->
     <Dialog
         v-model:visible="dialogVisible"
         :header="$t('team.users.send-invitation.title')"
@@ -273,7 +267,7 @@ const inviteForm = ref({
 
 const roleOptions = [
   { label: 'Administrador', value: 'Administrador' },
-  { label: 'Gestor', value: 'Gestor' },
+  { label: 'Gestor', value: 'Gestor Operativo' },
   { label: 'Logística', value: 'Logistica' },
   { label: 'Cliente', value: 'Cliente' }
 ]
@@ -283,6 +277,25 @@ const isInviteFormValid = computed(() => {
       inviteForm.value.firstName &&
       inviteForm.value.lastName &&
       inviteForm.value.role
+})
+
+/**
+ * REGLA VISUAL DE ORDENAMIENTO:
+ * Toma la lista ya filtrada por el buscador y fuerza a que el usuario actual aparezca en la posición [0] (primero)
+ */
+const sortedUsers = computed(() => {
+  const users = [...store.filteredUsers]
+  if (!store.currentUser) return users
+
+  // Buscamos si el usuario actual ya está en el arreglo
+  const currentIndex = users.findIndex(u => u.id === store.currentUser.id || u.email === store.currentUser.email)
+
+  if (currentIndex > -1) {
+    // Si ya existe, lo sacamos de su posición actual y lo empujamos al principio de la lista
+    const [currentUserObj] = users.splice(currentIndex, 1)
+    users.unshift(currentUserObj)
+  }
+  return users
 })
 
 const getInitials = (fullName) => {
@@ -309,7 +322,7 @@ const getRoleSeverity = (role) => {
 }
 
 const isCurrentUser = (user) => {
-  return store.currentUser?.id === user.id
+  return store.currentUser?.id === user.id || store.currentUser?.email === user.email
 }
 
 const toggleStatus = async (user) => {
@@ -341,8 +354,48 @@ watch(searchValue, (newVal) => {
   store.updateSearchTerm(newVal)
 })
 
-onMounted(() => {
-  store.fetchUsers()
+/**
+ * REGLA DE NEGOCIO EN EL CICLO DE VIDA (ON MOUNTED)
+ * 1. Carga el estado del usuario logueado localmente.
+ * 2. Carga todos los usuarios asignados al proyecto desde el backend (.NET).
+ * 3. Verifica si el usuario actual falta en la base de datos de este proyecto; de ser así, lo registra en caliente.
+ */
+onMounted(async () => {
+  // Primero cargamos los datos locales de sesión
   store.loadCurrentUser()
+
+  // Traemos los usuarios existentes de la base de datos
+  await store.fetchUsers()
+
+  // Verificamos si el usuario actual ya se encuentra en el listado de este proyecto
+  if (store.currentUser) {
+    const userExists = store.teamUsers.some(
+        u => u.email === store.currentUser.email &&
+            String(u.projectId) === String(localStorage.getItem('currentProjectId'))
+    )
+
+    // Si no está registrado en el proyecto actual, hacemos la auto-suscripción
+    if (!userExists) {
+      console.log("El usuario actual no está registrado en este proyecto. Registrando automáticamente...")
+
+      // Separamos el nombre completo de Pepe para cumplir con la firma del formulario de invitación
+      const nameParts = store.currentUser.fullName.split(' ')
+      const firstName = nameParts[0] || 'User'
+      const lastName = nameParts.slice(1).join(' ') || 'Kipu'
+
+      const registrationData = {
+        firstName: firstName,
+        lastName: lastName,
+        email: store.currentUser.email,
+        role: store.currentUser.role || 'Gestor Operativo'
+      }
+
+      // Ejecutamos la acción del Store que hace el POST hacia C#
+      await store.inviteUser(registrationData)
+
+      // Volvemos a refrescar la tabla para traer el ID definitivo asignado por el Agregado DDD
+      await store.fetchUsers()
+    }
+  }
 })
 </script>

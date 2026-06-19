@@ -53,9 +53,6 @@ const inventoryFields = computed(() => [
   >
     <template #footer>
       <div class="flex items-center justify-between">
-        <span class="text-xs text-neutral-border italic">
-          {{ inventoryMaterial.materialSubcategory || '---' }}
-        </span>
         <span
             v-if="isLowStock"
             class="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-danger-soft text-danger"

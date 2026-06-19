@@ -57,6 +57,10 @@ const navigateToCreate = () => {
 const navigateToEdit = (id) => {
   router.push(`/advances/edit/${id}`);
 };
+
+const navigateToHistory = (activityName) => {
+  router.push(`/advances/activity-history/${encodeURIComponent(activityName)}`);
+};
 </script>
 
 <template>
@@ -106,25 +110,69 @@ const navigateToEdit = (id) => {
           <th class="px-6 py-4">{{ t('execution.table.activity') }}</th>
           <th class="px-6 py-4">{{ t('execution.table.specialty') }}</th>
           <th class="px-6 py-4">{{ t('execution.table.progress') }}</th>
+          <th class="px-6 py-4">{{ t('execution.table.weight') }}</th>
           <th class="px-6 py-4">{{ t('execution.table.status') }}</th>
         </tr>
         </thead>
-        <tbody class="divide-y divide-gray-100">
-        <tr v-if="store.filteredAdvances.length === 0">
-          <td colspan="5" class="px-6 py-10 text-center text-gray-400 italic">No hay registros para este proyecto.</td>
-        </tr>
-        <tr v-for="item in store.filteredAdvances" :key="item.id" class="hover:bg-gray-50 transition-colors cursor-pointer" @click="navigateToEdit(item.id)">
-          <td class="px-6 py-4">{{ new Date(item.lastUpdate || item.date).toLocaleDateString() }}</td>
-          <td class="px-6 py-4">
-            <div class="font-bold text-gray-800">{{ item.activityName || item.activity }}</div>
-            <div class="text-xs text-gray-400 font-normal">{{ item.details || item.sector }}</div>
-          </td>
+        <!--<tbody class="divide-y divide-gray-100">
+        <tr v-for="item in store.filteredAdvances" :key="item.id"
+            class="hover:bg-gray-50 transition-colors cursor-pointer"
+            @click="navigateToHistory(item.activityName)">
+          <td class="px-6 py-4">{{ new Date(item.lastUpdate).toLocaleDateString() }}</td>
+          <td class="px-6 py-4 font-bold text-gray-800">{{ item.activityName }}</td>
           <td class="px-6 py-4 text-gray-500">{{ item.specialty }}</td>
-          <td class="px-6 py-4 font-bold">{{ item.currentPercentage || item.progress }}%</td>
+
+          <!- Progress Bar Cell ->
           <td class="px-6 py-4">
-              <span :class="getStatusBadgeClass(item.status)">
-                {{ t(`execution.status.${(item.status || 'ACTIVE').toUpperCase()}`) }}
-              </span>
+            <div class="flex items-center gap-3">
+              <div class="w-24 bg-gray-200 rounded-full h-2">
+                <div class="bg-blue-600 h-2 rounded-full" :style="{ width: item.currentPercentage + '%' }"></div>
+              </div>
+              <span class="font-bold text-sm">{{ item.currentPercentage }}%</span>
+            </div>
+          </td>
+
+          <!- Weight Cell ->
+          <td class="px-6 py-4 font-bold text-gray-700">{{ item.weight }}</td>
+
+          <!- Status Cell ->
+          <td class="px-6 py-4">
+          <span :class="getStatusBadgeClass(item.status)">
+            {{ t(`execution.status.${(item.status || 'ACTIVE').toUpperCase()}`) }}
+          </span>
+          </td>
+        </tr>
+        </tbody>-->
+
+        <tbody class="divide-y divide-gray-100">
+        <tr v-for="group in store.groupedAdvances" :key="group.activityName"
+            class="hover:bg-gray-50 transition-colors cursor-pointer"
+            @click="navigateToHistory(group.activityName)">
+
+          <td class="px-6 py-4 text-gray-500">
+            {{ group.lastUpdate ? new Date(group.lastUpdate).toLocaleDateString() : '-' }}
+          </td>
+
+          <td class="px-6 py-4 font-bold text-gray-800">{{ group.activityName }}</td>
+
+          <td class="px-6 py-4 text-gray-500">{{ group.specialty }}</td>
+
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-3">
+              <div class="w-24 bg-gray-200 rounded-full h-2">
+                <div class="bg-blue-600 h-2 rounded-full" :style="{ width: Math.min(group.totalProgress, 100) + '%' }"></div>
+              </div>
+              <span class="font-bold text-sm">{{ group.totalProgress }}%</span>
+            </div>
+          </td>
+
+          <td class="px-6 py-4 font-bold text-gray-700">{{ group.totalWeight }}</td>
+
+          <td class="px-6 py-4">
+      <span :class="group.totalProgress >= 100 ? 'bg-green-100 text-emerald-600' : 'bg-blue-100 text-blue-500'"
+            class="px-3 py-1 rounded-md text-xs font-bold uppercase">
+        {{ group.totalProgress >= 100 ? t('execution.status.COMPLETED') : t('execution.statusOptions.progress') }}
+      </span>
           </td>
         </tr>
         </tbody>

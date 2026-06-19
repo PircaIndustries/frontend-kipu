@@ -1,7 +1,5 @@
-<!-- src/domains/team/presentation/pages/team-workers/team-workers-page.vue -->
 <template>
   <div class="p-6">
-    <!-- Header con buscador -->
     <div class="flex justify-between items-center mb-8">
       <h1 class="text-2xl font-bold text-text-main">{{ $t('team.workers.title') }}</h1>
       <div class="flex gap-4">
@@ -27,29 +25,21 @@
       </div>
     </div>
 
-    <!-- Descripción -->
     <p class="text-base text-neutral-border mb-4">{{ $t('team.workers.register.description') }}</p>
 
-    <!-- Tabla de trabajadores -->
     <Card>
       <template #content>
         <DataTable :value="filteredWorkers" class="w-full">
           <Column field="dni" :header="$t('team.workers.register.tab-dni')">
-            <template #body="{ data }">
-              <span class="text-text-main">{{ data.dni }}</span>
-            </template>
+            <template #body="{ data }"><span class="text-text-main">{{ data.dni }}</span></template>
           </Column>
 
           <Column field="fullName" :header="$t('team.workers.register.tab-name')">
-            <template #body="{ data }">
-              <span class="text-text-main">{{ data.fullName }}</span>
-            </template>
+            <template #body="{ data }"><span class="text-text-main">{{ data.fullName }}</span></template>
           </Column>
 
           <Column field="role" :header="$t('team.workers.register.tab-role')">
-            <template #body="{ data }">
-              <span class="text-text-main">{{ data.role }}</span>
-            </template>
+            <template #body="{ data }"><span class="text-text-main">{{ data.role }}</span></template>
           </Column>
 
           <Column field="status" :header="$t('team.workers.register.tab-status')">
@@ -94,8 +84,8 @@
             <template #body="{ data }">
               <Button
                   @click="toggleStatus(data)"
-                  :label="data.isActive ? $t('team.workers.register.tab-btn-disable') : $t('team.workers.register.tab-btn-enable')"
-                  :severity="data.isActive ? 'danger' : 'success'"
+                  label="Eliminar"
+                  severity="danger"
                   text
                   size="small"
                   :loading="togglingId === data.id"
@@ -110,7 +100,6 @@
       </template>
     </Card>
 
-    <!-- Nota del flujo -->
     <div class="mt-6 p-4 bg-neutral-bg rounded-md border border-neutral-border flex gap-0.5 flex-col">
       <h3 class="text-xl font-bold text-primary mb-2">{{ $t('team.workers.register.flow-title') }}</h3>
       <p class="text-base text-text-main">{{ $t('team.workers.register.flow-description') }}</p>
@@ -119,7 +108,6 @@
       </router-link>
     </div>
 
-    <!-- Diálogo para añadir nuevo obrero -->
     <Dialog
         v-model:visible="dialogVisible"
         :header="$t('team.workers.add-modal.title')"
@@ -130,32 +118,17 @@
       <form @submit.prevent="createWorker" class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">
           <label class="text-xs font-bold text-text-main">{{ $t('team.workers.add-modal.dni-label') }}</label>
-          <InputText
-              v-model="newWorker.dni"
-              :placeholder="$t('team.workers.add-modal.dni-placeholder')"
-              required
-              class="border-neutral-border focus:border-accent"
-          />
+          <InputText v-model="newWorker.dni" :placeholder="$t('team.workers.add-modal.dni-placeholder')" required class="border-neutral-border focus:border-accent" />
         </div>
 
         <div class="flex flex-col gap-1">
           <label class="text-xs font-bold text-text-main">{{ $t('team.workers.add-modal.name-label') }}</label>
-          <InputText
-              v-model="newWorker.fullName"
-              :placeholder="$t('team.workers.add-modal.name-placeholder')"
-              required
-              class="border-neutral-border focus:border-accent"
-          />
+          <InputText v-model="newWorker.fullName" :placeholder="$t('team.workers.add-modal.name-placeholder')" required class="border-neutral-border focus:border-accent" />
         </div>
 
         <div class="flex flex-col gap-1">
           <label class="text-xs font-bold text-text-main">{{ $t('team.workers.add-modal.role-label') }}</label>
-          <InputText
-              v-model="newWorker.role"
-              :placeholder="$t('team.workers.add-modal.role-placeholder')"
-              required
-              class="border-neutral-border focus:border-accent"
-          />
+          <InputText v-model="newWorker.role" :placeholder="$t('team.workers.add-modal.role-placeholder')" required class="border-neutral-border focus:border-accent" />
         </div>
 
         <div class="flex flex-col gap-1">
@@ -166,20 +139,19 @@
                 :key="index"
                 class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-accent/10 text-accent! rounded-full"
             >
-              {{ tool }}
-              <button type="button" @click="removeTool(index)" class="hover:text-primary">
-                <i class="pi pi-times text-xs"></i>
-              </button>
+              {{ tool.machineryName || tool.name }}
+              <button type="button" @click="removeTool(index)" class="hover:text-primary"><i class="pi pi-times text-xs"></i></button>
             </span>
           </div>
           <div class="flex gap-2">
-            <InputText
-                v-model="newToolName"
-                :placeholder="$t('team.workers.add-modal.tools-placeholder')"
-                class="flex-1 border-neutral-border! focus:border-accent!"
-                @keyup.enter="addTool"
+            <Dropdown
+                v-model="selectedMachineryItem"
+                :options="availableMachineryList"
+                optionLabel="machineryName"
+                :placeholder="$t('team.workers.add-modal.tools-add')"
+                @change="addTool"
+                class="w-full text-sm text-text-main!"
             />
-            <Button class="text-text-main! hover:bg-primary!" type="button" @click="addTool" :label="$t('team.workers.add-modal.tools-add')" text />
           </div>
         </div>
       </form>
@@ -187,13 +159,7 @@
       <template #footer>
         <div class="flex justify-end gap-2">
           <Button @click="closeDialog" :label="$t('team.workers.add-modal.btn-cancel')" text class="text-text-main! hover:bg-primary!" />
-          <Button
-              @click="createWorker"
-              :label="$t('team.workers.add-modal.btn-save')"
-              :disabled="!isFormValid"
-              :loading="creating"
-              class="bg-accent! text-white border-none! hover:bg-primary"
-          />
+          <Button @click="createWorker" :disabled="!isFormValid" :loading="creating" :label="$t('team.workers.add-modal.btn-save')" class="bg-accent! text-white border-none! hover:bg-primary" />
         </div>
       </template>
     </Dialog>
@@ -203,6 +169,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useTeamWorkerStore } from '../../application/team-worker.store.js'
+import useMachineryStore from '@/domains/logistics/application/machinery.store.js'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import InputText from 'primevue/inputtext'
@@ -210,16 +177,17 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import Badge from 'primevue/badge'
 import Dialog from 'primevue/dialog'
+import Dropdown from 'primevue/dropdown'
 
 const store = useTeamWorkerStore()
+const machineryStore = useMachineryStore()
 
-// Local state
 const searchValue = ref('')
 const openToolsDropdown = ref(null)
 const togglingId = ref(null)
 const dialogVisible = ref(false)
 const creating = ref(false)
-const newToolName = ref('')
+const selectedMachineryItem = ref(null)
 
 const newWorker = ref({
   dni: '',
@@ -228,21 +196,16 @@ const newWorker = ref({
   assignedTools: []
 })
 
-const isFormValid = computed(() => {
-  return newWorker.value.dni && newWorker.value.fullName && newWorker.value.role
-})
+const isFormValid = computed(() => newWorker.value.dni && newWorker.value.fullName && newWorker.value.role)
+const currentProjectId = computed(() => localStorage.getItem('currentProjectId') || 'proj-01')
 
-
-const filteredWorkers = computed(() => {
-  const term = searchValue.value.toLowerCase().trim()
-  if (!term) return store.allWorkers
-  return store.allWorkers.filter(worker =>
-      worker.dni?.toLowerCase().includes(term) ||
-      worker.fullName?.toLowerCase().includes(term) ||
-      worker.role?.toLowerCase().includes(term)
+const availableMachineryList = computed(() => {
+  return (machineryStore.machineryView || []).filter(
+      item => item.status === 'AVAILABLE' && String(item.projectId) === String(currentProjectId.value)
   )
 })
 
+const filteredWorkers = computed(() => store.filteredWorkers)
 
 const getToolsCountLabel = (count) => {
   if (count === 0) return '0 equipos'
@@ -250,45 +213,35 @@ const getToolsCountLabel = (count) => {
   return `${count} equipos`
 }
 
-
 const toggleToolsDropdown = (workerId) => {
-  if (openToolsDropdown.value === workerId) {
-    openToolsDropdown.value = null
-  } else {
-    openToolsDropdown.value = workerId
-  }
+  openToolsDropdown.value = openToolsDropdown.value === workerId ? null : workerId
 }
-
 
 const toggleStatus = async (worker) => {
   togglingId.value = worker.id
   try {
     await store.toggleWorkerStatus(worker)
+  } catch (error) {
+    console.error('Error:', error)
   } finally {
     togglingId.value = null
   }
 }
-
 
 const clearSearch = () => {
   searchValue.value = ''
   store.updateSearchTerm('')
 }
 
-
 const handleClickOutside = (event) => {
-  if (openToolsDropdown.value !== null) {
-    const target = event.target
-    if (!target.closest('.relative')) {
-      openToolsDropdown.value = null
-    }
+  if (openToolsDropdown.value !== null && !event.target.closest('.relative')) {
+    openToolsDropdown.value = null
   }
 }
 
-
 const openAddWorkerDialog = () => {
   newWorker.value = { dni: '', fullName: '', role: '', assignedTools: [] }
-  newToolName.value = ''
+  selectedMachineryItem.value = null
   dialogVisible.value = true
 }
 
@@ -297,9 +250,9 @@ const closeDialog = () => {
 }
 
 const addTool = () => {
-  if (newToolName.value.trim()) {
-    newWorker.value.assignedTools.push(newToolName.value.trim())
-    newToolName.value = ''
+  if (selectedMachineryItem.value && !newWorker.value.assignedTools.some(t => t.id === selectedMachineryItem.value.id)) {
+    newWorker.value.assignedTools.push(selectedMachineryItem.value)
+    selectedMachineryItem.value = null
   }
 }
 
@@ -310,9 +263,46 @@ const removeTool = (index) => {
 const createWorker = async () => {
   if (!isFormValid.value) return
   creating.value = true
+
   try {
-    await store.createWorker(newWorker.value)
+    // Almacenamos el array entero de objetos de máquinas
+    const toolsToSync = [...newWorker.value.assignedTools]
+
+    const workerPayload = {
+      dni: newWorker.value.dni,
+      fullName: newWorker.value.fullName,
+      role: newWorker.value.role
+    }
+
+    // Le pasamos el worker y el arreglo de herramientas por separado al Store
+    const createdWorker = await store.createWorker(workerPayload, toolsToSync)
+    await store.fetchWorkers()
+
+    if (createdWorker && toolsToSync.length > 0) {
+      const todayStr = new Date().toISOString().slice(0, 10)
+
+      setTimeout(async () => {
+        try {
+          for (const machine of toolsToSync) {
+            const updatedAssignmentPayload = {
+              ...machine,
+              status: 'IN_USE',
+              assignedTo: createdWorker.id,
+              registrationDate: todayStr,
+              assignmentDetail: `Asignado a ${createdWorker.fullName}`
+            }
+            await machineryStore.updateAssignment(machine.id, updatedAssignmentPayload)
+          }
+          await machineryStore.fetchMachinery()
+        } catch (err) {
+          console.error("Error sincronizando logística:", err)
+        }
+      }, 100)
+    }
+
     closeDialog()
+  } catch (error) {
+    console.error("Error al crear:", error)
   } finally {
     creating.value = false
   }
@@ -324,8 +314,8 @@ watch(searchValue, (newVal) => {
 
 onMounted(() => {
   store.fetchWorkers()
+  machineryStore.fetchMachinery()
   document.addEventListener('click', handleClickOutside)
-  console.log('Componente montado', new Date().toLocaleTimeString())
 })
 
 onUnmounted(() => {

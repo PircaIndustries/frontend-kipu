@@ -1,48 +1,39 @@
-// src/domains/signatures/infrastructure/document.api.js
 import axios from 'axios'
 import { DocumentAssembler } from './document.assembler.js'
 
-const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:3000/api/v1'
-const DOCUMENTS_ENDPOINT = import.meta.env.VITE_API_KIPU_DOCUMENTS_ENDPOINT || '/documents'
-
+const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL_LOCAL || 'http://localhost:5230/api/v1'
+const DOCUMENTS_ENDPOINT = '/documents'
 const documentsUrl = `${API_BASE_URL}${DOCUMENTS_ENDPOINT}`
 
-/**
- * Infrastructure gateway for Document bounded-context endpoints.
- */
 export const documentApi = {
     /**
-     * @returns {Promise<DocumentEntity[]>} Promise resolving to document entities
+     * Consume el endpoint: GET /api/v1/documents/pending?projectId=...&teamUserId=...
      */
-    async getAllDocuments() {
+    async getPendingDocuments(projectId, teamUserId) {
         try {
-            const response = await axios.get(documentsUrl)
-            return DocumentAssembler.toEntitiesFromResponse(response.data)
-        } catch (error) {
-            console.error('Error fetching documents:', error)
-            throw error
-        }
-    },
-
-    /**
-     * @param {string} projectId - Project identifier
-     * @returns {Promise<DocumentEntity[]>} Promise resolving to document entities
-     */
-    async getDocumentsByProject(projectId) {
-        try {
-            const url = `${documentsUrl}?projectId=${projectId}`
+            const url = `${documentsUrl}/pending?projectId=${projectId}&teamUserId=${teamUserId}`
             const response = await axios.get(url)
             return DocumentAssembler.toEntitiesFromResponse(response.data)
         } catch (error) {
-            console.error('Error fetching documents by project:', error)
+            console.error('Error fetching pending documents:', error)
             throw error
         }
     },
 
     /**
-     * @param {string} id - Document identifier
-     * @returns {Promise<DocumentEntity>} Promise resolving to document entity
+     * Consume el endpoint: GET /api/v1/documents/signed?projectId=...&teamUserId=...
      */
+    async getSignedDocuments(projectId, teamUserId) {
+        try {
+            const url = `${documentsUrl}/signed?projectId=${projectId}&teamUserId=${teamUserId}`
+            const response = await axios.get(url)
+            return DocumentAssembler.toEntitiesFromResponse(response.data)
+        } catch (error) {
+            console.error('Error fetching signed documents:', error)
+            throw error
+        }
+    },
+
     async getDocumentById(id) {
         try {
             const response = await axios.get(`${documentsUrl}/${id}`)
@@ -54,13 +45,11 @@ export const documentApi = {
     },
 
     /**
-     * @param {DocumentEntity} document - Document entity to create
-     * @returns {Promise<DocumentEntity>} Promise resolving to created document
+     * Manda el CreateDocumentResource DTO al backend
      */
-    async postDocument(document) {
+    async postDocument(createResource) {
         try {
-            const resource = DocumentAssembler.toResourceFromEntity(document)
-            const response = await axios.post(documentsUrl, resource)
+            const response = await axios.post(documentsUrl, createResource)
             return DocumentAssembler.toEntityFromResource(response.data)
         } catch (error) {
             console.error('Error creating document:', error)
@@ -69,24 +58,18 @@ export const documentApi = {
     },
 
     /**
-     * @param {DocumentEntity} document - Document entity to update
-     * @returns {Promise<DocumentEntity>} Promise resolving to updated document
+     * Command: Envía el SignDocumentRequest DTO al sub-endpoint /sign de tu C#
      */
-    async updateDocument(document) {
+    async signDocument(documentId, signRequest) {
         try {
-            const response = await axios.put(`${documentsUrl}/${document.id}`, document)
-            console.log('Document updated in API:', response.data)
+            const response = await axios.post(`${documentsUrl}/${documentId}/sign`, signRequest)
             return DocumentAssembler.toEntityFromResource(response.data)
         } catch (error) {
-            console.error('Error updating document:', error)
+            console.error(`Error executing sign command for document ${documentId}:`, error)
             throw error
         }
     },
 
-    /**
-     * @param {string} id - Document identifier
-     * @returns {Promise<void>} Promise resolving when deleted
-     */
     async deleteDocument(id) {
         try {
             await axios.delete(`${documentsUrl}/${id}`)

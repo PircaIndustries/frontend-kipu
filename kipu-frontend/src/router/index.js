@@ -9,7 +9,7 @@ import { useProjectsStore } from '@/domains/project-management/data/useProjectsS
  * Used by the navigation guard to avoid infinite redirects.
  */
 const PROJECT_WHITELIST = [
-    'Login', 'Register', 'ForgotPassword', 'ResetPassword', 'Verification', 'Projects'
+    'Login', 'Register', 'ForgotPassword', 'ResetPassword', 'Verification', 'Projects', 'Settings', 'Notifications'
 ];
 
 const PUBLIC_ROUTES = [
@@ -61,6 +61,18 @@ const routes = [
         name: 'Projects',
         component: () => import('@/domains/project-management/presentation/views/ProjectsView.vue')
     },
+    // ── Settings ──
+    {
+        path: '/settings',
+        name: 'Settings',
+        component: () => import('@/domains/identity/presentation/views/SettingsView.vue')
+    },
+    // ── Notifications ──
+    {
+        path: '/notifications',
+        name: 'Notifications',
+        component: () => import('@/domains/identity/presentation/views/NotificationsView.vue')
+    },
     // ── Progress Monitoring ──
     {
         path: '/advances',
@@ -79,6 +91,11 @@ const routes = [
                 path: 'photos',
                 name: 'PhotoLog',
                 component: () => import('@/domains/progress-monitoring/presentation/views/PhotoLogView.vue')
+            },
+            {
+                path: 'calendar',
+                name: 'Calendar',
+                component: () => import('@/domains/progress-monitoring/presentation/views/CalendarView.vue')
             }
         ]
     },
@@ -92,6 +109,11 @@ const routes = [
         path: '/advances/edit/:id',
         name: 'EditAdvance',
         component: () => import('@/domains/progress-monitoring/presentation/views/CreateAdvanceView.vue')
+    },
+    {
+        path: '/advances/activity-history/:activityName',
+        name: 'ActivityHistory',
+        component: () => import('@/domains/progress-monitoring/presentation/views/ActivityHistoryView.vue')
     },
     {
         path: '/rnc',

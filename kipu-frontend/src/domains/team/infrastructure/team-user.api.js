@@ -1,15 +1,19 @@
 import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
-const TEAMUSERS_URL = import.meta.env.VITE_TEAMUSERS_ENDPOINT_PATH;
+const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL_LOCAL || 'http://localhost:5230/api/v1';
+const TEAMUSERS_URL = import.meta.env.VITE_TEAMUSERS_ENDPOINT_PATH || '/team-users';
+
 export const teamUserApi = {
-    /**
-     * Fetches all team users
-     * @returns {Promise<TeamUserEntity[]>} Promise resolving to team users
-     */
-    async getAllUsers() {
+
+    async getAllUsers(projectId, globalSearch = '', role = '', isActive = null) {
         try {
-            const response = await axios.get(`${API_BASE_URL}${TEAMUSERS_URL}`)
+            const params = { projectId };
+
+            if (globalSearch) params.globalSearch = globalSearch;
+            if (role) params.role = role;
+            if (isActive !== null) params.isActive = isActive;
+
+            const response = await axios.get(`${API_BASE_URL}${TEAMUSERS_URL}`, { params })
             return response.data
         } catch (error) {
             console.error('Error fetching team users:', error)
@@ -17,14 +21,9 @@ export const teamUserApi = {
         }
     },
 
-    /**
-     * Fetches a team user by ID
-     * @param {string} id - User identifier
-     * @returns {Promise<TeamUserEntity>} Promise resolving to team user
-     */
     async getUserById(id) {
         try {
-            const response = await axios.get(`${API_BASE_URL}/team-users/${id}`)
+            const response = await axios.get(`${API_BASE_URL}${TEAMUSERS_URL}/${id}`)
             return response.data
         } catch (error) {
             console.error(`Error fetching user ${id}:`, error)
@@ -32,14 +31,9 @@ export const teamUserApi = {
         }
     },
 
-    /**
-     * Creates a new team user
-     * @param {TeamUserEntity} user - Team user to create
-     * @returns {Promise<TeamUserEntity>} Promise resolving to created user
-     */
-    async createUser(user) {
+    async createUser(createResource) {
         try {
-            const response = await axios.post(`${API_BASE_URL}/team-users`, user)
+            const response = await axios.post(`${API_BASE_URL}${TEAMUSERS_URL}`, createResource)
             return response.data
         } catch (error) {
             console.error('Error creating user:', error)
@@ -47,32 +41,22 @@ export const teamUserApi = {
         }
     },
 
-    /**
-     * Updates an existing team user
-     * @param {string} id - User identifier
-     * @param {TeamUserEntity} user - Updated user application
-     * @returns {Promise<TeamUserEntity>} Promise resolving to updated user
-     */
-    async updateUser(id, user) {
+    async activateUser(id) {
         try {
-            const response = await axios.put(`${API_BASE_URL}/team-users/${id}`, user)
+            const response = await axios.post(`${API_BASE_URL}${TEAMUSERS_URL}/${id}/activate`)
             return response.data
         } catch (error) {
-            console.error(`Error updating user ${id}:`, error)
+            console.error(`Error activating user ${id}:`, error)
             throw error
         }
     },
 
-    /**
-     * Deletes a team user
-     * @param {string} id - User identifier
-     * @returns {Promise<void>} Promise resolving when deleted
-     */
-    async deleteUser(id) {
+    async deactivateUser(id) {
         try {
-            await axios.delete(`${API_BASE_URL}/team-users/${id}`)
+            const response = await axios.post(`${API_BASE_URL}${TEAMUSERS_URL}/${id}/deactivate`)
+            return response.data
         } catch (error) {
-            console.error(`Error deleting user ${id}:`, error)
+            console.error(`Error deactivating user ${id}:`, error)
             throw error
         }
     }

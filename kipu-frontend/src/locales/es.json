@@ -144,14 +144,53 @@
         "rnc": "RNC",
         "logistics": "Logística",
         "materials": "Materiales",
-        "blueprints": "Planos",
         "signatures": "Firmas",
         "budget": "Presupuesto",
         "team": "Equipo"
     },
     "execution": {
+        "calendar":{
+            "today": "Ir al día de hoy",
+            "detailTitle": "Historial de Avances: {activity}"
+         },
+
         "advances": {
             "title": "Control de Avances",
+            "activityHistory": {
+                "title": "Historial de Avances: {activity}",
+                "date": "FECHA",
+                "percentage": "AVANCE (%)",
+                "edit": "Editar",
+                "addVersion": "Registrar nuevo miniavance",
+                "editMain": "Editar actividad principal"
+            },
+            "create": {
+                "title": "Nuevo Avance Diario",
+                "editTitle": "Editar Registro de Avance",
+                "submitBtn": "Guardar Avance",
+                "deleteHeader": "Confirmar Eliminación",
+                "deleteMessage": "¿Estás seguro?",
+                "discardHeader": "Confirmar descarte",
+                "discardMessage": "¿Seguro que quieres salir?",
+                "fields": {
+                    "date": "Fecha",
+                    "specialty": "Especialidad",
+                    "activity": "Actividad",
+                    "location": "Ubicación",
+                    "progress": "Avance",
+                    "weight": "Peso",
+                    "description": "Descripción",
+                    "responsible": "Responsable",
+                    "crewSize": "Personal de Cuadrilla",
+                    "weather": "Clima"
+                },
+                "placeholders": {
+                    "activity": "Ej: Vaciado",
+                    "location": "Ej: Nivel 2",
+                    "select_specialty": "Seleccione especialidad",
+                    "select_responsible": "Seleccione un Gestor"
+                }
+            },
             "subtitle": "Historial de registros diarios y estados de ejecución.",
             "newBtn": "Nuevo Avance Diario",
             "filterSpecialty": "Filtrar por: Especialidad",
@@ -163,9 +202,11 @@
                 "installations": "Instalaciones",
                 "architecture": "Arquitectura"
             },
+
             "tabs": {
                 "registry": "Registro de Avance (PPC)",
-                "photoLog": "Bitácora Fotográfica"
+                "photoLog": "Bitácora Fotográfica",
+                "calendar": "Calendario de Avances"
             },
             "photoLog": {
                 "title": "Galería de Evidencias",
@@ -193,6 +234,7 @@
             "activity": "ACTIVIDAD REALIZADA",
             "specialty": "ESPECIALIDAD",
             "progress": "AVANCE (%)",
+            "weight": "PESO",
             "status": "ESTADO",
             "project": "PROYECTO"
         },
@@ -210,6 +252,7 @@
                 "location": "Ubicación/Sector",
                 "progress": "Porcentaje de Avance",
                 "description": "Descripción Detallada",
+                "weight": "Peso",
                 "responsible": "Responsable",
                 "crewSize": "Personal de Cuadrilla",
                 "weather": "Condiciones Climáticas",
@@ -277,9 +320,11 @@
         "management": "Gestión de Obras",
         "cancel": "Cancelar",
         "confirm": "Confirmar",
+        "delete": "Eliminar",
         "yes": "Sí",
         "no": "No",
-        "error": "Error"
+        "error": "Error",
+        "back": "← Volver"
     },
     "roles": {
         "resident": "Residente de Obra"
@@ -449,6 +494,10 @@
             "success": {
                 "summary": "Éxito",
                 "message": "Solicitud creada exitosamente"
+            },
+            "error": {
+                "summary": "Error",
+                "message": "No se pudo crear la solicitud. Verifique los datos e intente nuevamente."
             }
         }
     },
@@ -616,7 +665,7 @@
                 "role-label": "Cargo / Cuadrilla",
                 "role-placeholder": "Ejm. Operario de Albañilería",
                 "tools-title": "Herramientas Asignadas",
-                "tools-add": "+ Añadir Herramienta",
+                "tools-add": "Selecciona una maquinaria real...",
                 "tools-placeholder": "Nombre del equipo...",
                 "btn-save": "Guardar Obrero",
                 "btn-cancel": "Cancelar"
@@ -630,7 +679,7 @@
             "signed-title": "Documentos Firmados",
             "deadline": "Vence",
             "signers": "Firmantes",
-            "btn-sign": "Sign Document",
+            "btn-sign": "Firmar Documento",
             "empty-pending": "No hay documentos pendientes",
             "empty-signed": "No hay documentos firmados",
             "summary-title": "Resumen",
@@ -970,5 +1019,50 @@
         "tab-suppliers": "Proveedores",
         "tab-waste": "Mermas",
         "tab-machinery": "Maquinaria"
+    },
+    "settings": {
+        "title": "Configuraciones del Sistema",
+        "subtitle": "Ajusta las opciones de accesibilidad, visualización e idioma según tus preferencias.",
+        "visual_accessibility": "Accesibilidad Visual",
+        "contrast": "Contraste de Pantalla",
+        "contrast_hint": "Aumenta el contraste para mejorar la lectura en exteriores o baja visión.",
+        "font_size": "Tamaño del Texto",
+        "font_size_hint": "Escala el tamaño de toda la tipografía de la plataforma.",
+        "dyslexic_font": "Tipografía de Alta Legibilidad",
+        "dyslexic_hint": "Utiliza un espaciado amplio y caracteres simplificados para facilitar la lectura.",
+        "cognitive_motor": "Cognitivo y Motor",
+        "colorblindness": "Filtro para Daltonismo",
+        "colorblindness_hint": "Aplica corrección de color para protanopía, deuteranopía o tritanopía.",
+        "reduced_motion": "Reducir Animaciones",
+        "reduced_motion_hint": "Desactiva transiciones y micro-animaciones para pantallas fluidas.",
+        "inclusivity_layout": "Idioma e Interfaz",
+        "language": "Idioma de la Plataforma",
+        "language_hint": "Selecciona tu idioma preferido para todos los textos y menús.",
+        "simplified_ui": "Interfaz Simplificada",
+        "simplified_hint": "Oculta detalles avanzados y botones secundarios para facilitar el uso en campo.",
+        "back": "Volver",
+        "contrast_normal": "Normal",
+        "contrast_high": "Alto Contraste",
+        "fontSize_normal": "Normal",
+        "fontSize_large": "Grande",
+        "fontSize_xlarge": "Extra Grande",
+        "toggle_on": "Activado",
+        "toggle_off": "Desactivado",
+        "color_off": "Desactivado (Off)",
+        "color_protanopia": "Protanopía (Rojo-Verde)",
+        "color_deuteranopia": "Deuteranopía (Verde-Rojo)",
+        "color_tritanopia": "Tritanopía (Azul-Amarillo)"
+    },
+    "notifications": {
+        "title": "Bandeja de Notificaciones",
+        "subtitle": "Revisa el historial completo de alertas e incidencias para el proyecto activo.",
+        "clear_all": "Limpiar todo",
+        "empty_title": "Bandeja vacía",
+        "empty_desc": "No tienes notificaciones pendientes para este proyecto.",
+        "back_to_panel": "Volver al panel",
+        "total_suffix": "Total",
+        "empty_short": "Sin notificaciones pendientes",
+        "back": "Volver",
+        "view_all": "Ver todas las notificaciones"
     }
 }

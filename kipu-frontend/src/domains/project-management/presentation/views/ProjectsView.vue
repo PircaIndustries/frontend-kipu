@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useProjectsStore } from '../../data/useProjectsStore';
+import { useAdvanceStore } from '@/domains/progress-monitoring/application/advancesStore.js';
 
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
@@ -17,6 +18,7 @@ import Badge from 'primevue/badge';
 
 const { t } = useI18n();
 const store = useProjectsStore();
+const advanceStore = useAdvanceStore();
 
 // ── Search ──
 const searchQuery = ref('');
@@ -151,12 +153,21 @@ const statusProject = ref(null);
 const newStatus = ref('');
 const statusJustification = ref('');
 
-const allStatusOptions = computed(() => [
-  { label: t('projects_dashboard.create_status_planned'), value: 'Planificación' },
-  { label: t('projects_dashboard.create_status_in_progress'), value: 'En ejecución' },
-  { label: 'Paralizada', value: 'Paralizada' },
-  { label: 'Finalizada', value: 'Finalizada' }
-]);
+const allStatusOptions = computed(() => {
+  const currentStatus = statusProject.value?.status;
+
+  // If the project is currently 'Paralizada', only allow resuming to 'En ejecución'
+  if (currentStatus === 'Paralizada') {
+    return [
+      { label: t('projects_dashboard.create_status_in_progress'), value: 'En ejecución' }
+    ];
+  }
+
+  // If the project is NOT 'Paralizada', only allow setting it to 'Paralizada'
+  return [
+    { label: 'Paralizada', value: 'Paralizada' }
+  ];
+});
 
 function openStatusDialog(project) {
   statusProject.value = project;
@@ -172,26 +183,17 @@ const isStatusValid = computed(() => {
   return true;
 });
 
-/** Map status to automatic progress value. */
-const STATUS_PROGRESS_MAP = {
-  'Planificación': 12,
-  'En ejecución': 45,
-  'Finalizada': 100,
-  'Paralizada': null  // keeps current progress, bar turns gray
-};
 
 async function confirmStatusChange() {
   if (!isStatusValid.value || !statusProject.value) return;
   try {
-    const progress = STATUS_PROGRESS_MAP[newStatus.value];
     await store.updateProjectStatus(
-      statusProject.value.id,
-      newStatus.value,
+      statusProject.value.id, newStatus.value,
       statusJustification.value.trim() || undefined,
-      progress
+      null
     );
     showStatusDialog.value = false; statusProject.value = null;
-  } catch { /* error handled in store */ }
+  } catch { console.error("Error al cambiar estado:", err); }
 }
 
 // ── Active Project Details Helpers & Document Form ──
@@ -248,7 +250,36 @@ async function handleAddDocument() {
   }
 }
 
-onMounted(() => { store.loadProjects(); });
+const showFullHistoryDialog = ref(false);
+
+const calculateProjectProgress = (p) => {
+  const projectAdvances = advanceStore.advances.filter(a => String(a.projectId) === String(p.id));
+  if (projectAdvances.length === 0) return 0;
+
+  const totalWeightedSum = projectAdvances.reduce((sum, item) =>
+      sum + (Number(item.currentPercentage || 0) * Number(item.weight || 1)), 0);
+
+  const totalWeight = projectAdvances.reduce((sum, item) =>
+      sum + Number(item.weight || 1), 0);
+
+  return totalWeight > 0 ? Math.round(totalWeightedSum / totalWeight) : 0;
+};
+
+const calculateProjectStatus = (p) => {
+  if (p.status === 'Paralizada') return 'Paralizada';
+  const progress = calculateProjectProgress(p);
+  return progress >= 100 ? 'Finalizada' : (progress > 0 ? 'En ejecución' : 'Planificación');
+};
+
+const slicedStatusLogs = computed(() => {
+  const logs = store.currentProject?.statusLogs || [];
+  return logs.slice(-5);
+});
+
+onMounted(async () => {
+  await store.loadProjects();
+  await advanceStore.loadAdvances();
+});
 </script>
 
 <template>
@@ -302,10 +333,10 @@ onMounted(() => { store.loadProjects(); });
               <!-- Status tag — clickable to change status -->
               <span
                 class="project-card__status-tag project-card__status-tag--clickable"
-                :class="'project-card__status-tag--' + p.status.toLowerCase().replace(/\s/g, '-')"
+                :class="'project-card__status-tag--' + calculateProjectStatus(p).toLowerCase().replace(/\s/g, '-')"
                 @click.stop="openStatusDialog(p)"
                 v-tooltip.top="'Click to change status'"
-              >{{ p.status }}</span>
+              >{{ calculateProjectStatus(p) }}</span>
               <!-- Delete button -->
               <button
                 class="project-card__delete-btn"
@@ -319,13 +350,15 @@ onMounted(() => { store.loadProjects(); });
 
           <p v-if="p.description" class="project-card__desc">{{ p.description }}</p>
 
-          <!-- Progress -->
+          <!-- Project Progress Row -->
           <div class="project-card__progress-row">
-            <span class="project-card__progress-label">{{ t('projects_dashboard.progress') }}</span>
-            <span class="project-card__progress-value">{{ p.progress }}%</span>
+            <span>{{ t('projects_dashboard.progress') }}</span>
+            <span>{{ calculateProjectProgress(p) }}%</span>
           </div>
-          <div class="project-card__progress-bar" :class="{ 'project-card__progress-bar--gray': p.status === 'Paralizada' }">
-            <div :style="{ width: p.progress + '%' }"></div>
+
+          <!-- Single Progress Bar -->
+          <div class="project-card__progress-bar" :class="{ 'project-card__progress-bar--gray': calculateProjectStatus(p) === 'Paralizada' }">
+            <div :style="{ width: calculateProjectProgress(p) + '%' }"></div>
           </div>
 
           <!-- Footer -->
@@ -359,7 +392,7 @@ onMounted(() => { store.loadProjects(); });
             <p class="details-card__desc">Trazabilidad histórica de los cambios de estado con su respectiva justificación técnica.</p>
           </div>
           <div class="details-card__content">
-            <Timeline :value="store.currentProject.statusLogs || []" align="left" class="custom-timeline">
+            <Timeline :value="slicedStatusLogs" align="left" class="custom-timeline">
               <template #marker="slotProps">
                 <span class="timeline-marker" :style="{ backgroundColor: getTimelineColor(slotProps.item.status) }">
                   <i :class="getTimelineIcon(slotProps.item.status)" style="color: white; font-size: 0.75rem;"></i>
@@ -380,6 +413,9 @@ onMounted(() => { store.loadProjects(); });
                 </div>
               </template>
             </Timeline>
+            <div v-if="store.currentProject.statusLogs && store.currentProject.statusLogs.length > 5" class="flex justify-center mt-3">
+              <Button label="Ver historial completo" icon="pi pi-external-link" size="small" outlined @click="showFullHistoryDialog = true" />
+            </div>
             <div v-if="!store.currentProject.statusLogs || store.currentProject.statusLogs.length === 0" class="empty-detail-state">
               <i class="pi pi-info-circle mr-1"></i> Sin registros de cambios de estado.
             </div>
@@ -576,6 +612,42 @@ onMounted(() => { store.loadProjects(); });
       <template #footer>
         <Button label="Cancel" severity="secondary" text @click="showStatusDialog = false" />
         <Button label="Update Status" :disabled="!isStatusValid" @click="confirmStatusChange" />
+      </template>
+    </Dialog>
+
+    <!-- ═══ FULL HISTORY STATUS LOGS DIALOG ═══ -->
+    <Dialog
+        v-model:visible="showFullHistoryDialog"
+        header="Historial Completo de Estados"
+        :modal="true"
+        :style="{ width: '600px' }"
+        dismissableMask
+    >
+      <div class="max-h-96 overflow-y-auto px-2 py-4">
+        <Timeline :value="store.currentProject?.statusLogs || []" align="left" class="custom-timeline">
+          <template #marker="slotProps">
+            <span class="timeline-marker" :style="{ backgroundColor: getTimelineColor(slotProps.item.status) }">
+              <i :class="getTimelineIcon(slotProps.item.status)" style="color: white; font-size: 0.75rem;"></i>
+            </span>
+          </template>
+          <template #content="slotProps">
+            <div class="timeline-item-card">
+              <div class="timeline-item-header">
+                <span class="timeline-item-status" :style="{ color: getTimelineColor(slotProps.item.status) }">
+                  {{ slotProps.item.status }}
+                </span>
+                <span class="timeline-item-date">{{ slotProps.item.date }}</span>
+              </div>
+              <p class="timeline-item-justification">{{ slotProps.item.justification }}</p>
+              <div v-if="slotProps.item.progress !== null" class="timeline-item-progress">
+                Avance asignado: <span class="font-bold text-gray-800">{{ slotProps.item.progress }}%</span>
+              </div>
+            </div>
+          </template>
+        </Timeline>
+      </div>
+      <template #footer>
+        <Button label="Cerrar" severity="secondary" text @click="showFullHistoryDialog = false" />
       </template>
     </Dialog>
   </div>

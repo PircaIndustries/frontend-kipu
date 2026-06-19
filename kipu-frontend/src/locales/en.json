@@ -144,12 +144,16 @@
         "rnc": "RNC",
         "logistics": "Logistics",
         "materials": "Materials",
-        "blueprints": "Blueprints",
         "signatures": "Signatures",
         "budget": "Budget",
         "team": "Team"
     },
     "execution": {
+        "calendar": {
+            "today": "Go to today",
+            "detailTitle": "Progress History: {activity}"
+        },
+
         "advances": {
             "title": "Work Progress Control",
             "subtitle": "Daily records and execution status history.",
@@ -162,9 +166,47 @@
                 "installations": "Installations",
                 "architecture": "Architecture"
             },
+            "activityHistory": {
+                "title": "Progress History: {activity}",
+                "date": "DATE",
+                "percentage": "PROGRESS (%)",
+                "edit": "Edit",
+                "addVersion": "Register new mini-advance",
+                "editMain": "Edit main activity"
+            },
+            "create": {
+                "title": "New Daily Progress",
+                "editTitle": "Edit Progress Record",
+                "submitBtn": "Save Progress",
+                "discardHeader": "Confirm Discard",
+                "discardMessage": "You have unsaved changes. Are you sure you want to leave?",
+                "deleteHeader": "Confirm Deletion",
+                "deleteMessage": "Are you sure you want to delete this progress record? This action cannot be undone.",
+                "fields": {
+                    "date": "Progress Date",
+                    "specialty": "Specialty",
+                    "activity": "Activity Performed",
+                    "location": "Location/Sector",
+                    "progress": "Progress Percentage",
+                    "weight": "Activity weight",
+                    "description": "Detailed Description",
+                    "responsible": "Responsible",
+                    "crewSize": "Crew Size",
+                    "weather": "Weather Conditions",
+                    "photos": "Progress Photos",
+                    "project": "Assigned Project"
+                },
+                "placeholders": {
+                    "activity": "e.g., Concrete pouring",
+                    "location": "e.g., Level 2",
+                    "select_specialty": "Select specialty",
+                    "select_responsible": "Select a manager"
+                }
+            },
             "tabs": {
                 "registry": "Progress Log (PPC)",
-                "photoLog": "Photo Log"
+                "photoLog": "Photo Log",
+                "calendar": "Calendar"
             },
             "photoLog": {
                 "title": "Evidence Gallery",
@@ -192,6 +234,7 @@
             "activity": "ACTIVITY PERFORMED",
             "specialty": "SPECIALTY",
             "progress": "PROGRESS (%)",
+            "weight": "WEIGHT",
             "status": "STATUS",
             "project": "PROJECT"
         },
@@ -202,10 +245,13 @@
             "submitBtn": "Save Progress",
             "discardHeader": "Confirm Discard",
             "discardMessage": "You have unsaved changes. Are you sure you want to leave?",
+            "deleteHeader": "Confirm Deletion",
+            "deleteMessage": "Are you sure you want to delete this progress record? This action cannot be undone.",
             "fields": {
                 "date": "Progress Date",
                 "specialty": "Specialty",
                 "activity": "Activity Performed",
+                "weight": "Weight",
                 "location": "Location/Sector",
                 "progress": "Progress Percentage",
                 "description": "Detailed Description",
@@ -275,10 +321,12 @@
     "common": {
         "management": "Construction Management",
         "cancel": "Cancel",
+        "delete": "Delete",
         "confirm": "Confirm",
         "yes": "Yes",
         "no": "No",
-        "error": "Error"
+        "error": "Error",
+        "back": "← Back"
     },
     "roles": {
         "resident": "Project Resident"
@@ -448,6 +496,10 @@
             "success": {
                 "summary": "Success",
                 "message": "Request created successfully"
+            },
+            "error": {
+                "summary": "Error",
+                "message": "Could not create the request. Please check the data and try again."
             }
         }
     },
@@ -615,7 +667,7 @@
                 "role-label": "Position / Crew",
                 "role-placeholder": "e.g., Bricklaying Operator",
                 "tools-title": "Assigned Tools",
-                "tools-add": "+ Add Tool",
+                "tools-add": "Select a real equipment",
                 "tools-placeholder": "Equipment name...",
                 "btn-save": "Save Worker",
                 "btn-cancel": "Cancel"
@@ -690,6 +742,7 @@
             "activity": "Activity Performed",
             "specialty": "Specialty",
             "progress": "Progress (%)",
+            "weight": "Weight",
             "project": "Project",
             "status": "Status"
         },
@@ -1008,5 +1061,50 @@
         "tab-suppliers": "Suppliers",
         "tab-waste": "Waste",
         "tab-machinery": "Machinery"
+    },
+    "settings": {
+        "title": "System Settings",
+        "subtitle": "Adjust accessibility, display, and language options according to your preferences.",
+        "visual_accessibility": "Visual Accessibility",
+        "contrast": "Screen Contrast",
+        "contrast_hint": "Increase contrast to improve readability outdoors or for low vision.",
+        "font_size": "Text Size",
+        "font_size_hint": "Scales the size of all typography on the platform.",
+        "dyslexic_font": "High Legibility Typography",
+        "dyslexic_hint": "Uses wide spacing and simplified characters to facilitate reading.",
+        "cognitive_motor": "Cognitive & Motor",
+        "colorblindness": "Color Blindness Filter",
+        "colorblindness_hint": "Applies color correction for protanopia, deuteranopia, or tritanopia.",
+        "reduced_motion": "Reduce Animations",
+        "reduced_motion_hint": "Disables transitions and micro-animations for smoother screens.",
+        "inclusivity_layout": "Language & Interface",
+        "language": "Platform Language",
+        "language_hint": "Select your preferred language for all texts and menus.",
+        "simplified_ui": "Simplified Interface",
+        "simplified_hint": "Hides advanced details and secondary buttons to facilitate field use.",
+        "back": "Back",
+        "contrast_normal": "Normal",
+        "contrast_high": "High Contrast",
+        "fontSize_normal": "Normal",
+        "fontSize_large": "Large",
+        "fontSize_xlarge": "Extra Large",
+        "toggle_on": "Enabled",
+        "toggle_off": "Disabled",
+        "color_off": "Disabled (Off)",
+        "color_protanopia": "Protanopia (Red-Green)",
+        "color_deuteranopia": "Deuteranopia (Green-Red)",
+        "color_tritanopia": "Tritanopia (Blue-Yellow)"
+    },
+    "notifications": {
+        "title": "Notifications Inbox",
+        "subtitle": "Review the full history of alerts and incidents for the active project.",
+        "clear_all": "Clear all",
+        "empty_title": "Empty inbox",
+        "empty_desc": "You have no pending notifications for this project.",
+        "back_to_panel": "Return to panel",
+        "total_suffix": "Total",
+        "empty_short": "No pending notifications",
+        "back": "Back",
+        "view_all": "View all notifications"
     }
 }

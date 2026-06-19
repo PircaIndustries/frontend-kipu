@@ -907,34 +907,40 @@
   ],
   "ncrs": [
     {
-      "id": "1",
-      "projectId": "1",
-      "date": "2026-04-20T10:00:00.000Z",
-      "ncrTitle": "Fisura en Losa N3",
-      "ncrDescription": "Se detectó una fisura longitudinal tras el desencofrado.",
-      "specialty": "Estructuras",
-      "severityLevel": "Alto",
-      "photoUrl": "https://i.pinimg.com/736x/29/7b/a1/297ba161005c3fef3978dd086c8bc76.jpg"
+      "id": "ncr-001",
+      "projectId": "proj-01",
+      "code": "RNC-2026-001",
+      "title": "Cangrejeras en Placa P-2 (Sótano 1)",
+      "description": "Se detectaron espacios vacíos (cangrejeras) en la base de la Placa P-2 debido a una vibración deficiente del concreto fresco.",
+      "reportedBy": "us-02",
+      "reportedDate": "2026-05-15",
+      "status": "OPEN",
+      "severity": "MEDIUM",
+      "remediationPlan": "Picado del concreto defectuoso, aplicación de puente de adherencia epóxico y vaciado con mortero de reparación sin contracción."
     },
     {
-      "ncrTitle": "Tuberia rotaa",
-      "specialty": "Servicios",
-      "date": "2026-06-17T19:59:19.251Z",
-      "severityLevel": "Alto",
-      "ncrDescription": "Tuberias llenas de moho, oxido y sarro",
-      "projectId": "proj-02",
-      "photoUrl": "",
-      "id": "aAsiGOS"
+      "id": "ncr-002",
+      "projectId": "proj-01",
+      "code": "RNC-2026-002",
+      "title": "Desviación de Plomada en Muro de Ascensor",
+      "description": "El muro del cajón de ascensores presenta un desplome de 15 mm en el nivel 4, superando la tolerancia permitida de 8 mm.",
+      "reportedBy": "us-02",
+      "reportedDate": "2026-05-20",
+      "status": "OPEN",
+      "severity": "HIGH",
+      "remediationPlan": "Evaluación por parte del calculista estructural para autorizar el tarrajeo de compensación con malla electrosoldada."
     },
     {
-      "ncrTitle": "Tuberia rotaa",
-      "specialty": "Servicios",
-      "date": "2026-06-17T19:59:22.450Z",
-      "severityLevel": "Alto",
-      "ncrDescription": "Tuberias llenas de moho, oxido y sarro",
+      "id": "ncr-003",
       "projectId": "proj-02",
-      "photoUrl": "",
-      "id": "3FThwrQ"
+      "code": "RNC-2026-003",
+      "title": "Fisuras por Contracción Plástica en Losa",
+      "description": "Aparición de fisuras superficiales en la losa de cimentación debido a una evaporación acelerada de agua antes del curado.",
+      "reportedBy": "us-03",
+      "reportedDate": "2026-06-02",
+      "status": "OPEN",
+      "severity": "LOW",
+      "remediationPlan": "Sellado de fisuras mediante inyección de resina epóxica de baja viscosidad para evitar la corrosión de la armadura."
     }
   ],
   "projects": [

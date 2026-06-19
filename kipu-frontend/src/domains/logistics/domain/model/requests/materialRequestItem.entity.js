@@ -1,16 +1,9 @@
-/**
- * MaterialRequestItem entity representing individual items within a material request.
- *
- * @class MaterialRequestItemEntity
- */
 export class MaterialRequestItemEntity {
-    /**
-     * @param {Object} params - Entity attributes.
-     * @param {?string} [params.supplierOfferId=null] - Associated supplier offer identifier.
-     * @param {number} [params.quantity=0] - Requested quantity.
-     */
-    constructor({ supplierOfferId = null, quantity = 0 } = {}) {
-        this.supplierOfferId = supplierOfferId;
+    constructor({ id = null, materialCatalogId = null, supplierId = null, quantity = 0, unitPrice = 0 } = {}) {
+        this.id = id;
+        this.materialCatalogId = materialCatalogId;
+        this.supplierId = supplierId;
         this.quantity = quantity;
+        this.unitPrice = unitPrice;
     }
 }

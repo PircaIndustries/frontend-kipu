@@ -2,50 +2,57 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { documentApi } from '../infrastructure/document.api.js'
-import { DocumentEntity } from '../domain/model/document.entity.js'
+import { useTeamUserStore } from '../../team/application/team-user.store.js'
 
 export const useDocumentStore = defineStore('document', () => {
+
     // ========== STATE ==========
-    const documents = ref([])
+    const pendingDocs = ref([])
+    const signedDocs = ref([])
     const currentToken = ref(null)
     const currentDocumentId = ref(null)
 
     // ========== GETTERS ==========
-    const documents$ = computed(() => documents.value)
+    const documents$ = computed(() => [...pendingDocs.value, ...signedDocs.value])
     const currentToken$ = computed(() => currentToken.value)
 
     // ========== ACTIONS ==========
     const loadAllDocuments = async () => {
-        try {
-            const response = await documentApi.getAllDocuments()
-            documents.value = response
-            console.log(`Loaded ${documents.value.length} documents`)
-        } catch (error) {
-            console.error('Error loading documents:', error)
+        const currentProjectId = localStorage.getItem('currentProjectId')
+        const storedUser = localStorage.getItem('currentUser')
+
+        if (!currentProjectId || !storedUser) return
+
+        const teamUserStore = useTeamUserStore()
+        const currentUserData = JSON.parse(storedUser)
+
+        // ¡LA CLAVE! Buscamos tu ID real de TeamUser usando tu correo
+        const actualTeamUser = teamUserStore.allUsers.find(u => u.email === currentUserData.email)
+
+        if (!actualTeamUser) {
+            console.warn("Aún no se ha cargado el TeamUser actual. Ignorando fetch de documentos por ahora.")
+            return;
         }
-    }
 
-    const addLocalDocument = (document) => {
-        documents.value.push(document)
-        console.log('Document added locally:', document)
-    }
+        const teamUserId = actualTeamUser.id
 
-    const updateLocalDocument = (updatedDocument) => {
-        const index = documents.value.findIndex(d => d.id === updatedDocument.id)
-        if (index !== -1) {
-            documents.value[index] = updatedDocument
-            console.log('Document updated locally:', updatedDocument)
+        try {
+            const [pendingResponse, signedResponse] = await Promise.all([
+                documentApi.getPendingDocuments(currentProjectId, teamUserId),
+                documentApi.getSignedDocuments(currentProjectId, teamUserId)
+            ])
+
+            pendingDocs.value = pendingResponse
+            signedDocs.value = signedResponse
+        } catch (error) {
+            console.error('Error loading documents segments:', error)
         }
     }
 
     const generateToken = (documentId) => {
         const token = "123456"
-        console.log('[STORE] generateToken called with documentId:', documentId)
-        console.log('[STORE] Before setting - currentToken:', currentToken.value)
         currentToken.value = token
         currentDocumentId.value = documentId
-        console.log('[STORE] After setting - currentToken:', currentToken.value)
-        console.log('[STORE] After setting - currentDocumentId:', currentDocumentId.value)
         return token
     }
 
@@ -53,120 +60,78 @@ export const useDocumentStore = defineStore('document', () => {
         const activeToken = currentToken.value
         const activeDocumentId = currentDocumentId.value
 
-        console.log('Verifying token:', token)
-        console.log('Active token:', currentToken.value)
-        console.log('Active document ID:', currentDocumentId.value)
+        if (!activeToken || !activeDocumentId) return { success: false, message: 'No active signature process' }
+        if (token !== activeToken) return { success: false, message: 'Incorrect token' }
 
-        if (!activeToken || !activeDocumentId) {
-            return { success: false, message: 'No active signature process' }
+        const storedUser = localStorage.getItem('currentUser')
+        if (!storedUser) return { success: false, message: 'Current user session not found' }
+
+        const teamUserStore = useTeamUserStore()
+        const currentUserData = JSON.parse(storedUser)
+
+        // ¡LA CLAVE! Usamos tu ID de TeamUser para firmar
+        const actualTeamUser = teamUserStore.allUsers.find(u => u.email === currentUserData.email)
+
+        if (!actualTeamUser) {
+            return { success: false, message: 'No estás registrado como usuario en este equipo.' }
         }
 
-        if (token !== activeToken) {
-            return { success: false, message: 'Incorrect token' }
+        const signRequest = {
+            teamUserId: actualTeamUser.id,
+            fullName: actualTeamUser.fullName
         }
-
-        const documentToUpdate = documents.value.find(d => d.id === activeDocumentId)
-
-        if (!documentToUpdate) {
-            return { success: false, message: 'Document not found' }
-        }
-
-        if (documentToUpdate.isSigned) {
-            return { success: false, message: 'Document already signed' }
-        }
-
-        const updatedDocument = {
-            ...documentToUpdate,
-            isSigned: true,
-            digitalSignatureToken: token
-        }
-
-        currentToken.value = null
-        currentDocumentId.value = null
 
         try {
-            const response = await documentApi.updateDocument(updatedDocument)
-            const index = documents.value.findIndex(d => d.id === response.id)
-            if (index !== -1) {
-                documents.value[index] = response
-            }
+            await documentApi.signDocument(activeDocumentId, signRequest)
+
+            currentToken.value = null
+            currentDocumentId.value = null
+
+            // Al refrescar, el documento pasará de pending a signed mágicamente
+            await loadAllDocuments()
             return { success: true, message: 'Document signed successfully' }
         } catch (error) {
             console.error('Error signing document:', error)
-            return { success: false, message: error.message || 'Error saving signature' }
+            return { success: false, message: error.response?.data || 'Error saving signature' }
         }
     }
 
     const cancelSignature = () => {
         currentToken.value = null
         currentDocumentId.value = null
-        console.log('Signature process cancelled')
     }
 
-    const hasActiveSignature = () => {
-        return currentToken.value !== null && currentDocumentId.value !== null
-    }
-
-    const getPendingDocuments = () => {
-        return documents.value.filter(doc => !doc.isSigned)
-    }
-
-    const getSignedDocuments = () => {
-        return documents.value.filter(doc => doc.isSigned)
-    }
-
-    const getDocumentsByType = (type) => {
-        return documents.value.filter(doc => doc.type === type)
-    }
+    const hasActiveSignature = () => currentToken.value !== null && currentDocumentId.value !== null
+    const getPendingDocuments = () => pendingDocs.value
+    const getSignedDocuments = () => signedDocs.value
+    const getDocumentsByType = (type) => documents$.value.filter(doc => doc.type === type)
 
     const createDocument = async (data) => {
-        const newDocument = new DocumentEntity()
-        newDocument.id = `doc-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`
-        newDocument.type = data.type
-        newDocument.deadLine = data.deadLine
-        newDocument.isSigned = false
-        newDocument.digitalSignatureToken = null
-        newDocument.assignedTo = data.assignedTo
+        const currentProjectId = localStorage.getItem('currentProjectId')
 
-        documents.value.push(newDocument)
+        const createResource = {
+            type: data.type,
+            deadline: data.deadLine.toISOString(),
+            projectId: currentProjectId,
+            participants: data.assignedTo.map(p => ({
+                teamUserId: p.id,
+                fullName: p.fullName
+            }))
+        }
 
         try {
-            const savedDocument = await documentApi.postDocument(newDocument)
-            const index = documents.value.findIndex(d => d.id === newDocument.id)
-            if (index !== -1) {
-                documents.value[index] = savedDocument
-            }
-            console.log('Document created and saved:', savedDocument)
+            const savedDocument = await documentApi.postDocument(createResource)
+            await loadAllDocuments()
             return savedDocument
         } catch (error) {
-            const index = documents.value.findIndex(d => d.id === newDocument.id)
-            if (index !== -1) {
-                documents.value.splice(index, 1)
-            }
             console.error('Error creating document:', error)
             throw error
         }
     }
 
     return {
-        // State
-        documents,
-        currentToken,
-        currentDocumentId,
-        // Getters
-        documents$,
-        currentToken$,
-        // Actions
-        loadAllDocuments,
-        addLocalDocument,
-        updateLocalDocument,
-        generateToken,
-        verifyAndSign,
-        cancelSignature,
-        hasActiveSignature,
-        getPendingDocuments,
-        getSignedDocuments,
-        getDocumentsByType,
-        createDocument
+        pendingDocs, signedDocs, currentToken, currentDocumentId, documents$, currentToken$,
+        loadAllDocuments, generateToken, verifyAndSign, cancelSignature,
+        hasActiveSignature, getPendingDocuments, getSignedDocuments, getDocumentsByType, createDocument
     }
 })

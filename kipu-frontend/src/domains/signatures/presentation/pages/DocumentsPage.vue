@@ -1,24 +1,28 @@
-<!-- src/domains/signatures/presentation/pages/DocumentsPage.vue -->
 <template>
   <div class="p-6">
-    <!-- Header -->
     <div class="flex justify-between items-center mb-8">
       <h1 class="text-2xl font-bold text-text-main flex items-center gap-2">
         <i class="pi pi-file"></i>
         {{ $t('signatures.page.title') }}
       </h1>
-      <Button
-          @click="openCreateDialog"
-          :label="$t('signatures.page.btn-create')"
-          icon="pi pi-plus"
-          class="bg-accent! text-white border-none! hover:bg-primary!"
-      />
+      <div class="flex gap-3">
+        <Button
+            @click="openExportDialog"
+            label="Exportar Dossier"
+            icon="pi pi-download"
+            class="bg-primary! text-white border-none! hover:bg-primary-hover!"
+        />
+        <Button
+            @click="openCreateDialog"
+            :label="$t('signatures.page.btn-create')"
+            icon="pi pi-plus"
+            class="bg-accent! text-white border-none! hover:bg-primary!"
+        />
+      </div>
     </div>
 
     <div class="flex gap-6">
-      <!-- Columna principal -->
       <div class="flex-1 flex flex-col gap-6">
-        <!-- Documentos pendientes -->
         <Card>
           <template #title>
             <div class="flex items-center justify-between">
@@ -26,7 +30,6 @@
                 <i class="pi pi-clock text-warning"></i>
                 <span class="text-text-main">{{ $t('signatures.page.pending-title') }}</span>
               </div>
-
             </div>
           </template>
           <template #content>
@@ -68,7 +71,6 @@
           </template>
         </Card>
 
-        <!-- Documentos firmados -->
         <Card>
           <template #title>
             <div class="flex items-center justify-between">
@@ -76,7 +78,6 @@
                 <i class="pi pi-check-circle text-success"></i>
                 <span class="text-text-main">{{ $t('signatures.page.signed-title') }}</span>
               </div>
-
             </div>
           </template>
           <template #content>
@@ -113,7 +114,6 @@
         </Card>
       </div>
 
-      <!-- Sidebar -->
       <div class="w-80 flex flex-col gap-4">
         <Card>
           <template #title>
@@ -141,71 +141,50 @@
             </div>
           </template>
         </Card>
-
-        <Card>
-          <template #title>
-            <div class="flex items-center gap-2">
-              <i class="pi pi-shield text-accent"></i>
-              <span class="text-text-main">{{ $t('signatures.page.security-title') }}</span>
-            </div>
-          </template>
-          <template #content>
-            <p class="text-sm text-neutral-border leading-relaxed">
-              {{ $t('signatures.page.security-description') }}
-            </p>
-          </template>
-        </Card>
-
-        <Card>
-          <template #title>
-            <div class="flex items-center gap-2">
-              <i class="pi pi-question-circle text-accent"></i>
-              <span class="text-text-main">{{ $t('signatures.page.howto-title') }}</span>
-            </div>
-          </template>
-          <template #content>
-            <ol class="space-y-2 text-sm text-neutral-border list-decimal list-inside">
-              <li>{{ $t('signatures.page.howto-step1') }}</li>
-              <li>{{ $t('signatures.page.howto-step2') }}</li>
-              <li>{{ $t('signatures.page.howto-step3') }}</li>
-              <li>{{ $t('signatures.page.howto-step4') }}</li>
-            </ol>
-          </template>
-        </Card>
       </div>
     </div>
 
-    <!-- Diálogo de firma -->
-    <SignatureDialog
-        v-model:visible="dialogVisible"
-        :document="selectedDocument"
-        @signed="onDocumentSigned"
-    />
+    <SignatureDialog v-model:visible="dialogVisible" :document="selectedDocument" @signed="onDocumentSigned" />
+    <DocumentCreateDialog v-model:visible="createDialogVisible" @created="onDocumentCreated" />
 
-    <!-- Diálogo de creación -->
-    <DocumentCreateDialog
-        v-model:visible="createDialogVisible"
-        @created="onDocumentCreated"
-    />
+    <pv-dialog v-model:visible="exportDialogVisible" header="Exportar Dossier de Calidad" :modal="true" :style="{ width: '450px' }">
+      <div class="flex flex-col gap-4">
+        <p class="text-sm text-neutral-border">Seleccione el rango de documentos firmados que desea incluir.</p>
+        <div class="grid grid-cols-2 gap-3">
+          <div @click="exportRange = 'all'" :class="['p-4 border rounded-xl cursor-pointer', exportRange === 'all' ? 'border-accent bg-accent/5' : 'border-neutral-border']">
+            <span class="font-bold text-sm block">Todo el historial</span>
+          </div>
+          <div @click="exportRange = 'dates'" :class="['p-4 border rounded-xl cursor-pointer', exportRange === 'dates' ? 'border-accent bg-accent/5' : 'border-neutral-border']">
+            <span class="font-bold text-sm block">Rango de fechas</span>
+          </div>
+        </div>
+      </div>
+      <template #footer>
+        <Button label="Cancelar" severity="secondary" text @click="exportDialogVisible = false" />
+        <Button label="Generar PDF" icon="pi pi-file-pdf" class="bg-accent! text-white" @click="generateDossierPDF" />
+      </template>
+    </pv-dialog>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useDocumentStore } from '../../application/document.store.js'
+import { useTeamUserStore } from '../../../team/application/team-user.store.js'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
-import Badge from 'primevue/badge'
 import SignatureDialog from '../components/SignatureDialog.vue'
 import DocumentCreateDialog from '../components/DocumentCreateDialog.vue'
 
 const documentStore = useDocumentStore()
+const teamUserStore = useTeamUserStore()
 
 const dialogVisible = ref(false)
 const createDialogVisible = ref(false)
 const selectedDocument = ref(null)
+const exportDialogVisible = ref(false)
+const exportRange = ref('all')
 
-const allDocuments = computed(() => documentStore.documents$())
 const pendingDocuments = computed(() => documentStore.getPendingDocuments())
 const signedDocuments = computed(() => documentStore.getSignedDocuments())
 
@@ -223,24 +202,57 @@ const openCreateDialog = () => {
   createDialogVisible.value = true
 }
 
-const onDocumentCreated = (newDocument) => {
-  // ✅ No recargar, el documento ya está en el store
-  console.log('Documento creado:', newDocument)
-  // documentStore.loadAllDocuments()  // ❌ No llamar esto
+const onDocumentCreated = async () => {
+  await documentStore.loadAllDocuments()
 }
 
 const openSignatureDialog = (doc) => {
   selectedDocument.value = doc
-  const token = documentStore.generateToken(doc.id)  // <-- Esto es lo que faltaba
-  console.log(`Token generado para ${doc.type}: ${token}`)
+  documentStore.generateToken(doc.id)
   dialogVisible.value = true
 }
 
-const onDocumentSigned = () => {
-  documentStore.loadAllDocuments()
+const onDocumentSigned = async () => {
+  await documentStore.loadAllDocuments()
 }
 
-onMounted(() => {
-  documentStore.loadAllDocuments()
+const openExportDialog = () => {
+  exportRange.value = 'all'
+  exportDialogVisible.value = true
+}
+
+const generateDossierPDF = () => {
+  exportDialogVisible.value = false
+  console.log("Generando PDF Dossier...")
+}
+
+onMounted(async () => {
+  teamUserStore.loadCurrentUser()
+  const currentProjectId = localStorage.getItem('currentProjectId')
+
+  // 1. OBLIGATORIO: Esperar a que el equipo se cargue por completo primero
+  await teamUserStore.fetchUsers()
+
+  if (teamUserStore.currentUser) {
+    const userExists = teamUserStore.teamUsers.some(
+        u => u.email === teamUserStore.currentUser.email && String(u.projectId) === String(currentProjectId)
+    )
+
+    if (!userExists) {
+      console.log("[DOCUMENTS ON MOUNTED] Auto-registering Pepe in TeamUsers...")
+      const parts = teamUserStore.currentUser.fullName.split(' ')
+      await teamUserStore.inviteUser({
+        firstName: parts[0] || 'Pepe',
+        lastName: parts.slice(1).join(' ') || 'Kipu',
+        email: teamUserStore.currentUser.email,
+        role: teamUserStore.currentUser.role || 'Gestor Operativo'
+      })
+      // Volvemos a traer el equipo para obtener tu nuevo ID
+      await teamUserStore.fetchUsers()
+    }
+  }
+
+  // 2. AHORA SÍ cargamos los documentos, porque ya sabemos con exactitud cuál es tu TeamUser ID
+  await documentStore.loadAllDocuments()
 })
 </script>
