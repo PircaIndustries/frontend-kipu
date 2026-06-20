@@ -18,9 +18,9 @@ const tabs = [
 </script>
 
 <template>
-  <div class="w-full bg-white border-b border-neutral-border/40">
-    <pv-tabs :value="currentRoute" class="m-0 p-0">
-      <pv-tablist class="border-b-0! bg-transparent! px-8">
+  <div class="w-full bg-white border-b border-neutral-border/40 overflow-x-auto scrollbar-hide">
+    <pv-tabs :value="currentRoute" class="m-0 p-0 w-max min-w-full">
+      <pv-tablist class="border-b-0! bg-transparent! px-4 md:px-8">
         <pv-tab
             v-for="tab in tabs"
             :key="tab.route"

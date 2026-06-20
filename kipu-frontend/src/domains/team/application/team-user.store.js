@@ -193,26 +193,36 @@ export const useTeamUserStore = defineStore('teamUser', () => {
      */
     const inviteUser = async (userData) => {
         const currentProjectId = localStorage.getItem('currentProjectId');
-        if (!currentProjectId) return null;
-
-        const createResource = {
-            fullName: `${userData.firstName} ${userData.lastName}`,
-            email: userData.email,
-            role: userData.role,
-            projectId: currentProjectId
-        }
+        if (!currentProjectId) throw new Error('No active project found');
 
         try {
-            const created = await teamUserApi.createUser(createResource)
+            // Retrieve all users from the platform to validate if email exists
+            const allUsers = await teamUserApi.getAllUsers('');
+            const userExists = allUsers.some(u => u.email === userData.email);
 
+            if (!userExists) {
+                throw new Error('USER_NOT_FOUND');
+            }
+
+            const createResource = {
+                fullName: `${userData.firstName} ${userData.lastName}`,
+                email: userData.email,
+                role: userData.role,
+                projectId: currentProjectId,
+                isPending: true // Simulate pending invitation
+            }
+
+            const created = await teamUserApi.createUser(createResource)
             const entity = TeamUserAssembler.toEntityFromResource(created)
+            entity.isPending = true; // Ensure entity has this property
+            
             teamUsers.value.push(entity)
             console.log('User invited successfully:', entity)
             return entity
 
         } catch (error) {
             console.error('Error inviting user:', error.response?.data || error.message)
-            return null
+            throw error
         }
     }
 

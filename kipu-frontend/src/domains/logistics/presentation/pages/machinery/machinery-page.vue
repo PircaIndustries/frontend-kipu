@@ -211,8 +211,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="flex flex-col gap-6 p-6 h-full">
-    <header class="flex items-center justify-between">
+  <section class="flex flex-col gap-6 p-4 md:p-6 h-full">
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl font-bold text-primary tracking-tight m-0">
           {{ t('machinery.title') }}
@@ -223,14 +223,14 @@ onMounted(() => {
       </div>
       <button
         @click="showCreateDialog = true"
-        class="bg-accent text-white py-2.5 px-6 rounded-lg font-bold text-base shadow-md cursor-pointer transition-all hover:scale-[1.02] active:scale-95 flex items-center gap-2"
+        class="bg-accent text-white py-2.5 px-6 rounded-lg font-bold text-base shadow-md cursor-pointer transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 w-full md:w-auto"
       >
         <i class="pi pi-plus-circle text-lg"></i>
         <span>{{ t('machinery.button-register') }}</span>
       </button>
     </header>
 
-    <div class="flex gap-6 flex-1 min-h-0">
+    <div class="flex flex-col md:flex-row gap-6 flex-1 min-h-0">
       <div class="flex-1 min-w-0 flex flex-col gap-4">
         <div class="relative">
           <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-neutral-border text-sm"></i>
@@ -242,14 +242,16 @@ onMounted(() => {
           />
         </div>
 
-        <MachineryList
-          :machinery-list="filteredMachinery"
-          @assign="handleAssign"
-          @return="handleReturn"
-          @maintenance="handleMaintenance"
-          @enable="handleEnable"
-          @delete="handleDelete"
-        />
+        <div class="overflow-x-auto w-full">
+          <MachineryList
+            :machinery-list="filteredMachinery"
+            @assign="handleAssign"
+            @return="handleReturn"
+            @maintenance="handleMaintenance"
+            @enable="handleEnable"
+            @delete="handleDelete"
+          />
+        </div>
 
         <div v-if="filteredMachinery.length === 0 && assignmentsLoaded" class="flex flex-col items-center justify-center gap-3 py-20 text-center">
           <div class="w-14 h-14 rounded-full bg-neutral-bg flex items-center justify-center">
@@ -260,7 +262,7 @@ onMounted(() => {
         </div>
       </div>
 
-      <aside class="w-64 flex flex-col gap-6 shrink-0">
+      <aside class="w-full md:w-64 flex flex-col gap-6 shrink-0">
         <FilterSummaryBar :title="t('machinery.summary.title')" :filters="summaryFilters" />
 
         <div class="flex flex-col gap-2">

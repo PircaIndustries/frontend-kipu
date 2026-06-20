@@ -26,6 +26,26 @@ function handleNotificationClick(item) {
 }
 
 // Helpers for styled tags and icons
+const formatTime = (timeString) => {
+  if (!timeString) return '';
+  const ts = timeString.toLowerCase();
+  if (ts.includes('justo ahora')) return t('time.just_now');
+  if (ts.includes('ayer')) return t('time.yesterday');
+  if (ts.includes('minuto')) {
+    const min = ts.replace(/\D/g, '') || 1;
+    return t('time.minutes', { count: min });
+  }
+  if (ts.includes('hora')) {
+    const hr = ts.replace(/\D/g, '') || 1;
+    return t('time.hours', { count: hr });
+  }
+  if (ts.includes('día')) {
+    const day = ts.replace(/\D/g, '') || 1;
+    return t('time.days', { count: day });
+  }
+  return timeString;
+};
+
 function getCategoryInfo(type) {
   switch (type) {
     case 'logistica':
@@ -105,7 +125,7 @@ function getCategoryInfo(type) {
               <span class="category-badge" :style="{ color: getCategoryInfo(item.type).color, borderColor: getCategoryInfo(item.type).color }">
                 {{ getCategoryInfo(item.type).label }}
               </span>
-              <span class="timestamp">{{ item.date }}</span>
+              <span class="timestamp">{{ formatTime(item.date) }}</span>
             </div>
             <h4 class="notif-title">{{ item.title }}</h4>
             <p class="notif-desc">{{ item.description }}</p>

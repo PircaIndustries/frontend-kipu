@@ -115,4 +115,11 @@ const getSeverityBadge = (level) => {
 .expand-enter-from, .expand-leave-to { max-height: 0; opacity: 0; }
 .action-box { display: flex; align-items: center; padding: 0 1rem; }
 .rotate-icon { color: #3b82f6 !important; }
+
+@media (max-width: 768px) {
+  .ncr-main-row { flex-direction: column; }
+  .ncr-section { border-right: none; border-bottom: 1px solid #e2e8f0; padding: 1rem; }
+  .status-box { gap: 1rem; border-bottom: none; }
+  .action-box { padding: 1rem; justify-content: center; border-top: 1px solid #e2e8f0; }
+}
 </style>

@@ -17,8 +17,15 @@ const router = useRouter();
 const currentUser = computed(() => {
   try {
     const raw = localStorage.getItem('currentUser');
-    return raw ? JSON.parse(raw) : { name: 'User', role: '' };
-  } catch { return { name: 'User', role: '' }; }
+    return raw ? JSON.parse(raw) : { fullName: 'User', role: '' };
+  } catch { return { fullName: 'User', role: '' }; }
+});
+
+const translatedRole = computed(() => {
+  const role = currentUser.value.role;
+  if (role === 'Gestor Operativo') return t('identity.role_manager');
+  if (role === 'Logística y Administración') return t('identity.role_logistics');
+  return role;
 });
 
 /** Navigation items definition. */
@@ -54,7 +61,7 @@ function goToLogin() {
 </script>
 
 <template>
-  <nav class="side-navigation">
+  <nav class="side-navigation flex flex-col">
     <div class="logo-container">
       <div class="logo-text">
         <span class="brand-name">Kipu</span>
@@ -75,8 +82,8 @@ function goToLogin() {
     <div class="user-profile" @click="toggleLogoutMenu">
       <Avatar icon="pi pi-user" shape="circle" size="large" class="user-avatar" />
       <div class="user-info">
-        <span class="user-name">{{ currentUser.name }}</span>
-        <span class="user-role">{{ currentUser.role }}</span>
+        <span class="user-name">{{ currentUser.fullName || currentUser.name }}</span>
+        <span class="user-role">{{ translatedRole }}</span>
       </div>
       <i class="pi pi-chevron-up user-chevron" :class="{ 'user-chevron--open': showLogoutMenu }"></i>
     </div>
@@ -103,12 +110,8 @@ function goToLogin() {
 
 <style scoped>
 .side-navigation {
-  width: 260px;
-  height: 100vh;
   background-color: #2c3e50;
   color: white;
-  display: flex;
-  flex-direction: column;
   padding: 1.5rem 1rem;
   position: relative;
 }

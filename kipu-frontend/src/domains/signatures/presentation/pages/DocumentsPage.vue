@@ -7,8 +7,8 @@
       </h1>
       <div class="flex gap-3">
         <Button
-            @click="openExportDialog"
-            label="Exportar Dossier"
+            @click="exportDialogVisible = true"
+            :label="$t('signatures.page.export_btn')"
             icon="pi pi-download"
             class="bg-primary! text-white border-none! hover:bg-primary-hover!"
         />
@@ -147,7 +147,8 @@
     <SignatureDialog v-model:visible="dialogVisible" :document="selectedDocument" @signed="onDocumentSigned" />
     <DocumentCreateDialog v-model:visible="createDialogVisible" @created="onDocumentCreated" />
 
-    <pv-dialog v-model:visible="exportDialogVisible" header="Exportar Dossier de Calidad" :modal="true" :style="{ width: '450px' }">
+    <!-- Export Quality Dossier Dialog -->
+    <pv-dialog v-model:visible="exportDialogVisible" :header="$t('signatures.page.export_modal_title')" :modal="true" :style="{ width: '450px' }">
       <div class="flex flex-col gap-4">
         <p class="text-sm text-neutral-border">Seleccione el rango de documentos firmados que desea incluir.</p>
         <div class="grid grid-cols-2 gap-3">

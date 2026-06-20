@@ -62,6 +62,7 @@ export const useAdvanceStore = defineStore('advances', () => {
             advances.value = [savedEntry, ...advances.value];
         } catch (error) {
             console.error(error);
+            throw error;
         }
     };
 
@@ -121,7 +122,7 @@ export const useAdvanceStore = defineStore('advances', () => {
 
     const groupedAdvances = computed(() => {
         const groups = {};
-        currentProjectAdvances.value.forEach(a => {
+        filteredAdvances.value.forEach(a => {
             if (!groups[a.activityName]) {
                 groups[a.activityName] = {
                     activityName: a.activityName,

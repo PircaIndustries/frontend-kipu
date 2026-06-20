@@ -125,8 +125,8 @@ const handleApproveRequest = async (event) => {
 
 <template>
   <pv-toast />
-  <section class="flex flex-col gap-6 p-6 h-full">
-    <header class="flex items-center justify-between">
+  <section class="flex flex-col gap-6 p-4 md:p-6 h-full">
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="flex flex-col gap-0.5">
         <h1 class="text-2xl font-bold text-primary tracking-tight m-0">
           {{ t('request.title') }}
@@ -134,23 +134,25 @@ const handleApproveRequest = async (event) => {
       </div>
       <button
           @click="handleCreateRequest"
-          class="w-60 bg-accent text-white py-2.5 rounded-lg font-bold text-base shadow-md cursor-pointer transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
+          class="w-full md:w-60 bg-accent text-white py-2.5 rounded-lg font-bold text-base shadow-md cursor-pointer transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
       >
         <i class="pi pi-plus-circle text-lg"></i>
         <span>{{ t('request.button-create') }}</span>
       </button>
     </header>
 
-    <div class="flex gap-6 flex-1 min-h-0">
+    <div class="flex flex-col md:flex-row gap-6 flex-1 min-h-0">
       <div class="flex-1 min-w-0 flex flex-col gap-4">
-        <RequestList
-            :requests="filteredRequests"
-            @detail="handleDetail"
-            @modify="handleModify"
-        />
+        <div class="overflow-x-auto w-full">
+          <RequestList
+              :requests="filteredRequests"
+              @detail="handleDetail"
+              @modify="handleModify"
+          />
+        </div>
       </div>
 
-      <aside class="w-60 flex flex-col gap-6 shrink-0">
+      <aside class="w-full md:w-60 flex flex-col gap-6 shrink-0">
         <FilterSummaryBar
             :title="t('general.summary')"
             :filters="statusFilters"

@@ -25,7 +25,7 @@
       <div class="bg-success-soft p-3 rounded-lg mt-2">
         <p class="text-sm text-success font-medium flex items-center gap-1">
           <i class="pi pi-user-edit"></i>
-          Tú firmarás este documento automáticamente como: <strong>{{ creatorTeamUser?.fullName || 'Usuario Actual' }}</strong>
+          <span v-html="$t('signatures.create.auto_sign', { user: '<strong>' + (creatorTeamUser?.fullName || 'Usuario Actual') + '</strong>' })"></span>
         </p>
       </div>
     </form>
