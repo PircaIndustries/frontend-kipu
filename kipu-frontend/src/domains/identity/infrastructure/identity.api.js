@@ -46,15 +46,18 @@ export const identityApi = {
      */
     async login(credentials) {
         try {
-            const response = await axios.get(`${API_BASE_URL}/identities`, {
-                params: { email: credentials.email }
+            const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+                email: credentials.email,
+                password: credentials.password
             });
-            const user = response.data.find(
-                u => u.email === credentials.email && u.password === credentials.password
-            );
-            return user || null;
+            // The real backend returns the authenticated user object or token
+            return response.data || null;
         } catch (error) {
             console.error('Error during login:', error);
+            // Return null for 400/401/405 to represent invalid credentials
+            if (error.response && (error.response.status === 401 || error.response.status === 400 || error.response.status === 405)) {
+                return null;
+            }
             throw error;
         }
     }
