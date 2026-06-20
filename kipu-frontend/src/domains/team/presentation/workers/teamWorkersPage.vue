@@ -1,14 +1,14 @@
 <template>
-  <div class="p-6">
-    <div class="flex justify-between items-center mb-8">
+  <div class="p-4 md:p-6">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
       <h1 class="text-2xl font-bold text-text-main">{{ $t('team.workers.title') }}</h1>
-      <div class="flex gap-4">
-        <div class="relative">
+      <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+        <div class="relative w-full sm:w-auto">
           <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-neutral-border text-sm"></i>
           <InputText
               v-model="searchValue"
               :placeholder="$t('team.workers.search-placeholder')"
-              class="pl-10! w-64!"
+              class="pl-10! w-full sm:w-64!"
           />
           <i
               v-if="searchValue"
@@ -20,7 +20,7 @@
             @click="openAddWorkerDialog"
             :label="$t('team.workers.register.btn-add-worker')"
             icon="pi pi-user-plus"
-            class="bg-accent! text-white border-none! hover:bg-primary!"
+            class="bg-accent! text-white border-none! hover:bg-primary! w-full sm:w-auto justify-center"
         />
       </div>
     </div>
@@ -29,70 +29,72 @@
 
     <Card>
       <template #content>
-        <DataTable :value="filteredWorkers" class="w-full">
-          <Column field="dni" :header="$t('team.workers.register.tab-dni')">
-            <template #body="{ data }"><span class="text-text-main">{{ data.dni }}</span></template>
-          </Column>
+        <div class="overflow-x-auto w-full">
+          <DataTable :value="filteredWorkers" class="w-full">
+            <Column field="dni" :header="$t('team.workers.register.tab-dni')">
+              <template #body="{ data }"><span class="text-text-main">{{ data.dni }}</span></template>
+            </Column>
 
-          <Column field="fullName" :header="$t('team.workers.register.tab-name')">
-            <template #body="{ data }"><span class="text-text-main">{{ data.fullName }}</span></template>
-          </Column>
+            <Column field="fullName" :header="$t('team.workers.register.tab-name')">
+              <template #body="{ data }"><span class="text-text-main">{{ data.fullName }}</span></template>
+            </Column>
 
-          <Column field="role" :header="$t('team.workers.register.tab-role')">
-            <template #body="{ data }"><span class="text-text-main">{{ data.role }}</span></template>
-          </Column>
+            <Column field="role" :header="$t('team.workers.register.tab-role')">
+              <template #body="{ data }"><span class="text-text-main">{{ data.role }}</span></template>
+            </Column>
 
-          <Column field="status" :header="$t('team.workers.register.tab-status')">
-            <template #body="{ data }">
-              <Badge
-                  :value="data.isActive ? $t('team.workers.register.tab-status-active') : $t('team.workers.register.tab-status-inactive')"
-                  :severity="data.isActive ? 'success' : 'secondary'"
-              />
-            </template>
-          </Column>
+            <Column field="status" :header="$t('team.workers.register.tab-status')">
+              <template #body="{ data }">
+                <Badge
+                    :value="data.isActive ? $t('team.workers.register.tab-status-active') : $t('team.workers.register.tab-status-inactive')"
+                    :severity="data.isActive ? 'success' : 'secondary'"
+                />
+              </template>
+            </Column>
 
-          <Column field="tools" :header="$t('team.workers.register.tab-tools')">
-            <template #body="{ data }">
-              <div class="relative">
-                <button
-                    @click="toggleToolsDropdown(data.id)"
-                    class="text-accent hover:text-primary underline cursor-pointer"
-                >
-                  {{ getToolsCountLabel(data.assignedTools?.length || 0) }}
-                </button>
-                <div
-                    v-if="openToolsDropdown === data.id"
-                    class="absolute z-50 mt-1 bg-white border border-neutral-border rounded-lg shadow-lg min-w-48"
-                >
-                  <div class="p-2 border-b border-neutral-border bg-neutral-bg rounded-t-lg">
-                    <span class="text-xs font-bold text-text-main">Herramientas asignadas</span>
-                  </div>
-                  <div class="p-2">
-                    <ul v-if="data.assignedTools?.length > 0" class="list-disc list-inside">
-                      <li v-for="tool in data.assignedTools" :key="tool" class="text-sm text-text-main">
-                        {{ tool }}
-                      </li>
-                    </ul>
-                    <p v-else class="text-sm text-neutral-border">Sin herramientas asignadas</p>
+            <Column field="tools" :header="$t('team.workers.register.tab-tools')">
+              <template #body="{ data }">
+                <div class="relative">
+                  <button
+                      @click="toggleToolsDropdown(data.id)"
+                      class="text-accent hover:text-primary underline cursor-pointer"
+                  >
+                    {{ getToolsCountLabel(data.assignedTools?.length || 0) }}
+                  </button>
+                  <div
+                      v-if="openToolsDropdown === data.id"
+                      class="absolute z-50 mt-1 bg-white border border-neutral-border rounded-lg shadow-lg min-w-48"
+                  >
+                    <div class="p-2 border-b border-neutral-border bg-neutral-bg rounded-t-lg">
+                      <span class="text-xs font-bold text-text-main">Herramientas asignadas</span>
+                    </div>
+                    <div class="p-2">
+                      <ul v-if="data.assignedTools?.length > 0" class="list-disc list-inside">
+                        <li v-for="tool in data.assignedTools" :key="tool" class="text-sm text-text-main">
+                          {{ tool }}
+                        </li>
+                      </ul>
+                      <p v-else class="text-sm text-neutral-border">Sin herramientas asignadas</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </template>
-          </Column>
+              </template>
+            </Column>
 
-          <Column :header="$t('team.workers.register.tab-action')">
-            <template #body="{ data }">
-              <Button
-                  @click="toggleStatus(data)"
-                  label="Eliminar"
-                  severity="danger"
-                  text
-                  size="small"
-                  :loading="togglingId === data.id"
-              />
-            </template>
-          </Column>
-        </DataTable>
+            <Column :header="$t('team.workers.register.tab-action')">
+              <template #body="{ data }">
+                <Button
+                    @click="toggleStatus(data)"
+                    label="Eliminar"
+                    severity="danger"
+                    text
+                    size="small"
+                    :loading="togglingId === data.id"
+                />
+              </template>
+            </Column>
+          </DataTable>
+        </div>
 
         <div class="text-right text-sm text-neutral-border mt-4">
           {{ filteredWorkers.length }} / {{ store.allWorkers.length }} {{ $t('team.workers.register.worker-count') }}

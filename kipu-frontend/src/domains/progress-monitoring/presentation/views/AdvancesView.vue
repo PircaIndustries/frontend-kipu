@@ -65,16 +65,16 @@ const navigateToHistory = (activityName) => {
 
 <template>
   <div class="bg-white p-6 rounded-b-xl shadow-sm">
-    <div class="flex justify-between items-center mb-6">
-      <div class="flex flex-wrap gap-4 items-center">
-        <div class="w-[280px]">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+      <div class="flex flex-col sm:flex-row flex-wrap gap-4 items-stretch sm:items-center w-full md:w-auto">
+        <div class="w-full sm:w-[280px]">
           <InputText
               placeholder="Buscar..."
               class="w-full !rounded-lg"
               @input="(e) => store.setSearchFilter(e.target.value)"
           />
         </div>
-        <div class="w-[280px]">
+        <div class="w-full sm:w-[280px]">
           <Select
               :options="specialtiesOptions"
               optionLabel="name"
@@ -85,7 +85,7 @@ const navigateToHistory = (activityName) => {
               showClear
           />
         </div>
-        <div class="w-[300px]">
+        <div class="w-full sm:w-[300px]">
           <DatePicker
               v-model="dates"
               selectionMode="range"
@@ -97,13 +97,13 @@ const navigateToHistory = (activityName) => {
         </div>
       </div>
 
-      <button class="bg-[#2c3e50] text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-[#34495e] transition-colors font-bold" @click="navigateToCreate">
+      <button class="bg-[#2c3e50] text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-[#34495e] transition-colors font-bold w-full md:w-auto" @click="navigateToCreate">
         <i class="pi pi-plus"></i> {{ t('execution.advances.newBtn') }}
       </button>
     </div>
 
-    <div class="border border-gray-100 rounded-lg overflow-hidden">
-      <table class="w-full text-left text-sm">
+    <div class="border border-gray-100 rounded-lg overflow-x-auto">
+      <table class="w-full text-left text-sm whitespace-nowrap">
         <thead class="bg-gray-50 text-gray-400 uppercase font-semibold text-xs">
         <tr>
           <th class="px-6 py-4">{{ t('execution.table.date') }}</th>

@@ -38,6 +38,10 @@ const calendarOptions = computed(() => ({
 
 <template>
   <div class="bg-white p-6 rounded-b-xl shadow-sm">
-    <FullCalendar :key="locale" :options="calendarOptions" />
+    <div v-if="store.calendarEvents.length === 0" class="flex flex-col items-center justify-center p-12 text-gray-500">
+      <i class="pi pi-calendar mb-4 text-4xl text-gray-300"></i>
+      <p class="text-lg font-medium">{{ t('execution.calendar.emptyState') }}</p>
+    </div>
+    <FullCalendar v-else :key="locale" :options="calendarOptions" />
   </div>
 </template>

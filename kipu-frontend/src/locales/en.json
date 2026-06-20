@@ -114,11 +114,47 @@
         "create_loc": "Location",
         "create_loc_placeholder": "Eg: Main St 123, Lima",
         "create_err_loc_req": "Location is required.",
+        "create_budget": "Assigned Budget ($)",
         "create_status": "Initial Status",
         "create_status_planned": "Planned",
         "create_status_in_progress": "In Progress",
-        "create_budget": "Estimated Budget",
-        "create_budget_placeholder": "Eg: 500000",
+        "create_btn_cancel": "Cancel",
+        "create_btn_submit": "Create Project",
+        "status": {
+            "planned": "Planned",
+            "in_progress": "In progress",
+            "halted": "Halted",
+            "completed": "Completed"
+        },
+        "details": {
+            "title": "Technical Sheet: {name}",
+            "history_title": "Status History",
+            "history_desc": "Historical traceability of status changes with their respective technical justification.",
+            "history_progress": "Assigned progress:",
+            "history_full_btn": "View full history",
+            "history_empty": "No status change records.",
+            "docs_title": "Technical Files and Plans",
+            "docs_desc": "List of construction plans and technical specifications approved for this site.",
+            "docs_upload_btn": "Upload Plan",
+            "docs_empty": "No plans or specifications have been registered for this site.",
+            "tooltips": {
+                "change_status": "Change status",
+                "delete": "Delete"
+            },
+            "modal": {
+                "title": "Upload Plan or Technical Document",
+                "name_label": "Document / Plan Name *",
+                "name_placeholder": "e.g. Sector B Foundation Plan",
+                "type_label": "Element Type",
+                "version_label": "Version",
+                "status_label": "Digital Signature Status",
+                "status_signed": "Digitally Signed",
+                "status_pending": "Signature Pending",
+                "deadline_label": "Approval Deadline",
+                "btn_cancel": "Cancel",
+                "btn_submit": "Register Document"
+            }
+        },
         "create_start_date": "Start Date",
         "create_end_date": "End Date (Optional)",
         "create_err_req": "Required.",
@@ -151,7 +187,8 @@
     "execution": {
         "calendar": {
             "today": "Go to today",
-            "detailTitle": "Progress History: {activity}"
+            "detailTitle": "Progress History: {activity}",
+            "emptyState": "There is no progress scheduled for this month yet."
         },
 
         "advances": {
@@ -178,6 +215,7 @@
                 "title": "New Daily Progress",
                 "editTitle": "Edit Progress Record",
                 "submitBtn": "Save Progress",
+                "simulatedNotice": "Simulated functionality in this version.",
                 "discardHeader": "Confirm Discard",
                 "discardMessage": "You have unsaved changes. Are you sure you want to leave?",
                 "deleteHeader": "Confirm Deletion",
@@ -201,7 +239,14 @@
                     "location": "e.g., Level 2",
                     "select_specialty": "Select specialty",
                     "select_responsible": "Select a manager"
-                }
+                },
+                "dailyStats": {
+                    "title": "Daily Statistics",
+                    "personnel": "Personnel:",
+                    "weather": "Weather:"
+                },
+                "successTitle": "New Progress Registered",
+                "successMessage": "The progress has been registered successfully."
             },
             "tabs": {
                 "registry": "Progress Log (PPC)",
@@ -212,7 +257,9 @@
                 "title": "Evidence Gallery",
                 "noPhotos": "No photos recorded for this period.",
                 "viewFull": "View Fullscreen",
-                "filterBy": "Specialty:"
+                "filterBy": "Specialty:",
+                "uploadNotice": "Feature coming soon.",
+                "exportNotice": "Export simulated successfully."
             }
         },
         "impedimentLabel": "Impediment Reason",
@@ -319,9 +366,9 @@
         }
     },
     "common": {
-        "management": "Construction Management",
+        "management": "Project Management",
+        "ncrDisabled": "The report could not be saved because persistence is disabled in this trial version.",
         "cancel": "Cancel",
-        "delete": "Delete",
         "confirm": "Confirm",
         "yes": "Yes",
         "no": "No",
@@ -675,8 +722,14 @@
         }
     },
     "signatures": {
+        "create": {
+            "auto_sign": "You will automatically sign this document as: {user}"
+        },
         "page": {
             "title": "Documents",
+            "subtitle": "Manage, sign and export technical documents, acts and NCRs of the site.",
+            "export_btn": "Export Dossier",
+            "export_modal_title": "Export Quality Dossier",
             "pending-title": "Documents Pending Your Signature",
             "signed-title": "Signed Documents",
             "deadline": "Deadline",
@@ -719,6 +772,7 @@
             "description": "Enter the verification code",
             "token-sent": "A 6-digit verification code has been sent to your email",
             "btn-confirm": "Confirm Signature",
+            "tokenError": "The entered code is incorrect. Check the 6-digit code sent to your email.",
             "btn-cancel": "Cancel"
         }
     },
@@ -1106,5 +1160,33 @@
         "empty_short": "No pending notifications",
         "back": "Back",
         "view_all": "View all notifications"
+    },
+    "time": {
+        "just_now": "Just now",
+        "minutes": "{count} minutes ago",
+        "hours": "{count} hours ago",
+        "days": "{count} days ago",
+        "yesterday": "Yesterday"
+    },
+    "rnc": {
+        "register": {
+            "title": "Register NCR",
+            "subtitle": "Generate an immediate alert for the design team",
+            "project": "Project",
+            "incidence_title": "Incidence Title",
+            "incidence_title_ph": "E.g. Plumb error in wall",
+            "specialty": "Affected Specialty",
+            "specialty_ph": "E.g. Structures...",
+            "severity": "Severity Level",
+            "description": "Detailed Description",
+            "description_ph": "Explain the technical failure...",
+            "evidence": "Photographic Evidence (Required)",
+            "upload_btn": "Upload Evidence",
+            "upload_hint": "Click to upload photo",
+            "evidence_error": "You must attach visual evidence.",
+            "cancel_btn": "Cancel",
+            "submit_btn": "Register and Notify",
+            "save_error": "The report could not be saved due to a server error."
+        }
     }
 }

@@ -115,15 +115,49 @@
         "create_loc_placeholder": "Ej: Av. Principal 123, Lima",
         "create_err_loc_req": "La ubicación es obligatoria.",
         "create_status": "Estado Inicial",
-        "create_status_planned": "Planificado",
-        "create_status_in_progress": "En Progreso",
-        "create_budget": "Presupuesto Estimado",
-        "create_budget_placeholder": "Ej: 500000",
+        "create_status_planned": "Planificación",
+        "create_status_in_progress": "En ejecución",
+        "create_budget": "Presupuesto Asignado ($)",
         "create_start_date": "Fecha de Inicio",
         "create_end_date": "Fecha Fin (Opcional)",
         "create_err_req": "Obligatorio.",
         "create_cancel": "Cancelar",
         "create_submit": "Crear Proyecto",
+        "status": {
+            "planned": "Planificación",
+            "in_progress": "En ejecución",
+            "halted": "Paralizada",
+            "completed": "Finalizada"
+        },
+        "details": {
+            "title": "Ficha Técnica: {name}",
+            "history_title": "Historial de Estados",
+            "history_desc": "Trazabilidad histórica de los cambios de estado con su respectiva justificación técnica.",
+            "history_progress": "Avance asignado:",
+            "history_full_btn": "Ver historial completo",
+            "history_empty": "Sin registros de cambios de estado.",
+            "docs_title": "Expedientes y Planos Técnicos",
+            "docs_desc": "Lista de planos constructivos y especificaciones técnicas aprobadas para esta obra.",
+            "docs_upload_btn": "Subir Plano",
+            "docs_empty": "No se han registrado planos ni especificaciones para esta obra.",
+            "tooltips": {
+                "change_status": "Cambiar estado",
+                "delete": "Eliminar"
+            },
+            "modal": {
+                "title": "Subir Plano o Documento Técnico",
+                "name_label": "Nombre del Documento / Plano *",
+                "name_placeholder": "Ej. Plano de Cimentaciones Sector B",
+                "type_label": "Tipo de Elemento",
+                "version_label": "Versión",
+                "status_label": "Estado de Firma Digital",
+                "status_signed": "Firmado Digitalmente",
+                "status_pending": "Firma Pendiente",
+                "deadline_label": "Fecha Límite para Aprobación",
+                "btn_cancel": "Cancelar",
+                "btn_submit": "Registrar Documento"
+            }
+        },
         "select_title": "Seleccionar Proyecto",
         "select_desc": "Estás a punto de seleccionar el proyecto:",
         "select_prompt": "¿Quieres continuar?",
@@ -151,7 +185,8 @@
     "execution": {
         "calendar":{
             "today": "Ir al día de hoy",
-            "detailTitle": "Historial de Avances: {activity}"
+            "detailTitle": "Historial de Avances: {activity}",
+            "emptyState": "Aún no hay avances programados para este mes."
          },
 
         "advances": {
@@ -168,6 +203,7 @@
                 "title": "Nuevo Avance Diario",
                 "editTitle": "Editar Registro de Avance",
                 "submitBtn": "Guardar Avance",
+                "simulatedNotice": "Funcionalidad simulada en esta versión.",
                 "deleteHeader": "Confirmar Eliminación",
                 "deleteMessage": "¿Estás seguro?",
                 "discardHeader": "Confirmar descarte",
@@ -189,7 +225,14 @@
                     "location": "Ej: Nivel 2",
                     "select_specialty": "Seleccione especialidad",
                     "select_responsible": "Seleccione un Gestor"
-                }
+                },
+                "dailyStats": {
+                    "title": "Estadísticas Diarias",
+                    "personnel": "Personal:",
+                    "weather": "Clima:"
+                },
+                "successTitle": "Nuevo Avance Registrado",
+                "successMessage": "El avance se ha registrado exitosamente."
             },
             "subtitle": "Historial de registros diarios y estados de ejecución.",
             "newBtn": "Nuevo Avance Diario",
@@ -212,7 +255,9 @@
                 "title": "Galería de Evidencias",
                 "noPhotos": "No hay fotos registradas para este periodo.",
                 "viewFull": "Ver pantalla completa",
-                "filterBy": "Especialidad:"
+                "filterBy": "Especialidad:",
+                "uploadNotice": "Funcionalidad disponible próximamente.",
+                "exportNotice": "Exportación simulada correctamente."
             }
         },
         "impedimentLabel": "Motivo de Impedimento",
@@ -318,6 +363,7 @@
     },
     "common": {
         "management": "Gestión de Obras",
+        "ncrDisabled": "El reporte no pudo guardarse porque la persistencia está deshabilitada en esta versión de prueba.",
         "cancel": "Cancelar",
         "confirm": "Confirmar",
         "delete": "Eliminar",
@@ -673,8 +719,14 @@
         }
     },
     "signatures": {
+        "create": {
+            "auto_sign": "Tú firmarás este documento automáticamente como: {user}"
+        },
         "page": {
             "title": "Documentos",
+            "subtitle": "Gestione, firme y exporte documentos técnicos, actas y RNCs de la obra.",
+            "export_btn": "Exportar Dossier",
+            "export_modal_title": "Exportar Dossier de Calidad",
             "pending-title": "Documentos Pendientes de Tu Firma",
             "signed-title": "Documentos Firmados",
             "deadline": "Vence",
@@ -716,7 +768,8 @@
             "title": "Sign Document",
             "description": "Ingresa el código de verificación",
             "token-sent": "Se ha enviado un código de 6 dígitos a tu correo",
-            "btn-confirm": "Confirmar Firma"
+            "btn-confirm": "Confirmar Firma",
+            "tokenError": "El código ingresado es incorrecto. Verifica el código de 6 dígitos enviado a tu correo."
         }
     },
     "budget": {
@@ -1064,5 +1117,33 @@
         "empty_short": "Sin notificaciones pendientes",
         "back": "Volver",
         "view_all": "Ver todas las notificaciones"
+    },
+    "time": {
+        "just_now": "Justo ahora",
+        "minutes": "Hace {count} minutos",
+        "hours": "Hace {count} horas",
+        "days": "Hace {count} días",
+        "yesterday": "Ayer"
+    },
+    "rnc": {
+        "register": {
+            "title": "Registrar RNC",
+            "subtitle": "Genere una alerta inmediata para el equipo de diseño",
+            "project": "Proyecto",
+            "incidence_title": "Título de la incidencia",
+            "incidence_title_ph": "Ej. Error de plomada en muro",
+            "specialty": "Especialidad afectada",
+            "specialty_ph": "Ej. Estructuras...",
+            "severity": "Nivel de severidad",
+            "description": "Descripción detallada",
+            "description_ph": "Explique la falla técnica...",
+            "evidence": "Evidencia Fotográfica (Obligatorio)",
+            "upload_btn": "Subir evidencia",
+            "upload_hint": "Haga clic para cargar la foto",
+            "evidence_error": "Debe adjuntar la evidencia visual.",
+            "cancel_btn": "Cancelar",
+            "submit_btn": "Registrar y Notificar",
+            "save_error": "No se pudo guardar el reporte debido a un error en el servidor."
+        }
     }
 }

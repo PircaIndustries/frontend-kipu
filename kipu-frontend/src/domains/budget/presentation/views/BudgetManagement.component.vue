@@ -85,36 +85,36 @@
   </script>
 
   <template>
-    <div class="budget-container p-6 bg-slate-50 min-h-screen font-sans">
-      <header class="flex justify-between items-center mb-6">
+    <div class="budget-container p-4 md:p-6 bg-slate-50 min-h-screen font-sans">
+      <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div class="text-left">
           <h1 class="text-2xl font-black text-slate-900">{{ t('budget.title') }}</h1>
           <p class="text-sm text-slate-500 font-medium">{{ projectsStore.currentProjectName }}</p>
         </div>
-        <div class="flex gap-3">
-          <button class="px-5 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition-all shadow-sm text-sm" @click="router.push({ name: 'RequestExtension' })">
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          <button class="w-full sm:w-auto px-5 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition-all shadow-sm text-sm" @click="router.push({ name: 'RequestExtension' })">
             {{ t('budget.extension.btn') }}
           </button>
-          <button class="px-5 py-2.5 bg-sky-600 text-white font-bold rounded-lg hover:bg-sky-700 transition-all shadow-sm text-sm" @click="router.push({ name: 'RegisterTransaction' })">
+          <button class="w-full sm:w-auto px-5 py-2.5 bg-sky-600 text-white font-bold rounded-lg hover:bg-sky-700 transition-all shadow-sm text-sm" @click="router.push({ name: 'RegisterTransaction' })">
             {{ t('budget.register.btn') }}
           </button>
         </div>
       </header>
 
-      <section class="grid grid-cols-3 gap-6 mb-8 bg-white p-6 rounded-xl border border-slate-100 shadow-sm text-left">
+      <section class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8 bg-white p-6 rounded-xl border border-slate-100 shadow-sm text-left">
         <div>
           <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ t('budget.overview.total') }}</span>
           <strong class="text-2xl font-black text-slate-800 block mt-1">S/ {{ summary.total.toLocaleString() }}</strong>
         </div>
-        <div class="border-x border-slate-100 px-6">
+        <div class="border-y sm:border-y-0 sm:border-x border-slate-100 py-4 sm:py-0 sm:px-6">
           <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ t('budget.overview.executed') }}</span>
           <strong class="text-2xl font-black text-emerald-600 block mt-1">S/ {{ summary.executed.toLocaleString() }}</strong>
         </div>
-        <div class="px-6">
+        <div class="sm:px-6">
           <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ t('budget.overview.available') }}</span>
           <strong class="text-2xl font-black text-sky-500 block mt-1">S/ {{ summary.available.toLocaleString() }}</strong>
         </div>
-        <div class="col-span-3 mt-4">
+        <div class="col-span-1 sm:col-span-3 mt-4">
           <div class="flex justify-between text-xs font-bold text-slate-500 mb-1.5">
             <span>{{ t('budget.overview.status') }}</span>
             <span>{{ summary.percentage }}%</span>
@@ -125,16 +125,16 @@
         </div>
       </section>
 
-      <div class="grid grid-cols-3 gap-6 text-left">
-        <main class="col-span-2 flex flex-col gap-4">
+      <div class="flex flex-col lg:flex-row gap-6 text-left">
+        <main class="flex-1 flex flex-col gap-4">
           <h2 class="text-base font-black text-slate-700 uppercase tracking-wide mb-1">{{ t('budget.items.title') }}</h2>
 
           <div v-for="(item, index) in budgetItems" :key="item.id" :id="`advance-budget-${item.id}`"
                @click="handleItemClick(item)"
-               class="p-5 cursor-pointer rounded-xl border transition-all flex justify-between items-center duration-300"
+               class="p-4 sm:p-5 cursor-pointer rounded-xl border transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 duration-300"
                :class="isBudgetDepleted(item) ? 'bg-rose-50 border-rose-400 shadow-sm hover:border-rose-500' : 'bg-white border-slate-200 shadow-sm hover:border-sky-400'">
             <div>
-              <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+              <h3 class="font-bold text-slate-800 text-base flex flex-wrap items-center gap-2">
                 <span v-if="isNewItem(item)" class="px-2 py-0.5 bg-sky-100 text-sky-700 text-[10px] uppercase font-black rounded border border-sky-200">
                   {{ t('budget.items.newBadge') }}
                 </span>
@@ -149,23 +149,23 @@
               </p>
             </div>
 
-            <div class="flex gap-6 items-center">
-              <div class="text-right">
+            <div class="flex flex-wrap sm:flex-nowrap gap-4 sm:gap-6 items-center w-full sm:w-auto justify-between sm:justify-end">
+              <div class="text-left sm:text-right">
                 <span class="block text-[10px] font-bold uppercase" :class="isBudgetDepleted(item) ? 'text-rose-400' : 'text-slate-400'">{{ t('budget.items.budgeted') }}</span>
                 <strong class="text-sm font-bold" :class="isBudgetDepleted(item) ? 'text-rose-800' : 'text-slate-700'">S/ {{ (item.assignedBudget || 0).toLocaleString() }}</strong>
               </div>
-              <div class="text-right">
+              <div class="text-left sm:text-right">
                 <span class="block text-[10px] font-bold uppercase" :class="isBudgetDepleted(item) ? 'text-rose-400' : 'text-slate-400'">{{ t('budget.items.executed') }}</span>
                 <strong class="text-sm font-bold" :class="isBudgetDepleted(item) ? 'text-rose-800' : 'text-slate-700'">S/ {{ (item.executedAmount || 0).toLocaleString() }}</strong>
               </div>
-              <div class="px-2 py-1 font-black text-xs rounded" :class="isBudgetDepleted(item) ? 'text-rose-700 bg-rose-200' : 'text-emerald-600 bg-emerald-50'">
+              <div class="px-2 py-1 font-black text-xs rounded whitespace-nowrap" :class="isBudgetDepleted(item) ? 'text-rose-700 bg-rose-200' : 'text-emerald-600 bg-emerald-50'">
                 {{ calculateUsedPercentage(item.executedAmount, item.assignedBudget) }}%
               </div>
             </div>
           </div>
         </main>
 
-        <aside class="flex flex-col gap-4">
+        <aside class="w-full lg:w-80 flex flex-col gap-4">
           <h2 class="text-base font-black text-slate-700 uppercase tracking-wide mb-1">{{ t('budget.recent.title') }}</h2>
           <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-2.5">
             <div v-for="mv in projectRecentMovements" :key="mv.id"

@@ -1,16 +1,16 @@
 <template>
-  <div class="p-6">
-    <div class="flex justify-between items-center mb-8">
+  <div class="p-4 md:p-6">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
       <h1 class="text-2xl font-bold text-text-main">{{ $t('team.users.title') }}</h1>
       <Button
           @click="openInviteDialog"
           :label="$t('team.users.btn-invite')"
           icon="pi pi-user-plus"
-          class="bg-accent! text-white border-none! hover:bg-primary!"
+          class="bg-accent! text-white border-none! hover:bg-primary! w-full md:w-auto justify-center"
       />
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
       <Card>
         <template #content>
           <div class="text-center">
@@ -48,18 +48,18 @@
       </Card>
     </div>
 
-    <div class="flex gap-6">
-      <div class="flex-1">
+    <div class="flex flex-col md:flex-row gap-6">
+      <div class="flex-1 w-full overflow-hidden">
         <Card>
           <template #title>
-            <div class="flex justify-between items-center overflow-hidden">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center overflow-hidden gap-4">
               <span class="text-text-main">{{ $t('team.users.assigned-roles.title') }}</span>
-              <div class="relative">
+              <div class="relative w-full md:w-auto">
                 <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-neutral-border text-sm"></i>
                 <InputText
                     v-model="searchValue"
                     :placeholder="$t('team.users.assigned-roles.input-placeholder')"
-                    class="pl-10! w-60!"
+                    class="pl-10! w-full md:w-60!"
                 />
                 <i
                     v-if="searchValue"
@@ -70,7 +70,8 @@
             </div>
           </template>
           <template #content>
-            <DataTable :value="sortedUsers" class="w-full">
+            <div class="overflow-x-auto w-full">
+              <DataTable :value="sortedUsers" class="w-full">
               <Column field="fullName" :header="$t('team.users.assigned-roles.user-tab')">
                 <template #body="{ data }">
                   <div class="flex items-center gap-2">
@@ -100,6 +101,9 @@
                   <div v-if="isCurrentUser(data)" class="text-neutral-border text-xs italic p-2">
                     -
                   </div>
+                  <div v-else-if="data.isPending" class="text-warning text-xs font-semibold px-2 py-1 bg-warning/10 rounded inline-block">
+                    Pendiente
+                  </div>
                   <div v-else>
                     <Button
                         v-if="data.isActive"
@@ -120,6 +124,7 @@
                 </template>
               </Column>
             </DataTable>
+            </div>
 
             <div class="text-right text-sm text-neutral-border mt-4">
               {{ sortedUsers.length }} / {{ store.allUsers.length }} {{ $t('team.users.assigned-roles.user-count') }}
@@ -128,7 +133,7 @@
         </Card>
       </div>
 
-      <div class="w-80 flex flex-col gap-4">
+      <div class="w-full md:w-80 flex flex-col gap-4">
         <Card>
           <template #title>
             <div class="flex items-center gap-2">
@@ -340,9 +345,17 @@ const closeDialog = () => {
 
 const inviteUser = async () => {
   if (!isInviteFormValid.value) return
-  await store.inviteUser(inviteForm.value)
-  closeDialog()
-  await store.fetchUsers()
+  try {
+    await store.inviteUser(inviteForm.value)
+    closeDialog()
+    await store.fetchUsers()
+  } catch (error) {
+    if (error.message === 'USER_NOT_FOUND') {
+      alert('No se encontró tal usuario. El correo electrónico no está registrado en la plataforma.');
+    } else {
+      alert('Ocurrió un error al enviar la invitación.');
+    }
+  }
 }
 
 const clearSearch = () => {

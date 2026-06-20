@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { documentApi } from '../infrastructure/document.api.js'
 import { useTeamUserStore } from '../../team/application/team-user.store.js'
+import i18n from '../../../locales/i18n.js'
 
 export const useDocumentStore = defineStore('document', () => {
 
@@ -61,7 +62,7 @@ export const useDocumentStore = defineStore('document', () => {
         const activeDocumentId = currentDocumentId.value
 
         if (!activeToken || !activeDocumentId) return { success: false, message: 'No active signature process' }
-        if (token !== activeToken) return { success: false, message: 'Incorrect token' }
+        if (token !== activeToken) return { success: false, message: i18n.global.t('signatures.dialog.tokenError') }
 
         const storedUser = localStorage.getItem('currentUser')
         if (!storedUser) return { success: false, message: 'Current user session not found' }
