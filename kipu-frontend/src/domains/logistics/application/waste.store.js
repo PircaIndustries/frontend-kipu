@@ -1,19 +1,18 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { LogisticsApi } from "@/domains/logistics/infrastructure/logistics.api.js";
 import { MaterialWasteEntity } from "@/domains/logistics/domain/model/waste/materialWaste.entity.js";
 import { MaterialWasteAssembler } from "@/domains/logistics/infrastructure/waste/materialWaste.assembler.js";
 import { WasteClassificationEntity } from "@/domains/logistics/domain/model/waste/wasteClassification.entity.js";
 import { WasteClassificationAssembler } from "@/domains/logistics/infrastructure/waste/wasteClassification.assembler.js";
-import {WasteApi} from "../infrastructure/waste.api.js";
+import { WasteApi } from "../infrastructure/waste.api.js";
 
 const wasteApi = new WasteApi();
 
 const DEFAULT_CLASSIFICATIONS = [
-  new WasteClassificationEntity({ id: 'wcls-001', name: 'Rotura' }),
-  new WasteClassificationEntity({ id: 'wcls-002', name: 'Vencimiento' }),
-  new WasteClassificationEntity({ id: 'wcls-003', name: 'Hurto' }),
-  new WasteClassificationEntity({ id: 'wcls-004', name: 'Otro' }),
+    new WasteClassificationEntity({ id: 'wcls-001', name: 'Rotura' }),
+    new WasteClassificationEntity({ id: 'wcls-002', name: 'Vencimiento' }),
+    new WasteClassificationEntity({ id: 'wcls-003', name: 'Hurto' }),
+    new WasteClassificationEntity({ id: 'wcls-004', name: 'Otro' }),
 ];
 
 const useWasteStore = defineStore('waste', () => {
