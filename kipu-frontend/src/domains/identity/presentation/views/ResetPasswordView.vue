@@ -11,18 +11,33 @@ import AuthBanner from '@/shared/presentation/components/AuthBanner.vue';
 import Password from 'primevue/password';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import InputText from 'primevue/inputtext';
+import { identityApi } from '../../infrastructure/identity.api';
+import { useRoute } from 'vue-router';
 
 const { t } = useI18n();
+const route = useRoute();
 const router = useRouter();
 
+const email = computed(() => route.query.email || '');
+const code = ref('');
 const password = ref('');
 const confirmPassword = ref('');
 const isSubmitting = ref(false);
 const showSuccessDialog = ref(false);
+const submitError = ref('');
 
 const touched = ref({
+    code: false,
     password: false,
     confirmPassword: false
+});
+
+const codeError = computed(() => {
+    if (!touched.value.code) return '';
+    if (!code.value) return 'El código es requerido';
+    if (code.value.length !== 6) return 'El código debe tener 6 dígitos';
+    return '';
 });
 
 const passwordError = computed(() => {
@@ -40,20 +55,28 @@ const confirmPasswordError = computed(() => {
 });
 
 const isFormValid = computed(() =>
+    code.value.length === 6 &&
     password.value.length >= 8 &&
-    confirmPassword.value === password.value
+    confirmPassword.value === password.value &&
+    !isSubmitting.value
 );
 
 async function onSubmit() {
+    touched.value.code = true;
     touched.value.password = true;
     touched.value.confirmPassword = true;
+    submitError.value = '';
     if (!isFormValid.value) return;
 
     isSubmitting.value = true;
-    setTimeout(() => {
-        isSubmitting.value = false;
+    try {
+        await identityApi.resetPassword(email.value, code.value, password.value);
         showSuccessDialog.value = true;
-    }, 600);
+    } catch (error) {
+        submitError.value = 'El código es inválido o expiró.';
+    } finally {
+        isSubmitting.value = false;
+    }
 }
 
 function onSuccessClose() {
@@ -73,6 +96,19 @@ function onSuccessClose() {
                     <p class="auth-panel__subtitle">{{ t('identity.reset_desc') }}</p>
 
                     <form class="auth-form" @submit.prevent="onSubmit">
+                        <div class="auth-form__field">
+                            <label for="reset-code">Código de Verificación</label>
+                            <InputText
+                                id="reset-code"
+                                v-model="code"
+                                placeholder="Ingresa el código de 6 dígitos"
+                                fluid
+                                :invalid="!!codeError"
+                                @blur="touched.code = true"
+                            />
+                            <small v-if="codeError" class="auth-form__error">{{ codeError }}</small>
+                        </div>
+                        
                         <!-- New Password -->
                         <div class="auth-form__field">
                             <label for="reset-password">{{ t('identity.new_password') }}</label>
@@ -102,6 +138,8 @@ function onSuccessClose() {
                             />
                             <small v-if="confirmPasswordError" class="auth-form__error">{{ confirmPasswordError }}</small>
                         </div>
+
+                        <small v-if="submitError" class="auth-form__error auth-form__error--center">{{ submitError }}</small>
 
                         <!-- Submit -->
                         <Button
