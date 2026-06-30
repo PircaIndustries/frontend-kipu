@@ -2,7 +2,9 @@ import axios from 'axios';
 import { BudgetAssembler } from './budget.assembler.js';
 import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore.js';
 
-const API_URL = 'http://localhost:3000';
+// Get base URL from environment or fallback
+const BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:5230/api/v1';
+const API_URL = `${BASE_URL}/budget-items`;
 
 export class BudgetApi {
     async findAll() {

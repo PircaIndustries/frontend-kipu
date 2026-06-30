@@ -10,12 +10,15 @@ import AuthBanner from '@/shared/presentation/components/AuthBanner.vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 
+import { identityApi } from '../../infrastructure/identity.api';
+
 const { t } = useI18n();
 const router = useRouter();
 
 const email = ref('');
 const isSubmitting = ref(false);
 const touched = ref({ email: false });
+const submitError = ref('');
 
 const emailError = computed(() => {
     if (!touched.value.email) return '';
@@ -27,19 +30,24 @@ const emailError = computed(() => {
 
 const isFormValid = computed(() =>
     email.value.trim() &&
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value) &&
+    !isSubmitting.value
 );
 
 async function onSubmit() {
     touched.value.email = true;
+    submitError.value = '';
     if (!isFormValid.value) return;
 
     isSubmitting.value = true;
-    // Simulate email dispatch (500ms) then navigate to reset-password
-    setTimeout(() => {
+    try {
+        await identityApi.forgotPassword(email.value);
+        router.push({ path: '/reset-password', query: { email: email.value } });
+    } catch (error) {
+        submitError.value = 'Ha ocurrido un error al solicitar la recuperación.';
+    } finally {
         isSubmitting.value = false;
-        router.push('/reset-password');
-    }, 500);
+    }
 }
 </script>
 

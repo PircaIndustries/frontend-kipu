@@ -2,7 +2,8 @@ import { AdvanceAssembler } from './advance.assembler.js';
 
 export class AdvanceApi {
     constructor() {
-        this.baseUrl = 'http://localhost:3000/progress';
+        const BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:5230/api/v1';
+        this.baseUrl = `${BASE_URL}/progress`;
     }
 
     async getAll() {

@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { teamUserApi } from '../infrastructure/team-user.api.js'
 import { TeamUserAssembler } from '../infrastructure/team-user.assembler.js'
 import { TeamUserEntity } from '../domain/model/team-user.entity.js'
+import { identityApi } from '../../identity/infrastructure/identity.api.js'
 
 /**
  * Team Users Store - Manages team user state and operations
@@ -197,8 +198,7 @@ export const useTeamUserStore = defineStore('teamUser', () => {
 
         try {
             // Retrieve all users from the platform to validate if email exists
-            const allUsers = await teamUserApi.getAllUsers('');
-            const userExists = allUsers.some(u => u.email === userData.email);
+            const userExists = await identityApi.checkEmailExists(userData.email);
 
             if (!userExists) {
                 throw new Error('USER_NOT_FOUND');
