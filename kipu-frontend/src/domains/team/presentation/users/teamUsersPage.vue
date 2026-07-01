@@ -183,38 +183,22 @@
         :style="{ borderRadius: 'var(--radius-m)' }"
     >
       <form @submit.prevent="inviteUser" class="flex flex-col gap-4">
-        <p class="text-neutral-border text-sm">{{ $t('team.users.send-invitation.credentials') }}</p>
+        <p class="text-neutral-border text-sm">{{ $t('team.users.send-invitation.select-user') }}</p>
 
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-bold text-text-main">{{ $t('team.users.send-invitation.email') }}</label>
-          <InputText
-              v-model="inviteForm.email"
-              type="email"
-              :placeholder="$t('team.users.send-invitation.email-placeholder')"
+          <label class="text-xs font-bold text-text-main">{{ $t('team.users.send-invitation.user-label') }}</label>
+          <Select
+              v-model="inviteForm.selectedUser"
+              :options="iamUsers"
+              optionLabel="label"
+              placeholder="Seleccionar usuario"
               required
-              class="border-neutral-border focus:border-accent"
-          />
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-          <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-text-main">{{ $t('team.users.send-invitation.name') }}</label>
-            <InputText
-                v-model="inviteForm.firstName"
-                :placeholder="$t('team.users.send-invitation.name-placeholder')"
-                required
-                class="border-neutral-border focus:border-accent"
-            />
-          </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-text-main">{{ $t('team.users.send-invitation.lastname') }}</label>
-            <InputText
-                v-model="inviteForm.lastName"
-                :placeholder="$t('team.users.send-invitation.lastname-placeholder')"
-                required
-                class="border-neutral-border focus:border-accent"
-            />
-          </div>
+              class="border-neutral-border"
+          >
+            <template #option="slotProps">
+              <span>{{ slotProps.option.name || slotProps.option.email }} ({{ slotProps.option.email }})</span>
+            </template>
+          </Select>
         </div>
 
         <div class="flex flex-col gap-1">
@@ -249,6 +233,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useTeamUserStore } from '../../application/team-user.store.js'
+import { identityApi } from '../../../identity/infrastructure/identity.api.js'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import InputText from 'primevue/inputtext'
@@ -263,10 +248,9 @@ const store = useTeamUserStore()
 
 const searchValue = ref('')
 const dialogVisible = ref(false)
+const iamUsers = ref([])
 const inviteForm = ref({
-  email: '',
-  firstName: '',
-  lastName: '',
+  selectedUser: null,
   role: ''
 })
 
@@ -278,10 +262,7 @@ const roleOptions = [
 ]
 
 const isInviteFormValid = computed(() => {
-  return inviteForm.value.email &&
-      inviteForm.value.firstName &&
-      inviteForm.value.lastName &&
-      inviteForm.value.role
+  return inviteForm.value.selectedUser && inviteForm.value.role
 })
 
 /**
@@ -334,8 +315,17 @@ const toggleStatus = async (user) => {
   await store.toggleUserStatus(user)
 }
 
-const openInviteDialog = () => {
-  inviteForm.value = { email: '', firstName: '', lastName: '', role: '' }
+const openInviteDialog = async () => {
+  inviteForm.value = { selectedUser: null, role: '' }
+  try {
+    const users = await identityApi.getAllUsers()
+    iamUsers.value = users.map(u => ({
+      ...u,
+      label: `${u.name || u.email} (${u.email})`
+    }))
+  } catch (error) {
+    console.error('Error loading IAM users:', error)
+  }
   dialogVisible.value = true
 }
 
@@ -345,16 +335,18 @@ const closeDialog = () => {
 
 const inviteUser = async () => {
   if (!isInviteFormValid.value) return
+  const selected = inviteForm.value.selectedUser
   try {
-    await store.inviteUser(inviteForm.value)
+    await store.inviteUser({
+      userId: Number(selected.id),
+      fullName: selected.name || selected.email,
+      email: selected.email,
+      role: inviteForm.value.role
+    })
     closeDialog()
     await store.fetchUsers()
   } catch (error) {
-    if (error.message === 'USER_NOT_FOUND') {
-      alert('No se encontró tal usuario. El correo electrónico no está registrado en la plataforma.');
-    } else {
-      alert('Ocurrió un error al enviar la invitación.');
-    }
+    alert('Ocurrió un error al enviar la invitación.');
   }
 }
 
@@ -397,13 +389,12 @@ onMounted(async () => {
       const lastName = nameParts.slice(1).join(' ') || 'Kipu'
 
       const registrationData = {
-        firstName: firstName,
-        lastName: lastName,
+        userId: Number(store.currentUser.userId) || 0,
+        fullName: store.currentUser.fullName,
         email: store.currentUser.email,
         role: store.currentUser.role || 'Gestor Operativo'
       }
 
-      // Ejecutamos la acción del Store que hace el POST hacia C#
       await store.inviteUser(registrationData)
 
       // Volvemos a refrescar la tabla para traer el ID definitivo asignado por el Agregado DDD

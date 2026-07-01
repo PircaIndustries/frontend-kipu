@@ -287,9 +287,12 @@ const createWorker = async () => {
         try {
           for (const machine of toolsToSync) {
             const updatedAssignmentPayload = {
-              ...machine,
+              id: machine.id,
+              machineryId: machine.machineryId,
+              projectId: machine.projectId,
               status: 'IN_USE',
-              assignedTo: createdWorker.id,
+              assignedTo: createdWorker.fullName,
+              assignedWorkerId: createdWorker.id,
               registrationDate: todayStr,
               assignmentDetail: `Asignado a ${createdWorker.fullName}`
             }

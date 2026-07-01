@@ -188,8 +188,8 @@ export const useTeamUserStore = defineStore('teamUser', () => {
     }
 
     /**
-     * Invite a new user
-     * @param {Object} userData - User application (email, firstName, lastName, role)
+     * Invite a new user from IAM
+     * @param {Object} userData - { userId, fullName, email, role }
      * @returns {Promise<TeamUserEntity|null>}
      */
     const inviteUser = async (userData) => {
@@ -197,27 +197,17 @@ export const useTeamUserStore = defineStore('teamUser', () => {
         if (!currentProjectId) throw new Error('No active project found');
 
         try {
-            // Retrieve all users from the platform to validate if email exists
-            const userExists = await identityApi.checkEmailExists(userData.email);
-
-            if (!userExists) {
-                throw new Error('USER_NOT_FOUND');
-            }
-
             const createResource = {
-                fullName: `${userData.firstName} ${userData.lastName}`,
+                userId: userData.userId,
+                fullName: userData.fullName,
                 email: userData.email,
                 role: userData.role,
                 projectId: currentProjectId,
-                isPending: true // Simulate pending invitation
             }
 
             const created = await teamUserApi.createUser(createResource)
             const entity = TeamUserAssembler.toEntityFromResource(created)
-            entity.isPending = true; // Ensure entity has this property
-            
             teamUsers.value.push(entity)
-            console.log('User invited successfully:', entity)
             return entity
 
         } catch (error) {

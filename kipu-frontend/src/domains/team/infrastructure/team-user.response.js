@@ -1,6 +1,7 @@
 /**
  * @typedef {Object} TeamUserResource
  * @property {string} id - User identifier
+ * @property {number|null} userId - IAM user identifier
  * @property {string} fullName - User full name
  * @property {string} email - User email
  * @property {boolean} isActive - Active status

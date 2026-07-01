@@ -57,4 +57,13 @@ export class BaseEndpointLocal {
     delete(id) {
         return this.http.delete(`${this.endpointPath}/${id}`);
     }
+
+    /**
+     * @param {string|number} id
+     * @param {Object} resource
+     * @returns {Promise<import('axios').AxiosResponse>}
+     */
+    patch(id, resource) {
+        return this.http.patch(`${this.endpointPath}/${id}`, resource);
+    }
 }

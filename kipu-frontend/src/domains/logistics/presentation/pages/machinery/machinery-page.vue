@@ -123,56 +123,61 @@ function handleAssign(machinery) {
   showAssignDialog.value = true
 }
 
-function handleReturn(machinery) {
+async function handleReturn(machinery) {
   const updates = {
     ...machinery,
     assignedTo: null,
+    assignedWorkerId: null,
     assignmentDetail: null,
     status: 'AVAILABLE'
   }
-  machineryStore.updateAssignment(machinery.id, updates,
-    () => {
-      toast.add({
-        severity: 'success',
-        summary: t('machinery.return.success.summary'),
-        detail: t('machinery.return.success.detail'),
-        life: 3000
-      })
-    },
-    () => {
-      toast.add({
-        severity: 'error',
-        summary: t('common.error'),
-        detail: t('machinery.return.errors.save-failed'),
-        life: 4000
-      })
+  try {
+    await machineryStore.updateAssignment(machinery.id, updates)
+    if (machinery.assignedWorkerId) {
+      await workerStore.removeMachineryFromWorker(machinery.assignedWorkerId, machinery.machineryId)
     }
-  )
+    toast.add({
+      severity: 'success',
+      summary: t('machinery.return.success.summary'),
+      detail: t('machinery.return.success.detail'),
+      life: 3000
+    })
+  } catch {
+    toast.add({
+      severity: 'error',
+      summary: t('common.error'),
+      detail: t('machinery.return.errors.save-failed'),
+      life: 4000
+    })
+  }
 }
 
-function handleEnable(machinery) {
+async function handleEnable(machinery) {
   const updates = {
     ...machinery,
+    assignedTo: null,
+    assignedWorkerId: null,
     status: 'AVAILABLE'
   }
-  machineryStore.updateAssignment(machinery.id, updates,
-    () => {
-      toast.add({
-        severity: 'success',
-        summary: t('machinery.enable.success.summary'),
-        detail: t('machinery.enable.success.detail'),
-        life: 3000
-      })
-    },
-    () => {
-      toast.add({
-        severity: 'error',
-        summary: t('common.error'),
-        detail: t('machinery.enable.errors.save-failed'),
-        life: 4000
-      })
+  try {
+    await machineryStore.updateAssignment(machinery.id, updates)
+    if (machinery.assignedWorkerId) {
+      await workerStore.removeMachineryFromWorker(machinery.assignedWorkerId, machinery.machineryId)
     }
-  )
+    toast.add({
+      severity: 'success',
+      summary: t('machinery.enable.success.summary'),
+      detail: t('machinery.enable.success.detail'),
+      life: 3000
+    })
+  } catch {
+    toast.add({
+      severity: 'error',
+      summary: t('common.error'),
+      detail: t('machinery.enable.errors.save-failed'),
+      life: 4000
+    })
+  }
 }
 
 function handleMaintenance(machinery) {
