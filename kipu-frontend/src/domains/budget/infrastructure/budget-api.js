@@ -1,26 +1,49 @@
 import axios from 'axios';
+import i18n from '@/locales/i18n';
 import { BudgetAssembler } from './budget.assembler.js';
 import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore.js';
 
 // Get base URL from environment or fallback
 const BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:5230/api/v1';
-const API_URL = `${BASE_URL}/budget-items`;
+
+const apiClient = axios.create({
+    baseURL: BASE_URL
+});
+
+apiClient.interceptors.request.use((config) => {
+    const userStr = localStorage.getItem('currentUser');
+    if (userStr) {
+        try {
+            const user = JSON.parse(userStr);
+            if (user && user.token) {
+                config.headers.Authorization = `Bearer ${user.token}`;
+            }
+        } catch (e) {
+            console.error('Error parsing currentUser from localStorage', e);
+        }
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
+const API_URL = `/budget-items`;
 
 export class BudgetApi {
     async findAll() {
-        const { data } = await axios.get(`${API_URL}/progress`);
+        const { data } = await apiClient.get(`${API_URL}/progress`);
         return data.filter(item => !item.isMiniAdvance);
     }
 
     async findById(id) {
-        const { data } = await axios.get(`${API_URL}/progress/${id}`);
+        const { data } = await apiClient.get(`${API_URL}/progress/${id}`);
         return data;
     }
 
     // ADDED: Fetch transactions explicitly linked to a single budget item
     async getTransactionsByBudgetId(budgetId) {
         try {
-            const { data } = await axios.get(`${API_URL}/transactions?budgetId=${budgetId}`);
+            const { data } = await apiClient.get(`${API_URL}/transactions?budgetId=${budgetId}`);
             return data;
         } catch (error) {
             console.error("Error fetching transactions:", error);
@@ -48,23 +71,23 @@ export class BudgetApi {
     async addTransaction(id, amount, description = "Gasto registrado") {
         try {
             const item = await this.findById(id);
-            if (!item) throw new Error("Item not found");
+            if (!item) throw new Error(i18n.global.t('errors.item_not_found'));
 
             if (item.isMiniAdvance) {
-                throw new Error("No puedes registrar gastos en un miniavance.");
+                throw new Error(i18n.global.t('errors.expenses_mini_advance'));
             }
 
             const numAmount = Number(amount);
             const newExecuted = Number(item.executedAmount || 0) + numAmount;
 
-            await axios.post(`${API_URL}/transactions`, {
+            await apiClient.post(`${API_URL}/transactions`, {
                 budgetId: id,
                 amount: numAmount,
                 date: new Date().toISOString().split('T')[0],
                 description: description
             });
 
-            await axios.patch(`${API_URL}/progress/${id}`, {
+            await apiClient.patch(`${API_URL}/progress/${id}`, {
                 executedAmount: newExecuted
             });
         } catch (error) {
@@ -76,11 +99,11 @@ export class BudgetApi {
     async requestExtension(id, additionalBudget) {
         try {
             const item = await this.findById(id);
-            if (!item) throw new Error("Item not found");
+            if (!item) throw new Error(i18n.global.t('errors.item_not_found'));
 
             const newBudgeted = Number(item.assignedBudget || 0) + Number(additionalBudget);
 
-            await axios.patch(`${API_URL}/progress/${id}`, {
+            await apiClient.patch(`${API_URL}/progress/${id}`, {
                 assignedBudget: newBudgeted
             });
         } catch (error) {

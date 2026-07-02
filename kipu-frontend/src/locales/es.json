@@ -118,6 +118,7 @@
         "create_status_planned": "Planificación",
         "create_status_in_progress": "En ejecución",
         "create_budget": "Presupuesto Asignado ($)",
+        "create_budget_placeholder": "Ej: 500000",
         "create_start_date": "Fecha de Inicio",
         "create_end_date": "Fecha Fin (Opcional)",
         "create_err_req": "Obligatorio.",
@@ -156,6 +157,13 @@
                 "deadline_label": "Fecha Límite para Aprobación",
                 "btn_cancel": "Cancelar",
                 "btn_submit": "Registrar Documento"
+            },
+            "table": {
+                "name": "Nombre Documento / Plano",
+                "type": "Tipo",
+                "version": "Versión",
+                "signature": "Firma Digital",
+                "expires": "Vence"
             }
         },
         "select_title": "Seleccionar Proyecto",
@@ -169,7 +177,25 @@
         "delete_prompt_1": "Por favor escriba",
         "delete_prompt_2": "para confirmar:",
         "delete_placeholder": "Nombre del proyecto",
-        "delete_submit": "Entiendo las consecuencias, eliminar proyecto"
+        "delete_submit": "Entiendo las consecuencias, eliminar proyecto",
+        "create_btn_cancel": "Cancelar",
+        "create_btn_submit": "Guardar",
+        "change_status_dialog": {
+            "title": "Cambiar Estado del Proyecto",
+            "new_status": "Nuevo Estado",
+            "justification": "Justificación",
+            "justification_ph": "Documente la razón por la que se paraliza este proyecto...",
+            "justification_req": "La justificación es requerida al establecer el estado a 'Paralizada'.",
+            "cancel": "Cancelar",
+            "submit": "Actualizar Estado"
+        },
+        "discard_dialog": {
+            "title": "¿Descartar cambios?",
+            "message": "Los cambios no guardados se perderán.",
+            "continue": "Seguir editando",
+            "discard": "Descartar"
+        },
+        "create_success_msg": "Proyecto creado exitosamente."
     },
     "navigation": {
         "dashboard": "Dashboard",
@@ -183,12 +209,11 @@
         "team": "Equipo"
     },
     "execution": {
-        "calendar":{
+        "calendar": {
             "today": "Ir al día de hoy",
             "detailTitle": "Historial de Avances: {activity}",
             "emptyState": "Aún no hay avances programados para este mes."
-         },
-
+        },
         "advances": {
             "title": "Control de Avances",
             "activityHistory": {
@@ -200,39 +225,10 @@
                 "editMain": "Editar actividad principal"
             },
             "create": {
-                "title": "Nuevo Avance Diario",
-                "editTitle": "Editar Registro de Avance",
-                "submitBtn": "Guardar Avance",
-                "simulatedNotice": "Funcionalidad simulada en esta versión.",
-                "deleteHeader": "Confirmar Eliminación",
-                "deleteMessage": "¿Estás seguro?",
-                "discardHeader": "Confirmar descarte",
-                "discardMessage": "¿Seguro que quieres salir?",
                 "fields": {
-                    "date": "Fecha",
-                    "specialty": "Especialidad",
-                    "activity": "Actividad",
-                    "location": "Ubicación",
-                    "progress": "Avance",
-                    "weight": "Peso",
-                    "description": "Descripción",
-                    "responsible": "Responsable",
-                    "crewSize": "Personal de Cuadrilla",
-                    "weather": "Clima"
-                },
-                "placeholders": {
-                    "activity": "Ej: Vaciado",
-                    "location": "Ej: Nivel 2",
-                    "select_specialty": "Seleccione especialidad",
-                    "select_responsible": "Seleccione un Gestor"
-                },
-                "dailyStats": {
-                    "title": "Estadísticas Diarias",
-                    "personnel": "Personal:",
-                    "weather": "Clima:"
-                },
-                "successTitle": "Nuevo Avance Registrado",
-                "successMessage": "El avance se ha registrado exitosamente."
+                    "photos": "Fotos Adicionales",
+                    "project": "Proyecto"
+                }
             },
             "subtitle": "Historial de registros diarios y estados de ejecución.",
             "newBtn": "Nuevo Avance Diario",
@@ -245,7 +241,6 @@
                 "installations": "Instalaciones",
                 "architecture": "Arquitectura"
             },
-
             "tabs": {
                 "registry": "Registro de Avance (PPC)",
                 "photoLog": "Bitácora Fotográfica",
@@ -286,34 +281,8 @@
         "taskLabel": "Partida",
         "title": "Registro de Avance Diario",
         "create": {
-            "title": "Nuevo Avance Diario",
-            "submitBtn": "Guardar Avance",
-            "discardHeader": "Confirmar descarte",
-            "discardMessage": "Tienes cambios sin guardar. ¿Estás seguro de que deseas salir?",
-            "fields": {
-                "date": "Fecha del Avance",
-                "specialty": "Especialidad",
-                "activity": "Actividad Realizada",
-                "location": "Ubicación/Sector",
-                "progress": "Porcentaje de Avance",
-                "description": "Descripción Detallada",
-                "weight": "Peso",
-                "responsible": "Responsable",
-                "crewSize": "Personal de Cuadrilla",
-                "weather": "Condiciones Climáticas",
-                "photos": "Fotos del Avance",
-                "project": "Proyecto asignado"
-            },
-            "placeholders": {
-                "activity": "Ej: Vaciado de losa del segundo nivel",
-                "location": "Ej: Nivel 2 - Eje A-B",
-                "project": "Seleccione un proyecto",
-                "date": "Seleccionar fecha"
-            },
-            "photos": {
-                "add": "Agregar foto",
-                "empty": "Arrastra imágenes aquí para subirlas"
-            }
+            "deleteHeader": "Confirmar Eliminación",
+            "deleteMessage": "¿Estás seguro de eliminar este registro?"
         },
         "weather": {
             "sunny": "Soleado",
@@ -359,6 +328,18 @@
                 "continue": "Continuar editando",
                 "confirm": "Descartar"
             }
+        },
+        "status": {
+            "planning": "Planificación",
+            "in_progress": "En Progreso",
+            "paused": "Pausado",
+            "completed": "Finalizado",
+            "cancelled": "Cancelado",
+            "Activo": "Activo",
+            "Planificación": "Planificación",
+            "Pausado": "Pausado",
+            "Finalizado": "Finalizado",
+            "Cancelado": "Cancelado"
         }
     },
     "common": {
@@ -1111,7 +1092,11 @@
         "total_suffix": "Total",
         "empty_short": "Sin notificaciones pendientes",
         "back": "Volver",
-        "view_all": "Ver todas las notificaciones"
+        "view_all": "Ver todas las notificaciones",
+        "types": {
+            "ProjectInvitation": "Invitación de Proyecto",
+            "General": "Notificación"
+        }
     },
     "time": {
         "just_now": "Justo ahora",
@@ -1140,5 +1125,56 @@
             "submit_btn": "Registrar y Notificar",
             "save_error": "No se pudo guardar el reporte debido a un error en el servidor."
         }
+    },
+    "progress-monitoring": {
+        "advances": {
+            "title": "Supervisión de Progreso",
+            "subtitle": "Registra los avances por especialidad.",
+            "newBtn": "Nuevo Avance",
+            "filterProject": "Filtrar por Proyecto",
+            "filterSpecialty": "Filtrar por Especialidad",
+            "filterWeek": "Filtrar por Semana",
+            "weeklyReport": "Reporte Semanal",
+            "specialties": {
+                "structures": "Estructuras",
+                "installations": "Instalaciones",
+                "architecture": "Arquitectura"
+            }
+        },
+        "table": {
+            "date": "Fecha",
+            "activity": "Actividad",
+            "specialty": "Especialidad",
+            "progress": "Progreso",
+            "weight": "Peso",
+            "project": "Proyecto",
+            "status": "Estado"
+        },
+        "tabs": {
+            "log": "Registro",
+            "photos": "Fotos"
+        },
+        "actions": {
+            "export": "Exportar",
+            "upload": "Subir"
+        },
+        "filters": {
+            "activity": "Actividad",
+            "specialty": "Especialidad",
+            "start_date": "Fecha Inicio",
+            "end_date": "Fecha Fin"
+        }
+    },
+    "errors": {
+        "activity_exists": "Ya existe una actividad con este nombre.",
+        "no_active_project": "No se ha seleccionado ningún proyecto activo.",
+        "progress_exceeds": "La suma del progreso supera el 100%.",
+        "id_required_delete": "El ID es requerido para la eliminación.",
+        "project_not_found": "Proyecto no encontrado.",
+        "expenses_mini_advance": "No puedes registrar gastos en un miniavance.",
+        "item_not_found": "Elemento no encontrado."
+    },
+    "warnings": {
+        "select_project": "Debe seleccionar un proyecto para continuar."
     }
 }

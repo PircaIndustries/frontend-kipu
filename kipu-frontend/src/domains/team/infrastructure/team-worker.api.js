@@ -4,6 +4,27 @@ import axios from 'axios'
 const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL_LOCAL || 'http://localhost:5230/api/v1'
 const TEAMWORKERS_URL = '/team-workers'
 
+const apiClient = axios.create({
+    baseURL: API_BASE_URL
+});
+
+apiClient.interceptors.request.use((config) => {
+    const userStr = localStorage.getItem('currentUser');
+    if (userStr) {
+        try {
+            const user = JSON.parse(userStr);
+            if (user && user.token) {
+                config.headers.Authorization = `Bearer ${user.token}`;
+            }
+        } catch (e) {
+            console.error('Error parsing currentUser from localStorage', e);
+        }
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
 export const teamWorkerApi = {
     /**
      * Consume el endpoint: GET /api/v1/teamworkers?projectId=...
@@ -13,7 +34,7 @@ export const teamWorkerApi = {
             const params = { projectId }
             if (globalSearch) params.globalSearch = globalSearch
 
-            const response = await axios.get(`${API_BASE_URL}${TEAMWORKERS_URL}`, { params })
+            const response = await apiClient.get(TEAMWORKERS_URL, { params })
             return response.data
         } catch (error) {
             console.error('Error fetching team workers:', error)

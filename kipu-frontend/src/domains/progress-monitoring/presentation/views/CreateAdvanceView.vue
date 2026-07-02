@@ -117,6 +117,14 @@ onMounted(async () => {
  */
 const saveProgress = async () => {
 
+  saveError.value = '';
+
+  // Form Validation
+  if (!form.date || !form.specialty || !form.activityName || form.percentage === '' || form.weight === '' || !form.responsible || form.workers === '') {
+    saveError.value = "Por favor, complete todos los campos obligatorios (*).";
+    return;
+  }
+
   const payload = {
     ...form,
     isMiniAdvance: isMiniAdvanceMode.value,
@@ -138,7 +146,7 @@ const saveProgress = async () => {
     }, 0);
 
     if (currentSum + Number(form.percentage) > 100) {
-      alert("¡Error! La suma del progreso no puede superar el 100%.");
+      saveError.value = "¡Error! La suma del progreso no puede superar el 100%.";
       return;
     }
   }
@@ -219,12 +227,12 @@ const deleteProgress = () => {
 
         <form @submit.prevent="saveProgress" class="grid grid-cols-2 gap-x-6 gap-y-4">
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.date') }}</label>
+            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.date') }}<span class="text-red-500 ml-1">*</span></label>
             <DatePicker v-model="form.date" showIcon iconDisplay="input" fluid class="!rounded-lg" />
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.specialty') }}</label>
+            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.specialty') }}<span class="text-red-500 ml-1">*</span></label>
             <select v-model="form.specialty" :disabled="isMiniAdvanceMode" class="bg-gray-50 border border-gray-200 p-3 rounded-lg outline-none cursor-pointer">
               <option value="" disabled>{{ t('execution.advances.create.placeholders.select_specialty') }}</option>
               <option v-for="opt in specialtiesOptions" :key="opt" :value="opt">{{ opt }}</option>
@@ -232,7 +240,7 @@ const deleteProgress = () => {
           </div>
 
           <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.activity') }}</label>
+            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.activity') }}<span class="text-red-500 ml-1">*</span></label>
             <input type="text" v-model="form.activityName" :placeholder="t('execution.advances.create.placeholders.activity')" :disabled="isMiniAdvanceMode" class="bg-gray-50 border border-gray-200 p-3 rounded-lg outline-none">
           </div>
 
@@ -242,7 +250,7 @@ const deleteProgress = () => {
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.progress') }}</label>
+            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.progress') }}<span class="text-red-500 ml-1">*</span></label>
             <div class="relative">
               <input type="number" v-model="form.percentage" min="0" max="100" class="bg-gray-50 border border-gray-200 p-3 rounded-lg outline-none w-full pr-10">
               <span class="absolute right-4 top-3 text-gray-400 font-bold">%</span>
@@ -255,17 +263,17 @@ const deleteProgress = () => {
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.weight') }}</label>
+            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.weight') }}<span class="text-red-500 ml-1">*</span></label>
             <input type="number" v-model="form.weight" :disabled="isMiniAdvanceMode" min="1" class="bg-gray-50 border border-gray-200 p-3 rounded-lg outline-none">
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.crewSize') }}</label>
+            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.crewSize') }}<span class="text-red-500 ml-1">*</span></label>
             <input type="number" v-model="form.workers" :disabled="isMiniAdvanceMode" min="0" class="bg-gray-50 border border-gray-200 p-3 rounded-lg outline-none">
           </div>
 
           <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.responsible') }}</label>
+            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.responsible') }}<span class="text-red-500 ml-1">*</span></label>
             <select v-model="form.responsible" :disabled="isMiniAdvanceMode" class="bg-gray-50 border border-gray-200 p-3 rounded-lg outline-none cursor-pointer">
               <option value="" disabled>{{ t('execution.advances.create.placeholders.select_responsible') }}</option>
               <option v-for="user in operationalManagers" :key="user.id" :value="user.fullName">{{ user.fullName }}</option>

@@ -3,7 +3,27 @@ import { DocumentAssembler } from './document.assembler.js'
 
 const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL_LOCAL || 'http://localhost:5230/api/v1'
 const DOCUMENTS_ENDPOINT = '/documents'
-const documentsUrl = `${API_BASE_URL}${DOCUMENTS_ENDPOINT}`
+
+const apiClient = axios.create({
+    baseURL: API_BASE_URL
+});
+
+apiClient.interceptors.request.use((config) => {
+    const userStr = localStorage.getItem('currentUser');
+    if (userStr) {
+        try {
+            const user = JSON.parse(userStr);
+            if (user && user.token) {
+                config.headers.Authorization = `Bearer ${user.token}`;
+            }
+        } catch (e) {
+            console.error('Error parsing currentUser from localStorage', e);
+        }
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
 
 export const documentApi = {
     /**
@@ -11,8 +31,8 @@ export const documentApi = {
      */
     async getPendingDocuments(projectId, teamUserId) {
         try {
-            const url = `${documentsUrl}/pending?projectId=${projectId}&teamUserId=${teamUserId}`
-            const response = await axios.get(url)
+            const url = `${DOCUMENTS_ENDPOINT}/pending?projectId=${projectId}&teamUserId=${teamUserId}`
+            const response = await apiClient.get(url)
             return DocumentAssembler.toEntitiesFromResponse(response.data)
         } catch (error) {
             console.error('Error fetching pending documents:', error)

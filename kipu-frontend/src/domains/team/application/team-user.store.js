@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { teamUserApi } from '../infrastructure/team-user.api.js'
+import i18n from '@/locales/i18n.js'
 import { TeamUserAssembler } from '../infrastructure/team-user.assembler.js'
 import { TeamUserEntity } from '../domain/model/team-user.entity.js'
 import { identityApi } from '../../identity/infrastructure/identity.api.js'
@@ -194,7 +195,7 @@ export const useTeamUserStore = defineStore('teamUser', () => {
      */
     const inviteUser = async (userData) => {
         const currentProjectId = localStorage.getItem('currentProjectId');
-        if (!currentProjectId) throw new Error('No active project found');
+        if (!currentProjectId) throw new Error(i18n.global.t('errors.no_active_project'));
 
         try {
             const createResource = {

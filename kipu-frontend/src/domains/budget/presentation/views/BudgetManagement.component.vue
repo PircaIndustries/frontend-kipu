@@ -75,7 +75,7 @@
 
   onMounted(loadDashboardData);
 
-  watch(() => projectsStore.currentProjectId, loadDashboardData);
+  watch(() => projectsStore.currentProject, loadDashboardData, { deep: true });
 
   watch(() => route.fullPath, () => {
     if (route.name === 'BudgetManagement') {
