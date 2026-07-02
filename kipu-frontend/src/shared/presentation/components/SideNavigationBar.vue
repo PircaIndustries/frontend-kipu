@@ -9,9 +9,14 @@ import { useI18n } from 'vue-i18n';
 import Avatar from 'primevue/avatar';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
+import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore';
+
+import { useToast } from 'primevue/usetoast';
 
 const { t } = useI18n();
 const router = useRouter();
+const toast = useToast();
+const projectsStore = useProjectsStore();
 
 /** Read user application from localStorage (set at login). */
 const currentUser = computed(() => {
@@ -39,6 +44,15 @@ const menuItems = [
   { label: 'navigation.team', icon: 'pi pi-users', to: '/team' }
 ];
 
+function handleNavigation(e, item, navigate) {
+  if (item.to !== '/projects' && !projectsStore.currentProjectId) {
+    e.preventDefault();
+    toast.add({ severity: 'warn', summary: t('common.management'), detail: t('warnings.select_project'), life: 3000 });
+  } else {
+    navigate(e);
+  }
+}
+
 // ── Logout ──
 const showLogoutMenu = ref(false);
 const showLogoutSuccess = ref(false);
@@ -48,6 +62,8 @@ function toggleLogoutMenu() {
 }
 
 function performLogout() {
+  projectsStore.clearCurrentProject();
+  
   localStorage.removeItem('currentUser');
   localStorage.removeItem('currentProjectId');
   showLogoutMenu.value = false;
@@ -71,9 +87,11 @@ function goToLogin() {
 
     <ul class="menu-list">
       <li v-for="item in menuItems" :key="item.label" class="menu-item">
-        <router-link :to="item.to" class="menu-link" active-class="active-link">
-          <i :class="item.icon"></i>
-          <span>{{ t(item.label) }}</span>
+        <router-link :to="item.to" custom v-slot="{ href, navigate, isActive, isExactActive }">
+          <a :href="href" @click="(e) => handleNavigation(e, item, navigate)" :class="['menu-link', { 'active-link': isActive || isExactActive }]">
+            <i :class="item.icon"></i>
+            <span>{{ t(item.label) }}</span>
+          </a>
         </router-link>
       </li>
     </ul>

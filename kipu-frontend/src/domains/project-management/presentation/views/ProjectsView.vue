@@ -113,12 +113,12 @@ async function handleSave() {
       location: form.value.location,
       startDate: form.value.startDate?.toISOString().split('T')[0],
       endDate: form.value.endDate?.toISOString().split('T')[0],
-      budget: form.value.budget,
+      budget: Number(form.value.budget),
       status: form.value.status
     });
     form.value = { ...initialForm }; createError.value = '';
     showCreateModal.value = false; showSuccessModal.value = true;
-  } catch { createError.value = 'Error creating project.'; }
+  } catch (error) { console.log('CREATE ERROR:', error.response?.data); createError.value = error.response?.data?.message || 'Error creating project.'; }
 }
 
 // ── Select project ──
@@ -126,7 +126,7 @@ const showSelectDialog = ref(false);
 const projectToSelect = ref(null);
 
 function onCardClick(project) {
-  if (project.id === store.currentProjectId) return;
+  if (String(project.id) === String(store.currentProjectId)) return;
   projectToSelect.value = project;
   showSelectDialog.value = true;
 }
@@ -178,7 +178,7 @@ const allStatusOptions = computed(() => {
 
   // If the project is NOT 'Paralizada', only allow setting it to 'Paralizada'
   return [
-    { label: 'Paralizada', value: 'Paralizada' }
+    { label: t('projects_dashboard.status.halted'), value: 'Paralizada' }
   ];
 });
 
@@ -206,7 +206,7 @@ async function confirmStatusChange() {
       null
     );
     showStatusDialog.value = false; statusProject.value = null;
-  } catch { console.error("Error al cambiar estado:", err); }
+  } catch (err) { console.error("Error al cambiar estado:", err); }
 }
 
 // ── Active Project Details Helpers & Document Form ──
@@ -322,11 +322,11 @@ onMounted(async () => {
         v-for="p in filteredProjects"
         :key="p.id"
         class="project-card"
-        :class="{ 'project-card--current': p.id === store.currentProjectId }"
+        :class="{ 'project-card--current': String(p.id) === String(store.currentProjectId) }"
         @click="onCardClick(p)"
       >
         <!-- Current project banner -->
-        <div v-if="p.id === store.currentProjectId" class="project-card__banner">
+        <div v-if="String(p.id) === String(store.currentProjectId)" class="project-card__banner">
           <i class="pi pi-check-circle"></i> {{ t('projects_dashboard.current_project') }}
         </div>
 
@@ -338,11 +338,9 @@ onMounted(async () => {
             <div class="project-card__header-actions">
               <!-- Status tag — clickable to change status -->
               <span
-                class="project-card__status-tag project-card__status-tag--clickable"
+                class="project-card__status-tag"
                 :class="'project-card__status-tag--' + calculateProjectStatus(p).toLowerCase().replace(/\s/g, '-')"
-                @click.stop="openStatusDialog(p)"
-                v-tooltip.top="'Click to change status'"
-              >{{ calculateProjectStatus(p) }}</span>
+              >{{ translateStatus(calculateProjectStatus(p)) }}</span>
               <Button
                 icon="pi pi-sync"
                 severity="secondary"
@@ -445,21 +443,21 @@ onMounted(async () => {
           </div>
           <div class="details-card__content p-0 mt-4">
             <DataTable :value="store.currentProject.technicalDocs || []" class="p-datatable-sm documents-table" responsiveLayout="scroll">
-              <Column field="name" header="Nombre Documento / Plano" sortable></Column>
-              <Column field="type" header="Tipo" sortable>
+              <Column field="name" :header="t('projects_dashboard.details.table.name')" sortable></Column>
+              <Column field="type" :header="t('projects_dashboard.details.table.type')" sortable>
                 <template #body="slotProps">
                   <span class="doc-type-badge">{{ slotProps.data.type }}</span>
                 </template>
               </Column>
-              <Column field="version" header="Versión" align="center"></Column>
-              <Column field="signatureStatus" header="Firma Digital" sortable align="center">
+              <Column field="version" :header="t('projects_dashboard.details.table.version')" align="center"></Column>
+              <Column field="signatureStatus" :header="t('projects_dashboard.details.table.signature')" sortable align="center">
                 <template #body="slotProps">
                   <span class="signature-badge" :class="slotProps.data.signatureStatus === 'Firmado' ? 'signature-badge--signed' : 'signature-badge--pending'">
                     {{ slotProps.data.signatureStatus }}
                   </span>
                 </template>
               </Column>
-              <Column field="deadline" header="Vence" sortable align="right"></Column>
+              <Column field="deadline" :header="t('projects_dashboard.details.table.expires')" sortable align="right"></Column>
               <template #empty>
                 <div class="empty-docs-state">
                   <i class="pi pi-folder-open mb-2 text-gray-400 text-2xl"></i>
@@ -550,15 +548,15 @@ onMounted(async () => {
 
     <!-- ═══ CREATE SUCCESS DIALOG ═══ -->
     <Dialog v-model:visible="showSuccessModal" modal :style="{ width: '380px' }">
-      <div class="success-body"><i class="pi pi-check-circle" /><h2>{{ t('projects_dashboard.create_title') }}</h2><p>Project created successfully.</p></div>
+      <div class="success-body"><i class="pi pi-check-circle" /><h2>{{ t('projects_dashboard.create_title') }}</h2><p>{{ t('projects_dashboard.create_success_msg') }}</p></div>
     </Dialog>
 
     <!-- ═══ DISCARD DIALOG ═══ -->
-    <Dialog v-model:visible="showDiscardModal" modal header="Discard changes?" :style="{ width: '340px' }">
-      <p style="margin:0;color:#4b5563;">Unsaved changes will be lost.</p>
+    <Dialog v-model:visible="showDiscardModal" modal :header="t('projects_dashboard.discard_dialog.title')" :style="{ width: '340px' }">
+      <p style="margin:0;color:#4b5563;">{{ t('projects_dashboard.discard_dialog.message') }}</p>
       <template #footer>
-        <Button label="Continue editing" text severity="secondary" @click="showDiscardModal = false" />
-        <Button label="Discard" severity="danger" @click="confirmDiscard" />
+        <Button :label="t('projects_dashboard.discard_dialog.continue')" text severity="secondary" @click="showDiscardModal = false" />
+        <Button :label="t('projects_dashboard.discard_dialog.discard')" severity="danger" @click="confirmDiscard" />
       </template>
     </Dialog>
 
@@ -597,24 +595,24 @@ onMounted(async () => {
       </template>
     </Dialog>
 
-    <!-- ═══ STATUS CHANGE DIALOG ═══ -->
-    <Dialog v-model:visible="showStatusDialog" modal header="Change Project Status" :style="{ width: '420px' }">
+    <!-- ⚡⚡⚡ STATUS CHANGE DIALOG ⚡⚡⚡ -->
+    <Dialog v-model:visible="showStatusDialog" modal :header="t('projects_dashboard.change_status_dialog.title')" :style="{ width: '420px' }">
       <div class="form-body">
         <div class="field">
-          <label>New Status</label>
+          <label>{{ t('projects_dashboard.change_status_dialog.new_status') }}</label>
           <Select v-model="newStatus" :options="allStatusOptions" optionLabel="label" optionValue="value" fluid />
         </div>
         <div v-if="needsJustification" class="field">
-          <label>Justification <span class="field__required">*</span></label>
-          <Textarea v-model="statusJustification" rows="3" fluid placeholder="Document the reason for halting this project..." />
+          <label>{{ t('projects_dashboard.change_status_dialog.justification') }} <span class="field__required">*</span></label>
+          <Textarea v-model="statusJustification" rows="3" fluid :placeholder="t('projects_dashboard.change_status_dialog.justification_ph')" />
           <small v-if="needsJustification && !statusJustification.trim()" class="field__error">
-            Justification is required when setting status to 'Paralizada'.
+            {{ t('projects_dashboard.change_status_dialog.justification_req') }}
           </small>
         </div>
       </div>
       <template #footer>
-        <Button label="Cancel" severity="secondary" text @click="showStatusDialog = false" />
-        <Button label="Update Status" :disabled="!isStatusValid" @click="confirmStatusChange" />
+        <Button :label="t('projects_dashboard.change_status_dialog.cancel')" severity="secondary" text @click="showStatusDialog = false" />
+        <Button :label="t('projects_dashboard.change_status_dialog.submit')" :disabled="!isStatusValid" @click="confirmStatusChange" />
       </template>
     </Dialog>
 
@@ -705,7 +703,7 @@ onMounted(async () => {
 .project-card__image { width: 100%; height: 160px; object-fit: cover; background: #e9ecef; }
 
 .project-card__body { padding: 1.25rem; position: relative; }
-.project-card__header { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem; }
+.project-card__header { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
 .project-card__name { font-size: 1rem; font-weight: 600; color: #2c3e50; margin: 0; }
 .project-card__desc { font-size: 0.78rem; color: #7f8c8d; margin: 0 0 0.75rem; line-height: 1.4; }
 

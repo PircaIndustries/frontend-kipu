@@ -104,7 +104,7 @@
                   <div v-else-if="data.isPending" class="text-warning text-xs font-semibold px-2 py-1 bg-warning/10 rounded inline-block">
                     Pendiente
                   </div>
-                  <div v-else>
+                  <div v-else-if="canToggleStatus(data)" class="flex justify-start">
                     <Button
                         v-if="data.isActive"
                         @click="toggleStatus(data)"
@@ -112,6 +112,7 @@
                         severity="danger"
                         text
                         size="small"
+                        class="p-0 text-xs text-red-500 hover:bg-red-500/10"
                     />
                     <Button
                         v-else
@@ -119,6 +120,7 @@
                         :label="$t('team.users.assigned-roles.btn-action-done')"
                         text
                         size="small"
+                        class="p-0 text-xs text-green-500 hover:bg-green-500/10"
                     />
                   </div>
                 </template>
@@ -311,6 +313,18 @@ const isCurrentUser = (user) => {
   return store.currentUser?.id === user.id || store.currentUser?.email === user.email
 }
 
+const currentUserRole = computed(() => {
+  const user = store.allUsers.find(isCurrentUser)
+  return user?.role || ''
+})
+
+const canToggleStatus = (targetUser) => {
+  if (targetUser.role === 'Administrador') {
+    return currentUserRole.value === 'Administrador'
+  }
+  return true
+}
+
 const toggleStatus = async (user) => {
   await store.toggleUserStatus(user)
 }
@@ -319,10 +333,12 @@ const openInviteDialog = async () => {
   inviteForm.value = { selectedUser: null, role: '' }
   try {
     const users = await identityApi.getAllUsers()
-    iamUsers.value = users.map(u => ({
-      ...u,
-      label: `${u.name || u.email} (${u.email})`
-    }))
+    iamUsers.value = users
+      .filter(u => u.email !== store.currentUser?.email)
+      .map(u => ({
+        ...u,
+        label: `${u.name || u.email} (${u.email})`
+      }))
   } catch (error) {
     console.error('Error loading IAM users:', error)
   }
@@ -346,7 +362,11 @@ const inviteUser = async () => {
     closeDialog()
     await store.fetchUsers()
   } catch (error) {
-    alert('Ocurrió un error al enviar la invitación.');
+    if (error.response && error.response.data && error.response.data.message) {
+      alert(error.response.data.message);
+    } else {
+      alert('Ocurrió un error al enviar la invitación.');
+    }
   }
 }
 

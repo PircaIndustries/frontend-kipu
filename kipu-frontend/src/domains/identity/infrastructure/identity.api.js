@@ -2,10 +2,31 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:5230/api/v1';
 
+const apiClient = axios.create({
+    baseURL: API_BASE_URL
+});
+
+apiClient.interceptors.request.use((config) => {
+    const userStr = localStorage.getItem('currentUser');
+    if (userStr) {
+        try {
+            const user = JSON.parse(userStr);
+            if (user && user.token) {
+                config.headers.Authorization = `Bearer ${user.token}`;
+            }
+        } catch (e) {
+            console.error('Error parsing currentUser from localStorage', e);
+        }
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
 export const identityApi = {
     async register(identity) {
         try {
-            const response = await axios.post(`${API_BASE_URL}/identities`, identity);
+            const response = await apiClient.post('/identities', identity);
             return response.data;
         } catch (error) {
             console.error('Error registering identity:', error);
@@ -15,7 +36,7 @@ export const identityApi = {
 
     async getAllUsers() {
         try {
-            const response = await axios.get(`${API_BASE_URL}/users`);
+            const response = await apiClient.get('/identities');
             return response.data;
         } catch (error) {
             console.error('Error fetching all users:', error);
@@ -25,7 +46,7 @@ export const identityApi = {
 
     async checkEmailExists(email) {
         try {
-            const response = await axios.get(`${API_BASE_URL}/identities`, {
+            const response = await apiClient.get('/identities', {
                 params: { email }
             });
             return response.data.length > 0;
@@ -37,9 +58,10 @@ export const identityApi = {
 
     async login(credentials) {
         try {
-            const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+            const response = await apiClient.post('/auth/login', {
                 email: credentials.email,
-                password: credentials.password
+                password: credentials.password,
+                rememberMe: credentials.rememberMe || false
             });
             return response.data || null;
         } catch (error) {
@@ -53,7 +75,7 @@ export const identityApi = {
 
     async verifyLogin(email, code, rememberMe) {
         try {
-            const response = await axios.post(`${API_BASE_URL}/auth/verify-login`, {
+            const response = await apiClient.post('/auth/verify-login', {
                 email, code, rememberMe
             });
             return response.data;
@@ -65,7 +87,7 @@ export const identityApi = {
 
     async forgotPassword(email) {
         try {
-            const response = await axios.post(`${API_BASE_URL}/auth/forgot-password`, { email });
+            const response = await apiClient.post('/auth/forgot-password', { email });
             return response.data;
         } catch (error) {
             console.error('Error in forgot password:', error);
@@ -75,7 +97,7 @@ export const identityApi = {
 
     async resetPassword(email, code, newPassword) {
         try {
-            const response = await axios.post(`${API_BASE_URL}/auth/reset-password`, {
+            const response = await apiClient.post('/auth/reset-password', {
                 email, code, newPassword
             });
             return response.data;

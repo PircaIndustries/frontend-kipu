@@ -115,6 +115,7 @@
         "create_loc_placeholder": "Eg: Main St 123, Lima",
         "create_err_loc_req": "Location is required.",
         "create_budget": "Assigned Budget ($)",
+        "create_budget_placeholder": "Eg: 500000",
         "create_status": "Initial Status",
         "create_status_planned": "Planned",
         "create_status_in_progress": "In Progress",
@@ -153,6 +154,13 @@
                 "deadline_label": "Approval Deadline",
                 "btn_cancel": "Cancel",
                 "btn_submit": "Register Document"
+            },
+            "table": {
+                "name": "Document / Plan Name",
+                "type": "Type",
+                "version": "Version",
+                "signature": "Digital Signature",
+                "expires": "Expires"
             }
         },
         "create_start_date": "Start Date",
@@ -171,7 +179,23 @@
         "delete_prompt_1": "Please type",
         "delete_prompt_2": "to confirm:",
         "delete_placeholder": "Project name",
-        "delete_submit": "I understand the consequences, delete project"
+        "delete_submit": "I understand the consequences, delete project",
+        "change_status_dialog": {
+            "title": "Change Project Status",
+            "new_status": "New Status",
+            "justification": "Justification",
+            "justification_ph": "Document the reason for halting this project...",
+            "justification_req": "Justification is required when setting status to 'Paralizada'.",
+            "cancel": "Cancel",
+            "submit": "Update Status"
+        },
+        "discard_dialog": {
+            "title": "Discard changes?",
+            "message": "Unsaved changes will be lost.",
+            "continue": "Continue editing",
+            "discard": "Discard"
+        },
+        "create_success_msg": "Project created successfully."
     },
     "navigation": {
         "dashboard": "Dashboard",
@@ -190,7 +214,6 @@
             "detailTitle": "Progress History: {activity}",
             "emptyState": "There is no progress scheduled for this month yet."
         },
-
         "advances": {
             "title": "Work Progress Control",
             "subtitle": "Daily records and execution status history.",
@@ -260,7 +283,8 @@
                 "filterBy": "Specialty:",
                 "uploadNotice": "Feature coming soon.",
                 "exportNotice": "Export simulated successfully."
-            }
+            },
+            "filterProject": "Filter by Project"
         },
         "impedimentLabel": "Impediment Reason",
         "status": {
@@ -363,6 +387,18 @@
                 "continue": "Continue editing",
                 "confirm": "Discard"
             }
+        },
+        "status": {
+            "planning": "Planning",
+            "in_progress": "In Progress",
+            "paused": "Paused",
+            "completed": "Completed",
+            "cancelled": "Cancelled",
+            "Activo": "Active",
+            "Planificación": "Planning",
+            "Pausado": "Paused",
+            "Finalizado": "Completed",
+            "Cancelado": "Cancelled"
         }
     },
     "common": {
@@ -373,7 +409,8 @@
         "yes": "Yes",
         "no": "No",
         "error": "Error",
-        "back": "← Back"
+        "back": "← Back",
+        "delete": "Delete"
     },
     "roles": {
         "resident": "Project Resident"
@@ -767,8 +804,7 @@
             "description": "Enter the verification code",
             "token-sent": "A 6-digit verification code has been sent to your email",
             "btn-confirm": "Confirm Signature",
-            "tokenError": "The entered code is incorrect. Check the 6-digit code sent to your email.",
-            "btn-cancel": "Cancel"
+            "tokenError": "The entered code is incorrect. Check the 6-digit code sent to your email."
         }
     },
     "progress-monitoring": {
@@ -1104,13 +1140,6 @@
             }
         }
     },
-    "logistics-tabs": {
-        "tab-inventory": "Inventory",
-        "tab-requests": "Requests",
-        "tab-suppliers": "Suppliers",
-        "tab-waste": "Waste",
-        "tab-machinery": "Machinery"
-    },
     "settings": {
         "title": "System Settings",
         "subtitle": "Adjust accessibility, display, and language options according to your preferences.",
@@ -1154,7 +1183,11 @@
         "total_suffix": "Total",
         "empty_short": "No pending notifications",
         "back": "Back",
-        "view_all": "View all notifications"
+        "view_all": "View all notifications",
+        "types": {
+            "ProjectInvitation": "Project Invitation",
+            "General": "Notification"
+        }
     },
     "time": {
         "just_now": "Just now",
@@ -1183,5 +1216,24 @@
             "submit_btn": "Register and Notify",
             "save_error": "The report could not be saved due to a server error."
         }
+    },
+    "inventory-tabs": {
+        "tab-inventory": "Inventory",
+        "tab-requests": "Requests",
+        "tab-suppliers": "Suppliers",
+        "tab-waste": "Waste",
+        "tab-machinery": "Machinery & Equipment"
+    },
+    "errors": {
+        "activity_exists": "An activity with this name already exists.",
+        "no_active_project": "No active project selected.",
+        "progress_exceeds": "Progress sum exceeds 100%.",
+        "id_required_delete": "ID is required for deletion.",
+        "project_not_found": "Project not found.",
+        "expenses_mini_advance": "You cannot register expenses in a mini-advance.",
+        "item_not_found": "Item not found."
+    },
+    "warnings": {
+        "select_project": "You must select a project to continue."
     }
 }

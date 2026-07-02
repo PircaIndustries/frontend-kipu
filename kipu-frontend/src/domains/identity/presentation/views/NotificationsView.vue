@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useNotificationsStore } from '@/shared/application/notificationsStore.js';
@@ -39,7 +39,7 @@ const formatTime = (timeString) => {
     const hr = ts.replace(/\D/g, '') || 1;
     return t('time.hours', { count: hr });
   }
-  if (ts.includes('día')) {
+  if (ts.includes('dÃ­a')) {
     const day = ts.replace(/\D/g, '') || 1;
     return t('time.days', { count: day });
   }
@@ -49,13 +49,15 @@ const formatTime = (timeString) => {
 function getCategoryInfo(type) {
   switch (type) {
     case 'logistica':
-      return { icon: 'pi pi-box', color: '#3498db', label: t('navigation.logistics', 'Logística'), bg: '#e6f4ff' };
+      return { icon: 'pi pi-box', color: '#3498db', label: t('navigation.logistics', 'LogÃ­stica'), bg: '#e6f4ff' };
     case 'firmas':
       return { icon: 'pi pi-pencil', color: '#f59e0b', label: t('navigation.signatures', 'Firmas'), bg: '#fef3c7' };
     case 'rnc':
       return { icon: 'pi pi-exclamation-triangle', color: '#ef4444', label: t('navigation.rnc', 'RNC'), bg: '#fee2e2' };
     case 'presupuesto':
       return { icon: 'pi pi-money-bill', color: '#10b981', label: t('navigation.budget', 'Presupuesto'), bg: '#d1fae5' };
+    case 'ProjectInvitation':
+      return { icon: 'pi pi-envelope', color: '#6366f1', label: 'Invitación', bg: '#e0e7ff' };
     default:
       return { icon: 'pi pi-calendar', color: '#6b7280', label: t('navigation.advances', 'Avances'), bg: '#f3f4f6' };
   }
@@ -127,8 +129,18 @@ function getCategoryInfo(type) {
               </span>
               <span class="timestamp">{{ formatTime(item.date) }}</span>
             </div>
-            <h4 class="notif-title">{{ item.title }}</h4>
-            <p class="notif-desc">{{ item.description }}</p>
+            <h4 class="notif-title">{{ item.title || item.message }}</h4>
+            <p class="notif-desc">{{ item.description || item.message }}</p>
+            <div v-if="item.type === 'ProjectInvitation' && item.status === 'Pending'" class="flex gap-2 mt-3">
+              <Button label="Aceptar" size="small" severity="success" @click.stop="notifStore.acceptInvitation(item.id)" />
+              <Button label="Rechazar" size="small" severity="danger" outlined @click.stop="notifStore.rejectInvitation(item.id)" />
+            </div>
+            <div v-if="item.type === 'ProjectInvitation' && item.status === 'Accepted'" class="mt-2 text-green-600 text-sm font-bold">
+              <i class="pi pi-check"></i> Invitación aceptada
+            </div>
+            <div v-if="item.type === 'ProjectInvitation' && item.status === 'Rejected'" class="mt-2 text-red-600 text-sm font-bold">
+              <i class="pi pi-times"></i> Invitación rechazada
+            </div>
           </div>
 
           <!-- Dismiss Action -->
@@ -357,3 +369,4 @@ function getCategoryInfo(type) {
   align-items: center;
 }
 </style>
+

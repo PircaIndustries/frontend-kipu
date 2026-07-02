@@ -4,18 +4,26 @@
  * Conditionally renders the authenticated layout (sidebar + header)
  * or a full-screen view for identity routes based on route.meta.hideSidebar.
  */
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import SideNavigationBar from '@/shared/presentation/components/SideNavigationBar.vue';
 import HeaderComponent from '@/shared/presentation/components/headerComponent.vue';
 import Drawer from 'primevue/drawer';
+import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore';
 
 const route = useRoute();
 const mobileMenuOpen = ref(false);
+const projectsStore = useProjectsStore();
 
 // Close the drawer when the route changes
 watch(() => route.path, () => {
   mobileMenuOpen.value = false;
+});
+
+onMounted(async () => {
+  if (!route.meta.hideSidebar) {
+    await projectsStore.loadProjects();
+  }
 });
 </script>
 

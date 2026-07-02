@@ -1,11 +1,11 @@
 <template>
   <div class="p-6">
-    <div class="flex justify-between items-center mb-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
       <h1 class="text-2xl font-bold text-text-main flex items-center gap-2">
         <i class="pi pi-file"></i>
         {{ $t('signatures.page.title') }}
       </h1>
-      <div class="flex gap-3">
+      <div class="flex flex-wrap gap-3">
         <Button
             @click="exportDialogVisible = true"
             :label="$t('signatures.page.export_btn')"
@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <div class="flex gap-6">
+    <div class="flex flex-col lg:flex-row gap-6">
       <div class="flex-1 flex flex-col gap-6">
         <Card>
           <template #title>

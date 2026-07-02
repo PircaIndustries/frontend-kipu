@@ -25,7 +25,11 @@ function toggleDropdown() {
 
 function handleNotificationClick(item) {
   notifStore.markAsRead(item.id);
-  router.push(item.route);
+  if (item.type === 'ProjectInvitation') {
+    router.push({ name: 'Notifications' });
+  } else if (item.route) {
+    router.push(item.route);
+  }
   showDropdown.value = false;
 }
 
@@ -51,6 +55,7 @@ function handleClickOutside(event) {
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
+  notifStore.loadNotifications();
 });
 
 onUnmounted(() => {
@@ -82,7 +87,8 @@ const emit = defineEmits(['toggle-sidebar']);
 
 function getIconForType(type) {
   switch (type) {
-    case 'logistica': return 'pi pi-box text-blue-500';
+    case 'ProjectInvitation': return 'pi pi-user-plus text-blue-500';
+      case 'logistica': return 'pi pi-box text-blue-500';
     case 'firmas': return 'pi pi-pencil text-amber-500';
     case 'rnc': return 'pi pi-exclamation-triangle text-red-500';
     case 'presupuesto': return 'pi pi-money-bill text-emerald-500';
@@ -175,7 +181,7 @@ function getIconForType(type) {
                 </div>
                 
                 <div class="flex-1 min-w-0 pr-4">
-                  <p class="text-xs font-bold text-gray-800 m-0 truncate">{{ item.title }}</p>
+                  <p class="text-xs font-bold text-gray-800 m-0 truncate">{{ t(item.title) }}</p>
                   <p class="text-[11px] text-gray-500 mt-0.5 mb-0 leading-normal line-clamp-2">{{ item.description }}</p>
                   <span class="text-[9px] text-gray-400 mt-1 block">{{ formatTime(item.date) }}</span>
                 </div>

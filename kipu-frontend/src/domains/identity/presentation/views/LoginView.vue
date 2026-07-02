@@ -218,6 +218,9 @@ async function onVerifySubmit() {
     try {
         const userResponse = await identityApi.verifyLogin(email.value, verificationCode.value, rememberMe.value);
         if (userResponse && userResponse.token) {
+            if (rememberMe.value) {
+                localStorage.setItem(`trusted_user_${email.value}`, JSON.stringify(userResponse));
+            }
             localStorage.setItem('currentUser', JSON.stringify(userResponse));
             router.push('/projects');
         }
@@ -235,8 +238,36 @@ async function onSubmit() {
 
     isSubmitting.value = true;
     try {
-        const response = await identityApi.login({ email: email.value, password: password.value });
+        const response = await identityApi.login({ 
+            email: email.value, 
+            password: password.value, 
+            rememberMe: rememberMe.value 
+        });
         if (response && response.step === 'VERIFICATION_REQUIRED') {
+            const trustedStr = localStorage.getItem(`trusted_user_${email.value}`);
+            if (trustedStr) {
+                try {
+                    const trustedUser = JSON.parse(trustedStr);
+                    // Decode JWT to check expiration
+                    if (trustedUser && trustedUser.token) {
+                        const payloadBase64 = trustedUser.token.split('.')[1];
+                        const payload = JSON.parse(atob(payloadBase64));
+                        const isExpired = payload.exp * 1000 < Date.now();
+                        
+                        if (!isExpired) {
+                            // Bypass verification because this is a trusted device/user and token is valid
+                            localStorage.setItem('currentUser', JSON.stringify(trustedUser));
+                            router.push('/projects');
+                            return;
+                        } else {
+                            // Token expired, remove it so they have to verify again to get a fresh one
+                            localStorage.removeItem(`trusted_user_${email.value}`);
+                        }
+                    }
+                } catch (e) {
+                    localStorage.removeItem(`trusted_user_${email.value}`);
+                }
+            }
             showVerification.value = true;
             startResendTimer();
         } else if (response && response.token) {
