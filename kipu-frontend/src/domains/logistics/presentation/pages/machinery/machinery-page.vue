@@ -10,6 +10,7 @@ import { useProjectsStore } from '@/domains/project-management/data/useProjectsS
 import MachineryList from '@/domains/logistics/presentation/components/machinery/machinery-list.vue'
 import FilterSummaryBar from '@/shared/presentation/components/FilterSummaryBar.vue'
 import MachineryCreateForm from '@/domains/logistics/presentation/components/machinery/form/machinery-create-form.vue'
+import MachineryCatalogForm from '@/domains/logistics/presentation/components/machinery/form/machinery-catalog-form.vue'
 import MachineryAssignDialog from '@/domains/logistics/presentation/components/machinery/form/machinery-assign-dialog.vue'
 import MachineryMaintenanceDialog from '@/domains/logistics/presentation/components/machinery/form/machinery-maintenance-dialog.vue'
 
@@ -114,6 +115,7 @@ const summaryFilters = computed(() => [
 ])
 
 const showCreateDialog = ref(false)
+const showCatalogDialog = ref(false)
 const showAssignDialog = ref(false)
 const showMaintenanceDialog = ref(false)
 const selectedMachinery = ref(null)
@@ -136,6 +138,7 @@ async function handleReturn(machinery) {
     if (machinery.assignedWorkerId) {
       await workerStore.removeMachineryFromWorker(machinery.assignedWorkerId, machinery.machineryId)
     }
+    await Promise.all([machineryStore.fetchMachinery(), workerStore.fetchWorkers()])
     toast.add({
       severity: 'success',
       summary: t('machinery.return.success.summary'),
@@ -164,6 +167,7 @@ async function handleEnable(machinery) {
     if (machinery.assignedWorkerId) {
       await workerStore.removeMachineryFromWorker(machinery.assignedWorkerId, machinery.machineryId)
     }
+    await Promise.all([machineryStore.fetchMachinery(), workerStore.fetchWorkers()])
     toast.add({
       severity: 'success',
       summary: t('machinery.enable.success.summary'),
@@ -284,6 +288,19 @@ onMounted(() => {
             :manualInput="false"
           />
         </div>
+
+        <div class="flex flex-col gap-2">
+          <h3 class="text-[10px] font-black text-neutral-border uppercase tracking-widest m-0 pb-2 border-b border-neutral-border/20">
+            {{ t('machinery.catalog.button-add') }}
+          </h3>
+          <button
+            @click="showCatalogDialog = true"
+            class="w-full bg-accent text-white py-2 rounded-lg font-semibold text-sm shadow-sm cursor-pointer transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
+          >
+            <i class="pi pi-plus-circle text-base"></i>
+            <span>{{ t('machinery.catalog.button-add') }}</span>
+          </button>
+        </div>
       </aside>
     </div>
   </section>
@@ -292,6 +309,12 @@ onMounted(() => {
     v-if="showCreateDialog"
     @saved="refresh; showCreateDialog = false"
     @close="showCreateDialog = false"
+  />
+
+  <MachineryCatalogForm
+    v-if="showCatalogDialog"
+    @saved="refresh; showCatalogDialog = false"
+    @close="showCatalogDialog = false"
   />
 
   <MachineryAssignDialog

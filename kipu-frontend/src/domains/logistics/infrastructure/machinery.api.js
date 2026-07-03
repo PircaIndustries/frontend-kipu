@@ -25,7 +25,11 @@ export class MachineryApi extends BaseApi {
     deleteMachinery(id) { return this.#machineryEndpoint.delete(id); }
 
     // MACHINERY ASSIGNMENTS
-    getMachineryAssignments() { return this.#machineryAssignmentsEndpoint.getAll(); }
+    getMachineryAssignments(projectId) {
+        return projectId
+            ? this.http.get(`${this.#machineryAssignmentsEndpoint.endpointPath}?projectId=${projectId}`)
+            : this.#machineryAssignmentsEndpoint.getAll();
+    }
     getMachineryAssignmentById(id) { return this.#machineryAssignmentsEndpoint.getById(id); }
     createMachineryAssignment(resource) { return this.#machineryAssignmentsEndpoint.create(resource); }
     updateMachineryAssignment(resource) { return this.#machineryAssignmentsEndpoint.patch(resource.id, resource); }

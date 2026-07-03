@@ -120,17 +120,20 @@
       <form @submit.prevent="createWorker" class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">
           <label class="text-xs font-bold text-text-main">{{ $t('team.workers.add-modal.dni-label') }}</label>
-          <InputText v-model="newWorker.dni" :placeholder="$t('team.workers.add-modal.dni-placeholder')" required class="border-neutral-border focus:border-accent" />
+          <InputText v-model="newWorker.dni" :placeholder="$t('team.workers.add-modal.dni-placeholder')" :class="['border-neutral-border focus:border-accent', fieldErrors.dni ? 'p-invalid' : '']" />
+          <small v-if="fieldErrors.dni" class="text-red-500 text-xs">{{ fieldErrors.dni }}</small>
         </div>
 
         <div class="flex flex-col gap-1">
           <label class="text-xs font-bold text-text-main">{{ $t('team.workers.add-modal.name-label') }}</label>
-          <InputText v-model="newWorker.fullName" :placeholder="$t('team.workers.add-modal.name-placeholder')" required class="border-neutral-border focus:border-accent" />
+          <InputText v-model="newWorker.fullName" :placeholder="$t('team.workers.add-modal.name-placeholder')" :class="['border-neutral-border focus:border-accent', fieldErrors.fullName ? 'p-invalid' : '']" />
+          <small v-if="fieldErrors.fullName" class="text-red-500 text-xs">{{ fieldErrors.fullName }}</small>
         </div>
 
         <div class="flex flex-col gap-1">
           <label class="text-xs font-bold text-text-main">{{ $t('team.workers.add-modal.role-label') }}</label>
-          <InputText v-model="newWorker.role" :placeholder="$t('team.workers.add-modal.role-placeholder')" required class="border-neutral-border focus:border-accent" />
+          <InputText v-model="newWorker.role" :placeholder="$t('team.workers.add-modal.role-placeholder')" :class="['border-neutral-border focus:border-accent', fieldErrors.role ? 'p-invalid' : '']" />
+          <small v-if="fieldErrors.role" class="text-red-500 text-xs">{{ fieldErrors.role }}</small>
         </div>
 
         <div class="flex flex-col gap-1">
@@ -170,6 +173,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useTeamWorkerStore } from '../../application/team-worker.store.js'
 import useMachineryStore from '@/domains/logistics/application/machinery.store.js'
 import Button from 'primevue/button'
@@ -181,6 +185,7 @@ import Badge from 'primevue/badge'
 import Dialog from 'primevue/dialog'
 import Dropdown from 'primevue/dropdown'
 
+const { t } = useI18n()
 const store = useTeamWorkerStore()
 const machineryStore = useMachineryStore()
 
@@ -197,6 +202,27 @@ const newWorker = ref({
   role: '',
   assignedTools: []
 })
+
+const fieldErrors = ref({ dni: '', fullName: '', role: '' })
+
+function validateWorker() {
+  const err = { dni: '', fullName: '', role: '' }
+  let valid = true
+  if (!/^\d{8}$/.test(newWorker.value.dni)) {
+    err.dni = t('team.workers.add-modal.errors.dni-invalid')
+    valid = false
+  }
+  if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s'-]{2,100}$/.test(newWorker.value.fullName)) {
+    err.fullName = t('team.workers.add-modal.errors.name-invalid')
+    valid = false
+  }
+  if (!newWorker.value.role.trim()) {
+    err.role = t('team.workers.add-modal.errors.role-required')
+    valid = false
+  }
+  fieldErrors.value = err
+  return valid
+}
 
 const isFormValid = computed(() => newWorker.value.dni && newWorker.value.fullName && newWorker.value.role)
 const currentProjectId = computed(() => localStorage.getItem('currentProjectId') || 'proj-01')
@@ -222,7 +248,20 @@ const toggleToolsDropdown = (workerId) => {
 const toggleStatus = async (worker) => {
   togglingId.value = worker.id
   try {
+    const assignedToWorker = machineryStore.assignments.filter(
+      a => a.assignedWorkerId === worker.id
+    )
+    for (const m of assignedToWorker) {
+      await machineryStore.updateAssignment(m.id, {
+        ...m,
+        assignedTo: null,
+        assignedWorkerId: null,
+        status: 'AVAILABLE',
+        assignmentDetail: null
+      })
+    }
     await store.toggleWorkerStatus(worker)
+    if (assignedToWorker.length > 0) await machineryStore.fetchMachinery()
   } catch (error) {
     console.error('Error:', error)
   } finally {
@@ -243,6 +282,7 @@ const handleClickOutside = (event) => {
 
 const openAddWorkerDialog = () => {
   newWorker.value = { dni: '', fullName: '', role: '', assignedTools: [] }
+  fieldErrors.value = { dni: '', fullName: '', role: '' }
   selectedMachineryItem.value = null
   dialogVisible.value = true
 }
@@ -263,7 +303,7 @@ const removeTool = (index) => {
 }
 
 const createWorker = async () => {
-  if (!isFormValid.value) return
+  if (!validateWorker()) return
   creating.value = true
 
   try {

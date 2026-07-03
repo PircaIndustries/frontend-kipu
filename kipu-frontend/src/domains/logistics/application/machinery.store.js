@@ -8,7 +8,7 @@ import {MachineryApi} from "../infrastructure/machinery.api.js";
 
 const machineryApi = new MachineryApi();
 
-const ENTITY_FIELDS = ['id', 'projectId', 'machineryId', 'status', 'assignedTo', 'registrationDate', 'maintenanceHours', 'assignmentDetail'];
+const ENTITY_FIELDS = ['id', 'projectId', 'machineryId', 'name', 'status', 'assignedTo', 'assignedWorkerId', 'registrationDate', 'maintenanceHours', 'assignmentDetail'];
 
 function stripExtraFields(obj) {
     const clean = {};
@@ -39,14 +39,28 @@ const useMachineryStore = defineStore('machinery', () => {
 
     function fetchCatalog() {
         machineryApi.getMachinery().then(response => {
-            catalog.value = MachineryAssembler.toEntitiesFromResponse(response);
+            const data = Array.isArray(response?.data) ? response.data : [];
+            catalog.value = MachineryAssembler.toEntitiesFromResponse({ status: 200, data });
             catalogLoaded.value = true;
-        }).catch(error => { errors.value.push(error); });
+        }).catch(error => {
+            console.warn('No se pudo cargar el catálogo de maquinaria', error);
+            catalogLoaded.value = true;
+        });
+    }
+
+    function addCatalogItem(item, onSuccess, onError) {
+        return machineryApi.createMachinery(item).then(response => {
+            const [newItem] = MachineryAssembler.toEntitiesFromResponse(response);
+            if (newItem) catalog.value.push(newItem);
+            onSuccess?.(newItem);
+        }).catch(error => { errors.value.push(error); onError?.(error); });
     }
 
     function fetchAssignments() {
-        machineryApi.getMachineryAssignments().then(response => {
-            assignments.value = MachineryAssignmentAssembler.toEntitiesFromResponse(response);
+        const projectId = localStorage.getItem('currentProjectId');
+        machineryApi.getMachineryAssignments(projectId).then(response => {
+            const data = Array.isArray(response?.data) ? response.data : (response?.data?.[Symbol.iterator] ? [...response.data] : [response.data].filter(Boolean));
+            assignments.value = MachineryAssignmentAssembler.toEntitiesFromResponse({ status: 200, data });
             assignmentsLoaded.value = true;
         }).catch(error => { errors.value.push(error); });
     }
@@ -88,7 +102,7 @@ const useMachineryStore = defineStore('machinery', () => {
         assignmentsLoaded, catalogLoaded,
         machineryView,
         fetchMachinery, fetchCatalog, fetchAssignments,
-        addAssignment, updateAssignment, deleteAssignment,
+        addCatalogItem, addAssignment, updateAssignment, deleteAssignment,
     };
 });
 

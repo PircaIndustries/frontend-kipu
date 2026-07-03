@@ -699,7 +699,12 @@
                 "tools-add": "Selecciona una maquinaria real...",
                 "tools-placeholder": "Nombre del equipo...",
                 "btn-save": "Guardar Obrero",
-                "btn-cancel": "Cancelar"
+                "btn-cancel": "Cancelar",
+                "errors": {
+                    "dni-invalid": "El DNI debe tener exactamente 8 dígitos numéricos.",
+                    "name-invalid": "El nombre debe contener solo letras, espacios y guiones.",
+                    "role-required": "El cargo / cuadrilla es obligatorio."
+                }
             }
         }
     },
@@ -983,6 +988,7 @@
             },
             "errors": {
                 "detail-required": "Debe ingresar un detalle de asignación.",
+                "worker-required": "Debe seleccionar un obrero para asignar.",
                 "save-failed": "No se pudo asignar el equipo."
             },
             "success": {
@@ -1048,6 +1054,39 @@
             },
             "errors": {
                 "save-failed": "No se pudo habilitar el equipo."
+            }
+        },
+        "catalog": {
+            "button-add": "Nuevo al Catálogo",
+            "dialog-title": "Agregar Equipo al Catálogo",
+            "fields": {
+                "name": "Nombre",
+                "brand": "Marca",
+                "model": "Modelo",
+                "serial-number": "Número de Serie",
+                "acquisition-date": "Fecha de Adquisición"
+            },
+            "placeholders": {
+                "name": "Ingrese nombre del equipo",
+                "brand": "Ingrese marca",
+                "model": "Ingrese modelo",
+                "serial-number": "Ingrese número de serie",
+                "acquisition-date": "AAAA-MM-DD"
+            },
+            "actions": {
+                "cancel": "Cancelar",
+                "submit": "Agregar al Catálogo"
+            },
+            "errors": {
+                "name-required": "El nombre es obligatorio.",
+                "brand-required": "La marca es obligatoria.",
+                "model-required": "El modelo es obligatorio.",
+                "serial-number-required": "El número de serie es obligatorio.",
+                "save-failed": "No se pudo agregar el equipo al catálogo."
+            },
+            "success": {
+                "summary": "Agregado",
+                "detail": "Equipo agregado al catálogo correctamente."
             }
         }
     },

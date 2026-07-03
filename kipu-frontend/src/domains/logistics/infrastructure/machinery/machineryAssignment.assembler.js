@@ -11,12 +11,7 @@ export class MachineryAssignmentAssembler {
             return [];
         }
         let data = response.data;
-        if (!Array.isArray(data)) {
-            data = data['machineryAssignments'] || [data];
-        }
-        if (!Array.isArray(data)) {
-            data = [data];
-        }
+        if (!Array.isArray(data)) data = [data];
         return data.map(resource => this.toEntityFromResource(resource));
     }
 }

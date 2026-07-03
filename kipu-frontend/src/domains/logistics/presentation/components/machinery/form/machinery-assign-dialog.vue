@@ -44,6 +44,10 @@ function close() {
 function validate() {
   fieldErrors.value = { worker: '', detail: '' }
   let valid = true
+  if (!selectedWorker.value?.id) {
+    fieldErrors.value.worker = t('machinery.assign.errors.worker-required')
+    valid = false
+  }
   if (!assignmentDetail.value.trim()) {
     fieldErrors.value.detail = t('machinery.assign.errors.detail-required')
     valid = false

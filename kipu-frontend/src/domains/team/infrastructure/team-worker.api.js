@@ -44,7 +44,7 @@ export const teamWorkerApi = {
 
     async getWorkerById(id) {
         try {
-            const response = await axios.get(`${API_BASE_URL}${TEAMWORKERS_URL}/${id}`)
+            const response = await apiClient.get(`${TEAMWORKERS_URL}/${id}`)
             return response.data
         } catch (error) {
             console.error(`Error fetching worker ${id}:`, error)
@@ -57,7 +57,7 @@ export const teamWorkerApi = {
      */
     async createWorker(workerResource) {
         try {
-            const response = await axios.post(`${API_BASE_URL}${TEAMWORKERS_URL}`, workerResource)
+            const response = await apiClient.post(TEAMWORKERS_URL, workerResource)
             return response.data
         } catch (error) {
             console.error('Error creating worker:', error)
@@ -70,7 +70,7 @@ export const teamWorkerApi = {
      */
     async deleteWorker(id) {
         try {
-            await axios.delete(`${API_BASE_URL}${TEAMWORKERS_URL}/${id}`)
+            await apiClient.delete(`${TEAMWORKERS_URL}/${id}`)
         } catch (error) {
             console.error(`Error deleting worker ${id}:`, error)
             throw error
@@ -82,7 +82,7 @@ export const teamWorkerApi = {
      */
     async assignMachinery(teamWorkerId, machineryResource) {
         try {
-            const response = await axios.post(`${API_BASE_URL}${TEAMWORKERS_URL}/${teamWorkerId}/machineries`, machineryResource)
+            const response = await apiClient.post(`${TEAMWORKERS_URL}/${teamWorkerId}/machineries`, machineryResource)
             return response.data
         } catch (error) {
             console.error(`Error assigning machinery to worker ${teamWorkerId}:`, error)
@@ -95,7 +95,7 @@ export const teamWorkerApi = {
      */
     async removeMachinery(teamWorkerId, machineryId) {
         try {
-            const response = await axios.delete(`${API_BASE_URL}${TEAMWORKERS_URL}/${teamWorkerId}/machineries/${machineryId}`)
+            const response = await apiClient.delete(`${TEAMWORKERS_URL}/${teamWorkerId}/machineries/${machineryId}`)
             return response.data
         } catch (error) {
             console.error(`Error removing machinery from worker ${teamWorkerId}:`, error)
