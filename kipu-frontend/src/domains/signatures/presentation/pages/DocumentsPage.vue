@@ -170,6 +170,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
 import { useDocumentStore } from '../../application/document.store.js'
 import { useTeamUserStore } from '../../../team/application/team-user.store.js'
 import Button from 'primevue/button'
@@ -177,6 +179,8 @@ import Card from 'primevue/card'
 import SignatureDialog from '../components/SignatureDialog.vue'
 import DocumentCreateDialog from '../components/DocumentCreateDialog.vue'
 
+const { t } = useI18n()
+const toast = useToast()
 const documentStore = useDocumentStore()
 const teamUserStore = useTeamUserStore()
 
@@ -205,16 +209,17 @@ const openCreateDialog = () => {
 
 const onDocumentCreated = async () => {
   await documentStore.loadAllDocuments()
+  toast.add({ severity: 'success', summary: t('common.success'), detail: t('signatures.page.created'), life: 3000 })
 }
 
 const openSignatureDialog = (doc) => {
   selectedDocument.value = doc
-  documentStore.generateToken(doc.id)
   dialogVisible.value = true
 }
 
 const onDocumentSigned = async () => {
   await documentStore.loadAllDocuments()
+  toast.add({ severity: 'success', summary: t('common.success'), detail: t('signatures.dialog.signed'), life: 3000 })
 }
 
 const openExportDialog = () => {

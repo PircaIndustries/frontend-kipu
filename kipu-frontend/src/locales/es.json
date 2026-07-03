@@ -351,6 +351,7 @@
         "yes": "Sí",
         "no": "No",
         "error": "Error",
+        "success": "Éxito",
         "back": "← Volver"
     },
     "roles": {
@@ -734,7 +735,8 @@
             "howto-step2": "Haz clic en 'Sign Document'",
             "howto-step3": "Ingresa el código de verificación",
             "howto-step4": "La firma se registra automáticamente",
-            "btn-create": "Crear Documento"
+            "btn-create": "Crear Documento",
+            "created": "Documento creado correctamente."
         },
         "dialog": {
             "add-document-title": "Crear Nuevo Documento",
@@ -759,7 +761,9 @@
             "description": "Ingresa el código de verificación",
             "token-sent": "Se ha enviado un código de 6 dígitos a tu correo",
             "btn-confirm": "Confirmar Firma",
-            "tokenError": "El código ingresado es incorrecto. Verifica el código de 6 dígitos enviado a tu correo."
+            "tokenError": "El código ingresado es incorrecto. Verifica el código de 6 dígitos enviado a tu correo.",
+            "signed": "Documento firmado correctamente.",
+            "send-error": "No se pudo enviar el código de verificación."
         }
     },
     "budget": {

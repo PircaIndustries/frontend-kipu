@@ -68,6 +68,16 @@ export const documentApi = {
         }
     },
 
+    async sendSignCode(documentId, email) {
+        try {
+            const response = await apiClient.post(`${DOCUMENTS_ENDPOINT}/${documentId}/send-code`, { email })
+            return response.data
+        } catch (error) {
+            console.error('Error sending sign code:', error)
+            throw error
+        }
+    },
+
     async signDocument(documentId, signRequest) {
         try {
             const response = await apiClient.post(`${DOCUMENTS_ENDPOINT}/${documentId}/sign`, signRequest)

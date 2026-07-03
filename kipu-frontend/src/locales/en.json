@@ -409,6 +409,7 @@
         "yes": "Yes",
         "no": "No",
         "error": "Error",
+        "success": "Success",
         "back": "← Back",
         "delete": "Delete"
     },
@@ -793,7 +794,8 @@
             "howto-step2": "Click on 'Sign Document'",
             "howto-step3": "Enter the verification code",
             "howto-step4": "The signature is automatically recorded",
-            "btn-create": "Create Document"
+            "btn-create": "Create Document",
+            "created": "Document created successfully."
         },
         "dialog": {
             "add-document-title": "Create New Document",
@@ -818,7 +820,9 @@
             "description": "Enter the verification code",
             "token-sent": "A 6-digit verification code has been sent to your email",
             "btn-confirm": "Confirm Signature",
-            "tokenError": "The entered code is incorrect. Check the 6-digit code sent to your email."
+            "tokenError": "The entered code is incorrect. Check the 6-digit code sent to your email.",
+            "signed": "Document signed successfully.",
+            "send-error": "Could not send verification code."
         }
     },
     "progress-monitoring": {

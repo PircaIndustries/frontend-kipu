@@ -36,11 +36,15 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import { useToast } from 'primevue/usetoast'
 import { useDocumentStore } from '../../application/document.store.js'
 import Dialog from 'primevue/dialog'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
+const toast = useToast()
 const props = defineProps({
   visible: Boolean,
   document: Object
@@ -51,8 +55,11 @@ const emit = defineEmits(['update:visible', 'signed'])
 const documentStore = useDocumentStore()
 const token = ref('')
 
+const sending = ref(false)
+
 const close = () => {
   token.value = ''
+  sending.value = false
   emit('update:visible', false)
 }
 
@@ -61,16 +68,28 @@ const confirmSign = async () => {
 
   const result = await documentStore.verifyAndSign(token.value)
   if (result.success) {
+    toast.add({ severity: 'success', summary: t('common.success'), detail: t('signatures.dialog.signed'), life: 3000 })
     emit('signed')
     close()
   } else {
-    alert(result.message || 'Token incorrecto o documento no válido')
+    toast.add({ severity: 'error', summary: t('common.error'), detail: result.message, life: 4000 })
   }
 }
 
-watch(() => props.visible, (newVal) => {
-  if (!newVal) {
+watch(() => props.visible, async (newVal) => {
+  if (newVal && props.document) {
     token.value = ''
+    sending.value = true
+    const ok = await documentStore.sendSignCode(props.document.id)
+    if (!ok) {
+      toast.add({ severity: 'error', summary: t('common.error'), detail: t('signatures.dialog.send-error'), life: 4000 })
+      close()
+      return
+    }
+    sending.value = false
+  } else {
+    token.value = ''
+    sending.value = false
   }
 })
 </script>
