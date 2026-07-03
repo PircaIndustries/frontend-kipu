@@ -26,9 +26,6 @@ apiClient.interceptors.request.use((config) => {
 });
 
 export const documentApi = {
-    /**
-     * Consume el endpoint: GET /api/v1/documents/pending?projectId=...&teamUserId=...
-     */
     async getPendingDocuments(projectId, teamUserId) {
         try {
             const url = `${DOCUMENTS_ENDPOINT}/pending?projectId=${projectId}&teamUserId=${teamUserId}`
@@ -40,13 +37,10 @@ export const documentApi = {
         }
     },
 
-    /**
-     * Consume el endpoint: GET /api/v1/documents/signed?projectId=...&teamUserId=...
-     */
     async getSignedDocuments(projectId, teamUserId) {
         try {
-            const url = `${documentsUrl}/signed?projectId=${projectId}&teamUserId=${teamUserId}`
-            const response = await axios.get(url)
+            const url = `${DOCUMENTS_ENDPOINT}/signed?projectId=${projectId}&teamUserId=${teamUserId}`
+            const response = await apiClient.get(url)
             return DocumentAssembler.toEntitiesFromResponse(response.data)
         } catch (error) {
             console.error('Error fetching signed documents:', error)
@@ -56,7 +50,7 @@ export const documentApi = {
 
     async getDocumentById(id) {
         try {
-            const response = await axios.get(`${documentsUrl}/${id}`)
+            const response = await apiClient.get(`${DOCUMENTS_ENDPOINT}/${id}`)
             return DocumentAssembler.toEntityFromResource(response.data)
         } catch (error) {
             console.error(`Error fetching document ${id}:`, error)
@@ -64,12 +58,9 @@ export const documentApi = {
         }
     },
 
-    /**
-     * Manda el CreateDocumentResource DTO al backend
-     */
     async postDocument(createResource) {
         try {
-            const response = await axios.post(documentsUrl, createResource)
+            const response = await apiClient.post(DOCUMENTS_ENDPOINT, createResource)
             return DocumentAssembler.toEntityFromResource(response.data)
         } catch (error) {
             console.error('Error creating document:', error)
@@ -77,24 +68,12 @@ export const documentApi = {
         }
     },
 
-    /**
-     * Command: Envía el SignDocumentRequest DTO al sub-endpoint /sign de tu C#
-     */
     async signDocument(documentId, signRequest) {
         try {
-            const response = await axios.post(`${documentsUrl}/${documentId}/sign`, signRequest)
+            const response = await apiClient.post(`${DOCUMENTS_ENDPOINT}/${documentId}/sign`, signRequest)
             return DocumentAssembler.toEntityFromResource(response.data)
         } catch (error) {
             console.error(`Error executing sign command for document ${documentId}:`, error)
-            throw error
-        }
-    },
-
-    async deleteDocument(id) {
-        try {
-            await axios.delete(`${documentsUrl}/${id}`)
-        } catch (error) {
-            console.error(`Error deleting document ${id}:`, error)
             throw error
         }
     }

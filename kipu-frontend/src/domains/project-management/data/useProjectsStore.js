@@ -85,13 +85,19 @@ export const useProjectsStore = defineStore('projects', () => {
      * Loads all projects from the API (cache-first).
      */
     async function loadProjects() {
+        console.log('🔍 loadProjects - projects.length:', projects.value.length);
         if (projects.value.length === 0) {
             try {
+                console.log('🔍 loadProjects - Fetching from API...');
                 const data = await projectsApi.getAll();
+                console.log('🔍 loadProjects - API response:', data);
                 projects.value = data.map(p => new ProjectEntity(p));
+                console.log('🔍 loadProjects - projects.value luego de mapear:', projects.value.length);
             } catch (error) {
-                console.error('Failed to load projects:', error);
+                console.error('🔍 loadProjects - ERROR:', error);
             }
+        } else {
+            console.log('🔍 loadProjects - Cache hit, saltando fetch');
         }
     }
 

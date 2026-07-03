@@ -80,5 +80,34 @@ export const teamUserApi = {
             console.error(`Error deactivating user ${id}:`, error)
             throw error
         }
+    },
+
+    async getTeamUsersByUserId(userId) {
+        try {
+            const response = await apiClient.get(`${TEAMUSERS_URL}/by-user/${userId}`)
+            return response.data
+        } catch (error) {
+            console.error('Error fetching team users by user id:', error)
+            throw error
+        }
+    },
+
+    async deleteUser(id) {
+        try {
+            await apiClient.delete(`${TEAMUSERS_URL}/${id}`)
+        } catch (error) {
+            console.error(`Error deleting user ${id}:`, error)
+            throw error
+        }
+    },
+
+    async updateUserRole(id, newRole) {
+        try {
+            const response = await apiClient.patch(`${TEAMUSERS_URL}/${id}/role`, { role: newRole })
+            return response.data
+        } catch (error) {
+            console.error(`Error updating user role ${id}:`, error)
+            throw error
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿<script setup>
+<script setup>
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useNotificationsStore } from '@/shared/application/notificationsStore.js';
@@ -22,7 +22,9 @@ function handleGoBack() {
 
 function handleNotificationClick(item) {
   notifStore.markAsRead(item.id);
-  router.push(item.route);
+  if (item.route) {
+    router.push(item.route);
+  }
 }
 
 // Helpers for styled tags and icons
@@ -49,19 +51,25 @@ const formatTime = (timeString) => {
 function getCategoryInfo(type) {
   switch (type) {
     case 'logistica':
-      return { icon: 'pi pi-box', color: '#3498db', label: t('navigation.logistics', 'LogÃ­stica'), bg: '#e6f4ff' };
+      return { icon: 'pi pi-box', color: '#3498db', label: t('navigation.logistics'), bg: '#e6f4ff' };
     case 'firmas':
-      return { icon: 'pi pi-pencil', color: '#f59e0b', label: t('navigation.signatures', 'Firmas'), bg: '#fef3c7' };
+      return { icon: 'pi pi-pencil', color: '#f59e0b', label: t('navigation.signatures'), bg: '#fef3c7' };
     case 'rnc':
-      return { icon: 'pi pi-exclamation-triangle', color: '#ef4444', label: t('navigation.rnc', 'RNC'), bg: '#fee2e2' };
+      return { icon: 'pi pi-exclamation-triangle', color: '#ef4444', label: t('navigation.rnc'), bg: '#fee2e2' };
     case 'presupuesto':
-      return { icon: 'pi pi-money-bill', color: '#10b981', label: t('navigation.budget', 'Presupuesto'), bg: '#d1fae5' };
-    case 'ProjectInvitation':
-      return { icon: 'pi pi-envelope', color: '#6366f1', label: 'Invitación', bg: '#e0e7ff' };
-    default:
-      return { icon: 'pi pi-calendar', color: '#6b7280', label: t('navigation.advances', 'Avances'), bg: '#f3f4f6' };
+      return { icon: 'pi pi-money-bill', color: '#10b981', label: t('navigation.budget'), bg: '#d1fae5' };
+    default: {
+      const typeKey = 'notifications.types.' + type
+      const typeLabel = t(typeKey)
+      console.log('🔍 i18n debug:', { type, typeKey, typeLabel })
+      if (typeLabel && typeLabel !== typeKey) {
+        return { icon: 'pi pi-bell', color: '#6b7280', label: typeLabel, bg: '#f3f4f6' }
+      }
+      return { icon: 'pi pi-calendar', color: '#6b7280', label: type, bg: '#f3f4f6' }
+    }
   }
 }
+
 </script>
 
 <template>
@@ -129,7 +137,7 @@ function getCategoryInfo(type) {
               </span>
               <span class="timestamp">{{ formatTime(item.date) }}</span>
             </div>
-            <h4 class="notif-title">{{ item.title || item.message }}</h4>
+            <h4 class="notif-title">{{ $t('notifications.types.' + item.type, item.message) }}</h4>
             <p class="notif-desc">{{ item.description || item.message }}</p>
             <div v-if="item.type === 'ProjectInvitation' && item.status === 'Pending'" class="flex gap-2 mt-3">
               <Button label="Aceptar" size="small" severity="success" @click.stop="notifStore.acceptInvitation(item.id)" />

@@ -712,6 +712,15 @@
                 "rol": "Role to assign",
                 "btn-cancel": "Cancel",
                 "btn-invite": "Send Invitation"
+            },
+            "invitations": {
+                "pending-title": "Pending Invitations",
+                "no-pending": "No pending invitations",
+                "invited-message": "You have been invited to join the project as {role}",
+                "success-title": "Invitation sent",
+                "success-detail": "The user has been invited successfully.",
+                "error-title": "Error",
+                "error-detail": "An error occurred sending the invitation."
             }
         },
         "workers": {

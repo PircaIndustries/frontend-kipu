@@ -3,6 +3,7 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useProjectsStore } from '../../data/useProjectsStore';
 import { useAdvanceStore } from '@/domains/progress-monitoring/application/advancesStore.js';
+import { teamUserApi } from '@/domains/team/infrastructure/team-user.api.js';
 
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
@@ -35,25 +36,30 @@ const advanceStore = useAdvanceStore();
 
 // ── Search ──
 const searchQuery = ref('');
-const filteredProjects = computed(() => {
-  if (!searchQuery.value) return store.projects;
-  const q = searchQuery.value.toLowerCase();
-  return store.projects.filter(p => p.name.toLowerCase().includes(q));
+
+const displayProjects = computed(() => {
+  let list = store.projects;
+  if (searchQuery.value) {
+    const q = searchQuery.value.toLowerCase();
+    list = list.filter(p => p.name.toLowerCase().includes(q));
+  }
+  return list;
 });
 
 // ── Dynamic stats ──
 const averageAdvance = computed(() => {
-  if (store.projects.length === 0) return 0;
-  const sum = store.projects.reduce((acc, p) => acc + (p.progress || 0), 0);
-  return Math.round(sum / store.projects.length);
+  const list = displayProjects.value;
+  if (list.length === 0) return 0;
+  const sum = list.reduce((acc, p) => acc + (p.progress || 0), 0);
+  return Math.round(sum / list.length);
 });
 
 const totalRnc = computed(() =>
-  store.projects.reduce((acc, p) => acc + (p.rnc || 0), 0)
+  displayProjects.value.reduce((acc, p) => acc + (p.rnc || 0), 0)
 );
 
 const totalCollaborators = computed(() =>
-  store.projects.reduce((acc, p) => acc + (p.members || 0), 0)
+  displayProjects.value.reduce((acc, p) => acc + (p.members || 0), 0)
 );
 
 // ── Create project ──
@@ -118,6 +124,29 @@ async function handleSave() {
     });
     form.value = { ...initialForm }; createError.value = '';
     showCreateModal.value = false; showSuccessModal.value = true;
+
+    // Auto-registrar al creador como TeamUser del proyecto
+    try {
+      const userStr = localStorage.getItem('currentUser');
+      if (userStr) {
+        const currentUser = JSON.parse(userStr);
+        if (currentUser?.id) {
+          const { useTeamUserStore } = await import('@/domains/team/application/team-user.store.js')
+          const teamStore = useTeamUserStore()
+          await teamStore.inviteUser({
+            userId: Number(currentUser.id),
+            fullName: currentUser.name || currentUser.email,
+            email: currentUser.email,
+            role: 'Administrador'
+          })
+          await teamStore.fetchPendingInvitations()
+          const myInv = teamStore.pendingInvitations.find(n => String(n.userId) === String(currentUser.id))
+          if (myInv) await teamStore.acceptInvitation(myInv.id)
+        }
+      }
+    } catch (e) {
+      console.error('Error auto-registrando creador como TeamUser:', e)
+    }
   } catch (error) { console.log('CREATE ERROR:', error.response?.data); createError.value = error.response?.data?.message || 'Error creating project.'; }
 }
 
@@ -283,7 +312,10 @@ const slicedStatusLogs = computed(() => {
 });
 
 onMounted(async () => {
+  console.log('🔍 DEBUG: Limpiando y cargando proyectos...');
+  store.projects = [];
   await store.loadProjects();
+  console.log('🔍 DEBUG: store.projects:', store.projects.length, store.projects);
   await advanceStore.loadAdvances();
 });
 </script>
@@ -310,7 +342,7 @@ onMounted(async () => {
     </div>
 
     <!-- Empty state -->
-    <div v-if="store.projects.length === 0" class="empty-state">
+    <div v-if="displayProjects.length === 0" class="empty-state">
       <i class="pi pi-folder-open empty-state__icon"></i>
       <h3>{{ t('projects_dashboard.empty_state_title') }}</h3>
       <p>{{ t('projects_dashboard.empty_state_desc') }}</p>
@@ -319,7 +351,7 @@ onMounted(async () => {
     <!-- Projects grid -->
     <div v-else class="projects-grid">
       <div
-        v-for="p in filteredProjects"
+        v-for="p in displayProjects"
         :key="p.id"
         class="project-card"
         :class="{ 'project-card--current': String(p.id) === String(store.currentProjectId) }"

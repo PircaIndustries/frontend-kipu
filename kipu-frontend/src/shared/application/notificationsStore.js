@@ -32,7 +32,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
       const data = await notificationsApi.getByUser(user.id);
       notifications.value = data.map(n => ({
         ...n,
-        title: n.type === 'ProjectInvitation' ? 'notifications.types.ProjectInvitation' : 'notifications.types.General',
+        title: n.message,
         description: n.message,
         date: n.createdAt,
         read: n.isRead
@@ -48,6 +48,17 @@ export const useNotificationsStore = defineStore('notifications', () => {
     const notif = notifications.value.find(n => n.id === id);
     if (notif) {
       notif.isRead = true;
+    }
+  };
+
+  const clearAll = () => {
+    notifications.value = [];
+  };
+
+  const dismissNotification = (id) => {
+    const index = notifications.value.findIndex(n => n.id === id);
+    if (index !== -1) {
+      notifications.value.splice(index, 1);
     }
   };
 
@@ -83,6 +94,8 @@ export const useNotificationsStore = defineStore('notifications', () => {
     isLoading,
     loadNotifications,
     markAsRead,
+    dismissNotification,
+    clearAll,
     markAllAsRead,
     acceptInvitation,
     rejectInvitation

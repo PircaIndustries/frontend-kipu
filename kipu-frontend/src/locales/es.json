@@ -653,6 +653,15 @@
                 "rol": "Rol a asignar",
                 "btn-cancel": "Cancelar",
                 "btn-invite": "Enviar Invitación"
+            },
+            "invitations": {
+                "pending-title": "Invitaciones Pendientes",
+                "no-pending": "No tienes invitaciones pendientes",
+                "invited-message": "Has sido invitado a unirte al proyecto como {role}",
+                "success-title": "Invitación enviada",
+                "success-detail": "El usuario ha sido invitado exitosamente.",
+                "error-title": "Error",
+                "error-detail": "Ocurrió un error al enviar la invitación."
             }
         },
         "workers": {
