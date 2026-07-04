@@ -166,7 +166,6 @@
               <div><h3 class="text-base font-bold text-primary">{{ $t('team.users.role-dictionary.administrator') }}</h3><p class="text-sm text-text-main mt-1 leading-relaxed">{{ $t('team.users.role-dictionary.administrator-description') }}</p></div>
               <div><h3 class="text-base font-bold text-primary">{{ $t('team.users.role-dictionary.manager') }}</h3><p class="text-sm text-text-main mt-1 leading-relaxed">{{ $t('team.users.role-dictionary.manager-description') }}</p></div>
               <div><h3 class="text-base font-bold text-primary">{{ $t('team.users.role-dictionary.logistics') }}</h3><p class="text-sm text-text-main mt-1 leading-relaxed">{{ $t('team.users.role-dictionary.logistics-description') }}</p></div>
-              <div class="bg-neutral-bg p-3 rounded-md border border-neutral-border"><h3 class="text-base font-bold text-primary">{{ $t('team.users.role-dictionary.client') }}</h3><p class="text-sm text-text-main mt-1 leading-relaxed">{{ $t('team.users.role-dictionary.client-description-1') }}<span class="font-bold">{{ $t('team.users.role-dictionary.client-description-bold') }}</span>{{ $t('team.users.role-dictionary.client-description-2') }}</p></div>
             </div>
           </template>
         </Card>
