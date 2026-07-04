@@ -1174,7 +1174,7 @@
             "upload_hint": "Haga clic para cargar la foto",
             "evidence_error": "Debe adjuntar la evidencia visual.",
             "cancel_btn": "Cancelar",
-            "submit_btn": "Registrar y Notificar",
+            "submit_btn": "Registrar",
             "save_error": "No se pudo guardar el reporte debido a un error en el servidor."
         }
     },

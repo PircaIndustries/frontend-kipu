@@ -1265,7 +1265,7 @@
             "upload_hint": "Click to upload photo",
             "evidence_error": "You must attach visual evidence.",
             "cancel_btn": "Cancel",
-            "submit_btn": "Register and Notify",
+            "submit_btn": "Register",
             "save_error": "The report could not be saved due to a server error."
         }
     },

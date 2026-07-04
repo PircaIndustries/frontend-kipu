@@ -15,7 +15,7 @@ const toggleExpand = () => {
 };
 
 const getSeverityBadge = (level) => {
-  const map = { 'Crítico': 'danger', 'Alto': 'warning', 'Moderado': 'info', 'Bajo': 'success' };
+  const map = { 'Critico': 'danger', 'Alto': 'warning', 'Moderado': 'info', 'Bajo': 'success' };
   return map[level] || 'secondary';
 };
 </script>
@@ -27,15 +27,15 @@ const getSeverityBadge = (level) => {
         <div class="icon-circle calendar"><i class="pi pi-calendar"></i></div>
         <div class="data-group">
           <span class="label">FECHA</span>
-          <span class="value">{{ new Date(ncr.date).toLocaleDateString() }}</span>
+          <span class="value">{{ ncr.createdAt ? new Date(ncr.createdAt).toLocaleDateString() : new Date().toLocaleDateString() }}</span>
         </div>
       </div>
 
       <div class="ncr-section info-box">
         <div class="data-group">
           <span class="label">INCIDENCIA / ESPECIALIDAD</span>
-          <span class="main-val">{{ ncr.ncrTitle }}</span>
-          <span class="sub-val">{{ ncr.specialty }}</span>
+          <span class="main-val">{{ ncr.title }}</span>
+          <span class="sub-val">{{ ncr.speciality }}</span>
         </div>
       </div>
 
@@ -50,11 +50,7 @@ const getSeverityBadge = (level) => {
       <div class="ncr-section status-box">
         <div class="tag-column">
           <span class="label">SEVERIDAD</span>
-          <Tag :value="ncr.severityLevel" :severity="getSeverityBadge(ncr.severityLevel)" />
-        </div>
-        <div class="tag-column">
-          <span class="label">ESTADO</span>
-          <Tag value="PENDIENTE" severity="warn" />
+          <Tag :value="ncr.severity" :severity="getSeverityBadge(ncr.severity)" />
         </div>
       </div>
 
@@ -74,14 +70,7 @@ const getSeverityBadge = (level) => {
         <div class="details-content">
           <div class="description-text">
             <span class="label">DESCRIPCIÓN DETALLADA</span>
-            <p>{{ ncr.ncrDescription }}</p>
-          </div>
-
-          <div class="evidence-section" v-if="ncr.photoUrl">
-            <span class="label">EVIDENCIA FOTOGRÁFICA</span>
-            <div class="image-grid">
-              <img :src="ncr.photoUrl" alt="Evidencia RNC" class="evidence-img" />
-            </div>
+            <p>{{ ncr.description }}</p>
           </div>
         </div>
       </div>
@@ -97,7 +86,7 @@ const getSeverityBadge = (level) => {
 .date-box { flex: 1; }
 .info-box { flex: 2; }
 .project-box { flex: 1.5; }
-.status-box { flex: 1.5; gap: 2rem; border-right: none; }
+.status-box { flex: 1; gap: 2rem; border-right: none; }
 .data-group { display: flex; flex-direction: column; }
 .label { font-size: 10px; font-weight: 800; color: #94a3b8; letter-spacing: 0.05em; margin-bottom: 4px; }
 .value { font-weight: 700; color: #334155; }
@@ -110,9 +99,6 @@ const getSeverityBadge = (level) => {
 .ncr-details-panel { border-top: 1px solid #f1f5f9; background: #fafafa; border-radius: 0 0 12px 12px; overflow: hidden; }
 .details-content { padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
 .description-text p { margin: 0.5rem 0 0; color: #475569; line-height: 1.6; font-size: 0.95rem; }
-.evidence-img { max-width: 300px; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: 0.5rem; }
-.expand-enter-active, .expand-leave-active { transition: all 0.3s ease-out; max-height: 500px; }
-.expand-enter-from, .expand-leave-to { max-height: 0; opacity: 0; }
 .action-box { display: flex; align-items: center; padding: 0 1rem; }
 .rotate-icon { color: #3b82f6 !important; }
 
