@@ -3,6 +3,8 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { NcrRepository } from '../../infrastructure/NcrRepository.js';
+import { useProjectsStore } from '../../../project-management/data/useProjectsStore.js';
+import { useI18n } from 'vue-i18n';
 
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -14,9 +16,11 @@ import Message from 'primevue/message';
 const router = useRouter();
 const repository = new NcrRepository();
 const projectsStore = useProjectsStore();
+const { t } = useI18n();
 
 const projectOptions = ref([]);
 const photoError = ref(false);
+const saveError = ref(false);
 
 const form = ref({
   project: null,
@@ -45,6 +49,9 @@ const handleSave = async () => {
     return;
   }
 
+  photoError.value = false;
+  saveError.value = false;
+
   const reader = new FileReader();
   reader.readAsDataURL(form.value.photo);
 
@@ -65,7 +72,7 @@ const handleSave = async () => {
       await repository.save(newNcrEntry);
       router.push({ name: 'NcrRegistry' });
     } catch (error) {
-      alert("Error al persistir el reporte en el db.json");
+      saveError.value = true;
     }
   };
 };
@@ -75,72 +82,67 @@ const handleSave = async () => {
   <div class="register-container">
     <header class="form-header">
       <div class="title-group">
-        <h1>Registrar RNC</h1>
-        <p class="subtitle">Genere una alerta inmediata para el equipo de diseño</p>
+        <h1>{{ t('rnc.register.title', 'Registrar RNC') }}</h1>
+        <p class="subtitle">{{ t('rnc.register.subtitle', 'Genere una alerta inmediata para el equipo de diseño') }}</p>
       </div>
       <Button icon="pi pi-times" severity="secondary" text @click="router.back()" />
     </header>
 
     <div class="form-grid">
       <section class="main-form">
+        <Message v-if="saveError" severity="error" class="mb-4">{{ t('rnc.register.save_error', 'No se pudo guardar el reporte debido a un error en el servidor.') }}</Message>
         <div class="field">
-          <label>Proyecto</label>
-          <Select
-              v-model="form.project"
-              :options="projectOptions"
-              optionLabel="name"
-              placeholder="Seleccione proyecto real"
-              fluid
-          />
+          <label>{{ t('rnc.register.project', 'Proyecto') }}</label>
+          <InputText :value="projectsStore.currentProjectName" disabled fluid />
         </div>
 
         <div class="field">
-          <label>Título de la incidencia</label>
-          <InputText v-model="form.title" placeholder="Ej. Error de plomada en muro" fluid />
+          <label>{{ t('rnc.register.incidence_title', 'Título de la incidencia') }}</label>
+          <InputText v-model="form.title" :placeholder="t('rnc.register.incidence_title_ph', 'Ej. Error de plomada en muro')" fluid />
         </div>
 
         <div class="field-row">
           <div class="field">
-            <label>Especialidad afectada</label>
-            <InputText v-model="form.specialty" placeholder="Ej. Estructuras..." fluid />
+            <label>{{ t('rnc.register.specialty', 'Especialidad afectada') }}</label>
+            <InputText v-model="form.specialty" :placeholder="t('rnc.register.specialty_ph', 'Ej. Estructuras...')" fluid />
           </div>
           <div class="field">
-            <label>Nivel de severidad</label>
+            <label>{{ t('rnc.register.severity', 'Nivel de severidad') }}</label>
             <Select v-model="form.severity" :options="['Bajo', 'Moderado', 'Alto', 'Crítico']" fluid />
           </div>
         </div>
 
         <div class="field">
-          <label>Descripción detallada</label>
-          <Textarea v-model="form.description" rows="8" placeholder="Explique la falla técnica..." fluid />
+          <label>{{ t('rnc.register.description', 'Descripción detallada') }}</label>
+          <Textarea v-model="form.description" rows="8" :placeholder="t('rnc.register.description_ph', 'Explique la falla técnica...')" fluid />
         </div>
       </section>
 
       <aside class="photo-sidebar">
-        <label class="photo-label">Evidencia Fotográfica (Obligatorio)</label>
+        <label class="photo-label">{{ t('rnc.register.evidence', 'Evidencia Fotográfica (Obligatorio)') }}</label>
         <FileUpload
             mode="advanced"
             accept="image/*"
             @select="(e) => { form.photo = e.files[0]; photoError = false }"
             :showUploadButton="false"
-            chooseLabel="Subir evidencia"
+            :chooseLabel="t('rnc.register.upload_btn', 'Subir evidencia')"
         >
           <template #empty>
             <div class="upload-box" :class="{'error-box': photoError}">
               <i class="pi pi-camera" />
-              <p>Haga clic para cargar la foto</p>
+              <p>{{ t('rnc.register.upload_hint', 'Haga clic para cargar la foto') }}</p>
             </div>
           </template>
         </FileUpload>
         <Message v-if="photoError" severity="error" size="small">
-          Debe adjuntar la evidencia visual.
+          {{ t('rnc.register.evidence_error', 'Debe adjuntar la evidencia visual.') }}
         </Message>
       </aside>
     </div>
 
     <footer class="form-footer">
-      <Button label="Cancelar" severity="secondary" text @click="router.back()" />
-      <Button label="Registrar y Notificar" icon="pi pi-bell" class="btn-submit" @click="handleSave" />
+      <Button :label="t('rnc.register.cancel_btn', 'Cancelar')" severity="secondary" text @click="router.back()" />
+      <Button :label="t('rnc.register.submit_btn', 'Registrar y Notificar')" icon="pi pi-bell" class="btn-submit" @click="handleSave" />
     </footer>
   </div>
 </template>
@@ -154,6 +156,11 @@ const handleSave = async () => {
 .field { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
 .field label, .photo-label { font-weight: 600; color: #34495e; font-size: 0.9rem; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+@media (max-width: 768px) {
+  .form-grid, .field-row { grid-template-columns: 1fr; }
+}
+
 .upload-box { display: flex; flex-direction: column; align-items: center; padding: 3rem 1rem; border: 2px dashed #dee2e6; border-radius: 8px; color: #95a5a6; text-align: center; }
 .error-box { border-color: #e74c3c; background: #fff5f5; }
 .form-footer { margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid #f1f1f1; }

@@ -1,14 +1,14 @@
 <template>
-  <div class="p-6">
-    <div class="flex justify-between items-center mb-8">
+  <div class="p-4 md:p-6">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
       <h1 class="text-2xl font-bold text-text-main">{{ $t('team.workers.title') }}</h1>
-      <div class="flex gap-4">
-        <div class="relative">
+      <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+        <div class="relative w-full sm:w-auto">
           <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-neutral-border text-sm"></i>
           <InputText
               v-model="searchValue"
               :placeholder="$t('team.workers.search-placeholder')"
-              class="pl-10! w-64!"
+              class="pl-10! w-full sm:w-64!"
           />
           <i
               v-if="searchValue"
@@ -20,7 +20,7 @@
             @click="openAddWorkerDialog"
             :label="$t('team.workers.register.btn-add-worker')"
             icon="pi pi-user-plus"
-            class="bg-accent! text-white border-none! hover:bg-primary!"
+            class="bg-accent! text-white border-none! hover:bg-primary! w-full sm:w-auto justify-center"
         />
       </div>
     </div>
@@ -29,70 +29,72 @@
 
     <Card>
       <template #content>
-        <DataTable :value="filteredWorkers" class="w-full">
-          <Column field="dni" :header="$t('team.workers.register.tab-dni')">
-            <template #body="{ data }"><span class="text-text-main">{{ data.dni }}</span></template>
-          </Column>
+        <div class="overflow-x-auto w-full">
+          <DataTable :value="filteredWorkers" class="w-full">
+            <Column field="dni" :header="$t('team.workers.register.tab-dni')">
+              <template #body="{ data }"><span class="text-text-main">{{ data.dni }}</span></template>
+            </Column>
 
-          <Column field="fullName" :header="$t('team.workers.register.tab-name')">
-            <template #body="{ data }"><span class="text-text-main">{{ data.fullName }}</span></template>
-          </Column>
+            <Column field="fullName" :header="$t('team.workers.register.tab-name')">
+              <template #body="{ data }"><span class="text-text-main">{{ data.fullName }}</span></template>
+            </Column>
 
-          <Column field="role" :header="$t('team.workers.register.tab-role')">
-            <template #body="{ data }"><span class="text-text-main">{{ data.role }}</span></template>
-          </Column>
+            <Column field="role" :header="$t('team.workers.register.tab-role')">
+              <template #body="{ data }"><span class="text-text-main">{{ data.role }}</span></template>
+            </Column>
 
-          <Column field="status" :header="$t('team.workers.register.tab-status')">
-            <template #body="{ data }">
-              <Badge
-                  :value="data.isActive ? $t('team.workers.register.tab-status-active') : $t('team.workers.register.tab-status-inactive')"
-                  :severity="data.isActive ? 'success' : 'secondary'"
-              />
-            </template>
-          </Column>
+            <Column field="status" :header="$t('team.workers.register.tab-status')">
+              <template #body="{ data }">
+                <Badge
+                    :value="data.isActive ? $t('team.workers.register.tab-status-active') : $t('team.workers.register.tab-status-inactive')"
+                    :severity="data.isActive ? 'success' : 'secondary'"
+                />
+              </template>
+            </Column>
 
-          <Column field="tools" :header="$t('team.workers.register.tab-tools')">
-            <template #body="{ data }">
-              <div class="relative">
-                <button
-                    @click="toggleToolsDropdown(data.id)"
-                    class="text-accent hover:text-primary underline cursor-pointer"
-                >
-                  {{ getToolsCountLabel(data.assignedTools?.length || 0) }}
-                </button>
-                <div
-                    v-if="openToolsDropdown === data.id"
-                    class="absolute z-50 mt-1 bg-white border border-neutral-border rounded-lg shadow-lg min-w-48"
-                >
-                  <div class="p-2 border-b border-neutral-border bg-neutral-bg rounded-t-lg">
-                    <span class="text-xs font-bold text-text-main">Herramientas asignadas</span>
-                  </div>
-                  <div class="p-2">
-                    <ul v-if="data.assignedTools?.length > 0" class="list-disc list-inside">
-                      <li v-for="tool in data.assignedTools" :key="tool" class="text-sm text-text-main">
-                        {{ tool }}
-                      </li>
-                    </ul>
-                    <p v-else class="text-sm text-neutral-border">Sin herramientas asignadas</p>
+            <Column field="tools" :header="$t('team.workers.register.tab-tools')">
+              <template #body="{ data }">
+                <div class="relative">
+                  <button
+                      @click="toggleToolsDropdown(data.id)"
+                      class="text-accent hover:text-primary underline cursor-pointer"
+                  >
+                    {{ getToolsCountLabel(data.assignedTools?.length || 0) }}
+                  </button>
+                  <div
+                      v-if="openToolsDropdown === data.id"
+                      class="absolute z-50 mt-1 bg-white border border-neutral-border rounded-lg shadow-lg min-w-48"
+                  >
+                    <div class="p-2 border-b border-neutral-border bg-neutral-bg rounded-t-lg">
+                      <span class="text-xs font-bold text-text-main">Herramientas asignadas</span>
+                    </div>
+                    <div class="p-2">
+                      <ul v-if="data.assignedTools?.length > 0" class="list-disc list-inside">
+                        <li v-for="tool in data.assignedTools" :key="tool" class="text-sm text-text-main">
+                          {{ tool }}
+                        </li>
+                      </ul>
+                      <p v-else class="text-sm text-neutral-border">Sin herramientas asignadas</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </template>
-          </Column>
+              </template>
+            </Column>
 
-          <Column :header="$t('team.workers.register.tab-action')">
-            <template #body="{ data }">
-              <Button
-                  @click="toggleStatus(data)"
-                  label="Eliminar"
-                  severity="danger"
-                  text
-                  size="small"
-                  :loading="togglingId === data.id"
-              />
-            </template>
-          </Column>
-        </DataTable>
+            <Column :header="$t('team.workers.register.tab-action')">
+              <template #body="{ data }">
+                <Button
+                    @click="toggleStatus(data)"
+                    label="Eliminar"
+                    severity="danger"
+                    text
+                    size="small"
+                    :loading="togglingId === data.id"
+                />
+              </template>
+            </Column>
+          </DataTable>
+        </div>
 
         <div class="text-right text-sm text-neutral-border mt-4">
           {{ filteredWorkers.length }} / {{ store.allWorkers.length }} {{ $t('team.workers.register.worker-count') }}
@@ -118,17 +120,20 @@
       <form @submit.prevent="createWorker" class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">
           <label class="text-xs font-bold text-text-main">{{ $t('team.workers.add-modal.dni-label') }}</label>
-          <InputText v-model="newWorker.dni" :placeholder="$t('team.workers.add-modal.dni-placeholder')" required class="border-neutral-border focus:border-accent" />
+          <InputText v-model="newWorker.dni" :placeholder="$t('team.workers.add-modal.dni-placeholder')" :class="['border-neutral-border focus:border-accent', fieldErrors.dni ? 'p-invalid' : '']" />
+          <small v-if="fieldErrors.dni" class="text-red-500 text-xs">{{ fieldErrors.dni }}</small>
         </div>
 
         <div class="flex flex-col gap-1">
           <label class="text-xs font-bold text-text-main">{{ $t('team.workers.add-modal.name-label') }}</label>
-          <InputText v-model="newWorker.fullName" :placeholder="$t('team.workers.add-modal.name-placeholder')" required class="border-neutral-border focus:border-accent" />
+          <InputText v-model="newWorker.fullName" :placeholder="$t('team.workers.add-modal.name-placeholder')" :class="['border-neutral-border focus:border-accent', fieldErrors.fullName ? 'p-invalid' : '']" />
+          <small v-if="fieldErrors.fullName" class="text-red-500 text-xs">{{ fieldErrors.fullName }}</small>
         </div>
 
         <div class="flex flex-col gap-1">
           <label class="text-xs font-bold text-text-main">{{ $t('team.workers.add-modal.role-label') }}</label>
-          <InputText v-model="newWorker.role" :placeholder="$t('team.workers.add-modal.role-placeholder')" required class="border-neutral-border focus:border-accent" />
+          <InputText v-model="newWorker.role" :placeholder="$t('team.workers.add-modal.role-placeholder')" :class="['border-neutral-border focus:border-accent', fieldErrors.role ? 'p-invalid' : '']" />
+          <small v-if="fieldErrors.role" class="text-red-500 text-xs">{{ fieldErrors.role }}</small>
         </div>
 
         <div class="flex flex-col gap-1">
@@ -168,6 +173,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useTeamWorkerStore } from '../../application/team-worker.store.js'
 import useMachineryStore from '@/domains/logistics/application/machinery.store.js'
 import Button from 'primevue/button'
@@ -179,6 +185,7 @@ import Badge from 'primevue/badge'
 import Dialog from 'primevue/dialog'
 import Dropdown from 'primevue/dropdown'
 
+const { t } = useI18n()
 const store = useTeamWorkerStore()
 const machineryStore = useMachineryStore()
 
@@ -195,6 +202,27 @@ const newWorker = ref({
   role: '',
   assignedTools: []
 })
+
+const fieldErrors = ref({ dni: '', fullName: '', role: '' })
+
+function validateWorker() {
+  const err = { dni: '', fullName: '', role: '' }
+  let valid = true
+  if (!/^\d{8}$/.test(newWorker.value.dni)) {
+    err.dni = t('team.workers.add-modal.errors.dni-invalid')
+    valid = false
+  }
+  if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s'-]{2,100}$/.test(newWorker.value.fullName)) {
+    err.fullName = t('team.workers.add-modal.errors.name-invalid')
+    valid = false
+  }
+  if (!newWorker.value.role.trim()) {
+    err.role = t('team.workers.add-modal.errors.role-required')
+    valid = false
+  }
+  fieldErrors.value = err
+  return valid
+}
 
 const isFormValid = computed(() => newWorker.value.dni && newWorker.value.fullName && newWorker.value.role)
 const currentProjectId = computed(() => localStorage.getItem('currentProjectId') || 'proj-01')
@@ -220,7 +248,20 @@ const toggleToolsDropdown = (workerId) => {
 const toggleStatus = async (worker) => {
   togglingId.value = worker.id
   try {
+    const assignedToWorker = machineryStore.assignments.filter(
+      a => a.assignedWorkerId === worker.id
+    )
+    for (const m of assignedToWorker) {
+      await machineryStore.updateAssignment(m.id, {
+        ...m,
+        assignedTo: null,
+        assignedWorkerId: null,
+        status: 'AVAILABLE',
+        assignmentDetail: null
+      })
+    }
     await store.toggleWorkerStatus(worker)
+    if (assignedToWorker.length > 0) await machineryStore.fetchMachinery()
   } catch (error) {
     console.error('Error:', error)
   } finally {
@@ -241,6 +282,7 @@ const handleClickOutside = (event) => {
 
 const openAddWorkerDialog = () => {
   newWorker.value = { dni: '', fullName: '', role: '', assignedTools: [] }
+  fieldErrors.value = { dni: '', fullName: '', role: '' }
   selectedMachineryItem.value = null
   dialogVisible.value = true
 }
@@ -261,7 +303,7 @@ const removeTool = (index) => {
 }
 
 const createWorker = async () => {
-  if (!isFormValid.value) return
+  if (!validateWorker()) return
   creating.value = true
 
   try {
@@ -285,9 +327,12 @@ const createWorker = async () => {
         try {
           for (const machine of toolsToSync) {
             const updatedAssignmentPayload = {
-              ...machine,
+              id: machine.id,
+              machineryId: machine.machineryId,
+              projectId: machine.projectId,
               status: 'IN_USE',
-              assignedTo: createdWorker.id,
+              assignedTo: createdWorker.fullName,
+              assignedWorkerId: createdWorker.id,
               registrationDate: todayStr,
               assignmentDetail: `Asignado a ${createdWorker.fullName}`
             }

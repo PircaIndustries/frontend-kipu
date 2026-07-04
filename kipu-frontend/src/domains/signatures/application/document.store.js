@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { documentApi } from '../infrastructure/document.api.js'
 import { useTeamUserStore } from '../../team/application/team-user.store.js'
+import i18n from '../../../locales/i18n.js'
 
 export const useDocumentStore = defineStore('document', () => {
 
@@ -49,19 +50,24 @@ export const useDocumentStore = defineStore('document', () => {
         }
     }
 
-    const generateToken = (documentId) => {
-        const token = "123456"
-        currentToken.value = token
-        currentDocumentId.value = documentId
-        return token
+    const sendSignCode = async (documentId) => {
+        const storedUser = localStorage.getItem('currentUser')
+        if (!storedUser) return false
+
+        const user = JSON.parse(storedUser)
+        try {
+            await documentApi.sendSignCode(documentId, user.email)
+            currentDocumentId.value = documentId
+            return true
+        } catch (error) {
+            console.error('Error sending sign code:', error)
+            return false
+        }
     }
 
-    const verifyAndSign = async (token) => {
-        const activeToken = currentToken.value
+    const verifyAndSign = async (code) => {
         const activeDocumentId = currentDocumentId.value
-
-        if (!activeToken || !activeDocumentId) return { success: false, message: 'No active signature process' }
-        if (token !== activeToken) return { success: false, message: 'Incorrect token' }
+        if (!activeDocumentId) return { success: false, message: 'No active signature process' }
 
         const storedUser = localStorage.getItem('currentUser')
         if (!storedUser) return { success: false, message: 'Current user session not found' }
@@ -69,7 +75,6 @@ export const useDocumentStore = defineStore('document', () => {
         const teamUserStore = useTeamUserStore()
         const currentUserData = JSON.parse(storedUser)
 
-        // ¡LA CLAVE! Usamos tu ID de TeamUser para firmar
         const actualTeamUser = teamUserStore.allUsers.find(u => u.email === currentUserData.email)
 
         if (!actualTeamUser) {
@@ -78,30 +83,30 @@ export const useDocumentStore = defineStore('document', () => {
 
         const signRequest = {
             teamUserId: actualTeamUser.id,
-            fullName: actualTeamUser.fullName
+            fullName: actualTeamUser.fullName,
+            code,
+            email: currentUserData.email
         }
 
         try {
             await documentApi.signDocument(activeDocumentId, signRequest)
 
-            currentToken.value = null
             currentDocumentId.value = null
 
-            // Al refrescar, el documento pasará de pending a signed mágicamente
             await loadAllDocuments()
             return { success: true, message: 'Document signed successfully' }
         } catch (error) {
             console.error('Error signing document:', error)
-            return { success: false, message: error.response?.data || 'Error saving signature' }
+            const errMsg = error.response?.data?.message || error.response?.data || 'Código incorrecto o expirado'
+            return { success: false, message: errMsg }
         }
     }
 
     const cancelSignature = () => {
-        currentToken.value = null
         currentDocumentId.value = null
     }
 
-    const hasActiveSignature = () => currentToken.value !== null && currentDocumentId.value !== null
+    const hasActiveSignature = () => currentDocumentId.value !== null
     const getPendingDocuments = () => pendingDocs.value
     const getSignedDocuments = () => signedDocs.value
     const getDocumentsByType = (type) => documents$.value.filter(doc => doc.type === type)
@@ -130,8 +135,8 @@ export const useDocumentStore = defineStore('document', () => {
     }
 
     return {
-        pendingDocs, signedDocs, currentToken, currentDocumentId, documents$, currentToken$,
-        loadAllDocuments, generateToken, verifyAndSign, cancelSignature,
+        pendingDocs, signedDocs, currentDocumentId, documents$,
+        loadAllDocuments, sendSignCode, verifyAndSign, cancelSignature,
         hasActiveSignature, getPendingDocuments, getSignedDocuments, getDocumentsByType, createDocument
     }
 })

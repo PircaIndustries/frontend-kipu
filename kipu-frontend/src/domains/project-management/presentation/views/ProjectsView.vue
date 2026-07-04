@@ -3,6 +3,7 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useProjectsStore } from '../../data/useProjectsStore';
 import { useAdvanceStore } from '@/domains/progress-monitoring/application/advancesStore.js';
+import { teamUserApi } from '@/domains/team/infrastructure/team-user.api.js';
 
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
@@ -15,32 +16,50 @@ import Timeline from 'primevue/timeline';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Badge from 'primevue/badge';
+import RadioButton from 'primevue/radiobutton';
 
 const { t } = useI18n();
+
+const translateStatus = (status) => {
+  if (!status) return '';
+  switch(status.toLowerCase()) {
+    case 'planificación': return t('projects_dashboard.status.planned');
+    case 'en ejecución': return t('projects_dashboard.status.in_progress');
+    case 'paralizada': return t('projects_dashboard.status.halted');
+    case 'finalizada': return t('projects_dashboard.status.completed');
+    default: return status;
+  }
+};
+
 const store = useProjectsStore();
 const advanceStore = useAdvanceStore();
 
 // ── Search ──
 const searchQuery = ref('');
-const filteredProjects = computed(() => {
-  if (!searchQuery.value) return store.projects;
-  const q = searchQuery.value.toLowerCase();
-  return store.projects.filter(p => p.name.toLowerCase().includes(q));
+
+const displayProjects = computed(() => {
+  let list = store.projects;
+  if (searchQuery.value) {
+    const q = searchQuery.value.toLowerCase();
+    list = list.filter(p => p.name.toLowerCase().includes(q));
+  }
+  return list;
 });
 
 // ── Dynamic stats ──
 const averageAdvance = computed(() => {
-  if (store.projects.length === 0) return 0;
-  const sum = store.projects.reduce((acc, p) => acc + (p.progress || 0), 0);
-  return Math.round(sum / store.projects.length);
+  const list = displayProjects.value;
+  if (list.length === 0) return 0;
+  const sum = list.reduce((acc, p) => acc + (p.progress || 0), 0);
+  return Math.round(sum / list.length);
 });
 
 const totalRnc = computed(() =>
-  store.projects.reduce((acc, p) => acc + (p.rnc || 0), 0)
+  displayProjects.value.reduce((acc, p) => acc + (p.rnc || 0), 0)
 );
 
 const totalCollaborators = computed(() =>
-  store.projects.reduce((acc, p) => acc + (p.members || 0), 0)
+  displayProjects.value.reduce((acc, p) => acc + (p.members || 0), 0)
 );
 
 // ── Create project ──
@@ -100,12 +119,35 @@ async function handleSave() {
       location: form.value.location,
       startDate: form.value.startDate?.toISOString().split('T')[0],
       endDate: form.value.endDate?.toISOString().split('T')[0],
-      budget: form.value.budget,
+      budget: Number(form.value.budget),
       status: form.value.status
     });
     form.value = { ...initialForm }; createError.value = '';
     showCreateModal.value = false; showSuccessModal.value = true;
-  } catch { createError.value = 'Error creating project.'; }
+
+    // Auto-registrar al creador como TeamUser del proyecto
+    try {
+      const userStr = localStorage.getItem('currentUser');
+      if (userStr) {
+        const currentUser = JSON.parse(userStr);
+        if (currentUser?.id) {
+          const { useTeamUserStore } = await import('@/domains/team/application/team-user.store.js')
+          const teamStore = useTeamUserStore()
+          await teamStore.inviteUser({
+            userId: Number(currentUser.id),
+            fullName: currentUser.name || currentUser.email,
+            email: currentUser.email,
+            role: 'Administrador'
+          })
+          await teamStore.fetchPendingInvitations()
+          const myInv = teamStore.pendingInvitations.find(n => String(n.userId) === String(currentUser.id))
+          if (myInv) await teamStore.acceptInvitation(myInv.id)
+        }
+      }
+    } catch (e) {
+      console.error('Error auto-registrando creador como TeamUser:', e)
+    }
+  } catch (error) { console.log('CREATE ERROR:', error.response?.data); createError.value = error.response?.data?.message || 'Error creating project.'; }
 }
 
 // ── Select project ──
@@ -113,7 +155,7 @@ const showSelectDialog = ref(false);
 const projectToSelect = ref(null);
 
 function onCardClick(project) {
-  if (project.id === store.currentProjectId) return;
+  if (String(project.id) === String(store.currentProjectId)) return;
   projectToSelect.value = project;
   showSelectDialog.value = true;
 }
@@ -165,7 +207,7 @@ const allStatusOptions = computed(() => {
 
   // If the project is NOT 'Paralizada', only allow setting it to 'Paralizada'
   return [
-    { label: 'Paralizada', value: 'Paralizada' }
+    { label: t('projects_dashboard.status.halted'), value: 'Paralizada' }
   ];
 });
 
@@ -193,25 +235,18 @@ async function confirmStatusChange() {
       null
     );
     showStatusDialog.value = false; statusProject.value = null;
-  } catch { console.error("Error al cambiar estado:", err); }
+  } catch (err) { console.error("Error al cambiar estado:", err); }
 }
 
 // ── Active Project Details Helpers & Document Form ──
 const showAddDocDialog = ref(false);
-const docForm = ref({
+const newDocForm = ref({
   name: '',
-  type: 'Plano',
+  type: 'Plano de Estructuras',
   version: 'v1.0',
-  isSigned: false,
+  signatureStatus: 'Pendiente',
   deadline: null
 });
-
-const docTypes = [
-  { label: 'Plano de Estructuras', value: 'Plano' },
-  { label: 'Expediente Técnico', value: 'Expediente' },
-  { label: 'Informe de Avance', value: 'Informe' },
-  { label: 'Memoria Descriptiva', value: 'Memoria' }
-];
 
 const getTimelineIcon = (status) => {
   switch (status) {
@@ -233,18 +268,18 @@ const getTimelineColor = (status) => {
   }
 };
 
-async function handleAddDocument() {
-  if (!docForm.value.name.trim()) return;
+async function addTechnicalDocument() {
+  if (!newDocForm.value.name.trim()) return;
   try {
     await store.addProjectDocument(store.currentProjectId, {
-      name: docForm.value.name.trim(),
-      type: docForm.value.type,
-      version: docForm.value.version,
-      isSigned: docForm.value.isSigned,
-      deadline: docForm.value.deadline?.toISOString().split('T')[0] || ''
+      name: newDocForm.value.name.trim(),
+      type: newDocForm.value.type,
+      version: newDocForm.value.version,
+      signatureStatus: newDocForm.value.signatureStatus,
+      deadline: newDocForm.value.deadline?.toISOString().split('T')[0] || ''
     });
     showAddDocDialog.value = false;
-    docForm.value = { name: '', type: 'Plano', version: 'v1.0', isSigned: false, deadline: null };
+    newDocForm.value = { name: '', type: 'Plano de Estructuras', version: 'v1.0', signatureStatus: 'Pendiente', deadline: null };
   } catch (err) {
     console.error('Error adding document:', err);
   }
@@ -277,7 +312,10 @@ const slicedStatusLogs = computed(() => {
 });
 
 onMounted(async () => {
+  console.log('🔍 DEBUG: Limpiando y cargando proyectos...');
+  store.projects = [];
   await store.loadProjects();
+  console.log('🔍 DEBUG: store.projects:', store.projects.length, store.projects);
   await advanceStore.loadAdvances();
 });
 </script>
@@ -304,7 +342,7 @@ onMounted(async () => {
     </div>
 
     <!-- Empty state -->
-    <div v-if="store.projects.length === 0" class="empty-state">
+    <div v-if="displayProjects.length === 0" class="empty-state">
       <i class="pi pi-folder-open empty-state__icon"></i>
       <h3>{{ t('projects_dashboard.empty_state_title') }}</h3>
       <p>{{ t('projects_dashboard.empty_state_desc') }}</p>
@@ -313,14 +351,14 @@ onMounted(async () => {
     <!-- Projects grid -->
     <div v-else class="projects-grid">
       <div
-        v-for="p in filteredProjects"
+        v-for="p in displayProjects"
         :key="p.id"
         class="project-card"
-        :class="{ 'project-card--current': p.id === store.currentProjectId }"
+        :class="{ 'project-card--current': String(p.id) === String(store.currentProjectId) }"
         @click="onCardClick(p)"
       >
         <!-- Current project banner -->
-        <div v-if="p.id === store.currentProjectId" class="project-card__banner">
+        <div v-if="String(p.id) === String(store.currentProjectId)" class="project-card__banner">
           <i class="pi pi-check-circle"></i> {{ t('projects_dashboard.current_project') }}
         </div>
 
@@ -332,19 +370,23 @@ onMounted(async () => {
             <div class="project-card__header-actions">
               <!-- Status tag — clickable to change status -->
               <span
-                class="project-card__status-tag project-card__status-tag--clickable"
+                class="project-card__status-tag"
                 :class="'project-card__status-tag--' + calculateProjectStatus(p).toLowerCase().replace(/\s/g, '-')"
+              >{{ translateStatus(calculateProjectStatus(p)) }}</span>
+              <Button
+                icon="pi pi-sync"
+                severity="secondary"
+                text rounded
+                v-tooltip.top="t('projects_dashboard.details.tooltips.change_status')"
                 @click.stop="openStatusDialog(p)"
-                v-tooltip.top="'Click to change status'"
-              >{{ calculateProjectStatus(p) }}</span>
-              <!-- Delete button -->
-              <button
-                class="project-card__delete-btn"
+              />
+              <Button
+                icon="pi pi-trash"
+                severity="danger"
+                text rounded
+                v-tooltip.top="t('projects_dashboard.details.tooltips.delete')"
                 @click.stop="openDeleteDialog(p)"
-                v-tooltip.top="'Delete'"
-              >
-                <i class="pi pi-trash"></i>
-              </button>
+              />
             </div>
           </div>
 
@@ -376,20 +418,20 @@ onMounted(async () => {
         <div class="details-panel__title-area">
           <i class="pi pi-briefcase details-panel__icon"></i>
           <div>
-            <h2 class="details-panel__title">Ficha Técnica: {{ store.currentProject.name }}</h2>
+            <h2 class="details-panel__title">{{ t('projects_dashboard.details.title', { name: store.currentProject.name }) }}</h2>
             <p class="details-panel__subtitle">{{ store.currentProject.location }} • {{ store.currentProject.startDate }} a {{ store.currentProject.endDate }}</p>
           </div>
         </div>
         <span class="project-card__status-tag" :class="'project-card__status-tag--' + store.currentProject.status.toLowerCase().replace(/\s/g, '-')">
-          {{ store.currentProject.status }}
+          {{ translateStatus(store.currentProject.status) }}
         </span>
       </div>
 
       <div class="details-panel__grid">
         <div class="details-card">
           <div class="details-card__header">
-            <h3><i class="pi pi-history"></i> Historial de Estados</h3>
-            <p class="details-card__desc">Trazabilidad histórica de los cambios de estado con su respectiva justificación técnica.</p>
+            <h3><i class="pi pi-history"></i> {{ t('projects_dashboard.details.history_title') }}</h3>
+            <p class="details-card__desc">{{ t('projects_dashboard.details.history_desc') }}</p>
           </div>
           <div class="details-card__content">
             <Timeline :value="slicedStatusLogs" align="left" class="custom-timeline">
@@ -402,22 +444,22 @@ onMounted(async () => {
                 <div class="timeline-item-card">
                   <div class="timeline-item-header">
                     <span class="timeline-item-status" :style="{ color: getTimelineColor(slotProps.item.status) }">
-                      {{ slotProps.item.status }}
+                      {{ translateStatus(slotProps.item.status) }}
                     </span>
                     <span class="timeline-item-date">{{ slotProps.item.date }}</span>
                   </div>
                   <p class="timeline-item-justification">{{ slotProps.item.justification }}</p>
                   <div v-if="slotProps.item.progress !== null" class="timeline-item-progress">
-                    Avance asignado: <span class="font-bold text-gray-800">{{ slotProps.item.progress }}%</span>
+                    {{ t('projects_dashboard.details.history_progress') }} <span class="font-bold text-gray-800">{{ slotProps.item.progress }}%</span>
                   </div>
                 </div>
               </template>
             </Timeline>
             <div v-if="store.currentProject.statusLogs && store.currentProject.statusLogs.length > 5" class="flex justify-center mt-3">
-              <Button label="Ver historial completo" icon="pi pi-external-link" size="small" outlined @click="showFullHistoryDialog = true" />
+              <Button :label="t('projects_dashboard.details.history_full_btn')" icon="pi pi-external-link" size="small" outlined @click="showFullHistoryDialog = true" />
             </div>
             <div v-if="!store.currentProject.statusLogs || store.currentProject.statusLogs.length === 0" class="empty-detail-state">
-              <i class="pi pi-info-circle mr-1"></i> Sin registros de cambios de estado.
+              <i class="pi pi-info-circle mr-1"></i> {{ t('projects_dashboard.details.history_empty') }}
             </div>
           </div>
         </div>
@@ -426,85 +468,76 @@ onMounted(async () => {
         <div class="details-card">
           <div class="details-card__header flex-row-between">
             <div>
-              <h3><i class="pi pi-file"></i> Expedientes y Planos Técnicos</h3>
-              <p class="details-card__desc">Lista de planos constructivos y especificaciones técnicas aprobadas para esta obra.</p>
+              <h3><i class="pi pi-file"></i> {{ t('projects_dashboard.details.docs_title') }}</h3>
+              <p class="details-card__desc">{{ t('projects_dashboard.details.docs_desc') }}</p>
             </div>
-            <Button label="Subir Plano" icon="pi pi-plus" size="small" severity="success" outlined @click="showAddDocDialog = true" />
+            <Button :label="t('projects_dashboard.details.docs_upload_btn')" icon="pi pi-plus" size="small" severity="success" outlined @click="showAddDocDialog = true" />
           </div>
-          <div class="details-card__content">
-            <DataTable :value="store.currentProject.documents || []" responsiveLayout="scroll" class="p-datatable-sm custom-datatable" :paginator="true" :rows="3">
-              <Column field="name" header="Nombre Documento / Plano" sortable>
+          <div class="details-card__content p-0 mt-4">
+            <DataTable :value="store.currentProject.technicalDocs || []" class="p-datatable-sm documents-table" responsiveLayout="scroll">
+              <Column field="name" :header="t('projects_dashboard.details.table.name')" sortable></Column>
+              <Column field="type" :header="t('projects_dashboard.details.table.type')" sortable>
                 <template #body="slotProps">
-                  <div class="flex items-center gap-2">
-                    <i class="pi pi-file-pdf text-red-500 text-lg"></i>
-                    <span class="font-semibold text-gray-800">{{ slotProps.data.name }}</span>
-                  </div>
+                  <span class="doc-type-badge">{{ slotProps.data.type }}</span>
                 </template>
               </Column>
-              <Column field="type" header="Tipo" sortable style="width: 20%">
+              <Column field="version" :header="t('projects_dashboard.details.table.version')" align="center"></Column>
+              <Column field="signatureStatus" :header="t('projects_dashboard.details.table.signature')" sortable align="center">
                 <template #body="slotProps">
-                  <Badge :value="slotProps.data.type" severity="info" />
+                  <span class="signature-badge" :class="slotProps.data.signatureStatus === 'Firmado' ? 'signature-badge--signed' : 'signature-badge--pending'">
+                    {{ slotProps.data.signatureStatus }}
+                  </span>
                 </template>
               </Column>
-              <Column field="version" header="Versión" style="width: 15%">
-                <template #body="slotProps">
-                  <span class="font-mono text-xs text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded border">{{ slotProps.data.version }}</span>
-                </template>
-              </Column>
-              <Column field="isSigned" header="Firma Digital" sortable style="width: 20%">
-                <template #body="slotProps">
-                  <Badge 
-                    :value="slotProps.data.isSigned ? 'Firmado' : 'Pendiente'" 
-                    :severity="slotProps.data.isSigned ? 'success' : 'danger'" 
-                  />
-                </template>
-              </Column>
-              <Column field="deadline" header="Vence" sortable style="width: 15%"></Column>
+              <Column field="deadline" :header="t('projects_dashboard.details.table.expires')" sortable align="right"></Column>
+              <template #empty>
+                <div class="empty-docs-state">
+                  <i class="pi pi-folder-open mb-2 text-gray-400 text-2xl"></i>
+                  <p>{{ t('projects_dashboard.details.docs_empty') }}</p>
+                </div>
+              </template>
             </DataTable>
-            <div v-if="!store.currentProject.documents || store.currentProject.documents.length === 0" class="empty-detail-state">
-              <i class="pi pi-folder-open mr-1"></i> No se han registrado planos ni especificaciones para esta obra.
-            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ═══ DIÁLOGO PARA AÑADIR PLANO / DOCUMENTO TÉCNICO ═══ -->
-    <Dialog v-model:visible="showAddDocDialog" modal header="Subir Plano o Documento Técnico" :style="{ width: '450px' }">
-      <div class="form-body">
+    <!-- ═══ SUBIR PLANO O DOCUMENTO TÉCNICO DIALOG ═══ -->
+    <Dialog v-model:visible="showAddDocDialog" modal :header="t('projects_dashboard.details.modal.title')" :style="{ width: '450px' }">
+      <div class="flex flex-col gap-4 py-4">
         <div class="field">
-          <label>Nombre del Documento / Plano <span class="field__required">*</span></label>
-          <InputText v-model="docForm.name" placeholder="Ej. Plano de Cimentaciones Sector B" fluid />
+          <label>{{ t('projects_dashboard.details.modal.name_label') }}</label>
+          <InputText v-model="newDocForm.name" :placeholder="t('projects_dashboard.details.modal.name_placeholder')" fluid />
         </div>
         <div class="field">
-          <label>Tipo de Elemento</label>
-          <Select v-model="docForm.type" :options="docTypes" optionLabel="label" optionValue="value" fluid />
+          <label>{{ t('projects_dashboard.details.modal.type_label') }}</label>
+          <Select v-model="newDocForm.type" :options="['Plano de Estructuras', 'Plano de Arquitectura', 'Estudio de Suelos', 'Especificaciones Técnicas']" fluid />
         </div>
         <div class="field">
-          <label>Versión</label>
-          <InputText v-model="docForm.version" placeholder="Ej. v1.0" fluid />
+          <label>{{ t('projects_dashboard.details.modal.version_label') }}</label>
+          <InputText v-model="newDocForm.version" fluid />
         </div>
         <div class="field">
-          <label>Estado de Firma Digital</label>
-          <div class="flex gap-4 mt-1">
+          <label>{{ t('projects_dashboard.details.modal.status_label') }}</label>
+          <div class="flex gap-4 mt-2">
             <div class="flex items-center gap-2">
-              <input type="radio" id="signed-true" :value="true" v-model="docForm.isSigned" />
-              <label for="signed-true" class="cursor-pointer text-sm">Firmado Digitalmente</label>
+              <RadioButton v-model="newDocForm.signatureStatus" inputId="status1" value="Firmado" />
+              <label for="status1">{{ t('projects_dashboard.details.modal.status_signed') }}</label>
             </div>
             <div class="flex items-center gap-2">
-              <input type="radio" id="signed-false" :value="false" v-model="docForm.isSigned" />
-              <label for="signed-false" class="cursor-pointer text-sm">Firma Pendiente</label>
+              <RadioButton v-model="newDocForm.signatureStatus" inputId="status2" value="Pendiente" />
+              <label for="status2">{{ t('projects_dashboard.details.modal.status_pending') }}</label>
             </div>
           </div>
         </div>
         <div class="field">
-          <label>Fecha Límite para Aprobación</label>
-          <DatePicker v-model="docForm.deadline" showIcon fluid />
+          <label>{{ t('projects_dashboard.details.modal.deadline_label') }}</label>
+          <DatePicker v-model="newDocForm.deadline" fluid />
         </div>
       </div>
       <template #footer>
-        <Button label="Cancelar" severity="secondary" text @click="showAddDocDialog = false" />
-        <Button label="Registrar Documento" :disabled="!docForm.name.trim()" @click="handleAddDocument" />
+        <Button :label="t('projects_dashboard.details.modal.btn_cancel')" severity="secondary" text @click="showAddDocDialog = false" />
+        <Button :label="t('projects_dashboard.details.modal.btn_submit')" severity="success" @click="addTechnicalDocument" />
       </template>
     </Dialog>
 
@@ -547,15 +580,15 @@ onMounted(async () => {
 
     <!-- ═══ CREATE SUCCESS DIALOG ═══ -->
     <Dialog v-model:visible="showSuccessModal" modal :style="{ width: '380px' }">
-      <div class="success-body"><i class="pi pi-check-circle" /><h2>{{ t('projects_dashboard.create_title') }}</h2><p>Project created successfully.</p></div>
+      <div class="success-body"><i class="pi pi-check-circle" /><h2>{{ t('projects_dashboard.create_title') }}</h2><p>{{ t('projects_dashboard.create_success_msg') }}</p></div>
     </Dialog>
 
     <!-- ═══ DISCARD DIALOG ═══ -->
-    <Dialog v-model:visible="showDiscardModal" modal header="Discard changes?" :style="{ width: '340px' }">
-      <p style="margin:0;color:#4b5563;">Unsaved changes will be lost.</p>
+    <Dialog v-model:visible="showDiscardModal" modal :header="t('projects_dashboard.discard_dialog.title')" :style="{ width: '340px' }">
+      <p style="margin:0;color:#4b5563;">{{ t('projects_dashboard.discard_dialog.message') }}</p>
       <template #footer>
-        <Button label="Continue editing" text severity="secondary" @click="showDiscardModal = false" />
-        <Button label="Discard" severity="danger" @click="confirmDiscard" />
+        <Button :label="t('projects_dashboard.discard_dialog.continue')" text severity="secondary" @click="showDiscardModal = false" />
+        <Button :label="t('projects_dashboard.discard_dialog.discard')" severity="danger" @click="confirmDiscard" />
       </template>
     </Dialog>
 
@@ -594,24 +627,24 @@ onMounted(async () => {
       </template>
     </Dialog>
 
-    <!-- ═══ STATUS CHANGE DIALOG ═══ -->
-    <Dialog v-model:visible="showStatusDialog" modal header="Change Project Status" :style="{ width: '420px' }">
+    <!-- ⚡⚡⚡ STATUS CHANGE DIALOG ⚡⚡⚡ -->
+    <Dialog v-model:visible="showStatusDialog" modal :header="t('projects_dashboard.change_status_dialog.title')" :style="{ width: '420px' }">
       <div class="form-body">
         <div class="field">
-          <label>New Status</label>
+          <label>{{ t('projects_dashboard.change_status_dialog.new_status') }}</label>
           <Select v-model="newStatus" :options="allStatusOptions" optionLabel="label" optionValue="value" fluid />
         </div>
         <div v-if="needsJustification" class="field">
-          <label>Justification <span class="field__required">*</span></label>
-          <Textarea v-model="statusJustification" rows="3" fluid placeholder="Document the reason for halting this project..." />
+          <label>{{ t('projects_dashboard.change_status_dialog.justification') }} <span class="field__required">*</span></label>
+          <Textarea v-model="statusJustification" rows="3" fluid :placeholder="t('projects_dashboard.change_status_dialog.justification_ph')" />
           <small v-if="needsJustification && !statusJustification.trim()" class="field__error">
-            Justification is required when setting status to 'Paralizada'.
+            {{ t('projects_dashboard.change_status_dialog.justification_req') }}
           </small>
         </div>
       </div>
       <template #footer>
-        <Button label="Cancel" severity="secondary" text @click="showStatusDialog = false" />
-        <Button label="Update Status" :disabled="!isStatusValid" @click="confirmStatusChange" />
+        <Button :label="t('projects_dashboard.change_status_dialog.cancel')" severity="secondary" text @click="showStatusDialog = false" />
+        <Button :label="t('projects_dashboard.change_status_dialog.submit')" :disabled="!isStatusValid" @click="confirmStatusChange" />
       </template>
     </Dialog>
 
@@ -634,13 +667,13 @@ onMounted(async () => {
             <div class="timeline-item-card">
               <div class="timeline-item-header">
                 <span class="timeline-item-status" :style="{ color: getTimelineColor(slotProps.item.status) }">
-                  {{ slotProps.item.status }}
+                  {{ translateStatus(slotProps.item.status) }}
                 </span>
                 <span class="timeline-item-date">{{ slotProps.item.date }}</span>
               </div>
               <p class="timeline-item-justification">{{ slotProps.item.justification }}</p>
               <div v-if="slotProps.item.progress !== null" class="timeline-item-progress">
-                Avance asignado: <span class="font-bold text-gray-800">{{ slotProps.item.progress }}%</span>
+                {{ t('projects_dashboard.details.history_progress') }} <span class="font-bold text-gray-800">{{ slotProps.item.progress }}%</span>
               </div>
             </div>
           </template>
@@ -702,7 +735,7 @@ onMounted(async () => {
 .project-card__image { width: 100%; height: 160px; object-fit: cover; background: #e9ecef; }
 
 .project-card__body { padding: 1.25rem; position: relative; }
-.project-card__header { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem; }
+.project-card__header { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
 .project-card__name { font-size: 1rem; font-weight: 600; color: #2c3e50; margin: 0; }
 .project-card__desc { font-size: 0.78rem; color: #7f8c8d; margin: 0 0 0.75rem; line-height: 1.4; }
 
@@ -793,6 +826,12 @@ onMounted(async () => {
   .projects-grid { grid-template-columns: 1fr; }
 }
 
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .actions-bar { flex-direction: column; align-items: stretch; }
+  .search-input { width: 100%; }
+}
+
 /* ── Active Project Details Section ── */
 .details-panel {
   background: white;
@@ -867,6 +906,12 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.01);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.details-card__content {
+  overflow-x: auto;
 }
 
 .details-card__header {

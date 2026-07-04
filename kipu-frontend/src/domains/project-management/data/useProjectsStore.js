@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed, watch } from 'vue';
-import { projectsApi } from '../infrastructure/projects.api';
+import { projectsApi } from '../infrastructure/projects.api.js';
+import i18n from '@/locales/i18n';
 import { ProjectEntity, getRandomProjectImage } from '../domain/models/project.entity';
 import { useAdvanceStore } from '../../progress-monitoring/application/advancesStore.js';
 
@@ -24,7 +25,7 @@ export const useProjectsStore = defineStore('projects', () => {
      * It ensures a single source of truth for the project's progress and status.
      */
     const currentProject = computed(() => {
-        const baseProject = projects.value.find(p => p.id === currentProjectId.value);
+        const baseProject = projects.value.find(p => String(p.id) === String(currentProjectId.value));
         if (!baseProject) return null;
 
         const advanceStore = useAdvanceStore();
@@ -84,13 +85,19 @@ export const useProjectsStore = defineStore('projects', () => {
      * Loads all projects from the API (cache-first).
      */
     async function loadProjects() {
+        console.log('🔍 loadProjects - projects.length:', projects.value.length);
         if (projects.value.length === 0) {
             try {
+                console.log('🔍 loadProjects - Fetching from API...');
                 const data = await projectsApi.getAll();
+                console.log('🔍 loadProjects - API response:', data);
                 projects.value = data.map(p => new ProjectEntity(p));
+                console.log('🔍 loadProjects - projects.value luego de mapear:', projects.value.length);
             } catch (error) {
-                console.error('Failed to load projects:', error);
+                console.error('🔍 loadProjects - ERROR:', error);
             }
+        } else {
+            console.log('🔍 loadProjects - Cache hit, saltando fetch');
         }
     }
 
@@ -109,11 +116,6 @@ export const useProjectsStore = defineStore('projects', () => {
         currentProjectId.value = null;
     }
 
-    /**
-     * Creates a new project. Assigns a random local image automatically.
-     * @param {Object} projectData
-     * @returns {Promise<ProjectEntity>}
-     */
     /**
      * Creates a new project. Assigns a random local image automatically.
      * @param {Object} projectData
@@ -170,7 +172,7 @@ export const useProjectsStore = defineStore('projects', () => {
     async function updateProjectStatus(id, status, justification, progress) {
         try {
             const project = projects.value.find(p => p.id === id);
-            if (!project) throw new Error('Project not found');
+            if (!project) throw new Error(i18n.global.t('errors.project_not_found'));
 
             const currentProgress = typeof progress === 'number' ? progress : project.progress;
             const newLogEntry = {
@@ -185,7 +187,7 @@ export const useProjectsStore = defineStore('projects', () => {
 
             const payload = {
                 status,
-                statusJustification: justification || '',
+                statusJustification: justification || 'Cambio de estado del proyecto.',
                 statusLogs: updatedLogs
             };
             if (typeof progress === 'number') {
@@ -210,7 +212,7 @@ export const useProjectsStore = defineStore('projects', () => {
     async function addProjectDocument(projectId, documentData) {
         try {
             const project = projects.value.find(p => p.id === projectId);
-            if (!project) throw new Error('Project not found');
+            if (!project) throw new Error(i18n.global.t('errors.project_not_found'));
 
             const newDoc = {
                 id: `doc-proj-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,

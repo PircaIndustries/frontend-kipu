@@ -9,16 +9,28 @@ import { useI18n } from 'vue-i18n';
 import Avatar from 'primevue/avatar';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
+import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore';
+
+import { useToast } from 'primevue/usetoast';
 
 const { t } = useI18n();
 const router = useRouter();
+const toast = useToast();
+const projectsStore = useProjectsStore();
 
 /** Read user application from localStorage (set at login). */
 const currentUser = computed(() => {
   try {
     const raw = localStorage.getItem('currentUser');
-    return raw ? JSON.parse(raw) : { name: 'User', role: '' };
-  } catch { return { name: 'User', role: '' }; }
+    return raw ? JSON.parse(raw) : { fullName: 'User', role: '' };
+  } catch { return { fullName: 'User', role: '' }; }
+});
+
+const translatedRole = computed(() => {
+  const role = currentUser.value.role;
+  if (role === 'Gestor Operativo') return t('identity.role_manager');
+  if (role === 'Logística y Administración') return t('identity.role_logistics');
+  return role;
 });
 
 /** Navigation items definition. */
@@ -32,6 +44,15 @@ const menuItems = [
   { label: 'navigation.team', icon: 'pi pi-users', to: '/team' }
 ];
 
+function handleNavigation(e, item, navigate) {
+  if (item.to !== '/projects' && !projectsStore.currentProjectId) {
+    e.preventDefault();
+    toast.add({ severity: 'warn', summary: t('common.management'), detail: t('warnings.select_project'), life: 3000 });
+  } else {
+    navigate(e);
+  }
+}
+
 // ── Logout ──
 const showLogoutMenu = ref(false);
 const showLogoutSuccess = ref(false);
@@ -41,6 +62,8 @@ function toggleLogoutMenu() {
 }
 
 function performLogout() {
+  projectsStore.clearCurrentProject();
+  
   localStorage.removeItem('currentUser');
   localStorage.removeItem('currentProjectId');
   showLogoutMenu.value = false;
@@ -54,7 +77,7 @@ function goToLogin() {
 </script>
 
 <template>
-  <nav class="side-navigation">
+  <nav class="side-navigation flex flex-col">
     <div class="logo-container">
       <div class="logo-text">
         <span class="brand-name">Kipu</span>
@@ -64,9 +87,11 @@ function goToLogin() {
 
     <ul class="menu-list">
       <li v-for="item in menuItems" :key="item.label" class="menu-item">
-        <router-link :to="item.to" class="menu-link" active-class="active-link">
-          <i :class="item.icon"></i>
-          <span>{{ t(item.label) }}</span>
+        <router-link :to="item.to" custom v-slot="{ href, navigate, isActive, isExactActive }">
+          <a :href="href" @click="(e) => handleNavigation(e, item, navigate)" :class="['menu-link', { 'active-link': isActive || isExactActive }]">
+            <i :class="item.icon"></i>
+            <span>{{ t(item.label) }}</span>
+          </a>
         </router-link>
       </li>
     </ul>
@@ -75,8 +100,8 @@ function goToLogin() {
     <div class="user-profile" @click="toggleLogoutMenu">
       <Avatar icon="pi pi-user" shape="circle" size="large" class="user-avatar" />
       <div class="user-info">
-        <span class="user-name">{{ currentUser.name }}</span>
-        <span class="user-role">{{ currentUser.role }}</span>
+        <span class="user-name">{{ currentUser.fullName || currentUser.name }}</span>
+        <span class="user-role">{{ translatedRole }}</span>
       </div>
       <i class="pi pi-chevron-up user-chevron" :class="{ 'user-chevron--open': showLogoutMenu }"></i>
     </div>
@@ -103,12 +128,8 @@ function goToLogin() {
 
 <style scoped>
 .side-navigation {
-  width: 260px;
-  height: 100vh;
   background-color: #2c3e50;
   color: white;
-  display: flex;
-  flex-direction: column;
   padding: 1.5rem 1rem;
   position: relative;
 }

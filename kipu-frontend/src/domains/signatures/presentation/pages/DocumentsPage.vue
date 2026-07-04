@@ -1,14 +1,14 @@
 <template>
   <div class="p-6">
-    <div class="flex justify-between items-center mb-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
       <h1 class="text-2xl font-bold text-text-main flex items-center gap-2">
         <i class="pi pi-file"></i>
         {{ $t('signatures.page.title') }}
       </h1>
-      <div class="flex gap-3">
+      <div class="flex flex-wrap gap-3">
         <Button
-            @click="openExportDialog"
-            label="Exportar Dossier"
+            @click="exportDialogVisible = true"
+            :label="$t('signatures.page.export_btn')"
             icon="pi pi-download"
             class="bg-primary! text-white border-none! hover:bg-primary-hover!"
         />
@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <div class="flex gap-6">
+    <div class="flex flex-col lg:flex-row gap-6">
       <div class="flex-1 flex flex-col gap-6">
         <Card>
           <template #title>
@@ -147,7 +147,8 @@
     <SignatureDialog v-model:visible="dialogVisible" :document="selectedDocument" @signed="onDocumentSigned" />
     <DocumentCreateDialog v-model:visible="createDialogVisible" @created="onDocumentCreated" />
 
-    <pv-dialog v-model:visible="exportDialogVisible" header="Exportar Dossier de Calidad" :modal="true" :style="{ width: '450px' }">
+    <!-- Export Quality Dossier Dialog -->
+    <pv-dialog v-model:visible="exportDialogVisible" :header="$t('signatures.page.export_modal_title')" :modal="true" :style="{ width: '450px' }">
       <div class="flex flex-col gap-4">
         <p class="text-sm text-neutral-border">Seleccione el rango de documentos firmados que desea incluir.</p>
         <div class="grid grid-cols-2 gap-3">
@@ -169,6 +170,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
 import { useDocumentStore } from '../../application/document.store.js'
 import { useTeamUserStore } from '../../../team/application/team-user.store.js'
 import Button from 'primevue/button'
@@ -176,6 +179,8 @@ import Card from 'primevue/card'
 import SignatureDialog from '../components/SignatureDialog.vue'
 import DocumentCreateDialog from '../components/DocumentCreateDialog.vue'
 
+const { t } = useI18n()
+const toast = useToast()
 const documentStore = useDocumentStore()
 const teamUserStore = useTeamUserStore()
 
@@ -204,16 +209,17 @@ const openCreateDialog = () => {
 
 const onDocumentCreated = async () => {
   await documentStore.loadAllDocuments()
+  toast.add({ severity: 'success', summary: t('common.success'), detail: t('signatures.page.created'), life: 3000 })
 }
 
 const openSignatureDialog = (doc) => {
   selectedDocument.value = doc
-  documentStore.generateToken(doc.id)
   dialogVisible.value = true
 }
 
 const onDocumentSigned = async () => {
   await documentStore.loadAllDocuments()
+  toast.add({ severity: 'success', summary: t('common.success'), detail: t('signatures.dialog.signed'), life: 3000 })
 }
 
 const openExportDialog = () => {

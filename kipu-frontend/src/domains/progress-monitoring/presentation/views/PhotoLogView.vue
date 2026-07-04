@@ -9,20 +9,23 @@ const mockPhotos = [
   { title: 'Cimentación', url: 'https://loremflickr.com/600/400/foundation,construction?lock=2' },
   { title: 'Armado de Columnas', url: 'https://loremflickr.com/600/400/rebar,construction?lock=3' }
 ];
+
+const handleExport = () => alert(t('execution.advances.photoLog.exportNotice'));
+const handleUpload = () => alert(t('execution.advances.photoLog.uploadNotice'));
 </script>
 
 <template>
   <div class="bg-white p-6 rounded-b-xl shadow-sm">
-    <div class="flex justify-between items-center mb-6">
-      <div class="flex gap-2">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+      <div class="flex flex-wrap gap-2">
         <button class="px-4 py-2 border border-[#3498DB] text-[#3498DB] rounded-md font-medium text-sm hover:bg-blue-50 transition-colors">Excavaciones</button>
         <button class="px-4 py-2 border border-[#3498DB] text-[#3498DB] rounded-md font-medium text-sm hover:bg-blue-50 transition-colors">Cimentación</button>
       </div>
-      <div class="flex gap-2">
-        <button class="text-gray-500 flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-md font-bold text-sm transition-colors">
+      <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
+        <button @click="handleExport" class="text-gray-500 flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-md font-bold text-sm transition-colors">
           <i class="pi pi-download"></i> Exportar
         </button>
-        <button class="bg-gray-800 text-white flex items-center gap-2 px-4 py-2 rounded-md font-bold text-sm hover:bg-gray-900 transition-colors">
+        <button @click="handleUpload" class="bg-gray-800 text-white flex items-center gap-2 px-4 py-2 rounded-md font-bold text-sm hover:bg-gray-900 transition-colors">
           <i class="pi pi-plus"></i> Subir Fotos
         </button>
       </div>
@@ -34,7 +37,7 @@ const mockPhotos = [
            :style="{ backgroundImage: `url(${photo.url})` }">
         <div class="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors"></div>
       </div>
-      <div class="h-48 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center text-gray-400 cursor-pointer hover:bg-gray-50 hover:border-[#3498DB] hover:text-[#3498DB] transition-all">
+      <div @click="handleUpload" class="h-48 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center text-gray-400 cursor-pointer hover:bg-gray-50 hover:border-[#3498DB] hover:text-[#3498DB] transition-all">
         <i class="pi pi-plus text-4xl"></i>
       </div>
     </div>

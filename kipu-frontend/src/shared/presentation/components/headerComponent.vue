@@ -25,7 +25,11 @@ function toggleDropdown() {
 
 function handleNotificationClick(item) {
   notifStore.markAsRead(item.id);
-  router.push(item.route);
+  if (item.type === 'ProjectInvitation') {
+    router.push({ name: 'Notifications' });
+  } else if (item.route) {
+    router.push(item.route);
+  }
   showDropdown.value = false;
 }
 
@@ -51,6 +55,7 @@ function handleClickOutside(event) {
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
+  notifStore.loadNotifications();
 });
 
 onUnmounted(() => {
@@ -58,9 +63,32 @@ onUnmounted(() => {
 });
 
 // Helper for type icons
+const formatTime = (timeString) => {
+  if (!timeString) return '';
+  const ts = timeString.toLowerCase();
+  if (ts.includes('justo ahora')) return t('time.just_now');
+  if (ts.includes('ayer')) return t('time.yesterday');
+  if (ts.includes('minuto')) {
+    const min = ts.replace(/\D/g, '') || 1;
+    return t('time.minutes', { count: min });
+  }
+  if (ts.includes('hora')) {
+    const hr = ts.replace(/\D/g, '') || 1;
+    return t('time.hours', { count: hr });
+  }
+  if (ts.includes('día')) {
+    const day = ts.replace(/\D/g, '') || 1;
+    return t('time.days', { count: day });
+  }
+  return timeString;
+};
+
+const emit = defineEmits(['toggle-sidebar']);
+
 function getIconForType(type) {
   switch (type) {
-    case 'logistica': return 'pi pi-box text-blue-500';
+    case 'ProjectInvitation': return 'pi pi-user-plus text-blue-500';
+      case 'logistica': return 'pi pi-box text-blue-500';
     case 'firmas': return 'pi pi-pencil text-amber-500';
     case 'rnc': return 'pi pi-exclamation-triangle text-red-500';
     case 'presupuesto': return 'pi pi-money-bill text-emerald-500';
@@ -70,14 +98,22 @@ function getIconForType(type) {
 </script>
 
 <template>
-  <header class="flex items-center justify-between px-8 h-16 bg-white border-b border-neutral-border/40 w-full relative z-50">
+  <header class="flex items-center justify-between px-4 lg:px-8 h-16 bg-white border-b border-neutral-border/40 w-full sticky top-0 z-50">
     <div class="flex items-center gap-2">
-      <h1 class="text-xl font-bold text-primary tracking-tight leading-none m-0">
+      <!-- Hamburger Menu Button for Mobile -->
+      <button 
+        @click="emit('toggle-sidebar')" 
+        class="lg:hidden flex items-center justify-center w-10 h-10 text-primary hover:bg-neutral-bg rounded-full transition-colors cursor-pointer border-none bg-transparent"
+        aria-label="Toggle Sidebar"
+      >
+        <i class="pi pi-bars text-xl"></i>
+      </button>
+      <h1 class="text-lg lg:text-xl font-bold text-primary tracking-tight leading-none m-0 truncate max-w-[150px] lg:max-w-full">
         {{ projectsStore.currentProjectName || t('projects_dashboard.select_title') }}
       </h1>
     </div>
 
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-1 lg:gap-2">
       <!-- Language switcher -->
       <div class="flex items-center gap-1 bg-neutral-bg rounded-full p-1">
         <button
@@ -145,9 +181,9 @@ function getIconForType(type) {
                 </div>
                 
                 <div class="flex-1 min-w-0 pr-4">
-                  <p class="text-xs font-bold text-gray-800 m-0 truncate">{{ item.title }}</p>
+                  <p class="text-xs font-bold text-gray-800 m-0 truncate">{{ t(item.title) }}</p>
                   <p class="text-[11px] text-gray-500 mt-0.5 mb-0 leading-normal line-clamp-2">{{ item.description }}</p>
-                  <span class="text-[9px] text-gray-400 mt-1 block">{{ item.date }}</span>
+                  <span class="text-[9px] text-gray-400 mt-1 block">{{ formatTime(item.date) }}</span>
                 </div>
 
                 <!-- Dismiss Button -->

@@ -76,4 +76,10 @@ const handleCreateNew = () => {
 .ncr-cards-list { display: flex; flex-direction: column; gap: 0.5rem; }
 .empty-state { text-align: center; padding: 5rem; background: #f8fafc; border-radius: 12px; border: 2px dashed #e2e8f0; color: #94a3b8; }
 .empty-state i { font-size: 3rem; margin-bottom: 1rem; }
+
+@media (max-width: 768px) {
+  .ncr-view-container { padding: 1rem; }
+  .ncr-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .create-btn { width: 100%; justify-content: center; }
+}
 </style>

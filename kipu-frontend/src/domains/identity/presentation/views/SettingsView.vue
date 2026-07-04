@@ -405,5 +405,8 @@ const toggleLabelOff = computed(() => t('settings.toggle_off', 'Desactivado'));
   .w-48 {
     width: 100% !important;
   }
+  .back-btn :deep(.p-button-label) { display: none; }
+  .back-btn { padding: 0.5rem !important; margin-right: 0.5rem !important; }
 }
 </style>
+

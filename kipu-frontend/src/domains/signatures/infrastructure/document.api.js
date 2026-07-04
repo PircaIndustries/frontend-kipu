@@ -3,16 +3,33 @@ import { DocumentAssembler } from './document.assembler.js'
 
 const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL_LOCAL || 'http://localhost:5230/api/v1'
 const DOCUMENTS_ENDPOINT = '/documents'
-const documentsUrl = `${API_BASE_URL}${DOCUMENTS_ENDPOINT}`
+
+const apiClient = axios.create({
+    baseURL: API_BASE_URL
+});
+
+apiClient.interceptors.request.use((config) => {
+    const userStr = localStorage.getItem('currentUser');
+    if (userStr) {
+        try {
+            const user = JSON.parse(userStr);
+            if (user && user.token) {
+                config.headers.Authorization = `Bearer ${user.token}`;
+            }
+        } catch (e) {
+            console.error('Error parsing currentUser from localStorage', e);
+        }
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
 
 export const documentApi = {
-    /**
-     * Consume el endpoint: GET /api/v1/documents/pending?projectId=...&teamUserId=...
-     */
     async getPendingDocuments(projectId, teamUserId) {
         try {
-            const url = `${documentsUrl}/pending?projectId=${projectId}&teamUserId=${teamUserId}`
-            const response = await axios.get(url)
+            const url = `${DOCUMENTS_ENDPOINT}/pending?projectId=${projectId}&teamUserId=${teamUserId}`
+            const response = await apiClient.get(url)
             return DocumentAssembler.toEntitiesFromResponse(response.data)
         } catch (error) {
             console.error('Error fetching pending documents:', error)
@@ -20,13 +37,10 @@ export const documentApi = {
         }
     },
 
-    /**
-     * Consume el endpoint: GET /api/v1/documents/signed?projectId=...&teamUserId=...
-     */
     async getSignedDocuments(projectId, teamUserId) {
         try {
-            const url = `${documentsUrl}/signed?projectId=${projectId}&teamUserId=${teamUserId}`
-            const response = await axios.get(url)
+            const url = `${DOCUMENTS_ENDPOINT}/signed?projectId=${projectId}&teamUserId=${teamUserId}`
+            const response = await apiClient.get(url)
             return DocumentAssembler.toEntitiesFromResponse(response.data)
         } catch (error) {
             console.error('Error fetching signed documents:', error)
@@ -36,7 +50,7 @@ export const documentApi = {
 
     async getDocumentById(id) {
         try {
-            const response = await axios.get(`${documentsUrl}/${id}`)
+            const response = await apiClient.get(`${DOCUMENTS_ENDPOINT}/${id}`)
             return DocumentAssembler.toEntityFromResource(response.data)
         } catch (error) {
             console.error(`Error fetching document ${id}:`, error)
@@ -44,12 +58,9 @@ export const documentApi = {
         }
     },
 
-    /**
-     * Manda el CreateDocumentResource DTO al backend
-     */
     async postDocument(createResource) {
         try {
-            const response = await axios.post(documentsUrl, createResource)
+            const response = await apiClient.post(DOCUMENTS_ENDPOINT, createResource)
             return DocumentAssembler.toEntityFromResource(response.data)
         } catch (error) {
             console.error('Error creating document:', error)
@@ -57,24 +68,22 @@ export const documentApi = {
         }
     },
 
-    /**
-     * Command: Envía el SignDocumentRequest DTO al sub-endpoint /sign de tu C#
-     */
-    async signDocument(documentId, signRequest) {
+    async sendSignCode(documentId, email) {
         try {
-            const response = await axios.post(`${documentsUrl}/${documentId}/sign`, signRequest)
-            return DocumentAssembler.toEntityFromResource(response.data)
+            const response = await apiClient.post(`${DOCUMENTS_ENDPOINT}/${documentId}/send-code`, { email })
+            return response.data
         } catch (error) {
-            console.error(`Error executing sign command for document ${documentId}:`, error)
+            console.error('Error sending sign code:', error)
             throw error
         }
     },
 
-    async deleteDocument(id) {
+    async signDocument(documentId, signRequest) {
         try {
-            await axios.delete(`${documentsUrl}/${id}`)
+            const response = await apiClient.post(`${DOCUMENTS_ENDPOINT}/${documentId}/sign`, signRequest)
+            return DocumentAssembler.toEntityFromResource(response.data)
         } catch (error) {
-            console.error(`Error deleting document ${id}:`, error)
+            console.error(`Error executing sign command for document ${documentId}:`, error)
             throw error
         }
     }

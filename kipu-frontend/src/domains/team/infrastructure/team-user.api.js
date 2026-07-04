@@ -3,6 +3,27 @@ import axios from 'axios'
 const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL_LOCAL || 'http://localhost:5230/api/v1';
 const TEAMUSERS_URL = import.meta.env.VITE_TEAMUSERS_ENDPOINT_PATH || '/team-users';
 
+const apiClient = axios.create({
+    baseURL: API_BASE_URL
+});
+
+apiClient.interceptors.request.use((config) => {
+    const userStr = localStorage.getItem('currentUser');
+    if (userStr) {
+        try {
+            const user = JSON.parse(userStr);
+            if (user && user.token) {
+                config.headers.Authorization = `Bearer ${user.token}`;
+            }
+        } catch (e) {
+            console.error('Error parsing currentUser from localStorage', e);
+        }
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
 export const teamUserApi = {
 
     async getAllUsers(projectId, globalSearch = '', role = '', isActive = null) {
@@ -13,7 +34,7 @@ export const teamUserApi = {
             if (role) params.role = role;
             if (isActive !== null) params.isActive = isActive;
 
-            const response = await axios.get(`${API_BASE_URL}${TEAMUSERS_URL}`, { params })
+            const response = await apiClient.get(TEAMUSERS_URL, { params })
             return response.data
         } catch (error) {
             console.error('Error fetching team users:', error)
@@ -23,7 +44,7 @@ export const teamUserApi = {
 
     async getUserById(id) {
         try {
-            const response = await axios.get(`${API_BASE_URL}${TEAMUSERS_URL}/${id}`)
+            const response = await apiClient.get(`${TEAMUSERS_URL}/${id}`)
             return response.data
         } catch (error) {
             console.error(`Error fetching user ${id}:`, error)
@@ -33,7 +54,7 @@ export const teamUserApi = {
 
     async createUser(createResource) {
         try {
-            const response = await axios.post(`${API_BASE_URL}${TEAMUSERS_URL}`, createResource)
+            const response = await apiClient.post(TEAMUSERS_URL, createResource)
             return response.data
         } catch (error) {
             console.error('Error creating user:', error)
@@ -43,7 +64,7 @@ export const teamUserApi = {
 
     async activateUser(id) {
         try {
-            const response = await axios.post(`${API_BASE_URL}${TEAMUSERS_URL}/${id}/activate`)
+            const response = await apiClient.post(`${TEAMUSERS_URL}/${id}/activate`)
             return response.data
         } catch (error) {
             console.error(`Error activating user ${id}:`, error)
@@ -53,10 +74,39 @@ export const teamUserApi = {
 
     async deactivateUser(id) {
         try {
-            const response = await axios.post(`${API_BASE_URL}${TEAMUSERS_URL}/${id}/deactivate`)
+            const response = await apiClient.post(`${TEAMUSERS_URL}/${id}/deactivate`)
             return response.data
         } catch (error) {
             console.error(`Error deactivating user ${id}:`, error)
+            throw error
+        }
+    },
+
+    async getTeamUsersByUserId(userId) {
+        try {
+            const response = await apiClient.get(`${TEAMUSERS_URL}/by-user/${userId}`)
+            return response.data
+        } catch (error) {
+            console.error('Error fetching team users by user id:', error)
+            throw error
+        }
+    },
+
+    async deleteUser(id) {
+        try {
+            await apiClient.delete(`${TEAMUSERS_URL}/${id}`)
+        } catch (error) {
+            console.error(`Error deleting user ${id}:`, error)
+            throw error
+        }
+    },
+
+    async updateUserRole(id, newRole) {
+        try {
+            const response = await apiClient.patch(`${TEAMUSERS_URL}/${id}/role`, { role: newRole })
+            return response.data
+        } catch (error) {
+            console.error(`Error updating user role ${id}:`, error)
             throw error
         }
     }

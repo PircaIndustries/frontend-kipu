@@ -25,6 +25,7 @@ const email = ref('');
 const password = ref('');
 const rememberMe = ref(false);
 const loginError = ref('');
+const verifyError = ref('');
 const isSubmitting = ref(false);
 
 const touched = ref({ email: false, password: false });
@@ -110,7 +111,7 @@ async function handleOAuthSuccess(userInfo) {
         const exists = await identityApi.checkEmailExists(emailVal);
         if (exists) {
             // Log in normally
-            const response = await axios.get(`${import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:3000/api/v1'}/identities`, {
+            const response = await axios.get(`${import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:5230/api/v1'}/identities`, {
                 params: { email: emailVal }
             });
             const user = response.data.find(u => u.email === emailVal);
@@ -213,13 +214,21 @@ const isVerificationValid = computed(() => {
 async function onVerifySubmit() {
     if (!isVerificationValid.value) return;
     isVerifying.value = true;
-    setTimeout(() => {
-        isVerifying.value = false;
-        if (authenticatedUser.value) {
-            localStorage.setItem('currentUser', JSON.stringify(authenticatedUser.value));
+    verifyError.value = '';
+    try {
+        const userResponse = await identityApi.verifyLogin(email.value, verificationCode.value, rememberMe.value);
+        if (userResponse && userResponse.token) {
+            if (rememberMe.value) {
+                localStorage.setItem(`trusted_user_${email.value}`, JSON.stringify(userResponse));
+            }
+            localStorage.setItem('currentUser', JSON.stringify(userResponse));
             router.push('/projects');
         }
-    }, 800);
+    } catch (error) {
+        verifyError.value = t('identity.err_invalid_credentials') || 'Código inválido o expirado.';
+    } finally {
+        isVerifying.value = false;
+    }
 }
 
 async function onSubmit() {
@@ -229,11 +238,42 @@ async function onSubmit() {
 
     isSubmitting.value = true;
     try {
-        const user = await identityApi.login({ email: email.value, password: password.value });
-        if (user) {
-            authenticatedUser.value = user;
+        const response = await identityApi.login({ 
+            email: email.value, 
+            password: password.value, 
+            rememberMe: rememberMe.value 
+        });
+        if (response && response.step === 'VERIFICATION_REQUIRED') {
+            const trustedStr = localStorage.getItem(`trusted_user_${email.value}`);
+            if (trustedStr) {
+                try {
+                    const trustedUser = JSON.parse(trustedStr);
+                    // Decode JWT to check expiration
+                    if (trustedUser && trustedUser.token) {
+                        const payloadBase64 = trustedUser.token.split('.')[1];
+                        const payload = JSON.parse(atob(payloadBase64));
+                        const isExpired = payload.exp * 1000 < Date.now();
+                        
+                        if (!isExpired) {
+                            // Bypass verification because this is a trusted device/user and token is valid
+                            localStorage.setItem('currentUser', JSON.stringify(trustedUser));
+                            router.push('/projects');
+                            return;
+                        } else {
+                            // Token expired, remove it so they have to verify again to get a fresh one
+                            localStorage.removeItem(`trusted_user_${email.value}`);
+                        }
+                    }
+                } catch (e) {
+                    localStorage.removeItem(`trusted_user_${email.value}`);
+                }
+            }
             showVerification.value = true;
             startResendTimer();
+        } else if (response && response.token) {
+            // Already logged in directly?
+            localStorage.setItem('currentUser', JSON.stringify(response));
+            router.push('/projects');
         } else {
             loginError.value = t('identity.err_invalid_credentials');
         }
@@ -351,6 +391,7 @@ async function onSubmit() {
                         </div>
                         
                         <pv-inputotp v-model="verificationCode" :length="6" class="verification-box__otp" />
+                        <small v-if="verifyError" class="auth-form__error auth-form__error--center">{{ verifyError }}</small>
                         
                         <Button
                             type="submit"

@@ -21,11 +21,12 @@ export class MachineryAssembler {
      * @returns {MachineryEntity[]} Machinery entities.
      */
     static toEntitiesFromResponse(response) {
-        if (response.status !== 200) {
+        if (response.status !== 200 && response.status !== 201) {
             console.error(`${response.status}, ${response.statusText}`);
             return [];
         }
-        let resources = response.data instanceof Array ? response.data : response.data['machineryCatalog'];
+        let resources = response.data;
+        if (!Array.isArray(resources)) resources = [resources];
         return resources.map(resource => this.toEntityFromResource(resource));
     }
 }

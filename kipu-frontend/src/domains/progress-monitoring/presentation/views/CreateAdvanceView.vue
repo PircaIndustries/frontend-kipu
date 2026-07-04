@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, onMounted, computed } from 'vue';
+import { reactive, onMounted, computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 // ADDED: Import useRoute
 import { useRouter, useRoute } from 'vue-router';
@@ -8,7 +8,12 @@ import { useTeamUserStore } from '@/domains/team/application/team-user.store.js'
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from 'primevue/confirmdialog';
 import DatePicker from 'primevue/datepicker';
+import Message from 'primevue/message';
+import Dialog from 'primevue/dialog';
 import {useProjectsStore} from "@/domains/project-management/data/useProjectsStore.js";
+
+const saveError = ref('');
+const showSuccessModal = ref(false);
 
 const { t } = useI18n();
 const router = useRouter();
@@ -112,6 +117,14 @@ onMounted(async () => {
  */
 const saveProgress = async () => {
 
+  saveError.value = '';
+
+  // Form Validation
+  if (!form.date || !form.specialty || !form.activityName || form.percentage === '' || form.weight === '' || !form.responsible || form.workers === '') {
+    saveError.value = "Por favor, complete todos los campos obligatorios (*).";
+    return;
+  }
+
   const payload = {
     ...form,
     isMiniAdvance: isMiniAdvanceMode.value,
@@ -133,28 +146,37 @@ const saveProgress = async () => {
     }, 0);
 
     if (currentSum + Number(form.percentage) > 100) {
-      alert("¡Error! La suma del progreso no puede superar el 100%.");
+      saveError.value = "¡Error! La suma del progreso no puede superar el 100%.";
       return;
     }
   }
 
-  if (isEditMode.value) {
-    await store.updateAdvance(route.params.id, payload);
-  } else {
-    await store.addAdvance(payload);
-  }
+  saveError.value = '';
+  try {
+    if (isEditMode.value) {
+      await store.updateAdvance(route.params.id, payload);
+    } else {
+      await store.addAdvance(payload);
+    }
 
-  const projectStore = useProjectsStore();
-  if (projectStore.currentProject) {
-    await projectStore.updateProjectStatus(
-        projectStore.currentProjectId,
-        projectStore.currentProject.status,
-        'Actualización automática por avance diario',
-        projectStore.currentProject.progress
-    );
-  }
+    const projectStore = useProjectsStore();
+    if (projectStore.currentProject) {
+      await projectStore.updateProjectStatus(
+          projectStore.currentProjectId,
+          projectStore.currentProject.status,
+          'Actualización automática por avance diario',
+          projectStore.currentProject.progress
+      );
+    }
 
-  router.push('/advances/registry');
+    showSuccessModal.value = true;
+    setTimeout(() => {
+      showSuccessModal.value = false;
+      router.push('/advances/registry');
+    }, 1500);
+  } catch (error) {
+    saveError.value = error.message || 'Error saving progress';
+  }
 };
 
 const cancelCreation = () => {
@@ -205,12 +227,12 @@ const deleteProgress = () => {
 
         <form @submit.prevent="saveProgress" class="grid grid-cols-2 gap-x-6 gap-y-4">
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.date') }}</label>
+            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.date') }}<span class="text-red-500 ml-1">*</span></label>
             <DatePicker v-model="form.date" showIcon iconDisplay="input" fluid class="!rounded-lg" />
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.specialty') }}</label>
+            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.specialty') }}<span class="text-red-500 ml-1">*</span></label>
             <select v-model="form.specialty" :disabled="isMiniAdvanceMode" class="bg-gray-50 border border-gray-200 p-3 rounded-lg outline-none cursor-pointer">
               <option value="" disabled>{{ t('execution.advances.create.placeholders.select_specialty') }}</option>
               <option v-for="opt in specialtiesOptions" :key="opt" :value="opt">{{ opt }}</option>
@@ -218,7 +240,7 @@ const deleteProgress = () => {
           </div>
 
           <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.activity') }}</label>
+            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.activity') }}<span class="text-red-500 ml-1">*</span></label>
             <input type="text" v-model="form.activityName" :placeholder="t('execution.advances.create.placeholders.activity')" :disabled="isMiniAdvanceMode" class="bg-gray-50 border border-gray-200 p-3 rounded-lg outline-none">
           </div>
 
@@ -228,7 +250,7 @@ const deleteProgress = () => {
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.progress') }}</label>
+            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.progress') }}<span class="text-red-500 ml-1">*</span></label>
             <div class="relative">
               <input type="number" v-model="form.percentage" min="0" max="100" class="bg-gray-50 border border-gray-200 p-3 rounded-lg outline-none w-full pr-10">
               <span class="absolute right-4 top-3 text-gray-400 font-bold">%</span>
@@ -241,17 +263,17 @@ const deleteProgress = () => {
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.weight') }}</label>
+            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.weight') }}<span class="text-red-500 ml-1">*</span></label>
             <input type="number" v-model="form.weight" :disabled="isMiniAdvanceMode" min="1" class="bg-gray-50 border border-gray-200 p-3 rounded-lg outline-none">
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.crewSize') }}</label>
+            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.crewSize') }}<span class="text-red-500 ml-1">*</span></label>
             <input type="number" v-model="form.workers" :disabled="isMiniAdvanceMode" min="0" class="bg-gray-50 border border-gray-200 p-3 rounded-lg outline-none">
           </div>
 
           <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.responsible') }}</label>
+            <label class="text-xs font-bold text-gray-400 uppercase">{{ t('execution.advances.create.fields.responsible') }}<span class="text-red-500 ml-1">*</span></label>
             <select v-model="form.responsible" :disabled="isMiniAdvanceMode" class="bg-gray-50 border border-gray-200 p-3 rounded-lg outline-none cursor-pointer">
               <option value="" disabled>{{ t('execution.advances.create.placeholders.select_responsible') }}</option>
               <option v-for="user in operationalManagers" :key="user.id" :value="user.fullName">{{ user.fullName }}</option>
@@ -268,28 +290,40 @@ const deleteProgress = () => {
           </div>
         </form>
 
-        <div class="mt-10 flex gap-4">
-          <button @click="saveProgress" class="bg-gray-800 text-white py-6 flex-grow rounded-lg text-lg font-bold hover:bg-gray-900 transition-colors">
-            {{ isEditMode ? t('execution.advances.create.submitBtn') : t('execution.advances.create.submitBtn') }}
-          </button>
-          <button v-if="isEditMode" @click="deleteProgress" class="w-1/4 text-red-600 border border-red-200 font-bold hover:bg-red-50 rounded-lg transition-colors">
-            {{ t('common.delete') }}
-          </button>
-          <button @click="cancelCreation" class="w-1/4 text-gray-500 font-bold hover:bg-gray-100 rounded-lg transition-colors">
-            {{ t('common.cancel') }}
-          </button>
+        <div class="mt-10 flex flex-col gap-4">
+          <Message v-if="saveError" severity="error" size="small" :closable="false">{{ saveError }}</Message>
+          <div class="flex gap-4">
+            <button @click="saveProgress" class="bg-gray-800 text-white py-6 flex-grow rounded-lg text-lg font-bold hover:bg-gray-900 transition-colors">
+              {{ isEditMode ? t('execution.advances.create.submitBtn') : t('execution.advances.create.submitBtn') }}
+            </button>
+            <button v-if="isEditMode" @click="deleteProgress" class="w-1/4 text-red-600 border border-red-200 font-bold hover:bg-red-50 rounded-lg transition-colors">
+              {{ t('common.delete') }}
+            </button>
+            <button @click="cancelCreation" class="w-1/4 text-gray-500 font-bold hover:bg-gray-100 rounded-lg transition-colors">
+              {{ t('common.cancel') }}
+            </button>
+          </div>
         </div>
       </div>
 
       <div class="w-[350px] flex flex-col gap-6">
         <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm h-fit">
-          <h3 class="font-bold text-gray-800 text-sm mb-4">Daily Statistics</h3>
+          <h3 class="font-bold text-gray-800 text-sm mb-4">{{ t('execution.advances.create.dailyStats.title') }}</h3>
           <div class="flex flex-col gap-3 text-sm text-gray-600">
-            <div class="flex justify-between border-b pb-2"><span>Personnel:</span> <strong>{{ form.workers || 0 }}</strong></div>
-            <div class="flex justify-between"><span>Weather:</span> <strong class="capitalize">{{ form.weather }}</strong></div>
+            <div class="flex justify-between border-b pb-2"><span>{{ t('execution.advances.create.dailyStats.personnel') }}</span> <strong>{{ form.workers || 0 }}</strong></div>
+            <div class="flex justify-between"><span>{{ t('execution.advances.create.dailyStats.weather') }}</span> <strong class="capitalize">{{ t(`execution.weather.${form.weather}`) }}</strong></div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- CREATE SUCCESS DIALOG -->
+    <Dialog v-model:visible="showSuccessModal" modal :style="{ width: '380px' }" :closable="false">
+      <div class="text-center p-8">
+        <i class="pi pi-check-circle text-[#10b981] text-8xl mb-4" />
+        <h2 class="text-xl font-bold text-gray-800 mb-2">{{ t('execution.advances.create.successTitle') }}</h2>
+        <p class="text-gray-500 m-0">{{ t('execution.advances.create.successMessage') }}</p>
+      </div>
+    </Dialog>
   </div>
 </template>

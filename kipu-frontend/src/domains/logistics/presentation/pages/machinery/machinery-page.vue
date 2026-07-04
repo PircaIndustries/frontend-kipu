@@ -10,6 +10,7 @@ import { useProjectsStore } from '@/domains/project-management/data/useProjectsS
 import MachineryList from '@/domains/logistics/presentation/components/machinery/machinery-list.vue'
 import FilterSummaryBar from '@/shared/presentation/components/FilterSummaryBar.vue'
 import MachineryCreateForm from '@/domains/logistics/presentation/components/machinery/form/machinery-create-form.vue'
+import MachineryCatalogForm from '@/domains/logistics/presentation/components/machinery/form/machinery-catalog-form.vue'
 import MachineryAssignDialog from '@/domains/logistics/presentation/components/machinery/form/machinery-assign-dialog.vue'
 import MachineryMaintenanceDialog from '@/domains/logistics/presentation/components/machinery/form/machinery-maintenance-dialog.vue'
 
@@ -114,6 +115,7 @@ const summaryFilters = computed(() => [
 ])
 
 const showCreateDialog = ref(false)
+const showCatalogDialog = ref(false)
 const showAssignDialog = ref(false)
 const showMaintenanceDialog = ref(false)
 const selectedMachinery = ref(null)
@@ -123,56 +125,63 @@ function handleAssign(machinery) {
   showAssignDialog.value = true
 }
 
-function handleReturn(machinery) {
+async function handleReturn(machinery) {
   const updates = {
     ...machinery,
     assignedTo: null,
+    assignedWorkerId: null,
     assignmentDetail: null,
     status: 'AVAILABLE'
   }
-  machineryStore.updateAssignment(machinery.id, updates,
-    () => {
-      toast.add({
-        severity: 'success',
-        summary: t('machinery.return.success.summary'),
-        detail: t('machinery.return.success.detail'),
-        life: 3000
-      })
-    },
-    () => {
-      toast.add({
-        severity: 'error',
-        summary: t('common.error'),
-        detail: t('machinery.return.errors.save-failed'),
-        life: 4000
-      })
+  try {
+    await machineryStore.updateAssignment(machinery.id, updates)
+    if (machinery.assignedWorkerId) {
+      await workerStore.removeMachineryFromWorker(machinery.assignedWorkerId, machinery.machineryId)
     }
-  )
+    await Promise.all([machineryStore.fetchMachinery(), workerStore.fetchWorkers()])
+    toast.add({
+      severity: 'success',
+      summary: t('machinery.return.success.summary'),
+      detail: t('machinery.return.success.detail'),
+      life: 3000
+    })
+  } catch {
+    toast.add({
+      severity: 'error',
+      summary: t('common.error'),
+      detail: t('machinery.return.errors.save-failed'),
+      life: 4000
+    })
+  }
 }
 
-function handleEnable(machinery) {
+async function handleEnable(machinery) {
   const updates = {
     ...machinery,
+    assignedTo: null,
+    assignedWorkerId: null,
     status: 'AVAILABLE'
   }
-  machineryStore.updateAssignment(machinery.id, updates,
-    () => {
-      toast.add({
-        severity: 'success',
-        summary: t('machinery.enable.success.summary'),
-        detail: t('machinery.enable.success.detail'),
-        life: 3000
-      })
-    },
-    () => {
-      toast.add({
-        severity: 'error',
-        summary: t('common.error'),
-        detail: t('machinery.enable.errors.save-failed'),
-        life: 4000
-      })
+  try {
+    await machineryStore.updateAssignment(machinery.id, updates)
+    if (machinery.assignedWorkerId) {
+      await workerStore.removeMachineryFromWorker(machinery.assignedWorkerId, machinery.machineryId)
     }
-  )
+    await Promise.all([machineryStore.fetchMachinery(), workerStore.fetchWorkers()])
+    toast.add({
+      severity: 'success',
+      summary: t('machinery.enable.success.summary'),
+      detail: t('machinery.enable.success.detail'),
+      life: 3000
+    })
+  } catch {
+    toast.add({
+      severity: 'error',
+      summary: t('common.error'),
+      detail: t('machinery.enable.errors.save-failed'),
+      life: 4000
+    })
+  }
 }
 
 function handleMaintenance(machinery) {
@@ -211,8 +220,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="flex flex-col gap-6 p-6 h-full">
-    <header class="flex items-center justify-between">
+  <section class="flex flex-col gap-6 p-4 md:p-6 h-full">
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl font-bold text-primary tracking-tight m-0">
           {{ t('machinery.title') }}
@@ -223,14 +232,14 @@ onMounted(() => {
       </div>
       <button
         @click="showCreateDialog = true"
-        class="bg-accent text-white py-2.5 px-6 rounded-lg font-bold text-base shadow-md cursor-pointer transition-all hover:scale-[1.02] active:scale-95 flex items-center gap-2"
+        class="bg-accent text-white py-2.5 px-6 rounded-lg font-bold text-base shadow-md cursor-pointer transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 w-full md:w-auto"
       >
         <i class="pi pi-plus-circle text-lg"></i>
         <span>{{ t('machinery.button-register') }}</span>
       </button>
     </header>
 
-    <div class="flex gap-6 flex-1 min-h-0">
+    <div class="flex flex-col md:flex-row gap-6 flex-1 min-h-0">
       <div class="flex-1 min-w-0 flex flex-col gap-4">
         <div class="relative">
           <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-neutral-border text-sm"></i>
@@ -242,14 +251,16 @@ onMounted(() => {
           />
         </div>
 
-        <MachineryList
-          :machinery-list="filteredMachinery"
-          @assign="handleAssign"
-          @return="handleReturn"
-          @maintenance="handleMaintenance"
-          @enable="handleEnable"
-          @delete="handleDelete"
-        />
+        <div class="overflow-x-auto w-full">
+          <MachineryList
+            :machinery-list="filteredMachinery"
+            @assign="handleAssign"
+            @return="handleReturn"
+            @maintenance="handleMaintenance"
+            @enable="handleEnable"
+            @delete="handleDelete"
+          />
+        </div>
 
         <div v-if="filteredMachinery.length === 0 && assignmentsLoaded" class="flex flex-col items-center justify-center gap-3 py-20 text-center">
           <div class="w-14 h-14 rounded-full bg-neutral-bg flex items-center justify-center">
@@ -260,7 +271,7 @@ onMounted(() => {
         </div>
       </div>
 
-      <aside class="w-64 flex flex-col gap-6 shrink-0">
+      <aside class="w-full md:w-64 flex flex-col gap-6 shrink-0">
         <FilterSummaryBar :title="t('machinery.summary.title')" :filters="summaryFilters" />
 
         <div class="flex flex-col gap-2">
@@ -277,6 +288,19 @@ onMounted(() => {
             :manualInput="false"
           />
         </div>
+
+        <div class="flex flex-col gap-2">
+          <h3 class="text-[10px] font-black text-neutral-border uppercase tracking-widest m-0 pb-2 border-b border-neutral-border/20">
+            {{ t('machinery.catalog.button-add') }}
+          </h3>
+          <button
+            @click="showCatalogDialog = true"
+            class="w-full bg-accent text-white py-2 rounded-lg font-semibold text-sm shadow-sm cursor-pointer transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
+          >
+            <i class="pi pi-plus-circle text-base"></i>
+            <span>{{ t('machinery.catalog.button-add') }}</span>
+          </button>
+        </div>
       </aside>
     </div>
   </section>
@@ -285,6 +309,12 @@ onMounted(() => {
     v-if="showCreateDialog"
     @saved="refresh; showCreateDialog = false"
     @close="showCreateDialog = false"
+  />
+
+  <MachineryCatalogForm
+    v-if="showCatalogDialog"
+    @saved="refresh; showCatalogDialog = false"
+    @close="showCatalogDialog = false"
   />
 
   <MachineryAssignDialog

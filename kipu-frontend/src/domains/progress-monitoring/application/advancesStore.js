@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { AdvanceApi } from '../infrastructure/advance-api.js';
 import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore.js';
+import i18n from '@/locales/i18n';
 
 export const useAdvanceStore = defineStore('advances', () => {
     const api = new AdvanceApi();
@@ -39,7 +40,12 @@ export const useAdvanceStore = defineStore('advances', () => {
     const loadAdvances = async () => {
         isLoading.value = true;
         try {
-            advances.value = await api.getAll();
+            const currentId = projectsStore.currentProjectId;
+            if (currentId) {
+                advances.value = await api.getAll(currentId);
+            } else {
+                advances.value = [];
+            }
         } catch (error) {
             console.error(error);
         } finally {
@@ -50,18 +56,19 @@ export const useAdvanceStore = defineStore('advances', () => {
     const addAdvance = async (newEntry) => {
         if (!newEntry.isMiniAdvance) {
             const duplicate = advances.value.find(a => a.activityName === newEntry.activityName);
-            if (duplicate) {throw new Error("Ya existe una actividad con este nombre."); return;}
+            if (duplicate) {throw new Error(i18n.global.t('errors.activity_exists')); return;}
         }
         try {
             // ADDED: Assign current project ID to the new entry
             const currentId = projectsStore.currentProjectId;
-            if (!currentId) throw new Error("No active project selected");
+            if (!currentId) throw new Error(i18n.global.t('errors.no_active_project'));
 
             newEntry.projectId = currentId;
             const savedEntry = await api.create(newEntry);
             advances.value = [savedEntry, ...advances.value];
         } catch (error) {
             console.error(error);
+            throw error;
         }
     };
 
@@ -113,7 +120,7 @@ export const useAdvanceStore = defineStore('advances', () => {
         const currentSum = activityAdvances.reduce((sum, a) => sum + (a.currentPercentage || 0), 0);
 
         if (currentSum + newEntry.currentPercentage > 100) {
-            throw new Error('Progress sum exceeds 100%');
+            throw new Error(i18n.global.t('errors.progress_exceeds'));
         }
 
         return await addAdvance(newEntry);
@@ -121,7 +128,7 @@ export const useAdvanceStore = defineStore('advances', () => {
 
     const groupedAdvances = computed(() => {
         const groups = {};
-        currentProjectAdvances.value.forEach(a => {
+        filteredAdvances.value.forEach(a => {
             if (!groups[a.activityName]) {
                 groups[a.activityName] = {
                     activityName: a.activityName,

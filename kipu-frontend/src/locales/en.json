@@ -114,11 +114,55 @@
         "create_loc": "Location",
         "create_loc_placeholder": "Eg: Main St 123, Lima",
         "create_err_loc_req": "Location is required.",
+        "create_budget": "Assigned Budget ($)",
+        "create_budget_placeholder": "Eg: 500000",
         "create_status": "Initial Status",
         "create_status_planned": "Planned",
         "create_status_in_progress": "In Progress",
-        "create_budget": "Estimated Budget",
-        "create_budget_placeholder": "Eg: 500000",
+        "create_btn_cancel": "Cancel",
+        "create_btn_submit": "Create Project",
+        "status": {
+            "planned": "Planned",
+            "in_progress": "In progress",
+            "halted": "Halted",
+            "completed": "Completed"
+        },
+        "details": {
+            "title": "Technical Sheet: {name}",
+            "history_title": "Status History",
+            "history_desc": "Historical traceability of status changes with their respective technical justification.",
+            "history_progress": "Assigned progress:",
+            "history_full_btn": "View full history",
+            "history_empty": "No status change records.",
+            "docs_title": "Technical Files and Plans",
+            "docs_desc": "List of construction plans and technical specifications approved for this site.",
+            "docs_upload_btn": "Upload Plan",
+            "docs_empty": "No plans or specifications have been registered for this site.",
+            "tooltips": {
+                "change_status": "Change status",
+                "delete": "Delete"
+            },
+            "modal": {
+                "title": "Upload Plan or Technical Document",
+                "name_label": "Document / Plan Name *",
+                "name_placeholder": "e.g. Sector B Foundation Plan",
+                "type_label": "Element Type",
+                "version_label": "Version",
+                "status_label": "Digital Signature Status",
+                "status_signed": "Digitally Signed",
+                "status_pending": "Signature Pending",
+                "deadline_label": "Approval Deadline",
+                "btn_cancel": "Cancel",
+                "btn_submit": "Register Document"
+            },
+            "table": {
+                "name": "Document / Plan Name",
+                "type": "Type",
+                "version": "Version",
+                "signature": "Digital Signature",
+                "expires": "Expires"
+            }
+        },
         "create_start_date": "Start Date",
         "create_end_date": "End Date (Optional)",
         "create_err_req": "Required.",
@@ -135,7 +179,23 @@
         "delete_prompt_1": "Please type",
         "delete_prompt_2": "to confirm:",
         "delete_placeholder": "Project name",
-        "delete_submit": "I understand the consequences, delete project"
+        "delete_submit": "I understand the consequences, delete project",
+        "change_status_dialog": {
+            "title": "Change Project Status",
+            "new_status": "New Status",
+            "justification": "Justification",
+            "justification_ph": "Document the reason for halting this project...",
+            "justification_req": "Justification is required when setting status to 'Paralizada'.",
+            "cancel": "Cancel",
+            "submit": "Update Status"
+        },
+        "discard_dialog": {
+            "title": "Discard changes?",
+            "message": "Unsaved changes will be lost.",
+            "continue": "Continue editing",
+            "discard": "Discard"
+        },
+        "create_success_msg": "Project created successfully."
     },
     "navigation": {
         "dashboard": "Dashboard",
@@ -151,9 +211,9 @@
     "execution": {
         "calendar": {
             "today": "Go to today",
-            "detailTitle": "Progress History: {activity}"
+            "detailTitle": "Progress History: {activity}",
+            "emptyState": "There is no progress scheduled for this month yet."
         },
-
         "advances": {
             "title": "Work Progress Control",
             "subtitle": "Daily records and execution status history.",
@@ -178,6 +238,7 @@
                 "title": "New Daily Progress",
                 "editTitle": "Edit Progress Record",
                 "submitBtn": "Save Progress",
+                "simulatedNotice": "Simulated functionality in this version.",
                 "discardHeader": "Confirm Discard",
                 "discardMessage": "You have unsaved changes. Are you sure you want to leave?",
                 "deleteHeader": "Confirm Deletion",
@@ -201,7 +262,14 @@
                     "location": "e.g., Level 2",
                     "select_specialty": "Select specialty",
                     "select_responsible": "Select a manager"
-                }
+                },
+                "dailyStats": {
+                    "title": "Daily Statistics",
+                    "personnel": "Personnel:",
+                    "weather": "Weather:"
+                },
+                "successTitle": "New Progress Registered",
+                "successMessage": "The progress has been registered successfully."
             },
             "tabs": {
                 "registry": "Progress Log (PPC)",
@@ -212,8 +280,11 @@
                 "title": "Evidence Gallery",
                 "noPhotos": "No photos recorded for this period.",
                 "viewFull": "View Fullscreen",
-                "filterBy": "Specialty:"
-            }
+                "filterBy": "Specialty:",
+                "uploadNotice": "Feature coming soon.",
+                "exportNotice": "Export simulated successfully."
+            },
+            "filterProject": "Filter by Project"
         },
         "impedimentLabel": "Impediment Reason",
         "status": {
@@ -316,17 +387,31 @@
                 "continue": "Continue editing",
                 "confirm": "Discard"
             }
+        },
+        "status": {
+            "planning": "Planning",
+            "in_progress": "In Progress",
+            "paused": "Paused",
+            "completed": "Completed",
+            "cancelled": "Cancelled",
+            "Activo": "Active",
+            "Planificación": "Planning",
+            "Pausado": "Paused",
+            "Finalizado": "Completed",
+            "Cancelado": "Cancelled"
         }
     },
     "common": {
-        "management": "Construction Management",
+        "management": "Project Management",
+        "ncrDisabled": "The report could not be saved because persistence is disabled in this trial version.",
         "cancel": "Cancel",
-        "delete": "Delete",
         "confirm": "Confirm",
         "yes": "Yes",
         "no": "No",
         "error": "Error",
-        "back": "← Back"
+        "success": "Success",
+        "back": "← Back",
+        "delete": "Delete"
     },
     "roles": {
         "resident": "Project Resident"
@@ -623,16 +708,20 @@
             },
             "send-invitation": {
                 "title": "Invite new user",
-                "credentials": "An email will be sent with the credentials to access the system.",
-                "email": "EMAIL ADDRESS",
-                "email-placeholder": "user@company.com",
-                "name": "First Name",
-                "name-placeholder": "e.g., 'Juan'",
-                "lastname": "Last Name",
-                "lastname-placeholder": "e.g., 'Perez'",
+                "select-user": "Select a registered user",
+                "user-label": "USER",
                 "rol": "Role to assign",
                 "btn-cancel": "Cancel",
                 "btn-invite": "Send Invitation"
+            },
+            "invitations": {
+                "pending-title": "Pending Invitations",
+                "no-pending": "No pending invitations",
+                "invited-message": "You have been invited to join the project as {role}",
+                "success-title": "Invitation sent",
+                "success-detail": "The user has been invited successfully.",
+                "error-title": "Error",
+                "error-detail": "An error occurred sending the invitation."
             }
         },
         "workers": {
@@ -670,13 +759,24 @@
                 "tools-add": "Select a real equipment",
                 "tools-placeholder": "Equipment name...",
                 "btn-save": "Save Worker",
-                "btn-cancel": "Cancel"
+                "btn-cancel": "Cancel",
+                "errors": {
+                    "dni-invalid": "ID must be exactly 8 digits.",
+                    "name-invalid": "Name must contain only letters, spaces and hyphens.",
+                    "role-required": "Position / Crew is required."
+                }
             }
         }
     },
     "signatures": {
+        "create": {
+            "auto_sign": "You will automatically sign this document as: {user}"
+        },
         "page": {
             "title": "Documents",
+            "subtitle": "Manage, sign and export technical documents, acts and NCRs of the site.",
+            "export_btn": "Export Dossier",
+            "export_modal_title": "Export Quality Dossier",
             "pending-title": "Documents Pending Your Signature",
             "signed-title": "Signed Documents",
             "deadline": "Deadline",
@@ -694,7 +794,8 @@
             "howto-step2": "Click on 'Sign Document'",
             "howto-step3": "Enter the verification code",
             "howto-step4": "The signature is automatically recorded",
-            "btn-create": "Create Document"
+            "btn-create": "Create Document",
+            "created": "Document created successfully."
         },
         "dialog": {
             "add-document-title": "Create New Document",
@@ -719,7 +820,9 @@
             "description": "Enter the verification code",
             "token-sent": "A 6-digit verification code has been sent to your email",
             "btn-confirm": "Confirm Signature",
-            "btn-cancel": "Cancel"
+            "tokenError": "The entered code is incorrect. Check the 6-digit code sent to your email.",
+            "signed": "Document signed successfully.",
+            "send-error": "Could not send verification code."
         }
     },
     "progress-monitoring": {
@@ -987,6 +1090,7 @@
             },
             "errors": {
                 "detail-required": "You must enter an assignment detail.",
+                "worker-required": "You must select a worker to assign.",
                 "save-failed": "Could not assign equipment."
             },
             "success": {
@@ -1053,14 +1157,40 @@
             "errors": {
                 "save-failed": "Could not enable equipment."
             }
+        },
+        "catalog": {
+            "button-add": "New to Catalog",
+            "dialog-title": "Add Equipment to Catalog",
+            "fields": {
+                "name": "Name",
+                "brand": "Brand",
+                "model": "Model",
+                "serial-number": "Serial Number",
+                "acquisition-date": "Acquisition Date"
+            },
+            "placeholders": {
+                "name": "Enter equipment name",
+                "brand": "Enter brand",
+                "model": "Enter model",
+                "serial-number": "Enter serial number",
+                "acquisition-date": "YYYY-MM-DD"
+            },
+            "actions": {
+                "cancel": "Cancel",
+                "submit": "Add to Catalog"
+            },
+            "errors": {
+                "name-required": "Name is required.",
+                "brand-required": "Brand is required.",
+                "model-required": "Model is required.",
+                "serial-number-required": "Serial number is required.",
+                "save-failed": "Could not add equipment to catalog."
+            },
+            "success": {
+                "summary": "Added",
+                "detail": "Equipment added to catalog successfully."
+            }
         }
-    },
-    "logistics-tabs": {
-        "tab-inventory": "Inventory",
-        "tab-requests": "Requests",
-        "tab-suppliers": "Suppliers",
-        "tab-waste": "Waste",
-        "tab-machinery": "Machinery"
     },
     "settings": {
         "title": "System Settings",
@@ -1105,6 +1235,57 @@
         "total_suffix": "Total",
         "empty_short": "No pending notifications",
         "back": "Back",
-        "view_all": "View all notifications"
+        "view_all": "View all notifications",
+        "types": {
+            "ProjectInvitation": "Project Invitation",
+            "General": "Notification"
+        }
+    },
+    "time": {
+        "just_now": "Just now",
+        "minutes": "{count} minutes ago",
+        "hours": "{count} hours ago",
+        "days": "{count} days ago",
+        "yesterday": "Yesterday"
+    },
+    "rnc": {
+        "register": {
+            "title": "Register NCR",
+            "subtitle": "Generate an immediate alert for the design team",
+            "project": "Project",
+            "incidence_title": "Incidence Title",
+            "incidence_title_ph": "E.g. Plumb error in wall",
+            "specialty": "Affected Specialty",
+            "specialty_ph": "E.g. Structures...",
+            "severity": "Severity Level",
+            "description": "Detailed Description",
+            "description_ph": "Explain the technical failure...",
+            "evidence": "Photographic Evidence (Required)",
+            "upload_btn": "Upload Evidence",
+            "upload_hint": "Click to upload photo",
+            "evidence_error": "You must attach visual evidence.",
+            "cancel_btn": "Cancel",
+            "submit_btn": "Register and Notify",
+            "save_error": "The report could not be saved due to a server error."
+        }
+    },
+    "inventory-tabs": {
+        "tab-inventory": "Inventory",
+        "tab-requests": "Requests",
+        "tab-suppliers": "Suppliers",
+        "tab-waste": "Waste",
+        "tab-machinery": "Machinery & Equipment"
+    },
+    "errors": {
+        "activity_exists": "An activity with this name already exists.",
+        "no_active_project": "No active project selected.",
+        "progress_exceeds": "Progress sum exceeds 100%.",
+        "id_required_delete": "ID is required for deletion.",
+        "project_not_found": "Project not found.",
+        "expenses_mini_advance": "You cannot register expenses in a mini-advance.",
+        "item_not_found": "Item not found."
+    },
+    "warnings": {
+        "select_project": "You must select a project to continue."
     }
 }

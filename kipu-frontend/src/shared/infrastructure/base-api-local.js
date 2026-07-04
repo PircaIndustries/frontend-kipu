@@ -20,7 +20,24 @@ export class BaseApiLocal {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
             }
-        })
+        });
+
+        this.#http.interceptors.request.use((config) => {
+            const userStr = localStorage.getItem('currentUser');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    if (user && user.token) {
+                        config.headers.Authorization = `Bearer ${user.token}`;
+                    }
+                } catch (e) {
+                    console.error('Error parsing currentUser from localStorage', e);
+                }
+            }
+            return config;
+        }, (error) => {
+            return Promise.reject(error);
+        });
     }
 
     /**

@@ -115,15 +115,57 @@
         "create_loc_placeholder": "Ej: Av. Principal 123, Lima",
         "create_err_loc_req": "La ubicación es obligatoria.",
         "create_status": "Estado Inicial",
-        "create_status_planned": "Planificado",
-        "create_status_in_progress": "En Progreso",
-        "create_budget": "Presupuesto Estimado",
+        "create_status_planned": "Planificación",
+        "create_status_in_progress": "En ejecución",
+        "create_budget": "Presupuesto Asignado ($)",
         "create_budget_placeholder": "Ej: 500000",
         "create_start_date": "Fecha de Inicio",
         "create_end_date": "Fecha Fin (Opcional)",
         "create_err_req": "Obligatorio.",
         "create_cancel": "Cancelar",
         "create_submit": "Crear Proyecto",
+        "status": {
+            "planned": "Planificación",
+            "in_progress": "En ejecución",
+            "halted": "Paralizada",
+            "completed": "Finalizada"
+        },
+        "details": {
+            "title": "Ficha Técnica: {name}",
+            "history_title": "Historial de Estados",
+            "history_desc": "Trazabilidad histórica de los cambios de estado con su respectiva justificación técnica.",
+            "history_progress": "Avance asignado:",
+            "history_full_btn": "Ver historial completo",
+            "history_empty": "Sin registros de cambios de estado.",
+            "docs_title": "Expedientes y Planos Técnicos",
+            "docs_desc": "Lista de planos constructivos y especificaciones técnicas aprobadas para esta obra.",
+            "docs_upload_btn": "Subir Plano",
+            "docs_empty": "No se han registrado planos ni especificaciones para esta obra.",
+            "tooltips": {
+                "change_status": "Cambiar estado",
+                "delete": "Eliminar"
+            },
+            "modal": {
+                "title": "Subir Plano o Documento Técnico",
+                "name_label": "Nombre del Documento / Plano *",
+                "name_placeholder": "Ej. Plano de Cimentaciones Sector B",
+                "type_label": "Tipo de Elemento",
+                "version_label": "Versión",
+                "status_label": "Estado de Firma Digital",
+                "status_signed": "Firmado Digitalmente",
+                "status_pending": "Firma Pendiente",
+                "deadline_label": "Fecha Límite para Aprobación",
+                "btn_cancel": "Cancelar",
+                "btn_submit": "Registrar Documento"
+            },
+            "table": {
+                "name": "Nombre Documento / Plano",
+                "type": "Tipo",
+                "version": "Versión",
+                "signature": "Firma Digital",
+                "expires": "Vence"
+            }
+        },
         "select_title": "Seleccionar Proyecto",
         "select_desc": "Estás a punto de seleccionar el proyecto:",
         "select_prompt": "¿Quieres continuar?",
@@ -135,7 +177,25 @@
         "delete_prompt_1": "Por favor escriba",
         "delete_prompt_2": "para confirmar:",
         "delete_placeholder": "Nombre del proyecto",
-        "delete_submit": "Entiendo las consecuencias, eliminar proyecto"
+        "delete_submit": "Entiendo las consecuencias, eliminar proyecto",
+        "create_btn_cancel": "Cancelar",
+        "create_btn_submit": "Guardar",
+        "change_status_dialog": {
+            "title": "Cambiar Estado del Proyecto",
+            "new_status": "Nuevo Estado",
+            "justification": "Justificación",
+            "justification_ph": "Documente la razón por la que se paraliza este proyecto...",
+            "justification_req": "La justificación es requerida al establecer el estado a 'Paralizada'.",
+            "cancel": "Cancelar",
+            "submit": "Actualizar Estado"
+        },
+        "discard_dialog": {
+            "title": "¿Descartar cambios?",
+            "message": "Los cambios no guardados se perderán.",
+            "continue": "Seguir editando",
+            "discard": "Descartar"
+        },
+        "create_success_msg": "Proyecto creado exitosamente."
     },
     "navigation": {
         "dashboard": "Dashboard",
@@ -149,11 +209,11 @@
         "team": "Equipo"
     },
     "execution": {
-        "calendar":{
+        "calendar": {
             "today": "Ir al día de hoy",
-            "detailTitle": "Historial de Avances: {activity}"
-         },
-
+            "detailTitle": "Historial de Avances: {activity}",
+            "emptyState": "Aún no hay avances programados para este mes."
+        },
         "advances": {
             "title": "Control de Avances",
             "activityHistory": {
@@ -165,30 +225,9 @@
                 "editMain": "Editar actividad principal"
             },
             "create": {
-                "title": "Nuevo Avance Diario",
-                "editTitle": "Editar Registro de Avance",
-                "submitBtn": "Guardar Avance",
-                "deleteHeader": "Confirmar Eliminación",
-                "deleteMessage": "¿Estás seguro?",
-                "discardHeader": "Confirmar descarte",
-                "discardMessage": "¿Seguro que quieres salir?",
                 "fields": {
-                    "date": "Fecha",
-                    "specialty": "Especialidad",
-                    "activity": "Actividad",
-                    "location": "Ubicación",
-                    "progress": "Avance",
-                    "weight": "Peso",
-                    "description": "Descripción",
-                    "responsible": "Responsable",
-                    "crewSize": "Personal de Cuadrilla",
-                    "weather": "Clima"
-                },
-                "placeholders": {
-                    "activity": "Ej: Vaciado",
-                    "location": "Ej: Nivel 2",
-                    "select_specialty": "Seleccione especialidad",
-                    "select_responsible": "Seleccione un Gestor"
+                    "photos": "Fotos Adicionales",
+                    "project": "Proyecto"
                 }
             },
             "subtitle": "Historial de registros diarios y estados de ejecución.",
@@ -202,7 +241,6 @@
                 "installations": "Instalaciones",
                 "architecture": "Arquitectura"
             },
-
             "tabs": {
                 "registry": "Registro de Avance (PPC)",
                 "photoLog": "Bitácora Fotográfica",
@@ -212,7 +250,9 @@
                 "title": "Galería de Evidencias",
                 "noPhotos": "No hay fotos registradas para este periodo.",
                 "viewFull": "Ver pantalla completa",
-                "filterBy": "Especialidad:"
+                "filterBy": "Especialidad:",
+                "uploadNotice": "Funcionalidad disponible próximamente.",
+                "exportNotice": "Exportación simulada correctamente."
             }
         },
         "impedimentLabel": "Motivo de Impedimento",
@@ -241,34 +281,8 @@
         "taskLabel": "Partida",
         "title": "Registro de Avance Diario",
         "create": {
-            "title": "Nuevo Avance Diario",
-            "submitBtn": "Guardar Avance",
-            "discardHeader": "Confirmar descarte",
-            "discardMessage": "Tienes cambios sin guardar. ¿Estás seguro de que deseas salir?",
-            "fields": {
-                "date": "Fecha del Avance",
-                "specialty": "Especialidad",
-                "activity": "Actividad Realizada",
-                "location": "Ubicación/Sector",
-                "progress": "Porcentaje de Avance",
-                "description": "Descripción Detallada",
-                "weight": "Peso",
-                "responsible": "Responsable",
-                "crewSize": "Personal de Cuadrilla",
-                "weather": "Condiciones Climáticas",
-                "photos": "Fotos del Avance",
-                "project": "Proyecto asignado"
-            },
-            "placeholders": {
-                "activity": "Ej: Vaciado de losa del segundo nivel",
-                "location": "Ej: Nivel 2 - Eje A-B",
-                "project": "Seleccione un proyecto",
-                "date": "Seleccionar fecha"
-            },
-            "photos": {
-                "add": "Agregar foto",
-                "empty": "Arrastra imágenes aquí para subirlas"
-            }
+            "deleteHeader": "Confirmar Eliminación",
+            "deleteMessage": "¿Estás seguro de eliminar este registro?"
         },
         "weather": {
             "sunny": "Soleado",
@@ -314,16 +328,30 @@
                 "continue": "Continuar editando",
                 "confirm": "Descartar"
             }
+        },
+        "status": {
+            "planning": "Planificación",
+            "in_progress": "En Progreso",
+            "paused": "Pausado",
+            "completed": "Finalizado",
+            "cancelled": "Cancelado",
+            "Activo": "Activo",
+            "Planificación": "Planificación",
+            "Pausado": "Pausado",
+            "Finalizado": "Finalizado",
+            "Cancelado": "Cancelado"
         }
     },
     "common": {
         "management": "Gestión de Obras",
+        "ncrDisabled": "El reporte no pudo guardarse porque la persistencia está deshabilitada en esta versión de prueba.",
         "cancel": "Cancelar",
         "confirm": "Confirmar",
         "delete": "Eliminar",
         "yes": "Sí",
         "no": "No",
         "error": "Error",
+        "success": "Éxito",
         "back": "← Volver"
     },
     "roles": {
@@ -621,16 +649,20 @@
             },
             "send-invitation": {
                 "title": "Invitar nuevo usuario",
-                "credentials": "Se enviará un correo con las credenciales de acceso al sistema.",
-                "email": "CORREO ELECTRÓNICO",
-                "email-placeholder": "compania.com",
-                "name": "Nombre",
-                "name-placeholder": "Ejm. 'Juan'",
-                "lastname": "Apellido",
-                "lastname-placeholder": "Ejm. 'Perez'",
+                "select-user": "Selecciona un usuario registrado",
+                "user-label": "USUARIO",
                 "rol": "Rol a asignar",
                 "btn-cancel": "Cancelar",
                 "btn-invite": "Enviar Invitación"
+            },
+            "invitations": {
+                "pending-title": "Invitaciones Pendientes",
+                "no-pending": "No tienes invitaciones pendientes",
+                "invited-message": "Has sido invitado a unirte al proyecto como {role}",
+                "success-title": "Invitación enviada",
+                "success-detail": "El usuario ha sido invitado exitosamente.",
+                "error-title": "Error",
+                "error-detail": "Ocurrió un error al enviar la invitación."
             }
         },
         "workers": {
@@ -668,13 +700,24 @@
                 "tools-add": "Selecciona una maquinaria real...",
                 "tools-placeholder": "Nombre del equipo...",
                 "btn-save": "Guardar Obrero",
-                "btn-cancel": "Cancelar"
+                "btn-cancel": "Cancelar",
+                "errors": {
+                    "dni-invalid": "El DNI debe tener exactamente 8 dígitos numéricos.",
+                    "name-invalid": "El nombre debe contener solo letras, espacios y guiones.",
+                    "role-required": "El cargo / cuadrilla es obligatorio."
+                }
             }
         }
     },
     "signatures": {
+        "create": {
+            "auto_sign": "Tú firmarás este documento automáticamente como: {user}"
+        },
         "page": {
             "title": "Documentos",
+            "subtitle": "Gestione, firme y exporte documentos técnicos, actas y RNCs de la obra.",
+            "export_btn": "Exportar Dossier",
+            "export_modal_title": "Exportar Dossier de Calidad",
             "pending-title": "Documentos Pendientes de Tu Firma",
             "signed-title": "Documentos Firmados",
             "deadline": "Vence",
@@ -692,7 +735,8 @@
             "howto-step2": "Haz clic en 'Sign Document'",
             "howto-step3": "Ingresa el código de verificación",
             "howto-step4": "La firma se registra automáticamente",
-            "btn-create": "Crear Documento"
+            "btn-create": "Crear Documento",
+            "created": "Documento creado correctamente."
         },
         "dialog": {
             "add-document-title": "Crear Nuevo Documento",
@@ -716,7 +760,10 @@
             "title": "Sign Document",
             "description": "Ingresa el código de verificación",
             "token-sent": "Se ha enviado un código de 6 dígitos a tu correo",
-            "btn-confirm": "Confirmar Firma"
+            "btn-confirm": "Confirmar Firma",
+            "tokenError": "El código ingresado es incorrecto. Verifica el código de 6 dígitos enviado a tu correo.",
+            "signed": "Documento firmado correctamente.",
+            "send-error": "No se pudo enviar el código de verificación."
         }
     },
     "budget": {
@@ -945,6 +992,7 @@
             },
             "errors": {
                 "detail-required": "Debe ingresar un detalle de asignación.",
+                "worker-required": "Debe seleccionar un obrero para asignar.",
                 "save-failed": "No se pudo asignar el equipo."
             },
             "success": {
@@ -1011,6 +1059,39 @@
             "errors": {
                 "save-failed": "No se pudo habilitar el equipo."
             }
+        },
+        "catalog": {
+            "button-add": "Nuevo al Catálogo",
+            "dialog-title": "Agregar Equipo al Catálogo",
+            "fields": {
+                "name": "Nombre",
+                "brand": "Marca",
+                "model": "Modelo",
+                "serial-number": "Número de Serie",
+                "acquisition-date": "Fecha de Adquisición"
+            },
+            "placeholders": {
+                "name": "Ingrese nombre del equipo",
+                "brand": "Ingrese marca",
+                "model": "Ingrese modelo",
+                "serial-number": "Ingrese número de serie",
+                "acquisition-date": "AAAA-MM-DD"
+            },
+            "actions": {
+                "cancel": "Cancelar",
+                "submit": "Agregar al Catálogo"
+            },
+            "errors": {
+                "name-required": "El nombre es obligatorio.",
+                "brand-required": "La marca es obligatoria.",
+                "model-required": "El modelo es obligatorio.",
+                "serial-number-required": "El número de serie es obligatorio.",
+                "save-failed": "No se pudo agregar el equipo al catálogo."
+            },
+            "success": {
+                "summary": "Agregado",
+                "detail": "Equipo agregado al catálogo correctamente."
+            }
         }
     },
     "logistics-tabs": {
@@ -1063,6 +1144,89 @@
         "total_suffix": "Total",
         "empty_short": "Sin notificaciones pendientes",
         "back": "Volver",
-        "view_all": "Ver todas las notificaciones"
+        "view_all": "Ver todas las notificaciones",
+        "types": {
+            "ProjectInvitation": "Invitación de Proyecto",
+            "General": "Notificación"
+        }
+    },
+    "time": {
+        "just_now": "Justo ahora",
+        "minutes": "Hace {count} minutos",
+        "hours": "Hace {count} horas",
+        "days": "Hace {count} días",
+        "yesterday": "Ayer"
+    },
+    "rnc": {
+        "register": {
+            "title": "Registrar RNC",
+            "subtitle": "Genere una alerta inmediata para el equipo de diseño",
+            "project": "Proyecto",
+            "incidence_title": "Título de la incidencia",
+            "incidence_title_ph": "Ej. Error de plomada en muro",
+            "specialty": "Especialidad afectada",
+            "specialty_ph": "Ej. Estructuras...",
+            "severity": "Nivel de severidad",
+            "description": "Descripción detallada",
+            "description_ph": "Explique la falla técnica...",
+            "evidence": "Evidencia Fotográfica (Obligatorio)",
+            "upload_btn": "Subir evidencia",
+            "upload_hint": "Haga clic para cargar la foto",
+            "evidence_error": "Debe adjuntar la evidencia visual.",
+            "cancel_btn": "Cancelar",
+            "submit_btn": "Registrar y Notificar",
+            "save_error": "No se pudo guardar el reporte debido a un error en el servidor."
+        }
+    },
+    "progress-monitoring": {
+        "advances": {
+            "title": "Supervisión de Progreso",
+            "subtitle": "Registra los avances por especialidad.",
+            "newBtn": "Nuevo Avance",
+            "filterProject": "Filtrar por Proyecto",
+            "filterSpecialty": "Filtrar por Especialidad",
+            "filterWeek": "Filtrar por Semana",
+            "weeklyReport": "Reporte Semanal",
+            "specialties": {
+                "structures": "Estructuras",
+                "installations": "Instalaciones",
+                "architecture": "Arquitectura"
+            }
+        },
+        "table": {
+            "date": "Fecha",
+            "activity": "Actividad",
+            "specialty": "Especialidad",
+            "progress": "Progreso",
+            "weight": "Peso",
+            "project": "Proyecto",
+            "status": "Estado"
+        },
+        "tabs": {
+            "log": "Registro",
+            "photos": "Fotos"
+        },
+        "actions": {
+            "export": "Exportar",
+            "upload": "Subir"
+        },
+        "filters": {
+            "activity": "Actividad",
+            "specialty": "Especialidad",
+            "start_date": "Fecha Inicio",
+            "end_date": "Fecha Fin"
+        }
+    },
+    "errors": {
+        "activity_exists": "Ya existe una actividad con este nombre.",
+        "no_active_project": "No se ha seleccionado ningún proyecto activo.",
+        "progress_exceeds": "La suma del progreso supera el 100%.",
+        "id_required_delete": "El ID es requerido para la eliminación.",
+        "project_not_found": "Proyecto no encontrado.",
+        "expenses_mini_advance": "No puedes registrar gastos en un miniavance.",
+        "item_not_found": "Elemento no encontrado."
+    },
+    "warnings": {
+        "select_project": "Debe seleccionar un proyecto para continuar."
     }
 }

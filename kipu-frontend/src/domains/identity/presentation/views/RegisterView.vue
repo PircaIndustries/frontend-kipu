@@ -140,7 +140,7 @@ async function handleOAuthSuccess(userInfo) {
         const exists = await identityApi.checkEmailExists(emailVal);
         if (exists) {
             // Log in normally
-            const response = await axios.get(`${import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:3000/api/v1'}/identities`, {
+            const response = await axios.get(`${import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:5230/api/v1'}/identities`, {
                 params: { email: emailVal }
             });
             const user = response.data.find(u => u.email === emailVal);

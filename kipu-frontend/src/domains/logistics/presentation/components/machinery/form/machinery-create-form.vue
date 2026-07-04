@@ -73,11 +73,10 @@ function save() {
 
   saving.value = true
 
-  const newId = `asig-${Date.now()}`
   const assignment = {
-    id: newId,
     projectId: localStorage.getItem('currentProjectId') || 'proj-01',
     machineryId: selectedMachine.value.id,
+    name: selectedMachine.value.name,
     status: selectedWorker.value ? 'IN_USE' : 'AVAILABLE',
     assignedTo: selectedWorker.value?.id || null,
     registrationDate: new Date().toISOString(),
@@ -94,6 +93,14 @@ function save() {
     })
     emit('saved')
     close()
+  }, () => {
+    toast.add({
+      severity: 'error',
+      summary: t('common.error'),
+      detail: t('machinery.create.errors.save-failed'),
+      life: 4000
+    })
+    saving.value = false
   })
 }
 
