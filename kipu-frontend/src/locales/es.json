@@ -156,14 +156,27 @@
                 "status_pending": "Firma Pendiente",
                 "deadline_label": "Fecha Límite para Aprobación",
                 "btn_cancel": "Cancelar",
-                "btn_submit": "Registrar Documento"
+                "btn_submit": "Registrar Documento",
+                "legal_title": "Verificación de Documento",
+                "legal_question": "¿Es este un documento de índole legal que requiere firma?",
+                "legal_yes": "Sí, requiere firma legal",
+                "legal_no": "No, solo subir documento",
+                "file_label": "Archivo del Documento / Plano (Máx 100MB) *",
+                "file_error_size": "El archivo supera el límite de 100MB.",
+                "file_error_req": "Debe seleccionar un archivo.",
+                "edit_title": "Editar Documento"
             },
             "table": {
                 "name": "Nombre Documento / Plano",
                 "type": "Tipo",
                 "version": "Versión",
                 "signature": "Firma Digital",
-                "expires": "Vence"
+                "expires": "Vence",
+                "added_on": "Agregado el",
+                "actions": "Acciones",
+                "action_download": "Descargar",
+                "action_edit": "Editar nombre",
+                "action_delete": "Eliminar"
             }
         },
         "select_title": "Seleccionar Proyecto",
@@ -210,62 +223,93 @@
     },
     "execution": {
         "calendar": {
-            "today": "Ir al día de hoy",
-            "detailTitle": "Historial de Avances: {activity}",
+            "today": "Ir a hoy",
+            "detailTitle": "Historial de Avance: {activity}",
             "emptyState": "Aún no hay avances programados para este mes."
         },
         "advances": {
-            "title": "Control de Avances",
-            "activityHistory": {
-                "title": "Historial de Avances: {activity}",
-                "date": "FECHA",
-                "percentage": "AVANCE (%)",
-                "edit": "Editar",
-                "addVersion": "Registrar nuevo miniavance",
-                "editMain": "Editar actividad principal"
-            },
-            "create": {
-                "fields": {
-                    "photos": "Fotos Adicionales",
-                    "project": "Proyecto"
-                }
-            },
-            "subtitle": "Historial de registros diarios y estados de ejecución.",
+            "title": "Control de Avance de Obra",
+            "subtitle": "Registros diarios e historial del estado de ejecución.",
             "newBtn": "Nuevo Avance Diario",
-            "filterSpecialty": "Filtrar por: Especialidad",
+            "filterSpecialty": "Filtrar por Especialidad",
             "filterWeek": "Rango de fechas",
-            "filterProject": "Filtrar por: Proyecto",
-            "weeklyReport": "Has registrado {count} avances en este proyecto.",
+            "weeklyReport": "Has registrado {count} avances.",
             "specialties": {
                 "structures": "Estructuras",
                 "installations": "Instalaciones",
                 "architecture": "Arquitectura"
             },
+            "activityHistory": {
+                "title": "Historial de Avance: {activity}",
+                "date": "FECHA",
+                "percentage": "AVANCE (%)",
+                "edit": "Editar",
+                "addVersion": "Registrar nuevo mini-avance",
+                "editMain": "Editar actividad principal"
+            },
+            "create": {
+                "title": "Nuevo Avance Diario",
+                "editTitle": "Editar Registro de Avance",
+                "submitBtn": "Guardar Avance",
+                "simulatedNotice": "Funcionalidad simulada en esta versión.",
+                "discardHeader": "Confirmar Descarte",
+                "discardMessage": "Tienes cambios sin guardar. ¿Estás seguro de que deseas salir?",
+                "deleteHeader": "Confirmar Eliminación",
+                "deleteMessage": "¿Estás seguro de que deseas eliminar este registro de avance? Esta acción no se puede deshacer.",
+                "fields": {
+                    "date": "Fecha de Avance",
+                    "specialty": "Especialidad",
+                    "activity": "Actividad Realizada",
+                    "location": "Ubicación/Sector",
+                    "progress": "Porcentaje de Avance",
+                    "weight": "Peso de la Actividad",
+                    "description": "Descripción Detallada",
+                    "responsible": "Responsable",
+                    "crewSize": "Tamaño de la Cuadrilla",
+                    "weather": "Condiciones Climáticas",
+                    "photos": "Fotos de Avance",
+                    "project": "Proyecto Asignado"
+                },
+                "placeholders": {
+                    "activity": "ej., Vaciado de concreto",
+                    "location": "ej., Nivel 2",
+                    "select_specialty": "Seleccionar especialidad",
+                    "select_responsible": "Seleccionar un gestor"
+                },
+                "dailyStats": {
+                    "title": "Estadísticas Diarias",
+                    "personnel": "Personal:",
+                    "weather": "Clima:"
+                },
+                "successTitle": "Nuevo Avance Registrado",
+                "successMessage": "El avance se ha registrado con éxito."
+            },
             "tabs": {
                 "registry": "Registro de Avance (PPC)",
-                "photoLog": "Bitácora Fotográfica",
-                "calendar": "Calendario de Avances"
+                "photoLog": "Registro Fotográfico",
+                "calendar": "Calendario"
             },
             "photoLog": {
                 "title": "Galería de Evidencias",
-                "noPhotos": "No hay fotos registradas para este periodo.",
-                "viewFull": "Ver pantalla completa",
+                "noPhotos": "No se registraron fotos para este periodo.",
+                "viewFull": "Ver Pantalla Completa",
                 "filterBy": "Especialidad:",
-                "uploadNotice": "Funcionalidad disponible próximamente.",
-                "exportNotice": "Exportación simulada correctamente."
-            }
+                "uploadNotice": "Funcionalidad próximamente disponible.",
+                "exportNotice": "Exportación simulada con éxito."
+            },
+            "filterProject": "Filtrar por Proyecto"
         },
-        "impedimentLabel": "Motivo de Impedimento",
+        "impedimentLabel": "Motivo del Impedimento",
         "status": {
             "COMPLETED": "COMPLETADO",
-            "IN_PROGRESS": "EN CURSO",
-            "DELAYED": "DEMORADO",
+            "IN_PROGRESS": "EN PROGRESO",
+            "DELAYED": "RETRASADO",
             "ACTIVE": "ACTIVO",
             "FINISHED": "FINALIZADO"
         },
         "statusLabel": "Estado",
         "statusOptions": {
-            "progress": "En Avance",
+            "progress": "En Progreso",
             "blocked": "Bloqueado"
         },
         "submitBtn": "Registrar Avance",
@@ -278,16 +322,44 @@
             "status": "ESTADO",
             "project": "PROYECTO"
         },
-        "taskLabel": "Partida",
+        "taskLabel": "Tarea",
         "title": "Registro de Avance Diario",
         "create": {
+            "title": "Nuevo Avance Diario",
+            "submitBtn": "Guardar Avance",
+            "discardHeader": "Confirmar Descarte",
+            "discardMessage": "Tienes cambios sin guardar. ¿Estás seguro de que deseas salir?",
             "deleteHeader": "Confirmar Eliminación",
-            "deleteMessage": "¿Estás seguro de eliminar este registro?"
+            "deleteMessage": "¿Estás seguro de que deseas eliminar este registro de avance? Esta acción no se puede deshacer.",
+            "fields": {
+                "date": "Fecha de Avance",
+                "specialty": "Especialidad",
+                "activity": "Actividad Realizada",
+                "weight": "Peso",
+                "location": "Ubicación/Sector",
+                "progress": "Porcentaje de Avance",
+                "description": "Descripción Detallada",
+                "responsible": "Responsable",
+                "crewSize": "Tamaño de la Cuadrilla",
+                "weather": "Condiciones Climáticas",
+                "photos": "Fotos de Avance",
+                "project": "Proyecto Asignado"
+            },
+            "placeholders": {
+                "activity": "ej., Vaciado de concreto...",
+                "project": "Seleccionar un proyecto",
+                "location": "ej., Nivel 2 - Eje A-B",
+                "date": "Seleccionar fecha"
+            },
+            "photos": {
+                "add": "Agregar foto",
+                "empty": "Arrastra las imágenes aquí para subirlas"
+            }
         },
         "weather": {
             "sunny": "Soleado",
             "cloudy": "Nublado",
-            "rainy": "Lluvia",
+            "rainy": "Lluvioso",
             "storm": "Tormenta"
         }
     },

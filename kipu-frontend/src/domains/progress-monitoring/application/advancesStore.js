@@ -42,7 +42,12 @@ export const useAdvanceStore = defineStore('advances', () => {
         try {
             const currentId = projectsStore.currentProjectId;
             if (currentId) {
-                advances.value = await api.getAll(currentId);
+                const localData = localStorage.getItem(`mock_advances_${currentId}`);
+                if (localData) {
+                    advances.value = JSON.parse(localData);
+                } else {
+                    advances.value = [];
+                }
             } else {
                 advances.value = [];
             }
@@ -64,8 +69,11 @@ export const useAdvanceStore = defineStore('advances', () => {
             if (!currentId) throw new Error(i18n.global.t('errors.no_active_project'));
 
             newEntry.projectId = currentId;
-            const savedEntry = await api.create(newEntry);
-            advances.value = [savedEntry, ...advances.value];
+            newEntry.id = `adv-${Date.now()}`;
+            newEntry.lastUpdate = new Date().toISOString();
+            
+            advances.value = [newEntry, ...advances.value];
+            localStorage.setItem(`mock_advances_${currentId}`, JSON.stringify(advances.value));
         } catch (error) {
             console.error(error);
             throw error;
@@ -80,10 +88,13 @@ export const useAdvanceStore = defineStore('advances', () => {
     // ADDED: Action to update an existing advance
     const updateAdvance = async (id, updatedData) => {
         try {
-            const updatedEntry = await api.update(id, updatedData);
             const index = advances.value.findIndex(item => String(item.id) === String(id));
             if (index !== -1) {
-                advances.value[index] = updatedEntry;
+                updatedData.lastUpdate = new Date().toISOString();
+                advances.value[index] = { ...advances.value[index], ...updatedData };
+                
+                const currentId = projectsStore.currentProjectId;
+                localStorage.setItem(`mock_advances_${currentId}`, JSON.stringify(advances.value));
             }
         } catch (error) {
             console.error(error);
@@ -93,8 +104,10 @@ export const useAdvanceStore = defineStore('advances', () => {
     // ADDED: Action to delete an advance
     const deleteAdvance = async (id) => {
         try {
-            await api.delete(id);
             advances.value = advances.value.filter(item => String(item.id) !== String(id));
+            
+            const currentId = projectsStore.currentProjectId;
+            localStorage.setItem(`mock_advances_${currentId}`, JSON.stringify(advances.value));
         } catch (error) {
             console.error(error);
         }

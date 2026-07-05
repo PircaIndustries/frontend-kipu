@@ -32,10 +32,9 @@ const specialtiesOptions = computed(() => [
 
 const operationalManagers = computed(() => {
   if (teamStore && teamStore.teamUsers) {
+    const currentProjectId = localStorage.getItem('currentProjectId')
     return teamStore.teamUsers.filter(u =>
-        u.isActive &&
-        (String(u.role).toLowerCase().includes('gestor') ||
-            String(u.role).toLowerCase().includes('manager'))
+        u.isActive && String(u.projectId) === String(currentProjectId)
     );
   }
   return [];
@@ -119,6 +118,12 @@ const saveProgress = async () => {
 
   saveError.value = '';
 
+  const projectStore = useProjectsStore();
+  if (projectStore.currentProject?.status?.toLowerCase() === 'paralizada') {
+     saveError.value = "No puedes registrar avances. Debes reanudar la obra seleccionando el estado 'En ejecución' desde el panel de proyecto.";
+     return;
+  }
+
   // Form Validation
   if (!form.date || !form.specialty || !form.activityName || form.percentage === '' || form.weight === '' || !form.responsible || form.workers === '') {
     saveError.value = "Por favor, complete todos los campos obligatorios (*).";
@@ -164,7 +169,7 @@ const saveProgress = async () => {
       await projectStore.updateProjectStatus(
           projectStore.currentProjectId,
           projectStore.currentProject.status,
-          'Actualización automática por avance diario',
+          form.activityName || 'Registro de avance diario',
           projectStore.currentProject.progress
       );
     }

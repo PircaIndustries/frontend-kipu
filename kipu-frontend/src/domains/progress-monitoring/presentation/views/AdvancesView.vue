@@ -8,11 +8,15 @@ import { useProjectsStore } from '@/domains/project-management/data/useProjectsS
 import DatePicker from 'primevue/datepicker';
 import Select from 'primevue/select';
 import InputText from 'primevue/inputtext';
+import Dialog from 'primevue/dialog';
+import Button from 'primevue/button';
+import { useToast } from 'primevue/usetoast';
 
 const { t } = useI18n();
 const router = useRouter();
 const store = useAdvanceStore();
 const projectsStore = useProjectsStore();
+const toast = useToast();
 
 // Calendar range state
 const dates = ref(null);
@@ -44,10 +48,16 @@ const getStatusBadgeClass = (s) => {
   return `${base} bg-blue-100 text-blue-500`;
 };
 
+const showHaltedDialog = ref(false);
+
 const navigateToCreate = () => {
   // ADDED: Prevent navigation if no project is active
   if (!projectsStore.currentProjectId) {
     alert("Select a project first");
+    return;
+  }
+  if (projectsStore.currentProject?.status?.toLowerCase() === 'paralizada') {
+    showHaltedDialog.value = true;
     return;
   }
   router.push('/advances/new');
@@ -114,35 +124,6 @@ const navigateToHistory = (activityName) => {
           <th class="px-6 py-4">{{ t('execution.table.status') }}</th>
         </tr>
         </thead>
-        <!--<tbody class="divide-y divide-gray-100">
-        <tr v-for="item in store.filteredAdvances" :key="item.id"
-            class="hover:bg-gray-50 transition-colors cursor-pointer"
-            @click="navigateToHistory(item.activityName)">
-          <td class="px-6 py-4">{{ new Date(item.lastUpdate).toLocaleDateString() }}</td>
-          <td class="px-6 py-4 font-bold text-gray-800">{{ item.activityName }}</td>
-          <td class="px-6 py-4 text-gray-500">{{ item.specialty }}</td>
-
-          <!- Progress Bar Cell ->
-          <td class="px-6 py-4">
-            <div class="flex items-center gap-3">
-              <div class="w-24 bg-gray-200 rounded-full h-2">
-                <div class="bg-blue-600 h-2 rounded-full" :style="{ width: item.currentPercentage + '%' }"></div>
-              </div>
-              <span class="font-bold text-sm">{{ item.currentPercentage }}%</span>
-            </div>
-          </td>
-
-          <!- Weight Cell ->
-          <td class="px-6 py-4 font-bold text-gray-700">{{ item.weight }}</td>
-
-          <!- Status Cell ->
-          <td class="px-6 py-4">
-          <span :class="getStatusBadgeClass(item.status)">
-            {{ t(`execution.status.${(item.status || 'ACTIVE').toUpperCase()}`) }}
-          </span>
-          </td>
-        </tr>
-        </tbody>-->
 
         <tbody class="divide-y divide-gray-100">
         <tr v-for="group in store.groupedAdvances" :key="group.activityName"
@@ -183,5 +164,17 @@ const navigateToHistory = (activityName) => {
       <i class="pi pi-info-circle text-blue-500"></i>
       <span>{{ t('execution.advances.weeklyReport', { count: store.filteredAdvances.length }) }}</span>
     </div>
+
+    <Dialog v-model:visible="showHaltedDialog" modal header="Proyecto Paralizado" :style="{ width: '400px' }">
+      <div class="flex items-center gap-4 mb-4">
+        <i class="pi pi-exclamation-triangle text-orange-500 text-4xl"></i>
+        <p class="m-0 text-gray-700">
+          No puedes registrar avances. Debes reanudar la obra seleccionando el estado <strong>"En ejecución"</strong> desde el panel de proyecto.
+        </p>
+      </div>
+      <template #footer>
+        <Button label="Entendido" icon="pi pi-check" @click="showHaltedDialog = false" autofocus />
+      </template>
+    </Dialog>
   </div>
 </template>
