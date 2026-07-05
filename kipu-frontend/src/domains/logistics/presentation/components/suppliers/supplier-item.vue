@@ -4,7 +4,10 @@ import { useI18n } from 'vue-i18n'
 import CardComponent from '@/shared/presentation/components/cardComponent.vue'
 
 const { t } = useI18n()
-const props = defineProps({ supplier: { type: Object, required: true } })
+const props = defineProps({
+  supplier: { type: Object, required: true },
+  canEdit: { type: Boolean, default: true }
+})
 const emit = defineEmits(['edit', 'delete'])
 
 const supplierFields = computed(() => [
@@ -25,9 +28,9 @@ const statusSeverity = computed(() =>
       :badge-text="supplier.isActive ? 'ACTIVE' : 'INACTIVE'"
       :badge-severity="statusSeverity"
       :fields="supplierFields"
-      :show-footer="true"
+      :show-footer="canEdit"
   >
-    <template #footer>
+    <template v-if="canEdit" #footer>
       <div class="flex gap-3">
         <pv-button
             type="button"

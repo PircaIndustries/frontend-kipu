@@ -29,11 +29,8 @@ const useRequestStore = defineStore('request', () => {
     const requestDetailsView = computed(() => {
         const currentMaterials = materials.value;
         const currentCategories = categories.value.filter(c => c.isActive);
-        const projectId = projectsStore.currentProjectId;
 
-        return requests.value
-            .filter(request => !projectId || !request.projectId || String(request.projectId) === String(projectId))
-            .map(request => {
+        return requests.value.map(request => {
                 const enrichedItems = request.items.map(item => {
                     const material = currentMaterials.find(m => m.id === item.materialCatalogId);
                     const category = currentCategories.find(c => c.id === material?.categoryId);
@@ -82,10 +79,16 @@ const useRequestStore = defineStore('request', () => {
     function toggleRefusedRequestFilter() { refusedRequestFilter.value = !refusedRequestFilter.value; pendingRequestFilter.value = false; approvedRequestFilter.value = false; }
 
     function fetchRequests() {
-        requestApi.getMaterialRequests().then(response => {
+        const projectId = Number(projectsStore.currentProjectId) || null;
+        console.log('[requests.store] fetchRequests, projectId:', projectId, 'from store:', projectsStore.currentProjectId);
+        requestApi.getMaterialRequestsByProject(projectId).then(response => {
+            console.log('[requests.store] fetchRequests response:', response?.data);
             requests.value = MaterialRequestAssembler.toEntitiesFromResponse(response);
             requestsLoaded.value = true;
-        }).catch(error => { errors.value.push(error); });
+        }).catch(error => {
+            console.error('[requests.store] fetchRequests error:', error);
+            errors.value.push(error);
+        });
     }
 
     function fetchMaterials() {
@@ -104,13 +107,16 @@ const useRequestStore = defineStore('request', () => {
 
     function createRequest(request, onSuccess, onError) {
         if (!request.projectId) {
-            request.projectId = projectsStore.currentProjectId;
+            request.projectId = Number(projectsStore.currentProjectId) || null;
         }
+        console.log('[requests.store] createRequest payload:', JSON.stringify(request));
         requestApi.createMaterialRequest(request).then(response => {
+            console.log('[requests.store] createRequest response:', response?.data);
             const newRequests = MaterialRequestAssembler.toEntitiesFromResponse(response);
             requests.value.push(...newRequests);
             onSuccess?.();
         }).catch(error => {
+            console.error('[requests.store] createRequest error:', error);
             errors.value.push(error);
             onError?.();
         });

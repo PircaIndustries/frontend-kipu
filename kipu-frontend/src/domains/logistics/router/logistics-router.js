@@ -5,6 +5,7 @@ const RequestsPage = () => import('@/domains/logistics/presentation/pages/reques
 const RequestsCreateForm = () => import('@/domains/logistics/presentation/components/requests/form/request-create-form.vue');
 const SuppliersPage = () => import('@/domains/logistics/presentation/pages/suppliers/suppliers-page.vue');
 const WastePage = () => import('@/domains/logistics/presentation/pages/waste/waste-page.vue');
+const CatalogPage = () => import('@/domains/logistics/presentation/pages/catalog/catalog-page.vue');
 
 const logisticsRoutes = [
     {
@@ -47,6 +48,12 @@ const logisticsRoutes = [
                 name: 'waste-list',
                 component: WastePage,
                 meta: { title: 'Waste page' }
+            },
+            {
+                path: 'catalog',
+                name: 'catalog-page',
+                component: CatalogPage,
+                meta: { title: 'Catalog page' }
             }
         ]
     }

@@ -1276,6 +1276,123 @@
         "tab-waste": "Waste",
         "tab-machinery": "Machinery & Equipment"
     },
+    "logistics-tabs": {
+        "tab-inventory": "Inventory",
+        "tab-requests": "Requests",
+        "tab-suppliers": "Suppliers",
+        "tab-waste": "Waste",
+        "tab-machinery": "Machinery",
+        "tab-catalog": "Catalog"
+    },
+    "catalog": {
+        "title": "Catalog",
+        "filters": {
+            "search": "SEARCH",
+            "search-material": "Search by material name",
+            "search-machinery": "Search by name, brand or model"
+        },
+        "tabs": {
+            "materials": "Materials Catalog",
+            "machinery": "Machinery Catalog"
+        },
+        "materials": {
+            "button-create": "New Material",
+            "empty": "No materials in catalog.",
+            "card": {
+                "name": "Name",
+                "category": "Category",
+                "measure-unit": "Unit of Measure",
+                "edit": "Edit",
+                "delete": "Delete"
+            },
+            "form": {
+                "name": "Name",
+                "name-placeholder": "Enter material name",
+                "category": "Category",
+                "category-placeholder": "Select category",
+                "measure-unit": "Unit of Measure",
+                "measure-unit-placeholder": "Select unit"
+            },
+            "create": {
+                "title": "New Material",
+                "submit": "Save Material",
+                "success": {
+                    "summary": "Created",
+                    "message": "Material added to catalog successfully."
+                },
+                "error": {
+                    "message": "Error creating material."
+                }
+            },
+            "edit": {
+                "title": "Edit Material",
+                "submit": "Save Changes",
+                "success": {
+                    "summary": "Updated",
+                    "message": "Material updated successfully."
+                },
+                "error": {
+                    "message": "Error updating material."
+                }
+            },
+            "delete": {
+                "title": "Delete Material",
+                "message": "Are you sure you want to delete",
+                "success": "Material deleted successfully."
+            }
+        },
+        "machinery": {
+            "button-create": "New Machinery",
+            "empty": "No machinery in catalog.",
+            "card": {
+                "name": "Name",
+                "brand": "Brand",
+                "model": "Model",
+                "serial-number": "Serial Number",
+                "edit": "Edit",
+                "delete": "Delete"
+            },
+            "form": {
+                "name": "Name",
+                "name-placeholder": "Enter equipment name",
+                "brand": "Brand",
+                "brand-placeholder": "Enter brand",
+                "model": "Model",
+                "model-placeholder": "Enter model",
+                "serial-number": "Serial Number",
+                "serial-number-placeholder": "Enter serial number",
+                "acquisition-date": "Acquisition Date",
+                "acquisition-date-placeholder": "Select date"
+            },
+            "create": {
+                "title": "New Machinery",
+                "submit": "Save Machinery",
+                "success": {
+                    "summary": "Created",
+                    "message": "Machinery added to catalog successfully."
+                },
+                "error": {
+                    "message": "Error creating machinery."
+                }
+            },
+            "edit": {
+                "title": "Edit Machinery",
+                "submit": "Save Changes",
+                "success": {
+                    "summary": "Updated",
+                    "message": "Machinery updated successfully."
+                },
+                "error": {
+                    "message": "Error updating machinery."
+                }
+            },
+            "delete": {
+                "title": "Delete Machinery",
+                "message": "Are you sure you want to delete",
+                "success": "Machinery deleted successfully."
+            }
+        }
+    },
     "errors": {
         "activity_exists": "An activity with this name already exists.",
         "no_active_project": "No active project selected.",

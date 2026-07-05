@@ -250,8 +250,7 @@ const inviteForm = ref({ selectedUser: null, role: '' })
 const roleOptions = computed(() => {
   const options = [
     { label: 'Gestor', value: 'Gestor Operativo' },
-    { label: 'Logística', value: 'Logistica' },
-    { label: 'Cliente', value: 'Cliente' }
+    { label: 'Logística', value: 'Logistica' }
   ]
   if (isAdminUser.value) {
     options.unshift({ label: 'Administrador', value: 'Administrador' })

@@ -2,19 +2,27 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { useCurrentUser } from '@/domains/logistics/application/useCurrentUser.js';
 
 const route = useRoute();
 const { t } = useI18n();
+const { isLogistics, isGestor } = useCurrentUser();
 
 const currentRoute = computed(() => route.path);
 
-const tabs = [
-  { label: t('logistics-tabs.tab-inventory'), route: '/logistics/inventory' },
-  { label: t('logistics-tabs.tab-requests'),  route: '/logistics/requests'  },
-  { label: t('logistics-tabs.tab-suppliers'), route: '/logistics/suppliers' },
-  { label: t('logistics-tabs.tab-waste'),     route: '/logistics/waste'     },
-  { label: t('logistics-tabs.tab-machinery'), route: '/logistics/machinery' },
-];
+const tabs = computed(() => {
+  const base = [
+    { label: t('logistics-tabs.tab-inventory'), route: '/logistics/inventory' },
+    { label: t('logistics-tabs.tab-requests'),  route: '/logistics/requests'  },
+    { label: t('logistics-tabs.tab-suppliers'), route: '/logistics/suppliers' },
+    { label: t('logistics-tabs.tab-waste'),     route: '/logistics/waste'     },
+    { label: t('logistics-tabs.tab-machinery'), route: '/logistics/machinery' },
+  ];
+  if (isLogistics() || isGestor()) {
+    base.push({ label: t('logistics-tabs.tab-catalog'), route: '/logistics/catalog' });
+  }
+  return base;
+});
 </script>
 
 <template>

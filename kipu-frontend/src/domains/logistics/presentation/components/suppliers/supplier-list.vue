@@ -1,6 +1,9 @@
 <script setup>
 import SupplierItem from './supplier-item.vue'
-defineProps({ suppliers: { type: Array, required: true } })
+defineProps({
+  suppliers: { type: Array, required: true },
+  canEdit: { type: Boolean, default: true }
+})
 const emit = defineEmits(['edit', 'delete'])
 </script>
 
@@ -10,6 +13,7 @@ const emit = defineEmits(['edit', 'delete'])
         v-for="supplier in suppliers"
         :key="supplier.id"
         :supplier="supplier"
+        :can-edit="canEdit"
         @edit="emit('edit', $event)"
         @delete="emit('delete', $event)"
     />

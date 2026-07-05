@@ -12,6 +12,11 @@ export class RequestsApi extends BaseApiLocal {
     }
 
     getMaterialRequests() { return this.#materialRequestsEndpoint.getAll(); }
+    getMaterialRequestsByProject(projectId) {
+        return projectId
+            ? this.http.get(`${materialRequestsEndpointPath}/project/${projectId}`)
+            : this.#materialRequestsEndpoint.getAll();
+    }
     getMaterialRequestById(id) { return this.#materialRequestsEndpoint.getById(id); }
     createMaterialRequest(resource) { return this.#materialRequestsEndpoint.create(resource); }
 
