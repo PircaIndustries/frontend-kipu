@@ -170,6 +170,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useDocumentStore } from '../../application/document.store.js'
@@ -181,6 +182,7 @@ import DocumentCreateDialog from '../components/DocumentCreateDialog.vue'
 
 const { t } = useI18n()
 const toast = useToast()
+const route = useRoute()
 const documentStore = useDocumentStore()
 const teamUserStore = useTeamUserStore()
 
@@ -233,6 +235,10 @@ const generateDossierPDF = () => {
 }
 
 onMounted(async () => {
+  if (route.query.openCreate === 'true') {
+    openCreateDialog()
+  }
+
   teamUserStore.loadCurrentUser()
   const currentProjectId = localStorage.getItem('currentProjectId')
 

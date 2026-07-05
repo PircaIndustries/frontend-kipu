@@ -31,12 +31,12 @@ export const useProjectsStore = defineStore('projects', () => {
         const advanceStore = useAdvanceStore();
         const projectAdvances = advanceStore.advances.filter(a => a.projectId === baseProject.id);
 
-        // If no advances exist, it is in 'Planning' status with 0% progress
+        // If no advances exist, it is in 'Planning' status with 0% progress (unless it is halted)
         if (projectAdvances.length === 0) {
             return {
                 ...baseProject,
                 progress: 0,
-                status: 'Planificación' // Note: Ensure your i18n keys match this value
+                status: baseProject.status === 'Paralizada' ? 'Paralizada' : 'Planificación' // Note: Ensure your i18n keys match this value
             };
         }
 
@@ -91,7 +91,18 @@ export const useProjectsStore = defineStore('projects', () => {
                 console.log('🔍 loadProjects - Fetching from API...');
                 const data = await projectsApi.getAll();
                 console.log('🔍 loadProjects - API response:', data);
-                projects.value = data.map(p => new ProjectEntity(p));
+                projects.value = data.map(p => {
+                    const entity = new ProjectEntity(p);
+                    const localDocs = localStorage.getItem(`mock_docs_${entity.id}`);
+                    if (localDocs) {
+                        entity.documents = JSON.parse(localDocs);
+                    }
+                    const localLogs = localStorage.getItem(`mock_logs_${entity.id}`);
+                    if (localLogs) {
+                        entity.statusLogs = JSON.parse(localLogs);
+                    }
+                    return entity;
+                });
                 console.log('🔍 loadProjects - projects.value luego de mapear:', projects.value.length);
             } catch (error) {
                 console.error('🔍 loadProjects - ERROR:', error);
@@ -171,16 +182,27 @@ export const useProjectsStore = defineStore('projects', () => {
      */
     async function updateProjectStatus(id, status, justification, progress) {
         try {
-            const project = projects.value.find(p => p.id === id);
+            const project = projects.value.find(p => String(p.id) === String(id));
             if (!project) throw new Error(i18n.global.t('errors.project_not_found'));
 
             const currentProgress = typeof progress === 'number' ? progress : project.progress;
+            
+            const userStr = localStorage.getItem('currentUser');
+            let author = 'Sistema';
+            if (userStr) {
+                try {
+                    const u = JSON.parse(userStr);
+                    author = u.name || u.fullName || u.email || 'Sistema';
+                } catch(e) {}
+            }
+            
             const newLogEntry = {
                 id: `log-${Date.now()}`,
                 status: status,
-                date: new Date().toISOString().split('T')[0],
+                date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }),
                 justification: justification || 'Cambio de estado del proyecto.',
-                progress: currentProgress
+                progress: currentProgress,
+                author: author
             };
 
             const updatedLogs = [...(project.statusLogs || []), newLogEntry];
@@ -195,8 +217,14 @@ export const useProjectsStore = defineStore('projects', () => {
             }
 
             const updated = await projectsApi.updateStatus(id, payload);
+            
+            // Re-attach local data
+            updated.documents = project.documents;
+            updated.statusLogs = updatedLogs;
+            localStorage.setItem(`mock_logs_${id}`, JSON.stringify(updatedLogs));
+
             projects.value = projects.value.map(p =>
-                p.id === id ? new ProjectEntity(updated) : p
+                String(p.id) === String(id) ? new ProjectEntity(updated) : p
             );
         } catch (error) {
             console.error('Failed to update project status:', error);
@@ -211,28 +239,58 @@ export const useProjectsStore = defineStore('projects', () => {
      */
     async function addProjectDocument(projectId, documentData) {
         try {
-            const project = projects.value.find(p => p.id === projectId);
+            const project = projects.value.find(p => String(p.id) === String(projectId));
             if (!project) throw new Error(i18n.global.t('errors.project_not_found'));
 
             const newDoc = {
                 id: `doc-proj-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
                 name: documentData.name,
                 type: documentData.type || 'Plano',
-                version: documentData.version || 'v1.0',
-                uploadDate: new Date().toISOString().split('T')[0],
-                isSigned: documentData.isSigned || false,
-                deadline: documentData.deadline || ''
+                fileId: documentData.fileId || null,
+                fileName: documentData.fileName || '',
+                uploadDate: new Date().toISOString().split('T')[0]
             };
 
             const updatedDocs = [...(project.documents || []), newDoc];
 
-            const updated = await projectsApi.updateStatus(projectId, { documents: updatedDocs });
-            projects.value = projects.value.map(p =>
-                p.id === projectId ? new ProjectEntity(updated) : p
-            );
+            project.documents = updatedDocs;
+            localStorage.setItem(`mock_docs_${projectId}`, JSON.stringify(updatedDocs));
+            
             return newDoc;
         } catch (error) {
             console.error('Failed to add project document:', error);
+            throw error;
+        }
+    }
+
+    async function updateProjectDocument(projectId, docId, updates) {
+        try {
+            const project = projects.value.find(p => String(p.id) === String(projectId));
+            if (!project) throw new Error(i18n.global.t('errors.project_not_found'));
+
+            const updatedDocs = (project.documents || []).map(d => 
+                d.id === docId ? { ...d, ...updates } : d
+            );
+
+            project.documents = updatedDocs;
+            localStorage.setItem(`mock_docs_${projectId}`, JSON.stringify(updatedDocs));
+        } catch (error) {
+            console.error('Failed to update project document:', error);
+            throw error;
+        }
+    }
+
+    async function deleteProjectDocument(projectId, docId) {
+        try {
+            const project = projects.value.find(p => String(p.id) === String(projectId));
+            if (!project) throw new Error(i18n.global.t('errors.project_not_found'));
+
+            const updatedDocs = (project.documents || []).filter(d => d.id !== docId);
+
+            project.documents = updatedDocs;
+            localStorage.setItem(`mock_docs_${projectId}`, JSON.stringify(updatedDocs));
+        } catch (error) {
+            console.error('Failed to delete project document:', error);
             throw error;
         }
     }
@@ -245,7 +303,7 @@ export const useProjectsStore = defineStore('projects', () => {
         try {
             await projectsApi.delete(id);
             projects.value = projects.value.filter(p => p.id !== id);
-            if (currentProjectId.value === id) {
+            if (String(currentProjectId.value) === String(id)) {
                 currentProjectId.value = null;
             }
         } catch (error) {
@@ -290,6 +348,8 @@ export const useProjectsStore = defineStore('projects', () => {
         checkNameExists,
         updateProjectStatus,
         addProjectDocument,
+        updateProjectDocument,
+        deleteProjectDocument,
         deleteProject,
         syncProjectProgress
     };

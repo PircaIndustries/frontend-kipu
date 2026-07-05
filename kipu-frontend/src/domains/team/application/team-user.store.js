@@ -57,7 +57,18 @@ export const useTeamUserStore = defineStore('teamUser', () => {
         loading.value = true
         try {
             const response = await teamUserApi.getAllUsers(currentProjectId)
-            teamUsers.value = TeamUserAssembler.toEntitiesFromResponse(response)
+            const entities = TeamUserAssembler.toEntitiesFromResponse(response)
+            
+            const uniqueEntities = [];
+            const seenEmails = new Set();
+            for (const entity of entities) {
+                const identifier = entity.email || entity.id;
+                if (!seenEmails.has(identifier)) {
+                    seenEmails.add(identifier);
+                    uniqueEntities.push(entity);
+                }
+            }
+            teamUsers.value = uniqueEntities;
         } catch (error) {
             console.error('Error fetching users:', error)
         } finally {

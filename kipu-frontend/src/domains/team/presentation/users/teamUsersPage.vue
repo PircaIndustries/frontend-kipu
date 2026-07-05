@@ -3,6 +3,14 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
       <h1 class="text-2xl font-bold text-text-main">{{ $t('team.users.title') }}</h1>
       <div class="flex gap-3 items-center">
+        <Button
+          @click="refreshUsers"
+          :disabled="refreshCooldown > 0"
+          v-tooltip.bottom="'Actualizar'"
+          class="relative bg-white! text-text-main! border border-neutral-border! hover:bg-neutral-bg! w-10 h-10 p-0 flex items-center justify-center"
+        >
+          <i class="pi pi-refresh" :class="{ 'pi-spin': refreshCooldown > 0 }"></i>
+        </Button>
         <div class="relative">
           <Button
               @click="toggleInvitationsPanel"
@@ -246,6 +254,23 @@ const showInvitationsPanel = ref(false)
 const acceptingId = ref(null)
 const rejectingId = ref(null)
 const inviteForm = ref({ selectedUser: null, role: '' })
+const refreshCooldown = ref(0)
+let cooldownTimer = null
+
+const refreshUsers = async () => {
+  if (refreshCooldown.value > 0) return
+  
+  refreshCooldown.value = 5
+  await store.fetchUsers()
+  await store.fetchPendingInvitations()
+  
+  cooldownTimer = setInterval(() => {
+    refreshCooldown.value--
+    if (refreshCooldown.value <= 0) {
+      clearInterval(cooldownTimer)
+    }
+  }, 1000)
+}
 
 const roleOptions = computed(() => {
   const options = [

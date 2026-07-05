@@ -3,10 +3,14 @@ import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useAdvanceStore } from '@/domains/progress-monitoring/application/advancesStore.js';
+import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore.js';
+import { useToast } from 'primevue/usetoast';
 
 const route = useRoute();
 const router = useRouter();
 const store = useAdvanceStore();
+const projectsStore = useProjectsStore();
+const toast = useToast();
 const { t } = useI18n();
 
 const props = defineProps(['activityName']);
@@ -26,6 +30,15 @@ const editMainAdvance = () => {
 const editVersion = (id) => router.push(`/advances/edit/${id}`);
 
 const createNewVersion = () => {
+  if (projectsStore.currentProject?.status === 'Paralizada') {
+    toast.add({
+      severity: 'error',
+      summary: 'Proyecto Paralizado',
+      detail: 'No puedes registrar avances. Debes reanudar la obra seleccionando el estado "En ejecución" desde el panel de proyecto.',
+      life: 5000
+    });
+    return;
+  }
   router.push({
     name: 'CreateAdvance',
     query: {
