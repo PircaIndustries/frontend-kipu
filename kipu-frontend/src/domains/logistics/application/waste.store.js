@@ -4,9 +4,10 @@ import { MaterialWasteEntity } from "@/domains/logistics/domain/model/waste/mate
 import { MaterialWasteAssembler } from "@/domains/logistics/infrastructure/waste/materialWaste.assembler.js";
 import { WasteClassificationEntity } from "@/domains/logistics/domain/model/waste/wasteClassification.entity.js";
 import { WasteClassificationAssembler } from "@/domains/logistics/infrastructure/waste/wasteClassification.assembler.js";
-import { WasteApi } from "../infrastructure/waste.api.js";
+import { WasteRepository } from "../infrastructure/waste.api.js";
+import useInventoryStore from "./inventory.store.js"; // Importación integrada del store de inventario
 
-const wasteApi = new WasteApi();
+const wasteApi = new WasteRepository();
 
 const DEFAULT_CLASSIFICATIONS = [
     new WasteClassificationEntity({ id: 'wcls-001', name: 'Rotura' }),
@@ -25,15 +26,32 @@ const useWasteStore = defineStore('waste', () => {
     const classificationsLoaded = ref(false);
 
     function fetchWaste() {
-        wasteApi.getMaterialWastes().then(response => {
-            waste.value = MaterialWasteAssembler.toEntitiesFromResponse(response);
+        const inventoryStore = useInventoryStore();
+
+        wasteApi.getMaterialWastes().then(data => {
+            console.log("Datos crudos recibidos del backend:", data);
+
+            const entities = MaterialWasteAssembler.toEntitiesFromResponse(data);
+
+            // Mapeo integrado para cruzar los datos y resolver materialName y materialUnit
+            waste.value = entities.map(w => {
+                const matchedMaterial = inventoryStore.inventoryView.find(
+                    inv => Number(inv.materialId) === Number(w.materialId)
+                );
+                return {
+                    ...w,
+                    materialName: matchedMaterial ? matchedMaterial.materialName : `Material #${w.materialId}`,
+                    materialUnit: matchedMaterial ? matchedMaterial.materialUnit : 'U'
+                };
+            });
+
             wasteLoaded.value = true;
         }).catch(error => { errors.value.push(error); });
     }
 
     function fetchClassifications() {
-        wasteApi.getWasteClassifications().then(response => {
-            const fetched = WasteClassificationAssembler.toEntitiesFromResponse(response);
+        wasteApi.getWasteClassifications().then(data => {
+            const fetched = WasteClassificationAssembler.toEntitiesFromResponse(data);
             if (fetched.length > 0) {
                 classifications.value = fetched;
             }
@@ -44,8 +62,8 @@ const useWasteStore = defineStore('waste', () => {
     }
 
     function addClassification(name, onSuccess) {
-        wasteApi.createWasteClassification({ name }).then(response => {
-            const newItems = WasteClassificationAssembler.toEntitiesFromResponse(response);
+        wasteApi.createWasteClassification({ name }).then(data => {
+            const newItems = WasteClassificationAssembler.toEntitiesFromResponse(data);
             if (newItems.length > 0) {
                 classifications.value.push(...newItems);
             } else {
@@ -59,20 +77,41 @@ const useWasteStore = defineStore('waste', () => {
     }
 
     function addWaste(item, onSuccess) {
-        wasteApi.createMaterialWaste(item).then(response => {
-            const newItems = MaterialWasteAssembler.toEntitiesFromResponse(response);
-            waste.value.push(...newItems);
+        wasteApi.createMaterialWaste(item).then(data => {
+            const newItems = MaterialWasteAssembler.toEntitiesFromResponse(data);
+
+            // Hidratamos los nuevos elementos que se agregan al estado local inmediatamente
+            const inventoryStore = useInventoryStore();
+            const hydratedItems = newItems.map(w => {
+                const matchedMaterial = inventoryStore.inventoryView.find(inv => inv.materialId === w.materialId);
+                return {
+                    ...w,
+                    materialName: matchedMaterial ? matchedMaterial.materialName : `Material #${w.materialId}`,
+                    materialUnit: matchedMaterial ? matchedMaterial.materialUnit : 'U'
+                };
+            });
+
+            waste.value.push(...hydratedItems);
             onSuccess?.();
         }).catch(error => { errors.value.push(error); });
     }
 
     function updateWaste(id, updates, onSuccess) {
-        const payload = { id, ...updates };
-        wasteApi.updateMaterialWaste(payload).then(response => {
-            const [updated] = MaterialWasteAssembler.toEntitiesFromResponse(response);
+        wasteApi.updateMaterialWaste(id, updates).then(data => {
+            const [updated] = MaterialWasteAssembler.toEntitiesFromResponse(data);
             if (!updated) return;
+
+            const inventoryStore = useInventoryStore();
+            const matchedMaterial = inventoryStore.inventoryView.find(inv => inv.materialId === updated.materialId);
+
+            const hydratedUpdated = {
+                ...updated,
+                materialName: matchedMaterial ? matchedMaterial.materialName : `Material #${updated.materialId}`,
+                materialUnit: matchedMaterial ? matchedMaterial.materialUnit : 'U'
+            };
+
             const index = waste.value.findIndex(w => w.id === id);
-            if (index !== -1) waste.value[index] = updated;
+            if (index !== -1) waste.value[index] = hydratedUpdated;
             onSuccess?.();
         }).catch(error => { errors.value.push(error); });
     }

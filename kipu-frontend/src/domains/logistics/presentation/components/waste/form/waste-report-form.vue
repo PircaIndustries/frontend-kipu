@@ -94,18 +94,19 @@ function save() {
     }
   } catch (e) {}
 
-  const currentProjectId = localStorage.getItem('currentProjectId') || 'proj-01'
+  // Intenta recuperar el ID numérico del proyecto, de lo contrario usa 1 por defecto
+  const currentProjectIdStr = localStorage.getItem('currentProjectId');
+  const projectIdInt = currentProjectIdStr ? parseInt(currentProjectIdStr, 10) : 1;
 
+  // El objeto debe mapear exactamente a lo que espera tu CreateMaterialWasteResource de C#
   const newWaste = {
-    id: `rmt-${Date.now()}`,
-    projectId: currentProjectId,
-    materialId: selectedInventory.value.id,
-    quantity: quantity.value,
+    projectId: isNaN(projectIdInt) ? 1 : projectIdInt,     // Ahora es un ENTERO nativo
+    materialId: parseInt(selectedInventory.value.id, 10), // Forzar a ENTERO nativo
+    quantity: parseFloat(quantity.value),                 // Mapea a double
     classificationType: selectedClassification.value.name.toUpperCase(),
-    date: new Date().toISOString().slice(0, 10),
     description: reason.value.trim(),
-    reportedBy: currentUser,
-    photoUrl: ''
+    reportedBy: currentUser ? String(currentUser) : null,
+    photoUrl: "http://example.com/placeholder.jpg"        // URL válida por si el StringLength exige datos
   }
 
   wasteStore.addWaste(newWaste, () => {

@@ -8,13 +8,13 @@ const { t } = useI18n();
 
 const currentRoute = computed(() => route.path);
 
-const tabs = [
+const tabs = computed(() => [
   { label: t('logistics-tabs.tab-inventory'), route: '/logistics/inventory' },
   { label: t('logistics-tabs.tab-requests'),  route: '/logistics/requests'  },
   { label: t('logistics-tabs.tab-suppliers'), route: '/logistics/suppliers' },
   { label: t('logistics-tabs.tab-waste'),     route: '/logistics/waste'     },
   { label: t('logistics-tabs.tab-machinery'), route: '/logistics/machinery' },
-];
+]);
 </script>
 
 <template>

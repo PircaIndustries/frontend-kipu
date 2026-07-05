@@ -27,16 +27,24 @@ const { materials } = storeToRefs(inventoryStore);
 const currentProjectId = computed(() => projectsStore.currentProjectId);
 
 const enrichedWaste = computed(() =>
-  waste.value
-    .filter(w => w.projectId === currentProjectId.value)
-    .map(w => {
-      const material = materials.value.find(m => m.id === w.materialId);
-      return {
-        ...w,
-        materialName: material?.name ?? w.materialId ?? '---',
-        materialUnit: getMeasureUnitLabel(material?.measureUnit)
-      };
-    })
+    waste.value
+        .filter(w => {
+          // 1. Si tu store de proyectos usa "proj-01", extraemos el número o hacemos fallback lazo
+          const currentId = String(currentProjectId.value);
+          const recordProjectId = String(w.projectId);
+
+          // Maneja tanto si es "1" == "1" como si tu app usa prefijos como "proj-1"
+          return recordProjectId === currentId || currentId.endsWith(recordProjectId);
+        })
+        .map(w => {
+          // Comparación laxa o conversión a número para acoplar con los materiales de la vista
+          const material = materials.value.find(m => Number(m.id) === Number(w.materialId));
+          return {
+            ...w,
+            materialName: material?.name ?? w.materialName ?? `Material #${w.materialId}`,
+            materialUnit: material?.measureUnit ? getMeasureUnitLabel(material.measureUnit) : (w.materialUnit || 'U')
+          };
+        })
 );
 
 const dateRange = ref(null);
@@ -77,7 +85,7 @@ const filteredWaste = computed(() => {
   }
 
   if (selectedMaterial.value) {
-    records = records.filter(w => w.materialId === selectedMaterial.value.id);
+    records = records.filter(w => Number(w.materialId) === Number(selectedMaterial.value.id));
   }
 
   if (searchText.value.trim()) {
@@ -156,15 +164,18 @@ const handleDelete = (wasteRecord) => {
   });
 };
 
-onMounted(() => {
+onMounted(async () => {
+  // 1. Forzamos de manera secuencial a que el catálogo e inventario existan en memoria
+  if (!inventoryStore.inventoryLoaded) {
+    await inventoryStore.fetchInventory();
+  }
+  if (!inventoryStore.materialsLoaded) {
+    await inventoryStore.fetchMaterials();
+  }
+
+  // 2. Una vez que el inventario está garantizado en el cliente, traemos las mermas
   wasteStore.fetchWaste();
   wasteStore.fetchClassifications();
-  if (inventoryStore.materials.length === 0) {
-    inventoryStore.fetchMaterials();
-  }
-  if (!inventoryStore.inventoryLoaded) {
-    inventoryStore.fetchInventory();
-  }
 });
 </script>
 
