@@ -1,9 +1,11 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter, useRoute } from 'vue-router';
 import { useProjectsStore } from '../../data/useProjectsStore';
 import { useAdvanceStore } from '@/domains/progress-monitoring/application/advancesStore.js';
 import { teamUserApi } from '@/domains/team/infrastructure/team-user.api.js';
+import { LocalFileStorageService } from '@/shared/infrastructure/local-file-storage.service.js';
 
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
@@ -17,8 +19,11 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Badge from 'primevue/badge';
 import RadioButton from 'primevue/radiobutton';
+import Menu from 'primevue/menu';
 
 const { t } = useI18n();
+const router = useRouter();
+const route = useRoute();
 
 const translateStatus = (status) => {
   if (!status) return '';
@@ -50,16 +55,16 @@ const displayProjects = computed(() => {
 const averageAdvance = computed(() => {
   const list = displayProjects.value;
   if (list.length === 0) return 0;
-  const sum = list.reduce((acc, p) => acc + (p.progress || 0), 0);
+  const sum = list.reduce((acc, p) => acc + calculateProjectProgress(p), 0);
   return Math.round(sum / list.length);
 });
 
 const totalRnc = computed(() =>
-  displayProjects.value.reduce((acc, p) => acc + (p.rnc || 0), 0)
+  displayProjects.value.reduce((acc, p) => acc + calculateProjectRnc(p), 0)
 );
 
 const totalCollaborators = computed(() =>
-  displayProjects.value.reduce((acc, p) => acc + (p.members || 0), 0)
+  displayProjects.value.reduce((acc, p) => acc + calculateProjectMembers(p), 0)
 );
 
 // ── Create project ──
@@ -239,14 +244,90 @@ async function confirmStatusChange() {
 }
 
 // ── Active Project Details Helpers & Document Form ──
+const showLegalCheckDialog = ref(false);
 const showAddDocDialog = ref(false);
 const newDocForm = ref({
   name: '',
   type: 'Plano de Estructuras',
-  version: 'v1.0',
-  signatureStatus: 'Pendiente',
-  deadline: null
+  file: null,
+  fileError: ''
 });
+const showEditDocDialog = ref(false);
+const editDocForm = ref({ id: null, name: '' });
+
+const handleLegalYes = () => {
+  showLegalCheckDialog.value = false;
+  router.push({ name: 'Signatures', query: { openCreate: 'true' } });
+};
+const handleLegalNo = () => {
+  showLegalCheckDialog.value = false;
+  showAddDocDialog.value = true;
+};
+const handleFileUpload = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    if (file.size > 100 * 1024 * 1024) {
+      newDocForm.value.fileError = t('projects_dashboard.details.modal.file_error_size');
+      newDocForm.value.file = null;
+      event.target.value = '';
+    } else {
+      newDocForm.value.fileError = '';
+      newDocForm.value.file = file;
+    }
+  }
+};
+
+const docMenu = ref();
+const activeDoc = ref(null);
+const docMenuOptions = ref([
+  {
+    label: () => t('projects_dashboard.details.table.action_download'),
+    icon: 'pi pi-download',
+    command: async () => {
+      if (activeDoc.value?.fileId) {
+        const file = await LocalFileStorageService.getFile(activeDoc.value.fileId);
+        if (file) {
+          const url = URL.createObjectURL(file);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = activeDoc.value.fileName || activeDoc.value.name;
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      }
+    }
+  },
+  {
+    label: () => t('projects_dashboard.details.table.action_edit'),
+    icon: 'pi pi-pencil',
+    command: () => {
+      editDocForm.value = { id: activeDoc.value.id, name: activeDoc.value.name };
+      showEditDocDialog.value = true;
+    }
+  },
+  {
+    label: () => t('projects_dashboard.details.table.action_delete'),
+    icon: 'pi pi-trash',
+    command: async () => {
+      await store.deleteProjectDocument(store.currentProjectId, activeDoc.value.id);
+      if (activeDoc.value.fileId) {
+        await LocalFileStorageService.deleteFile(activeDoc.value.fileId);
+      }
+    }
+  }
+]);
+
+const toggleDocMenu = (event, doc) => {
+  activeDoc.value = doc;
+  docMenu.value.toggle(event);
+};
+
+const saveEditDoc = async () => {
+  if (editDocForm.value.name.trim()) {
+    await store.updateProjectDocument(store.currentProjectId, editDocForm.value.id, { name: editDocForm.value.name.trim() });
+    showEditDocDialog.value = false;
+  }
+};
 
 const getTimelineIcon = (status) => {
   switch (status) {
@@ -270,16 +351,22 @@ const getTimelineColor = (status) => {
 
 async function addTechnicalDocument() {
   if (!newDocForm.value.name.trim()) return;
+  if (!newDocForm.value.file) {
+    newDocForm.value.fileError = t('projects_dashboard.details.modal.file_error_req');
+    return;
+  }
   try {
+    const fileId = `file-${Date.now()}-${Math.random().toString(36).substring(2,6)}`;
+    await LocalFileStorageService.saveFile(fileId, newDocForm.value.file);
+
     await store.addProjectDocument(store.currentProjectId, {
       name: newDocForm.value.name.trim(),
       type: newDocForm.value.type,
-      version: newDocForm.value.version,
-      signatureStatus: newDocForm.value.signatureStatus,
-      deadline: newDocForm.value.deadline?.toISOString().split('T')[0] || ''
+      fileId: fileId,
+      fileName: newDocForm.value.file.name
     });
     showAddDocDialog.value = false;
-    newDocForm.value = { name: '', type: 'Plano de Estructuras', version: 'v1.0', signatureStatus: 'Pendiente', deadline: null };
+    newDocForm.value = { name: '', type: 'Plano de Estructuras', file: null, fileError: '' };
   } catch (err) {
     console.error('Error adding document:', err);
   }
@@ -308,28 +395,82 @@ const calculateProjectStatus = (p) => {
 
 const slicedStatusLogs = computed(() => {
   const logs = store.currentProject?.statusLogs || [];
-  return logs.slice(-5);
+  return [...logs].reverse().slice(0, 3);
 });
 
-onMounted(async () => {
-  console.log('🔍 DEBUG: Limpiando y cargando proyectos...');
-  store.projects = [];
-  await store.loadProjects();
-  console.log('🔍 DEBUG: store.projects:', store.projects.length, store.projects);
-  await advanceStore.loadAdvances();
+const reversedFullLogs = computed(() => {
+  const logs = store.currentProject?.statusLogs || [];
+  return [...logs].reverse();
 });
+
+const allNcrs = ref([]);
+const projectMembers = ref({});
+
+import { NcrRepository } from '@/domains/ncr/infrastructure/NcrRepository.js';
+
+const loadGlobalData = async () => {
+  await store.loadProjects();
+  
+  const ncrRepo = new NcrRepository();
+  allNcrs.value = await ncrRepo.getAll();
+  
+  for (const p of store.projects) {
+    try {
+      const users = await teamUserApi.getAllUsers(p.id);
+      projectMembers.value[p.id] = users && users.length > 0 ? users.length : 1;
+    } catch(e) {
+      projectMembers.value[p.id] = 1;
+    }
+  }
+  
+  await advanceStore.loadAdvances();
+};
+
+onMounted(async () => {
+  if (!route.meta?.hideSidebar) {
+    await loadGlobalData();
+  }
+});
+
+// Refresh data when route changes in case it's cached
+watch(() => route.fullPath, async () => {
+  if (!route.meta?.hideSidebar) {
+    await loadGlobalData();
+  }
+});
+
+const calculateProjectRnc = (p) => {
+  if (!allNcrs.value) return 0;
+  return allNcrs.value.filter(n => String(n.projectId) === String(p.id) && n.status !== 'Cerrado').length;
+};
+
+const calculateProjectMembers = (p) => {
+  return projectMembers.value[p.id] || 1;
+};
 </script>
 
 <template>
   <div class="projects-page">
     <h1 class="projects-page__title">{{ t('projects_dashboard.title') }}</h1>
 
-    <!-- Stats (dynamic) -->
+    <!-- Top metrics -->
     <header class="stats-grid">
-      <div class="stat-card"><span>{{ t('projects_dashboard.active_projects') }}</span><strong>{{ store.totalProjects }}</strong></div>
-      <div class="stat-card"><span>{{ t('projects_dashboard.average_advance') }}</span><strong>{{ averageAdvance }}%</strong></div>
-      <div class="stat-card"><span>{{ t('projects_dashboard.open_rncs') }}</span><strong class="stat-card__red">{{ totalRnc }}</strong></div>
-      <div class="stat-card"><span>{{ t('projects_dashboard.collaborators') }}</span><strong>{{ totalCollaborators }}</strong></div>
+      <div class="stat-card">
+        <span><i class="pi pi-folder-open text-blue-500 mr-2"></i>{{ t('projects_dashboard.active_projects') }}</span>
+        <strong>{{ store.totalProjects }}</strong>
+      </div>
+      <div class="stat-card">
+        <span><i class="pi pi-chart-line text-green-500 mr-2"></i>{{ t('projects_dashboard.average_advance') }}</span>
+        <strong>{{ averageAdvance }}%</strong>
+      </div>
+      <div class="stat-card">
+        <span><i class="pi pi-exclamation-triangle text-orange-500 mr-2"></i>{{ t('projects_dashboard.open_rncs') }}</span>
+        <strong class="stat-card__red">{{ totalRnc }}</strong>
+      </div>
+      <div class="stat-card">
+        <span><i class="pi pi-users text-cyan-500 mr-2"></i>{{ totalCollaborators === 1 ? 'Colaborador' : t('projects_dashboard.collaborators') }}</span>
+        <strong>{{ totalCollaborators }}</strong>
+      </div>
     </header>
 
     <!-- Actions bar -->
@@ -370,9 +511,9 @@ onMounted(async () => {
             <div class="project-card__header-actions">
               <!-- Status tag — clickable to change status -->
               <span
-                class="project-card__status-tag"
-                :class="'project-card__status-tag--' + calculateProjectStatus(p).toLowerCase().replace(/\s/g, '-')"
-              >{{ translateStatus(calculateProjectStatus(p)) }}</span>
+                class="project-card__status-tag project-card__status-tag--clickable"
+                :class="'project-card__status-tag--' + p.status.toLowerCase().replace(/\s/g, '-')"
+              >{{ translateStatus(p.status) }}</span>
               <Button
                 icon="pi pi-sync"
                 severity="secondary"
@@ -399,14 +540,14 @@ onMounted(async () => {
           </div>
 
           <!-- Single Progress Bar -->
-          <div class="project-card__progress-bar" :class="{ 'project-card__progress-bar--gray': calculateProjectStatus(p) === 'Paralizada' }">
+          <div class="project-card__progress-bar" :class="{ 'project-card__progress-bar--gray': p.status === 'Paralizada' }">
             <div :style="{ width: calculateProjectProgress(p) + '%' }"></div>
           </div>
 
           <!-- Footer -->
           <div class="project-card__footer">
-            <span><i class="pi pi-users"></i> {{ p.members }} {{ t('projects_dashboard.card_members') }}</span>
-            <span>{{ p.rnc }} {{ t('projects_dashboard.card_rnc') }} | {{ p.pending }} {{ t('projects_dashboard.card_pending') }}</span>
+            <span><i class="pi pi-users"></i> {{ calculateProjectMembers(p) }} {{ calculateProjectMembers(p) === 1 ? 'miembro' : t('projects_dashboard.card_members') }}</span>
+            <span>{{ calculateProjectRnc(p) }} {{ t('projects_dashboard.card_rnc') }} | {{ p.pending }} {{ t('projects_dashboard.card_pending') }}</span>
           </div>
         </div>
       </div>
@@ -436,27 +577,19 @@ onMounted(async () => {
           <div class="details-card__content">
             <Timeline :value="slicedStatusLogs" align="left" class="custom-timeline">
               <template #marker="slotProps">
-                <span class="timeline-marker" :style="{ backgroundColor: getTimelineColor(slotProps.item.status) }">
-                  <i :class="getTimelineIcon(slotProps.item.status)" style="color: white; font-size: 0.75rem;"></i>
-                </span>
+                <span class="timeline-marker-simple"></span>
               </template>
               <template #content="slotProps">
-                <div class="timeline-item-card">
-                  <div class="timeline-item-header">
-                    <span class="timeline-item-status" :style="{ color: getTimelineColor(slotProps.item.status) }">
-                      {{ translateStatus(slotProps.item.status) }}
-                    </span>
-                    <span class="timeline-item-date">{{ slotProps.item.date }}</span>
-                  </div>
-                  <p class="timeline-item-justification">{{ slotProps.item.justification }}</p>
-                  <div v-if="slotProps.item.progress !== null" class="timeline-item-progress">
-                    {{ t('projects_dashboard.details.history_progress') }} <span class="font-bold text-gray-800">{{ slotProps.item.progress }}%</span>
-                  </div>
+                <div class="timeline-item-simple">
+                  <div class="timeline-item-date">{{ slotProps.item.date }}</div>
+                  <div class="timeline-item-status">Status: {{ translateStatus(slotProps.item.status) }}</div>
+                  <p class="timeline-item-justification">"{{ slotProps.item.justification }}"</p>
+                  <div class="timeline-item-author">By: {{ slotProps.item.author || 'System' }}</div>
                 </div>
               </template>
             </Timeline>
-            <div v-if="store.currentProject.statusLogs && store.currentProject.statusLogs.length > 5" class="flex justify-center mt-3">
-              <Button :label="t('projects_dashboard.details.history_full_btn')" icon="pi pi-external-link" size="small" outlined @click="showFullHistoryDialog = true" />
+            <div v-if="store.currentProject.statusLogs && store.currentProject.statusLogs.length > 3" class="flex justify-center mt-3">
+              <Button :label="t('projects_dashboard.details.history_full_btn')" icon="pi pi-external-link" size="small" outlined @click="showFullHistoryDialog = true" class="w-full" />
             </div>
             <div v-if="!store.currentProject.statusLogs || store.currentProject.statusLogs.length === 0" class="empty-detail-state">
               <i class="pi pi-info-circle mr-1"></i> {{ t('projects_dashboard.details.history_empty') }}
@@ -471,25 +604,22 @@ onMounted(async () => {
               <h3><i class="pi pi-file"></i> {{ t('projects_dashboard.details.docs_title') }}</h3>
               <p class="details-card__desc">{{ t('projects_dashboard.details.docs_desc') }}</p>
             </div>
-            <Button :label="t('projects_dashboard.details.docs_upload_btn')" icon="pi pi-plus" size="small" severity="success" outlined @click="showAddDocDialog = true" />
+            <Button :label="t('projects_dashboard.details.docs_upload_btn')" icon="pi pi-plus" size="small" severity="success" outlined @click="showLegalCheckDialog = true" />
           </div>
           <div class="details-card__content p-0 mt-4">
-            <DataTable :value="store.currentProject.technicalDocs || []" class="p-datatable-sm documents-table" responsiveLayout="scroll">
+            <DataTable :value="store.currentProject.documents || []" class="p-datatable-sm documents-table" responsiveLayout="scroll">
               <Column field="name" :header="t('projects_dashboard.details.table.name')" sortable></Column>
               <Column field="type" :header="t('projects_dashboard.details.table.type')" sortable>
                 <template #body="slotProps">
                   <span class="doc-type-badge">{{ slotProps.data.type }}</span>
                 </template>
               </Column>
-              <Column field="version" :header="t('projects_dashboard.details.table.version')" align="center"></Column>
-              <Column field="signatureStatus" :header="t('projects_dashboard.details.table.signature')" sortable align="center">
+              <Column field="uploadDate" :header="t('projects_dashboard.details.table.added_on')" sortable align="center"></Column>
+              <Column :header="t('projects_dashboard.details.table.actions')" align="center">
                 <template #body="slotProps">
-                  <span class="signature-badge" :class="slotProps.data.signatureStatus === 'Firmado' ? 'signature-badge--signed' : 'signature-badge--pending'">
-                    {{ slotProps.data.signatureStatus }}
-                  </span>
+                  <Button icon="pi pi-ellipsis-v" text rounded @click="toggleDocMenu($event, slotProps.data)" aria-haspopup="true" aria-controls="overlay_menu" />
                 </template>
               </Column>
-              <Column field="deadline" :header="t('projects_dashboard.details.table.expires')" sortable align="right"></Column>
               <template #empty>
                 <div class="empty-docs-state">
                   <i class="pi pi-folder-open mb-2 text-gray-400 text-2xl"></i>
@@ -501,6 +631,20 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+
+      <Menu ref="docMenu" id="overlay_menu" :model="docMenuOptions" :popup="true" />
+
+    <!-- ═══ MODAL PREGUNTA LEGAL ═══ -->
+    <Dialog v-model:visible="showLegalCheckDialog" modal :header="t('projects_dashboard.details.modal.legal_title')" :style="{ width: '400px' }">
+      <div class="py-4 text-center">
+        <i class="pi pi-question-circle text-4xl text-blue-500 mb-4"></i>
+        <p class="text-lg text-gray-700">{{ t('projects_dashboard.details.modal.legal_question') }}</p>
+      </div>
+      <template #footer>
+        <Button :label="t('projects_dashboard.details.modal.legal_no')" severity="secondary" text @click="handleLegalNo" />
+        <Button :label="t('projects_dashboard.details.modal.legal_yes')" severity="primary" @click="handleLegalYes" />
+      </template>
+    </Dialog>
 
     <!-- ═══ SUBIR PLANO O DOCUMENTO TÉCNICO DIALOG ═══ -->
     <Dialog v-model:visible="showAddDocDialog" modal :header="t('projects_dashboard.details.modal.title')" :style="{ width: '450px' }">
@@ -514,30 +658,28 @@ onMounted(async () => {
           <Select v-model="newDocForm.type" :options="['Plano de Estructuras', 'Plano de Arquitectura', 'Estudio de Suelos', 'Especificaciones Técnicas']" fluid />
         </div>
         <div class="field">
-          <label>{{ t('projects_dashboard.details.modal.version_label') }}</label>
-          <InputText v-model="newDocForm.version" fluid />
-        </div>
-        <div class="field">
-          <label>{{ t('projects_dashboard.details.modal.status_label') }}</label>
-          <div class="flex gap-4 mt-2">
-            <div class="flex items-center gap-2">
-              <RadioButton v-model="newDocForm.signatureStatus" inputId="status1" value="Firmado" />
-              <label for="status1">{{ t('projects_dashboard.details.modal.status_signed') }}</label>
-            </div>
-            <div class="flex items-center gap-2">
-              <RadioButton v-model="newDocForm.signatureStatus" inputId="status2" value="Pendiente" />
-              <label for="status2">{{ t('projects_dashboard.details.modal.status_pending') }}</label>
-            </div>
-          </div>
-        </div>
-        <div class="field">
-          <label>{{ t('projects_dashboard.details.modal.deadline_label') }}</label>
-          <DatePicker v-model="newDocForm.deadline" fluid />
+          <label>{{ t('projects_dashboard.details.modal.file_label') }}</label>
+          <input type="file" @change="handleFileUpload" class="p-inputtext p-component w-full" accept=".pdf,.dwg,.doc,.docx,.xls,.xlsx,.jpg,.png" />
+          <small v-if="newDocForm.fileError" class="text-red-500">{{ newDocForm.fileError }}</small>
         </div>
       </div>
       <template #footer>
         <Button :label="t('projects_dashboard.details.modal.btn_cancel')" severity="secondary" text @click="showAddDocDialog = false" />
         <Button :label="t('projects_dashboard.details.modal.btn_submit')" severity="success" @click="addTechnicalDocument" />
+      </template>
+    </Dialog>
+
+    <!-- ═══ EDITAR DOCUMENTO DIALOG ═══ -->
+    <Dialog v-model:visible="showEditDocDialog" modal :header="t('projects_dashboard.details.modal.edit_title')" :style="{ width: '400px' }">
+      <div class="flex flex-col gap-4 py-4">
+        <div class="field">
+          <label>{{ t('projects_dashboard.details.modal.name_label') }}</label>
+          <InputText v-model="editDocForm.name" fluid />
+        </div>
+      </div>
+      <template #footer>
+        <Button :label="t('projects_dashboard.details.modal.btn_cancel')" severity="secondary" text @click="showEditDocDialog = false" />
+        <Button :label="t('projects_dashboard.details.modal.btn_submit')" severity="success" @click="saveEditDoc" />
       </template>
     </Dialog>
 
@@ -657,24 +799,16 @@ onMounted(async () => {
         dismissableMask
     >
       <div class="max-h-96 overflow-y-auto px-2 py-4">
-        <Timeline :value="store.currentProject?.statusLogs || []" align="left" class="custom-timeline">
+        <Timeline :value="reversedFullLogs" align="left" class="custom-timeline">
           <template #marker="slotProps">
-            <span class="timeline-marker" :style="{ backgroundColor: getTimelineColor(slotProps.item.status) }">
-              <i :class="getTimelineIcon(slotProps.item.status)" style="color: white; font-size: 0.75rem;"></i>
-            </span>
+            <span class="timeline-marker-simple"></span>
           </template>
           <template #content="slotProps">
-            <div class="timeline-item-card">
-              <div class="timeline-item-header">
-                <span class="timeline-item-status" :style="{ color: getTimelineColor(slotProps.item.status) }">
-                  {{ translateStatus(slotProps.item.status) }}
-                </span>
-                <span class="timeline-item-date">{{ slotProps.item.date }}</span>
-              </div>
-              <p class="timeline-item-justification">{{ slotProps.item.justification }}</p>
-              <div v-if="slotProps.item.progress !== null" class="timeline-item-progress">
-                {{ t('projects_dashboard.details.history_progress') }} <span class="font-bold text-gray-800">{{ slotProps.item.progress }}%</span>
-              </div>
+            <div class="timeline-item-simple">
+              <div class="timeline-item-date">{{ slotProps.item.date }}</div>
+              <div class="timeline-item-status">Status: {{ translateStatus(slotProps.item.status) }}</div>
+              <p class="timeline-item-justification">"{{ slotProps.item.justification }}"</p>
+              <div class="timeline-item-author">By: {{ slotProps.item.author || 'System' }}</div>
             </div>
           </template>
         </Timeline>
@@ -955,58 +1089,56 @@ onMounted(async () => {
   padding: 0.5rem 0;
 }
 
-.timeline-marker {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
+.custom-timeline :deep(.p-timeline-event-opposite) {
+  display: none !important;
+}
+
+.custom-timeline :deep(.p-timeline-event-content) {
+  padding: 0 0 1.5rem 1.5rem;
+}
+
+.custom-timeline :deep(.p-timeline-event-connector) {
+  width: 1px;
+  background-color: #e2e8f0;
+}
+
+.timeline-marker-simple {
+  display: block;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  border: 3px solid white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  border: 2px solid #e2e8f0;
+  background-color: white;
+  margin-top: 5px;
 }
 
-.timeline-item-card {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  margin-bottom: 1.25rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
-  margin-left: 0.5rem;
-}
-
-.timeline-item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.timeline-item-status {
-  font-size: 0.85rem;
-  font-weight: 700;
+.timeline-item-simple {
+  padding-bottom: 0;
 }
 
 .timeline-item-date {
   font-size: 0.75rem;
-  color: #95a5a6;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.timeline-item-status {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
 }
 
 .timeline-item-justification {
-  font-size: 0.8rem;
-  color: #555;
-  margin: 0 0 0.5rem;
-  line-height: 1.5;
+  font-size: 0.85rem;
+  color: #64748b;
+  font-style: italic;
+  margin: 0 0 0.25rem 0;
 }
 
-.timeline-item-progress {
+.timeline-item-author {
   font-size: 0.75rem;
-  color: #7f8c8d;
-  border-top: 1px dashed #e9ecef;
-  padding-top: 0.5rem;
-  display: flex;
-  justify-content: space-between;
+  color: #94a3b8;
 }
 
 .empty-detail-state {

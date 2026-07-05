@@ -28,20 +28,26 @@ apiClient.interceptors.request.use((config) => {
 export class NcrRepository {
     async getAll() {
         try {
+            const localData = localStorage.getItem('mock_ncrs');
+            if (localData) return JSON.parse(localData);
+            
             const { data } = await apiClient.get('/ncrs');
             return data;
         } catch (error) {
-            console.error("Error al obtener NCRs:", error);
-            return [];
+            console.warn("Error API NCR, using local storage:", error);
+            return JSON.parse(localStorage.getItem('mock_ncrs') || '[]');
         }
     }
 
     async save(ncrData) {
         try {
-            const { data } = await apiClient.post('/ncrs', ncrData);
-            return data;
+            const localData = JSON.parse(localStorage.getItem('mock_ncrs') || '[]');
+            const newNcr = { ...ncrData, id: Date.now(), createdAt: new Date().toISOString() };
+            localData.push(newNcr);
+            localStorage.setItem('mock_ncrs', JSON.stringify(localData));
+            return newNcr;
         } catch (error) {
-            console.error("Error al guardar NCR:", error);
+            console.error("Error al guardar NCR localmente:", error);
             throw error;
         }
     }

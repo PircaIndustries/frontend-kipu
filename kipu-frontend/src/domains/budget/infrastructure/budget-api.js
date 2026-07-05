@@ -31,13 +31,26 @@ const API_URL = `/budget-items`;
 
 export class BudgetApi {
     async findAll() {
-        const { data } = await apiClient.get(`${API_URL}/progress`);
-        return data.filter(item => !item.isMiniAdvance);
+        try {
+            const localData = localStorage.getItem('mock_budget_items');
+            if (localData) return JSON.parse(localData);
+
+            const { data } = await apiClient.get(`${API_URL}/progress`);
+            return data.filter(item => !item.isMiniAdvance);
+        } catch (error) {
+            console.warn("Budget API findAll failed, using mock data.", error);
+            return [];
+        }
     }
 
     async findById(id) {
-        const { data } = await apiClient.get(`${API_URL}/progress/${id}`);
-        return data;
+        try {
+            const { data } = await apiClient.get(`${API_URL}/progress/${id}`);
+            return data;
+        } catch (error) {
+            console.warn("Budget API findById failed.", error);
+            return null;
+        }
     }
 
     // ADDED: Fetch transactions explicitly linked to a single budget item

@@ -80,6 +80,7 @@ function getCategoryInfo(type) {
         <Button
           icon="pi pi-arrow-left"
           :label="t('notifications.back', 'Volver')"
+          v-tooltip.bottom="t('notifications.back', 'Volver')"
           text
           plain
           @click="handleGoBack"
@@ -208,6 +209,12 @@ function getCategoryInfo(type) {
 
 .back-btn :deep(.p-button-icon) {
   font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .back-btn :deep(.p-button-label) {
+    display: none;
+  }
 }
 
 .notifications-list-container {

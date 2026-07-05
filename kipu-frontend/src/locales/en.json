@@ -153,14 +153,27 @@
                 "status_pending": "Signature Pending",
                 "deadline_label": "Approval Deadline",
                 "btn_cancel": "Cancel",
-                "btn_submit": "Register Document"
+                "btn_submit": "Register Document",
+                "legal_title": "Document Verification",
+                "legal_question": "Is this a legal document that requires a signature?",
+                "legal_yes": "Yes, requires legal signature",
+                "legal_no": "No, just upload document",
+                "file_label": "Document / Plan File (Max 100MB) *",
+                "file_error_size": "The file exceeds the 100MB limit.",
+                "file_error_req": "You must select a file.",
+                "edit_title": "Edit Document"
             },
             "table": {
                 "name": "Document / Plan Name",
                 "type": "Type",
                 "version": "Version",
                 "signature": "Digital Signature",
-                "expires": "Expires"
+                "expires": "Expires",
+                "added_on": "Added on",
+                "actions": "Actions",
+                "action_download": "Download",
+                "action_edit": "Edit name",
+                "action_delete": "Delete"
             }
         },
         "create_start_date": "Start Date",
