@@ -1,75 +1,104 @@
-import {BaseEndpoint} from "../../../shared/infrastructure/base-endpoint.js";
-import {BaseApi} from "../../../shared/infrastructure/base-api.js";
+import axios from 'axios';
 
-const materialWasteEndpointPath          = import.meta.env.VITE_MATERIAL_WASTE_ENDPOINT_PATH || '/materials/waste';
-/**
- * Infrastructure gateway for Logistics bounded-context endpoints.
- *
- * @class WasteApi
- * @extends BaseApi
- */
+const BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:5230/api/v1';
 
-export class WasteApi extends BaseApi {
-    /** @type {BaseEndpoint} @private */
-    #materialWasteEndpoint;
+const apiClient = axios.create({
+    baseURL: BASE_URL
+});
 
-    /** Creates endpoint clients for all logistics resources. */
-    constructor() {
-        super();
-        this.#materialWasteEndpoint        = new BaseEndpoint(this, materialWasteEndpointPath);
+apiClient.interceptors.request.use((config) => {
+    const userStr = localStorage.getItem('currentUser');
+    if (userStr) {
+        try {
+            const user = JSON.parse(userStr);
+            if (user && user.token) {
+                config.headers.Authorization = `Bearer ${user.token}`;
+            }
+        } catch (e) {
+            console.error('Error parsing currentUser from localStorage', e);
+        }
     }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
+export class WasteRepository {
     // ==========================================
-    // MATERIAL WASTE
+    // MATERIAL WASTE (MERMAS)
     // ==========================================
 
-    /**
-     * Fetches all material waste records.
-     * @returns {Promise<import('axios').AxiosResponse>}
-     */
-    getMaterialWastes() { return this.#materialWasteEndpoint.getAll(); }
+    async getMaterialWastes() {
+        try {
+            const { data } = await apiClient.get('/materials/waste'); // Cambiado
+            return data;
+        } catch (error) {
+            console.error("Error al obtener registros de mermas:", error);
+            return [];
+        }
+    }
 
-    /**
-     * Fetches a material waste record by its ID.
-     * @param {number|string} id
-     * @returns {Promise<import('axios').AxiosResponse>}
-     */
-    getMaterialWasteById(id) { return this.#materialWasteEndpoint.getById(id); }
+    async getMaterialWasteById(id) {
+        try {
+            const { data } = await apiClient.get(`/materials/waste/${id}`); // Cambiado
+            return data;
+        } catch (error) {
+            console.error(`Error al obtener la merma con ID ${id}:`, error);
+            return null;
+        }
+    }
 
-    /**
-     * Creates a material waste resource.
-     * @param {Object} resource
-     * @returns {Promise<import('axios').AxiosResponse>}
-     */
-    createMaterialWaste(resource) { return this.#materialWasteEndpoint.create(resource); }
+    async createMaterialWaste(wasteData) {
+        try {
+            const { data } = await apiClient.post('/materials/waste', wasteData); // Cambiado
+            return data;
+        } catch (error) {
+            console.error("Error al guardar registro de merma:", error);
+            throw error;
+        }
+    }
 
-    /**
-     * Updates a material waste resource.
-     * @param {Object} resource
-     * @returns {Promise<import('axios').AxiosResponse>}
-     */
-    updateMaterialWaste(resource) { return this.#materialWasteEndpoint.update(resource.id, resource); }
+    async updateMaterialWaste(id, wasteData) {
+        try {
+            const { data } = await apiClient.put(`/materials/waste/${id}`, wasteData); // Cambiado
+            return data;
+        } catch (error) {
+            console.error(`Error al actualizar la merma con ID ${id}:`, error);
+            throw error;
+        }
+    }
 
-    /**
-     * Deletes a material waste record by its ID.
-     * @param {number|string} id
-     * @returns {Promise<import('axios').AxiosResponse>}
-     */
-    deleteMaterialWaste(id) { return this.#materialWasteEndpoint.delete(id); }
+    async deleteMaterialWaste(id) {
+        try {
+            const { data } = await apiClient.delete(`/materials/waste/${id}`); // Cambiado
+            return data;
+        } catch (error) {
+            console.error(`Error al eliminar la merma con ID ${id}:`, error);
+            throw error;
+        }
+    }
 
     // ==========================================
     // WASTE CLASSIFICATIONS
     // ==========================================
 
-    /**
-     * Fetches all waste classifications.
-     * @returns {Promise<import('axios').AxiosResponse>}
-     */
-    getWasteClassifications() { return this.http.get('/wasteClassifications'); }
+    async getWasteClassifications() {
+        try {
+            const { data } = await apiClient.get('/wasteclassifications'); // Cambiado
+            return data;
+        } catch (error) {
+            console.error("Error al obtener clasificaciones de mermas:", error);
+            return [];
+        }
+    }
 
-    /**
-     * Creates a waste classification.
-     * @param {Object} resource
-     * @returns {Promise<import('axios').AxiosResponse>}
-     */
-    createWasteClassification(resource) { return this.http.post('/wasteClassifications', resource); }
+    async createWasteClassification(classificationData) {
+        try {
+            const { data } = await apiClient.post('/wasteclassifications', classificationData); // Cambiado
+            return data;
+        } catch (error) {
+            console.error("Error al guardar clasificación de mermas:", error);
+            throw error;
+        }
+    }
 }

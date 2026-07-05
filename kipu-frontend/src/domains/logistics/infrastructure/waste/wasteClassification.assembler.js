@@ -4,18 +4,16 @@ export class WasteClassificationAssembler {
     static toEntityFromResource(resource) {
         return new WasteClassificationEntity({ ...resource });
     }
-    static toEntitiesFromResponse(response) {
-        if (response.status !== 200 && response.status !== 201) {
-            console.error(`${response.status}, ${response.statusText}`);
-            return [];
+
+    static toEntitiesFromResponse(data) {
+        if (!data) return [];
+
+        // Maneja si el backend responde con el array envuelto o directo
+        let items = data.wasteClassifications || data;
+
+        if (!Array.isArray(items)) {
+            items = [items];
         }
-        let data = response.data;
-        if (!Array.isArray(data)) {
-            data = data['wasteClassifications'] || [data];
-        }
-        if (!Array.isArray(data)) {
-            data = [data];
-        }
-        return data.map(resource => this.toEntityFromResource(resource));
+        return items.map(resource => this.toEntityFromResource(resource));
     }
 }

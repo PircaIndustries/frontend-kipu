@@ -1,22 +1,29 @@
-import {MaterialWasteEntity} from "@/domains/logistics/domain/model/waste/materialWaste.entity.js";
+import { MaterialWasteEntity } from "@/domains/logistics/domain/model/waste/materialWaste.entity.js";
 
+// REVISA QUE DIGA 'export class'
 export class MaterialWasteAssembler {
     static toEntityFromResource(resource) {
-        return new MaterialWasteEntity({...resource});
+        return {
+            id: resource.id,
+            projectId: resource.projectId,
+            materialId: resource.materialId,
+            quantity: resource.quantity,
+            classificationType: resource.classificationType || 'OTRO',
+            date: resource.date,
+            description: resource.description,
+            reportedBy: resource.reportedBy,
+            photoUrl: resource.photoUrl,
+            materialName: resource.materialName || `Material #${resource.materialId}`,
+            materialUnit: resource.materialUnit || 'U'
+        };
     }
 
-    static toEntitiesFromResponse(response) {
-        if (response.status !== 200 && response.status !== 201) {
-            console.error(`${response.status}, ${response.statusText}`);
-            return [];
+    static toEntitiesFromResponse(data) {
+        if (!data) return [];
+        let items = data.materialsWaste || data;
+        if (!Array.isArray(items)) {
+            items = [items];
         }
-        let data = response.data;
-        if (!Array.isArray(data)) {
-            data = data['materialsWaste'] || [data];
-        }
-        if (!Array.isArray(data)) {
-            data = [data];
-        }
-        return data.map(resource => this.toEntityFromResource(resource));
+        return items.map(resource => this.toEntityFromResource(resource));
     }
 }

@@ -10,6 +10,7 @@ const { isLogistics, isGestor } = useCurrentUser();
 
 const currentRoute = computed(() => route.path);
 
+
 const tabs = computed(() => {
   const base = [
     { label: t('logistics-tabs.tab-inventory'), route: '/logistics/inventory' },
@@ -23,6 +24,7 @@ const tabs = computed(() => {
   }
   return base;
 });
+
 </script>
 
 <template>
