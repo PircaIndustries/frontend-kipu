@@ -6,6 +6,7 @@ import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
 import ConfirmDialog from 'primevue/confirmdialog'
 import useSupplierStore from '@/domains/logistics/application/supplier.store.js'
+import { useCurrentUser } from '@/domains/logistics/application/useCurrentUser.js'
 import SupplierList from '@/domains/logistics/presentation/components/suppliers/supplier-list.vue'
 import FilterSummaryBar from '@/shared/presentation/components/FilterSummaryBar.vue'
 import SupplierEditDialog from '@/domains/logistics/presentation/components/suppliers/form/supplier-edit-dialog.vue'
@@ -15,6 +16,7 @@ const { t } = useI18n()
 const toast = useToast()
 const confirm = useConfirm()
 const supplierStore = useSupplierStore()
+const { isLogistics } = useCurrentUser()
 
 const {
   filteredSuppliers,
@@ -81,6 +83,7 @@ onMounted(() => {
     <header class="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <h1 class="text-2xl font-bold text-primary">{{ t('suppliers.title') }}</h1>
       <button
+          v-if="isLogistics()"
           @click="showCreateDialog = true"
           class="w-full md:w-60 bg-accent text-white py-2.5 rounded-lg font-bold text-base shadow-md cursor-pointer transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
       >
@@ -93,6 +96,7 @@ onMounted(() => {
         <div class="overflow-x-auto w-full">
           <SupplierList
               :suppliers="filteredSuppliers"
+              :can-edit="isLogistics()"
               @edit="handleEdit"
               @delete="handleDelete"
           />

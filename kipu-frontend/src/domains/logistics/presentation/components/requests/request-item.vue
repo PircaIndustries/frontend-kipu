@@ -9,10 +9,15 @@ const props = defineProps({
   request: {
     type: Object,
     required: true
-  }
+  },
+  currentUserId: { type: [Number, String], default: null }
 })
 
 const emit = defineEmits(['modify', 'detail'])
+
+const isOwner = computed(() =>
+  String(props.currentUserId) === String(props.request?.requestedBy)
+)
 
 const remainingDays = computed(() => {
   const diff = new Date(props.request.deadline).getTime() - Date.now()
@@ -62,7 +67,7 @@ const requestFields = computed(() => [
     </template>
     <template #footer>
       <div class="flex items-center justify-between w-full gap-4">
-        <button v-if="request.requestStatus === 'Pending'"
+        <button v-if="request.requestStatus === 'Pending' && isOwner"
             class="flex-1 bg-neutral-border/40 text-primary font-medium rounded-lg py-2 hover:brightness-95 transition"
             @click="emit('modify')"
         >

@@ -24,6 +24,11 @@ export class InventoryApi extends BaseApiLocal {
      * @returns {Promise<import('axios').AxiosResponse>}
      */
     getMaterialInventories() { return this.#inventoryEndpoint.getAll(); }
+    getMaterialInventoriesByProject(projectId) {
+        return projectId
+            ? this.http.get(`${inventoryEndpointPath}/project/${projectId}`)
+            : this.#inventoryEndpoint.getAll();
+    }
 
     /**
      * Fetches a material inventory by its ID.

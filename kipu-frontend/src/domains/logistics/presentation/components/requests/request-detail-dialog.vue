@@ -4,7 +4,8 @@ import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   request: { type: Object, required: true },
-  visible: { type: Boolean, default: false }
+  visible: { type: Boolean, default: false },
+  canApprove: { type: Boolean, default: false }
 })
 
 const emit = defineEmits(['update:visible', 'close', 'approve', 'reject'])
@@ -120,7 +121,7 @@ function handleReject() { emit('reject', props.request); close() }
 
     <template #footer>
       <div class="flex justify-end gap-2 w-full">
-        <template v-if="isPending">
+        <template v-if="isPending && canApprove">
           <pv-button :label="t('request.detail.btn-reject')" severity="danger" outlined class="w-32" @click="handleReject" />
           <pv-button :label="t('request.detail.btn-approve')" severity="success" class="w-32" @click="handleApprove" />
         </template>

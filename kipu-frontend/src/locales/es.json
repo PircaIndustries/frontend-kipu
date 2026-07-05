@@ -1171,7 +1171,8 @@
         "tab-requests": "Solicitudes",
         "tab-suppliers": "Proveedores",
         "tab-waste": "Mermas",
-        "tab-machinery": "Maquinaria"
+        "tab-machinery": "Maquinaria",
+        "tab-catalog": "Catálogo"
     },
     "settings": {
         "title": "Configuraciones del Sistema",
@@ -1287,6 +1288,115 @@
             "specialty": "Especialidad",
             "start_date": "Fecha Inicio",
             "end_date": "Fecha Fin"
+        }
+    },
+    "catalog": {
+        "title": "Catálogo",
+        "filters": {
+            "search": "BUSCAR",
+            "search-material": "Buscar por nombre de material",
+            "search-machinery": "Buscar por nombre, marca o modelo"
+        },
+        "tabs": {
+            "materials": "Catálogo de Materiales",
+            "machinery": "Catálogo de Maquinaria"
+        },
+        "materials": {
+            "button-create": "Nuevo Material",
+            "empty": "No hay materiales en el catálogo.",
+            "card": {
+                "name": "Nombre",
+                "category": "Categoría",
+                "measure-unit": "Unidad de Medida",
+                "edit": "Editar",
+                "delete": "Eliminar"
+            },
+            "form": {
+                "name": "Nombre",
+                "name-placeholder": "Ingrese nombre del material",
+                "category": "Categoría",
+                "category-placeholder": "Seleccionar categoría",
+                "measure-unit": "Unidad de Medida",
+                "measure-unit-placeholder": "Seleccionar unidad"
+            },
+            "create": {
+                "title": "Nuevo Material",
+                "submit": "Guardar Material",
+                "success": {
+                    "summary": "Creado",
+                    "message": "Material agregado al catálogo exitosamente."
+                },
+                "error": {
+                    "message": "Error al crear material."
+                }
+            },
+            "edit": {
+                "title": "Editar Material",
+                "submit": "Guardar Cambios",
+                "success": {
+                    "summary": "Actualizado",
+                    "message": "Material actualizado exitosamente."
+                },
+                "error": {
+                    "message": "Error al actualizar material."
+                }
+            },
+            "delete": {
+                "title": "Eliminar Material",
+                "message": "¿Estás seguro de eliminar",
+                "success": "Material eliminado exitosamente."
+            }
+        },
+        "machinery": {
+            "button-create": "Nueva Maquinaria",
+            "empty": "No hay maquinaria en el catálogo.",
+            "card": {
+                "name": "Nombre",
+                "brand": "Marca",
+                "model": "Modelo",
+                "serial-number": "N° de Serie",
+                "edit": "Editar",
+                "delete": "Eliminar"
+            },
+            "form": {
+                "name": "Nombre",
+                "name-placeholder": "Ingrese nombre del equipo",
+                "brand": "Marca",
+                "brand-placeholder": "Ingrese marca",
+                "model": "Modelo",
+                "model-placeholder": "Ingrese modelo",
+                "serial-number": "Número de Serie",
+                "serial-number-placeholder": "Ingrese número de serie",
+                "acquisition-date": "Fecha de Adquisición",
+                "acquisition-date-placeholder": "Seleccionar fecha"
+            },
+            "create": {
+                "title": "Nueva Maquinaria",
+                "submit": "Guardar Maquinaria",
+                "success": {
+                    "summary": "Creada",
+                    "message": "Maquinaria agregada al catálogo exitosamente."
+                },
+                "error": {
+                    "message": "Error al crear maquinaria."
+                }
+            },
+            "edit": {
+                "title": "Editar Maquinaria",
+                "submit": "Guardar Cambios",
+                "success": {
+                    "summary": "Actualizada",
+                    "message": "Maquinaria actualizada exitosamente."
+                },
+                "error": {
+                    "message": "Error al actualizar maquinaria."
+                }
+            },
+            "delete": {
+                "title": "Eliminar Maquinaria",
+                "message": "¿Estás seguro de eliminar",
+                "success": "Maquinaria eliminada exitosamente."
+            }
         }
     },
     "errors": {

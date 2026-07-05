@@ -86,7 +86,8 @@ const useInventoryStore = defineStore('logistics', () => {
      * @returns {void}
      */
     function fetchInventory() {
-        inventoryApi.getMaterialInventories().then(response => {
+        const projectId = Number(projectsStore.currentProjectId) || null;
+        inventoryApi.getMaterialInventoriesByProject(projectId).then(response => {
             inventoryMaterials.value = MaterialInventoryAssembler.toEntitiesFromResponse(response);
             inventoryLoaded.value = true;
         }).catch(error => {

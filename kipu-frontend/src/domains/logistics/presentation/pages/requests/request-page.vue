@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import useRequestStore from '@/domains/logistics/application/requests.store.js'
 import useSupplierStore from '@/domains/logistics/application/supplier.store.js'
+import { useCurrentUser } from '@/domains/logistics/application/useCurrentUser.js'
 import RequestList from '@/domains/logistics/presentation/components/requests/request-list.vue'
 import FilterMenu from "@/shared/presentation/components/FilterMenu.vue"
 import FilterSummaryBar from "@/shared/presentation/components/FilterSummaryBar.vue"
@@ -17,6 +18,8 @@ const requestStore = useRequestStore()
 const supplierStore = useSupplierStore()
 const router = useRouter()
 const toast = useToast()
+const { isLogistics, isGestor, getUserId } = useCurrentUser()
+const currentUserId = getUserId()
 const {
   requestDetailsView,
   pendingRequestFilter,
@@ -133,6 +136,7 @@ const handleApproveRequest = async (event) => {
         </h1>
       </div>
       <button
+          v-if="isGestor()"
           @click="handleCreateRequest"
           class="w-full md:w-60 bg-accent text-white py-2.5 rounded-lg font-bold text-base shadow-md cursor-pointer transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
       >
@@ -146,6 +150,7 @@ const handleApproveRequest = async (event) => {
         <div class="overflow-x-auto w-full">
           <RequestList
               :requests="filteredRequests"
+              :current-user-id="currentUserId"
               @detail="handleDetail"
               @modify="handleModify"
           />
@@ -168,6 +173,7 @@ const handleApproveRequest = async (event) => {
     <RequestDetailDialog
         v-model:visible="showDetailDialog"
         :request="selectedRequest"
+        :can-approve="isLogistics()"
         @approve="handleApproveRequest"
         @reject="requestStore.rejectRequest($event.id).then(() => requestStore.fetchRequests())"
     />

@@ -2,10 +2,8 @@
 import RequestItem from './request-item.vue'
 
 defineProps({
-  requests: {
-    type: Array,
-    required: true
-  }
+  requests: { type: Array, required: true },
+  currentUserId: { type: [Number, String], default: null }
 })
 
 const emit = defineEmits(['modify', 'detail'])
@@ -17,6 +15,7 @@ const emit = defineEmits(['modify', 'detail'])
         v-for="request in requests"
         :key="request.id"
         :request="request"
+        :current-user-id="currentUserId"
         @modify="emit('modify', request)"
         @detail="emit('detail', request)"
     />
