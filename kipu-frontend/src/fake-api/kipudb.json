@@ -1477,26 +1477,6 @@
   "progress": [
     {
       "date": null,
-      "specialty": "Estructuras",
-      "activityName": "Six seven",
-      "location": "",
-      "percentage": 7,
-      "description": "",
-      "responsible": "Juan Pérez",
-      "workers": 67,
-      "weather": "cloudy",
-      "status": "IN_PROGRESS",
-      "lastUpdate": "2026-05-31T14:00:47.087Z",
-      "projectId": "proj-01",
-      "apiId": "v1",
-      "id": 6,
-      "weight": 1,
-      "currentPercentage": 7,
-      "details": "",
-      "startDate": "2026-05-31T14:00:47.087Z"
-    },
-    {
-      "date": null,
       "specialty": "Arquitectura",
       "activityName": "Tilin",
       "location": "",
