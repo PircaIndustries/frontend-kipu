@@ -903,6 +903,40 @@
       "name": "Paula",
       "email": "paula@gmail.com",
       "password": "12345678",
+      "role": "Gestor Operativo"
+    },
+    {
+      "id": "id-002",
+      "name": "Ana Torres",
+      "email": "ana@kipu.pe",
+      "password": "12345678",
+      "role": "Logística y Administración"
+    },
+    {
+      "id": "id-003",
+      "name": "Usuario Demo",
+      "email": "demo@kipu.pe",
+      "password": "12345678",
+      "role": "Gestor Operativo"
+    },
+    {
+      "name": "Mario Perez",
+      "email": "kipu4@hotmail.com",
+      "password": "kipu1234",
+      "role": "Logística y Administración",
+      "id": "zLRgEqI"
+    },
+    {
+      "name": "Mario Perez",
+      "email": "kipu0@hotmail.com",
+      "password": "kipu1234",
+      "role": "Gestor Operativo",
+      "id": "PjaiuHE"
+    },
+    {
+      "name": "Armando Paredes",
+      "email": "armando@hotmail.com",
+      "password": "armando123",
       "role": "Logística y Administración",
       "id": "miEpHu0"
     },
@@ -916,11 +950,30 @@
   ],
   "progress": [
     {
-      "id": 1,
-      "projectId": "proj-01",
+      "date": null,
       "specialty": "Estructuras",
-      "activityName": "Excavación de Cimientos y Solados",
-      "location": "Sector A - Zapatas",
+      "activityName": "Six seven",
+      "location": "",
+      "percentage": 7,
+      "description": "",
+      "responsible": "Juan Pérez",
+      "workers": 67,
+      "weather": "cloudy",
+      "status": "IN_PROGRESS",
+      "lastUpdate": "2026-05-31T14:00:47.087Z",
+      "projectId": "proj-01",
+      "apiId": "v1",
+      "id": 6,
+      "weight": 1,
+      "currentPercentage": 7,
+      "details": "",
+      "startDate": "2026-05-31T14:00:47.087Z"
+    },
+    {
+      "date": null,
+      "specialty": "Arquitectura",
+      "activityName": "Tilin",
+      "location": "",
       "percentage": 100,
       "description": "Excavación con retroexcavadora y vaciado de solado de 4 pulgadas.",
       "responsible": "Ana Torres",
