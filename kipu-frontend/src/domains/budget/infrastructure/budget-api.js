@@ -1,9 +1,6 @@
 import axios from 'axios';
-import i18n from '@/locales/i18n';
-import { BudgetAssembler } from './budget.assembler.js';
 import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore.js';
 
-// Get base URL from environment or fallback
 const BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:5230/api/v1';
 
 const apiClient = axios.create({
@@ -27,25 +24,26 @@ apiClient.interceptors.request.use((config) => {
     return Promise.reject(error);
 });
 
-const API_URL = `/budget-items`;
+const BUDGET_PATH = import.meta.env.VITE_BUDGET_ENDPOINT_PATH || '/budget-items';
 
 export class BudgetApi {
     async findAll() {
+        const projectsStore = useProjectsStore();
+        const projectId = projectsStore.currentProjectId;
         try {
-            const localData = localStorage.getItem('mock_budget_items');
-            if (localData) return JSON.parse(localData);
-
-            const { data } = await apiClient.get(`${API_URL}/progress`);
+            const { data } = await apiClient.get(`${BUDGET_PATH}/project/${projectId}`);
             return data.filter(item => !item.isMiniAdvance);
         } catch (error) {
             console.warn("Budget API findAll failed, using mock data.", error);
+            const localData = localStorage.getItem('mock_budget_items');
+            if (localData) return JSON.parse(localData);
             return [];
         }
     }
 
     async findById(id) {
         try {
-            const { data } = await apiClient.get(`${API_URL}/progress/${id}`);
+            const { data } = await apiClient.get(`${BUDGET_PATH}/${id}`);
             return data;
         } catch (error) {
             console.warn("Budget API findById failed.", error);
@@ -53,11 +51,10 @@ export class BudgetApi {
         }
     }
 
-    // ADDED: Fetch transactions explicitly linked to a single budget item
     async getTransactionsByBudgetId(budgetId) {
         try {
-            const { data } = await apiClient.get(`${API_URL}/transactions?budgetId=${budgetId}`);
-            return data;
+            const item = await this.findById(budgetId);
+            return item?.transactions || [];
         } catch (error) {
             console.error("Error fetching transactions:", error);
             return [];
@@ -68,10 +65,8 @@ export class BudgetApi {
         const projectsStore = useProjectsStore();
         const items = await this.findAll();
 
-        const currentProjectItems = items.filter(item => String(item.projectId) === String(projectsStore.currentProjectId));
         const totalBudget = projectsStore.currentProject ? Number(projectsStore.currentProject.budget || 0) : 0;
-
-        const executed = currentProjectItems.reduce((acc, curr) => acc + Number(curr.executedAmount || 0), 0);
+        const executed = items.reduce((acc, curr) => acc + Number(curr.executedAmount || 0), 0);
 
         return {
             total: totalBudget,
@@ -83,25 +78,10 @@ export class BudgetApi {
 
     async addTransaction(id, amount, description = "Gasto registrado") {
         try {
-            const item = await this.findById(id);
-            if (!item) throw new Error(i18n.global.t('errors.item_not_found'));
-
-            if (item.isMiniAdvance) {
-                throw new Error(i18n.global.t('errors.expenses_mini_advance'));
-            }
-
-            const numAmount = Number(amount);
-            const newExecuted = Number(item.executedAmount || 0) + numAmount;
-
-            await apiClient.post(`${API_URL}/transactions`, {
-                budgetId: id,
-                amount: numAmount,
+            await apiClient.post(`${BUDGET_PATH}/${id}/transactions`, {
+                amount: Number(amount),
                 date: new Date().toISOString().split('T')[0],
                 description: description
-            });
-
-            await apiClient.patch(`${API_URL}/progress/${id}`, {
-                executedAmount: newExecuted
             });
         } catch (error) {
             console.error(error);
@@ -111,13 +91,8 @@ export class BudgetApi {
 
     async requestExtension(id, additionalBudget) {
         try {
-            const item = await this.findById(id);
-            if (!item) throw new Error(i18n.global.t('errors.item_not_found'));
-
-            const newBudgeted = Number(item.assignedBudget || 0) + Number(additionalBudget);
-
-            await apiClient.patch(`${API_URL}/progress/${id}`, {
-                assignedBudget: newBudgeted
+            await apiClient.post(`${BUDGET_PATH}/${id}/extensions`, {
+                amount: Number(additionalBudget)
             });
         } catch (error) {
             console.error(error);
