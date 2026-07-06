@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiURL = import.meta.env.VITE_API_KIPU_BASEURL_LOCAL;
+const apiURL = import.meta.env.VITE_API_KIPU_BASEURL_LOCAL || import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:5230/api/v1';
 
 /**
  * @class BaseApiLocal

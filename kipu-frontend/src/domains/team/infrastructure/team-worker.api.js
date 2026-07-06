@@ -1,7 +1,6 @@
 import axios from 'axios'
 
-// Usamos el puerto local de .NET Core
-const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL_LOCAL || 'http://localhost:5230/api/v1'
+const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:5230/api/v1'
 const TEAMWORKERS_URL = '/team-workers'
 
 const apiClient = axios.create({

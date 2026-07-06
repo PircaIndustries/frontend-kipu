@@ -85,30 +85,22 @@ export const useProjectsStore = defineStore('projects', () => {
      * Loads all projects from the API (cache-first).
      */
     async function loadProjects() {
-        console.log('🔍 loadProjects - projects.length:', projects.value.length);
-        if (projects.value.length === 0) {
-            try {
-                console.log('🔍 loadProjects - Fetching from API...');
-                const data = await projectsApi.getAll();
-                console.log('🔍 loadProjects - API response:', data);
-                projects.value = data.map(p => {
-                    const entity = new ProjectEntity(p);
-                    const localDocs = localStorage.getItem(`mock_docs_${entity.id}`);
-                    if (localDocs) {
-                        entity.documents = JSON.parse(localDocs);
-                    }
-                    const localLogs = localStorage.getItem(`mock_logs_${entity.id}`);
-                    if (localLogs) {
-                        entity.statusLogs = JSON.parse(localLogs);
-                    }
-                    return entity;
-                });
-                console.log('🔍 loadProjects - projects.value luego de mapear:', projects.value.length);
-            } catch (error) {
-                console.error('🔍 loadProjects - ERROR:', error);
-            }
-        } else {
-            console.log('🔍 loadProjects - Cache hit, saltando fetch');
+        try {
+            const data = await projectsApi.getAll();
+            projects.value = data.map(p => {
+                const entity = new ProjectEntity(p);
+                const localDocs = localStorage.getItem(`mock_docs_${entity.id}`);
+                if (localDocs) {
+                    entity.documents = JSON.parse(localDocs);
+                }
+                const localLogs = localStorage.getItem(`mock_logs_${entity.id}`);
+                if (localLogs) {
+                    entity.statusLogs = JSON.parse(localLogs);
+                }
+                return entity;
+            });
+        } catch (error) {
+            console.error('🔍 loadProjects - ERROR:', error);
         }
     }
 

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL_LOCAL || 'http://localhost:5230/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:5230/api/v1';
 const TEAMUSERS_URL = import.meta.env.VITE_TEAMUSERS_ENDPOINT_PATH || '/team-users';
 
 const apiClient = axios.create({

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { DocumentAssembler } from './document.assembler.js'
 
-const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL_LOCAL || 'http://localhost:5230/api/v1'
+const API_BASE_URL = import.meta.env.VITE_API_KIPU_BASEURL || 'http://localhost:5230/api/v1'
 const DOCUMENTS_ENDPOINT = '/documents'
 
 const apiClient = axios.create({
