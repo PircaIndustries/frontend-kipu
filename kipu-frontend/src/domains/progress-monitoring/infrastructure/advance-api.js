@@ -25,29 +25,27 @@ apiClient.interceptors.request.use((config) => {
     return Promise.reject(error);
 });
 
-export class AdvanceApi {
-    constructor() {
-        this.baseUrl = `/progress-items`;
-    }
+const PROGRESS_PATH = import.meta.env.VITE_PROGRESS_ENDPOINT_PATH || '/progress-items';
 
+export class AdvanceApi {
     async getAll(projectId) {
         if (!projectId) return [];
-        const res = await apiClient.get(`${this.baseUrl}/project/${projectId}`);
+        const res = await apiClient.get(`${PROGRESS_PATH}/project/${projectId}`);
         return AdvanceAssembler.toEntityList(res.data);
     }
 
     async create(data) {
-        const res = await apiClient.post(this.baseUrl, data);
+        const res = await apiClient.post(PROGRESS_PATH, data);
         return AdvanceAssembler.toEntity(res.data);
     }
 
     async update(id, data) {
-        const res = await apiClient.put(`${this.baseUrl}/${id}`, data);
+        const res = await apiClient.put(`${PROGRESS_PATH}/${id}`, data);
         return AdvanceAssembler.toEntity(res.data);
     }
 
     async delete(id) {
         if (!id) throw new Error(i18n.global.t('errors.id_required_delete'));
-        await apiClient.delete(`${this.baseUrl}/${id}`);
+        await apiClient.delete(`${PROGRESS_PATH}/${id}`);
     }
 }

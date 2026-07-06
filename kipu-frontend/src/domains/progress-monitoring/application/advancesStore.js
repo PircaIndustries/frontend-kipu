@@ -14,7 +14,13 @@ export const useAdvanceStore = defineStore('advances', () => {
     const searchFilter = ref('');
     const dateRange = ref({ start: null, end: null });
 
-    // ADDED: Strictly filter by current project context using useProjectsStore
+    const persistLocal = () => {
+        const currentId = projectsStore.currentProjectId;
+        if (currentId) {
+            localStorage.setItem(`mock_advances_${currentId}`, JSON.stringify(advances.value));
+        }
+    };
+
     const currentProjectAdvances = computed(() => {
         const currentId = projectsStore.currentProjectId;
         if (!currentId) return [];
@@ -42,17 +48,21 @@ export const useAdvanceStore = defineStore('advances', () => {
         try {
             const currentId = projectsStore.currentProjectId;
             if (currentId) {
-                const localData = localStorage.getItem(`mock_advances_${currentId}`);
-                if (localData) {
-                    advances.value = JSON.parse(localData);
-                } else {
-                    advances.value = [];
-                }
+                const result = await api.getAll(currentId);
+                advances.value = result;
+                persistLocal();
             } else {
                 advances.value = [];
             }
         } catch (error) {
-            console.error(error);
+            console.warn('Advance API failed, using local data.', error);
+            const currentId = projectsStore.currentProjectId;
+            if (currentId) {
+                const localData = localStorage.getItem(`mock_advances_${currentId}`);
+                advances.value = localData ? JSON.parse(localData) : [];
+            } else {
+                advances.value = [];
+            }
         } finally {
             isLoading.value = false;
         }
@@ -63,58 +73,60 @@ export const useAdvanceStore = defineStore('advances', () => {
             const duplicate = advances.value.find(a => a.activityName === newEntry.activityName);
             if (duplicate) {throw new Error(i18n.global.t('errors.activity_exists')); return;}
         }
-        try {
-            // ADDED: Assign current project ID to the new entry
-            const currentId = projectsStore.currentProjectId;
-            if (!currentId) throw new Error(i18n.global.t('errors.no_active_project'));
+        const currentId = projectsStore.currentProjectId;
+        if (!currentId) throw new Error(i18n.global.t('errors.no_active_project'));
 
-            newEntry.projectId = currentId;
+        newEntry.projectId = currentId;
+
+        try {
+            const created = await api.create(newEntry);
+            advances.value = [created, ...advances.value];
+            persistLocal();
+        } catch (error) {
+            console.warn('Advance API create failed, saving locally.', error);
             newEntry.id = `adv-${Date.now()}`;
             newEntry.lastUpdate = new Date().toISOString();
-            
             advances.value = [newEntry, ...advances.value];
-            localStorage.setItem(`mock_advances_${currentId}`, JSON.stringify(advances.value));
-        } catch (error) {
-            console.error(error);
-            throw error;
+            persistLocal();
         }
     };
 
-    // ADDED: Action to retrieve a single advance for editing
     const getAdvanceById = (id) => {
         return advances.value.find(item => String(item.id) === String(id));
     };
 
-    // ADDED: Action to update an existing advance
     const updateAdvance = async (id, updatedData) => {
         try {
+            const result = await api.update(id, updatedData);
+            const index = advances.value.findIndex(item => String(item.id) === String(id));
+            if (index !== -1) {
+                advances.value[index] = result;
+            }
+            persistLocal();
+        } catch (error) {
+            console.warn('Advance API update failed, updating locally.', error);
             const index = advances.value.findIndex(item => String(item.id) === String(id));
             if (index !== -1) {
                 updatedData.lastUpdate = new Date().toISOString();
                 advances.value[index] = { ...advances.value[index], ...updatedData };
-                
-                const currentId = projectsStore.currentProjectId;
-                localStorage.setItem(`mock_advances_${currentId}`, JSON.stringify(advances.value));
             }
-        } catch (error) {
-            console.error(error);
+            persistLocal();
         }
     };
 
-    // ADDED: Action to delete an advance
     const deleteAdvance = async (id) => {
         try {
+            await api.delete(id);
             advances.value = advances.value.filter(item => String(item.id) !== String(id));
-            
-            const currentId = projectsStore.currentProjectId;
-            localStorage.setItem(`mock_advances_${currentId}`, JSON.stringify(advances.value));
+            persistLocal();
         } catch (error) {
-            console.error(error);
+            console.warn('Advance API delete failed, deleting locally.', error);
+            advances.value = advances.value.filter(item => String(item.id) !== String(id));
+            persistLocal();
         }
     };
 
     const calendarEvents = computed(() => {
-        console.log("Avances actuales:", advances.value);
         return currentProjectAdvances.value.map(a => ({
             id: a.id,
             title: `${a.activityName} (${a.currentPercentage}%)`,
@@ -170,7 +182,6 @@ export const useAdvanceStore = defineStore('advances', () => {
         filteredAdvances,
         loadAdvances,
         addAdvance,
-        // ADDED: Export new actions
         getAdvanceById,
         updateAdvance,
         deleteAdvance,
