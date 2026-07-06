@@ -797,6 +797,8 @@
             "btn-sign": "Sign Document",
             "empty-pending": "No pending documents",
             "empty-signed": "No signed documents",
+        "signed-token": "Signed",
+        "pending-signers": "Waiting for other signers",
             "summary-title": "Summary",
             "summary-pending": "Pending",
             "summary-signed": "Signed",

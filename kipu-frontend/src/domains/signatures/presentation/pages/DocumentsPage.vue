@@ -99,9 +99,13 @@
                       {{ getSignersNames(doc) }}
                     </div>
                   </div>
-                  <span class="text-xs text-neutral-border flex items-center gap-1">
-                    <i class="pi pi-key"></i>
-                    {{ doc.digitalSignatureToken || '—' }}
+                  <span v-if="doc.digitalSignatureToken" class="text-xs text-success flex items-center gap-1">
+                    <i class="pi pi-check-circle"></i>
+                    {{ $t('signatures.page.signed-token') }}: {{ doc.digitalSignatureToken }}
+                  </span>
+                  <span v-else class="text-xs text-warning flex items-center gap-1">
+                    <i class="pi pi-clock"></i>
+                    {{ $t('signatures.page.pending-signers') }}
                   </span>
                 </div>
               </div>

@@ -46,7 +46,8 @@ export class DocumentAssembler {
     static toUserDocumentEntity(resource) {
         return {
             id: resource.teamUserId || resource.id,
-            fullName: resource.fullName
+            fullName: resource.fullName,
+            signedAt: resource.signedAt || null
         };
     }
 

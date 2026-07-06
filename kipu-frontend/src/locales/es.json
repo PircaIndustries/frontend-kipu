@@ -797,6 +797,8 @@
             "btn-sign": "Firmar Documento",
             "empty-pending": "No hay documentos pendientes",
             "empty-signed": "No hay documentos firmados",
+        "signed-token": "Firmado",
+        "pending-signers": "Esperando firmas restantes",
             "summary-title": "Resumen",
             "summary-pending": "Pendientes",
             "summary-signed": "Firmados",
