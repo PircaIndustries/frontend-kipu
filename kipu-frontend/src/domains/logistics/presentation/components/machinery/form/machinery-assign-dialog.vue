@@ -75,8 +75,14 @@ async function assign() {
     await machineryStore.updateAssignment(props.machinery.id, updates)
 
     if (worker) {
-      await workerStore.assignMachineryToWorker(worker.id, { machineryId: props.machinery.machineryId, fullName: props.machinery.machineryName })
+      try {
+        await workerStore.assignMachineryToWorker(worker.id, { machineryId: props.machinery.machineryId, fullName: props.machinery.machineryName })
+      } catch (e) {
+        console.warn('Worker sync warning (assigning machinery):', e)
+      }
     }
+
+    await Promise.all([machineryStore.fetchMachinery(), workerStore.fetchWorkers()])
 
     toast.add({
       severity: 'success',

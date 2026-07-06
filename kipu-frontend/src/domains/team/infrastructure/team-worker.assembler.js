@@ -15,9 +15,12 @@ export class TeamWorkerAssembler {
         entity.role = resource.role || resource.Role
         entity.isActive = resource.isActive !== undefined ? resource.isActive : resource.IsActive
 
-        // Mapeo especial para Maquinarias: Extraemos solo los nombres
+        // Mapeo especial para Maquinarias: Objetos con machineryId y machineryName
         const rawMachineries = resource.machineries || resource.Machineries || []
-        entity.assignedTools = rawMachineries.map(m => m.fullName || m.FullName)
+        entity.assignedTools = rawMachineries.map(m => ({
+            machineryId: m.machineryId || m.MachineryId,
+            machineryName: m.fullName || m.FullName
+        }))
 
         entity.projectId = resource.projectId || resource.ProjectId || ''
         return entity

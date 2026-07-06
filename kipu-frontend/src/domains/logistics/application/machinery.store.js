@@ -74,7 +74,7 @@ const useMachineryStore = defineStore('machinery', () => {
         return machineryApi.createMachineryAssignment(stripExtraFields(item)).then(response => {
             const newItems = MachineryAssignmentAssembler.toEntitiesFromResponse(response);
             assignments.value.push(...newItems);
-            onSuccess?.();
+            onSuccess?.(newItems);
         }).catch(error => { errors.value.push(error); onError?.(error); });
     }
 

@@ -70,8 +70,8 @@
                     </div>
                     <div class="p-2">
                       <ul v-if="data.assignedTools?.length > 0" class="list-disc list-inside">
-                        <li v-for="tool in data.assignedTools" :key="tool" class="text-sm text-text-main">
-                          {{ tool }}
+                        <li v-for="tool in data.assignedTools" :key="tool.machineryId || tool.machineryName" class="text-sm text-text-main">
+                          {{ tool.machineryName || tool }}
                         </li>
                       </ul>
                       <p v-else class="text-sm text-neutral-border">Sin herramientas asignadas</p>
@@ -338,7 +338,7 @@ const createWorker = async () => {
             }
             await machineryStore.updateAssignment(machine.id, updatedAssignmentPayload)
           }
-          await machineryStore.fetchMachinery()
+          await Promise.all([machineryStore.fetchMachinery(), store.fetchWorkers()])
         } catch (err) {
           console.error("Error sincronizando logística:", err)
         }

@@ -29,7 +29,7 @@ const enrichedView = computed(() =>
   machineryView.value
     .filter(a => a.projectId === currentProjectId.value)
     .map(a => {
-      const worker = workerStore.allWorkers.find(w => w.id === a.assignedTo)
+      const worker = workerStore.allWorkers.find(w => w.id === a.assignedWorkerId)
       return {
         ...a,
         workerDni: worker ? worker.dni : null,
@@ -136,7 +136,11 @@ async function handleReturn(machinery) {
   try {
     await machineryStore.updateAssignment(machinery.id, updates)
     if (machinery.assignedWorkerId) {
-      await workerStore.removeMachineryFromWorker(machinery.assignedWorkerId, machinery.machineryId)
+      try {
+        await workerStore.removeMachineryFromWorker(machinery.assignedWorkerId, machinery.machineryId)
+      } catch (e) {
+        console.warn('Worker sync warning (removing machinery):', e)
+      }
     }
     await Promise.all([machineryStore.fetchMachinery(), workerStore.fetchWorkers()])
     toast.add({
@@ -165,7 +169,11 @@ async function handleEnable(machinery) {
   try {
     await machineryStore.updateAssignment(machinery.id, updates)
     if (machinery.assignedWorkerId) {
-      await workerStore.removeMachineryFromWorker(machinery.assignedWorkerId, machinery.machineryId)
+      try {
+        await workerStore.removeMachineryFromWorker(machinery.assignedWorkerId, machinery.machineryId)
+      } catch (e) {
+        console.warn('Worker sync warning (enabling machinery):', e)
+      }
     }
     await Promise.all([machineryStore.fetchMachinery(), workerStore.fetchWorkers()])
     toast.add({
@@ -307,27 +315,27 @@ onMounted(() => {
 
   <MachineryCreateForm
     v-if="showCreateDialog"
-    @saved="refresh; showCreateDialog = false"
+    @saved="refresh(); showCreateDialog = false"
     @close="showCreateDialog = false"
   />
 
   <MachineryCatalogForm
     v-if="showCatalogDialog"
-    @saved="refresh; showCatalogDialog = false"
+    @saved="refresh(); showCatalogDialog = false"
     @close="showCatalogDialog = false"
   />
 
   <MachineryAssignDialog
     v-if="showAssignDialog && selectedMachinery"
     :machinery="selectedMachinery"
-    @saved="refresh; showAssignDialog = false; selectedMachinery = null"
+    @saved="refresh(); showAssignDialog = false; selectedMachinery = null"
     @close="showAssignDialog = false; selectedMachinery = null"
   />
 
   <MachineryMaintenanceDialog
     v-if="showMaintenanceDialog && selectedMachinery"
     :machinery="selectedMachinery"
-    @saved="refresh; showMaintenanceDialog = false; selectedMachinery = null"
+    @saved="refresh(); showMaintenanceDialog = false; selectedMachinery = null"
     @close="showMaintenanceDialog = false; selectedMachinery = null"
   />
 

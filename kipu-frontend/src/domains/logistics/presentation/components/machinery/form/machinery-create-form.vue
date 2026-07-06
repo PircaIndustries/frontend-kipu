@@ -45,6 +45,8 @@ const catalogOptions = computed(() => {
 const workerOptions = computed(() =>
   workerStore.activeWorkers.map(w => ({
     id: w.id,
+    dni: w.dni,
+    fullName: w.fullName,
     name: `${w.dni} - ${w.fullName} - ${w.role}`
   }))
 )
@@ -77,14 +79,41 @@ function save() {
     projectId: localStorage.getItem('currentProjectId') || 'proj-01',
     machineryId: selectedMachine.value.id,
     name: selectedMachine.value.name,
-    status: selectedWorker.value ? 'IN_USE' : 'AVAILABLE',
-    assignedTo: selectedWorker.value?.id || null,
+    status: 'AVAILABLE',
+    assignedTo: null,
+    assignedWorkerId: null,
     registrationDate: new Date().toISOString(),
     maintenanceHours: '0',
     assignmentDetail: assignmentDetail.value.trim()
   }
 
-  machineryStore.addAssignment(assignment, () => {
+  machineryStore.addAssignment(assignment, async (createdItems) => {
+    if (selectedWorker.value && createdItems?.length > 0) {
+      const created = createdItems[0]
+      const worker = selectedWorker.value
+      const catalogItem = machineryStore.catalog.find(c => c.id === selectedMachine.value.id)
+      const machineryName = catalogItem?.name || selectedMachine.value.name || 'Herramienta'
+      try {
+        await machineryStore.updateAssignment(created.id, {
+          ...created,
+          assignedTo: `${worker.dni} - ${worker.fullName}`,
+          assignedWorkerId: worker.id,
+          status: 'IN_USE',
+          assignmentDetail: assignmentDetail.value.trim()
+        })
+      } catch (err) {
+        console.warn('Created assignment but failed to PATCH machinery:', err)
+      }
+      try {
+        await workerStore.assignMachineryToWorker(worker.id, {
+          machineryId: created.machineryId,
+          fullName: machineryName
+        })
+      } catch (err) {
+        console.warn('Created assignment but failed to sync worker:', err)
+      }
+    }
+    await Promise.all([machineryStore.fetchMachinery(), workerStore.fetchWorkers()])
     toast.add({
       severity: 'success',
       summary: t('machinery.create.success.summary'),
