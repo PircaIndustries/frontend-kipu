@@ -121,7 +121,7 @@ export const useTeamUserStore = defineStore('teamUser', () => {
     }
 
     const inviteUser = async (userData) => {
-        const currentProjectId = localStorage.getItem('currentProjectId');
+        const currentProjectId = userData.projectId || localStorage.getItem('currentProjectId');
         if (!currentProjectId) throw new Error('No active project found');
 
         try {

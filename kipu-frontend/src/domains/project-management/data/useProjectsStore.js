@@ -89,6 +89,20 @@ export const useProjectsStore = defineStore('projects', () => {
             const data = await projectsApi.getAll();
             projects.value = data.map(p => {
                 const entity = new ProjectEntity(p);
+                // Load local documents and logs if they exist (preserving previous logic if it was there)
+                const localDocs = localStorage.getItem(`mock_docs_${entity.id}`);
+                if (localDocs) entity.documents = JSON.parse(localDocs);
+                const localLogs = localStorage.getItem(`mock_logs_${entity.id}`);
+                if (localLogs) entity.statusLogs = JSON.parse(localLogs);
+                
+                // Load local images
+                const localImages = JSON.parse(localStorage.getItem('mock_images') || '{}');
+                if (localImages[entity.id]) {
+                    entity.image = localImages[entity.id].imageUrl || entity.image;
+                    entity.imageId = localImages[entity.id].imageId;
+                    entity.imageUrl = localImages[entity.id].imageUrl;
+                }
+                
                 return entity;
             });
         } catch (error) {
@@ -121,7 +135,8 @@ export const useProjectsStore = defineStore('projects', () => {
             const initialStatus = projectData.status || 'Planificación';
             const payload = {
                 ...projectData,
-                image: getRandomProjectImage(),
+                image: projectData.imageUrl || getRandomProjectImage(),
+                imageId: projectData.imageId || null,
                 progress: 0,
                 members: 1,
                 rnc: 0,
@@ -139,6 +154,17 @@ export const useProjectsStore = defineStore('projects', () => {
             };
             const created = await projectsApi.create(payload);
             const entity = new ProjectEntity(created);
+            
+            if (projectData.imageUrl) {
+                entity.image = projectData.imageUrl;
+                entity.imageUrl = projectData.imageUrl;
+                entity.imageId = projectData.imageId;
+                
+                const localImages = JSON.parse(localStorage.getItem('mock_images') || '{}');
+                localImages[entity.id] = { imageUrl: projectData.imageUrl, imageId: projectData.imageId };
+                localStorage.setItem('mock_images', JSON.stringify(localImages));
+            }
+            
             projects.value.unshift(entity);
             return entity;
         } catch (error) {
@@ -154,6 +180,30 @@ export const useProjectsStore = defineStore('projects', () => {
      */
     function checkNameExists(name) {
         return projectsApi.checkNameExists(name);
+    }
+
+    async function updateProject(id, projectData) {
+        try {
+            const index = projects.value.findIndex(p => String(p.id) === String(id));
+            if (index === -1) throw new Error('Project not found');
+            
+            projects.value[index] = {
+                ...projects.value[index],
+                ...projectData
+            };
+            
+            if (projectData.imageUrl) {
+                const localImages = JSON.parse(localStorage.getItem('mock_images') || '{}');
+                localImages[id] = { imageUrl: projectData.imageUrl, imageId: projectData.imageId };
+                localStorage.setItem('mock_images', JSON.stringify(localImages));
+            }
+            
+            localStorage.setItem('mock_projects', JSON.stringify(projects.value));
+            return projects.value[index];
+        } catch(error) {
+            console.error('Error updating project:', error);
+            throw error;
+        }
     }
 
     /**
@@ -325,6 +375,7 @@ export const useProjectsStore = defineStore('projects', () => {
         setCurrentProject,
         clearCurrentProject,
         addProject,
+        updateProject,
         checkNameExists,
         updateProjectStatus,
         addProjectDocument,

@@ -5,7 +5,9 @@ import { NcrRepository } from '../../infrastructure/NcrRepository.js';
 import { useProjectsStore } from '../../../project-management/data/useProjectsStore.js';
 import NcrListItem from './NcrListItem.vue';
 import Button from 'primevue/button';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const router = useRouter();
 const repository = new NcrRepository();
 const projectsStore = useProjectsStore();
@@ -36,11 +38,11 @@ const handleCreateNew = () => {
   <div class="ncr-view-container">
     <header class="ncr-header">
       <div class="header-text">
-        <h1>No Conformidades (RNC)</h1>
-        <p class="subtitle">Gestión de incidencias y tickets de alerta en obra</p>
+        <h1>{{ t('ncr.title') }}</h1>
+        <p class="subtitle">{{ t('ncr.subtitle') }}</p>
       </div>
       <Button
-          label="Crear Nuevo RNC"
+          :label="t('ncr.create_btn')"
           icon="pi pi-plus"
           class="p-button-danger create-btn"
           @click="handleCreateNew"
@@ -59,7 +61,7 @@ const handleCreateNew = () => {
 
       <div v-if="filteredNcrs.length === 0" class="empty-state">
         <i class="pi pi-inbox"></i>
-        <p>No se encontraron registros de no conformidad.</p>
+        <p>{{ t('ncr.empty_state') }}</p>
       </div>
     </div>
   </div>
