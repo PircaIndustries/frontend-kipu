@@ -77,7 +77,13 @@ export const projectsApi = {
      */
     async checkNameExists(name) {
         try {
-            const response = await apiClient.get('/projects');
+            const userStr = localStorage.getItem('currentUser');
+            let userId = '';
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                userId = user.id;
+            }
+            const response = await apiClient.get('/projects', { params: { userId } });
             return response.data.some(p => p.name.toLowerCase() === name.toLowerCase());
         } catch (error) {
             console.error('Error checking project name:', error);

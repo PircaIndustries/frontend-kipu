@@ -3,6 +3,7 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { useProjectsStore } from '../../data/useProjectsStore';
+import { cloudinaryService } from '@/shared/infrastructure/cloudinary.service';
 import { useAdvanceStore } from '@/domains/progress-monitoring/application/advancesStore.js';
 import { teamUserApi } from '@/domains/team/infrastructure/team-user.api.js';
 import { LocalFileStorageService } from '@/shared/infrastructure/local-file-storage.service.js';
@@ -68,6 +69,50 @@ const totalCollaborators = computed(() =>
 );
 
 // ── Create project ──
+
+const uploadFile = ref(null);
+const uploadPreview = ref(null);
+const isUploading = ref(false);
+const showEditImageDialog = ref(false);
+const editingProjectImage = ref(null);
+
+const handleFileSelect = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    uploadFile.value = file;
+    const reader = new FileReader();
+    reader.onload = (e) => uploadPreview.value = e.target.result;
+    reader.readAsDataURL(file);
+  }
+};
+
+const openEditImageDialog = (project) => {
+  editingProjectImage.value = project;
+  uploadFile.value = null;
+  uploadPreview.value = project.imageUrl || project.image;
+  isUploading.value = false;
+  showEditImageDialog.value = true;
+};
+
+const handleEditImageSubmit = async () => {
+  if (!uploadFile.value || !editingProjectImage.value) return;
+  isUploading.value = true;
+  try {
+    const uploadedImage = await cloudinaryService.uploadImage(uploadFile.value);
+    await store.updateProject(editingProjectImage.value.id, {
+      imageUrl: uploadedImage.url,
+      imageId: uploadedImage.public_id,
+      image: uploadedImage.url // fallback
+    });
+    showEditImageDialog.value = false;
+    editingProjectImage.value = null;
+  } catch (error) {
+    console.error('Failed to update project image', error);
+  } finally {
+    isUploading.value = false;
+  }
+};
+
 const showCreateModal = ref(false);
 const showSuccessModal = ref(false);
 const showDiscardModal = ref(false);
@@ -108,27 +153,52 @@ const isCreateValid = computed(() =>
 );
 
 function handleCloseCreate(visible) {
-  if (!visible) { isDirty.value ? (showDiscardModal.value = true) : (showCreateModal.value = false); }
-  else { showCreateModal.value = true; }
+  if (!visible) {
+    if (isDirty.value) { 
+      showDiscardModal.value = true; 
+    } else {
+      showCreateModal.value = false;
+      form.value = { ...initialForm };
+      createError.value = '';
+      uploadFile.value = null;
+      uploadPreview.value = null;
+    }
+  } else { 
+    showCreateModal.value = true; 
+  }
 }
-function confirmDiscard() { form.value = { ...initialForm }; createError.value = ''; showDiscardModal.value = false; showCreateModal.value = false; }
+function confirmDiscard() { form.value = { ...initialForm }; createError.value = ''; uploadFile.value = null; uploadPreview.value = null; showDiscardModal.value = false; showCreateModal.value = false; }
 
 async function handleSave() {
   if (form.value.startDate && form.value.endDate && new Date(form.value.endDate) < new Date(form.value.startDate)) {
     createError.value = 'End date cannot be before start date.'; return;
   }
   try {
-    await store.addProject({
-      name: form.value.name,
-      description: form.value.description,
-      location: form.value.location,
-      startDate: form.value.startDate?.toISOString().split('T')[0],
-      endDate: form.value.endDate?.toISOString().split('T')[0],
-      budget: Number(form.value.budget),
-      status: form.value.status
-    });
-    form.value = { ...initialForm }; createError.value = '';
-    showCreateModal.value = false; showSuccessModal.value = true;
+      let uploadedImage = null;
+      if (uploadFile.value) {
+        isUploading.value = true;
+        try {
+          uploadedImage = await cloudinaryService.uploadImage(uploadFile.value);
+        } catch (e) {
+          console.error('Image upload failed', e);
+        } finally {
+          isUploading.value = false;
+        }
+      }
+
+      const newProject = await store.addProject({
+        name: form.value.name,
+        description: form.value.description,
+        location: form.value.location,
+        startDate: form.value.startDate?.toISOString().split('T')[0],
+        endDate: form.value.endDate?.toISOString().split('T')[0],
+        budget: Number(form.value.budget),
+        status: form.value.status,
+        imageUrl: uploadedImage?.url,
+        imageId: uploadedImage?.public_id
+      });
+      form.value = { ...initialForm }; createError.value = ''; uploadFile.value = null; uploadPreview.value = null;
+      showCreateModal.value = false; showSuccessModal.value = true;
 
     // Auto-registrar al creador como TeamUser del proyecto
     try {
@@ -514,8 +584,8 @@ const calculateProjectMembers = (p) => {
                 class="project-card__status-tag project-card__status-tag--clickable"
                 :class="'project-card__status-tag--' + p.status.toLowerCase().replace(/\s/g, '-')"
               >{{ translateStatus(p.status) }}</span>
-              <Button
-                icon="pi pi-sync"
+              <Button icon="pi pi-camera" severity="secondary" text rounded v-tooltip.top="t('projects_dashboard.details.tooltips.edit_image')" @click.stop="openEditImageDialog(p)" />
+                <Button icon="pi pi-sync"
                 severity="secondary"
                 text rounded
                 v-tooltip.top="t('projects_dashboard.details.tooltips.change_status')"
@@ -692,8 +762,18 @@ const calculateProjectMembers = (p) => {
           <small v-if="nameChecking" class="field__hint">{{ t('projects_dashboard.create_hint_verify') }}</small>
           <small v-if="nameDuplicated" class="field__error">{{ t('projects_dashboard.create_err_name_dup') }}</small>
         </div>
-        <div class="field">
-          <label>{{ t('projects_dashboard.create_desc') }}</label>
+        
+          <div class="field">
+            <label>{{ t('projects_dashboard.create_image') }}</label>
+            <div class="relative flex items-center border border-gray-300 rounded-md bg-gray-50 p-2 cursor-pointer hover:bg-gray-100 transition-colors" @click="$refs.fileInput1.click()">
+              <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded border border-gray-300 mr-3 text-sm font-medium">{{ t('projects_dashboard.choose_file', 'Elegir archivo') }}</span>
+              <span class="text-sm text-gray-500 truncate flex-1">{{ uploadFile ? uploadFile.name : t('projects_dashboard.no_file_chosen', 'Ningún archivo seleccionado') }}</span>
+              <input type="file" ref="fileInput1" @change="handleFileSelect" accept="image/*" class="hidden" />
+            </div>
+            <div v-if="uploadPreview && !editingProjectImage" class="mt-2 w-full h-32 bg-cover bg-center rounded-md border" :style="{ backgroundImage: 'url(' + uploadPreview + ')' }"></div>
+          </div>
+          <div class="field">
+            <label>{{ t('projects_dashboard.create_desc') }}</label>
           <InputText v-model="form.description" :placeholder="t('projects_dashboard.create_desc_placeholder')" fluid />
         </div>
         <div class="field">
@@ -818,8 +898,27 @@ const calculateProjectMembers = (p) => {
       </template>
     </Dialog>
   </div>
-</template>
 
+    <!-- EDIT IMAGE DIALOG -->
+    <Dialog :visible="showEditImageDialog" @update:visible="val => { showEditImageDialog = val; if (!val) editingProjectImage = null; }" modal :header="t('projects_dashboard.edit_image_dialog.title')" :style="{ width: '400px' }">
+      <div class="flex flex-col gap-4">
+        <div class="field">
+          <label>{{ t('projects_dashboard.create_image') }}</label>
+          <div class="relative flex items-center border border-gray-300 rounded-md bg-gray-50 p-2 cursor-pointer hover:bg-gray-100 transition-colors" @click="$refs.fileInput2.click()">
+              <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded border border-gray-300 mr-3 text-sm font-medium">{{ t('projects_dashboard.choose_file', 'Elegir archivo') }}</span>
+              <span class="text-sm text-gray-500 truncate flex-1">{{ uploadFile ? uploadFile.name : t('projects_dashboard.no_file_chosen', 'Ningún archivo seleccionado') }}</span>
+              <input type="file" ref="fileInput2" @change="handleFileSelect" accept="image/*" class="hidden" />
+            </div>
+        </div>
+        <div v-if="uploadPreview" class="mt-2 w-full h-40 bg-cover bg-center rounded-md border" :style="{ backgroundImage: 'url(' + uploadPreview + ')' }"></div>
+      </div>
+      <template #footer>
+        <Button :label="t('projects_dashboard.create_cancel')" severity="secondary" text @click="showEditImageDialog = false; editingProjectImage = null" />
+        <Button :label="isUploading ? 'Subiendo...' : t('projects_dashboard.edit_image_dialog.update')" severity="primary" :loading="isUploading" :disabled="!uploadFile || isUploading" @click="handleEditImageSubmit" />
+      </template>
+    </Dialog>
+
+</template>
 <style scoped>
 .projects-page { padding: 2rem; background: #f4f7f6; min-height: 100%; }
 .projects-page__title { font-size: 1.5rem; font-weight: 700; color: #2c3e50; margin: 0 0 1.5rem; }

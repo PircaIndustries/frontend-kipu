@@ -2,6 +2,9 @@
 import { ref } from 'vue';
 import Tag from 'primevue/tag';
 import Button from 'primevue/button';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
   ncr: Object,
@@ -26,14 +29,14 @@ const getSeverityBadge = (level) => {
       <div class="ncr-section date-box">
         <div class="icon-circle calendar"><i class="pi pi-calendar"></i></div>
         <div class="data-group">
-          <span class="label">FECHA</span>
+          <span class="label">{{ t('ncr.item.date') }}</span>
           <span class="value">{{ ncr.createdAt ? new Date(ncr.createdAt).toLocaleDateString() : new Date().toLocaleDateString() }}</span>
         </div>
       </div>
 
       <div class="ncr-section info-box">
         <div class="data-group">
-          <span class="label">INCIDENCIA / ESPECIALIDAD</span>
+          <span class="label">{{ t('ncr.item.incidence') }}</span>
           <span class="main-val">{{ ncr.title }}</span>
           <span class="sub-val">{{ ncr.speciality }}</span>
         </div>
@@ -42,14 +45,14 @@ const getSeverityBadge = (level) => {
       <div class="ncr-section project-box">
         <div class="icon-circle building"><i class="pi pi-building"></i></div>
         <div class="data-group">
-          <span class="label">PROYECTO</span>
+          <span class="label">{{ t('ncr.item.project') }}</span>
           <span class="value">{{ projectName }}</span>
         </div>
       </div>
 
       <div class="ncr-section status-box">
         <div class="tag-column">
-          <span class="label">SEVERIDAD</span>
+          <span class="label">{{ t('ncr.item.severity') }}</span>
           <Tag :value="ncr.severity" :severity="getSeverityBadge(ncr.severity)" />
         </div>
       </div>
