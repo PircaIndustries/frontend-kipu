@@ -49,7 +49,7 @@ onMounted(() => {
   requestStore.fetchCategories()
   supplierStore.fetchSupplierOffers()
   requestStore.fetchRequests()
-  // requestStore.fetchBudgetLines()
+  requestStore.fetchBudgetLines()
 })
 
 const handleCreateRequest = () => {
@@ -108,6 +108,7 @@ const handleApproveRequest = async (event) => {
   try {
     await requestStore.approveRequest(event.id);
     await requestStore.fetchRequests();
+    requestStore.fetchBudgetLines();
     toast.add({
       severity: 'success',
       summary: 'Solicitud Aprobada',
@@ -116,11 +117,12 @@ const handleApproveRequest = async (event) => {
     });
   } catch (error) {
     console.error(error);
+    const detail = error?.response?.data?.message || error?.response?.data || 'No se pudo aprobar la solicitud.';
     toast.add({
       severity: 'error',
       summary: t('common.error'),
-      detail: 'No se pudo aprobar la solicitud.',
-      life: 4000
+      detail: typeof detail === 'string' ? detail : (detail?.detail || detail?.message || JSON.stringify(detail)),
+      life: 5000
     });
   }
 };

@@ -5,8 +5,6 @@ import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { useAdvanceStore } from '@/domains/progress-monitoring/application/advancesStore.js';
 import { useTeamUserStore } from '@/domains/team/application/team-user.store.js';
-import { useConfirm } from "primevue/useconfirm";
-import ConfirmDialog from 'primevue/confirmdialog';
 import DatePicker from 'primevue/datepicker';
 import Message from 'primevue/message';
 import Dialog from 'primevue/dialog';
@@ -21,7 +19,6 @@ const router = useRouter();
 const route = useRoute();
 const store = useAdvanceStore();
 const teamStore = useTeamUserStore();
-const confirm = useConfirm();
 
 // Static options mapping to execution keys
 const specialtiesOptions = computed(() => [
@@ -186,14 +183,9 @@ const saveProgress = async () => {
 
 const cancelCreation = () => {
   if (form.activityName || form.percentage > 0 || form.description) {
-    confirm.require({
-      message: t('execution.create.discardMessage'),
-      header: t('execution.create.discardHeader'),
-      icon: 'pi pi-exclamation-triangle',
-      rejectProps: { label: t('common.cancel'), severity: 'secondary', outlined: true },
-      acceptProps: { label: t('common.yes'), severity: 'danger' },
-      accept: () => router.push('/advances/registry')
-    });
+    if (window.confirm(t('execution.create.discardMessage'))) {
+      router.push('/advances/registry');
+    }
   } else {
     router.push('/advances/registry');
   }
@@ -204,25 +196,18 @@ const cancelCreation = () => {
  * Using a flat, safe key structure for i18n to avoid your nested errors.
  */
 const deleteProgress = () => {
-  confirm.require({
-    message: t('execution.advances.create.deleteMessage'),
-    header: t('execution.advances.create.deleteHeader'),
-    icon: 'pi pi-exclamation-triangle',
-    rejectProps: { label: t('common.cancel'), severity: 'secondary', outlined: true },
-    acceptProps: { label: t('common.delete'), severity: 'danger' },
-    accept: async () => {
-      if (route.params.id) {
-        await store.deleteAdvance(route.params.id);
+  if (window.confirm(t('execution.advances.create.deleteMessage'))) {
+    if (route.params.id) {
+      store.deleteAdvance(route.params.id).then(() => {
         router.push('/advances/registry');
-      }
+      });
     }
-  });
+  }
 };
 
 </script>
 <template>
   <div class="p-8 bg-gray-50 min-h-screen">
-    <ConfirmDialog />
 
     <div class="flex gap-6">
       <div class="flex-grow bg-white p-8 rounded-xl shadow-sm border border-gray-100">

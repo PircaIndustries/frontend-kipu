@@ -22,6 +22,16 @@ const remainingDays = computed(() => {
 
 const firstItem = computed(() => props.request?.items?.[0] || {})
 
+const totalAmount = computed(() => {
+  if (!props.request?.items) return 0
+  return props.request.items.reduce((sum, item) =>
+    sum + (Number(item.quantity || 0) * Number(item.unitPrice || 0)), 0)
+})
+
+const isOverBudget = computed(() => {
+  return isPending.value && props.request.budgetStatus === false
+})
+
 const statusLabel = computed(() => t(`request.card.status.${props.request?.requestStatus?.toLowerCase()}`))
 
 const priorityStyle = computed(() => {
@@ -89,6 +99,39 @@ function handleReject() { emit('reject', props.request); close() }
         </div>
       </section>
 
+      <section v-if="totalAmount > 0" class="p-4 rounded-xl border" :class="{
+        'bg-success-soft/5 border-success/30': !isOverBudget,
+        'bg-danger-soft/5 border-danger/30': isOverBudget
+      }">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-black text-neutral-border uppercase tracking-widest">
+            {{ t('request.create.budget-verification.title') }}
+          </span>
+          <span
+            v-if="isPending && request.budgetLineId"
+            class="px-3 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border"
+            :class="{
+              'bg-success-soft text-success border-success': !isOverBudget,
+              'bg-danger-soft text-danger border-danger': isOverBudget
+            }"
+          >
+            {{ isOverBudget ? t('request.filters.exceed-budget') : t('request.filters.within-budget') }}
+          </span>
+        </div>
+        <div class="mt-3 flex items-center gap-4">
+          <div class="flex flex-col">
+            <span class="text-[9px] text-neutral-border uppercase tracking-wider">{{ t('request.card.fields.budget-line') }}</span>
+            <span class="text-sm font-bold text-primary">{{ request.budgetLineName || (request.budgetLineId ? `#${request.budgetLineId}` : '-') }}</span>
+          </div>
+          <div class="flex flex-col ml-auto">
+            <span class="text-[9px] text-neutral-border uppercase tracking-wider text-right">{{ t('request.create.fields.quantity') }}</span>
+            <span class="text-lg font-black" :class="isOverBudget ? 'text-danger' : 'text-accent'">
+              S/ {{ totalAmount.toFixed(2) }}
+            </span>
+          </div>
+        </div>
+      </section>
+
       <section class="flex flex-col gap-4">
         <h3 class="text-[10px] font-black text-neutral-border uppercase tracking-widest border-b pb-2">{{ t('request.detail.section.logistics') }}</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -102,7 +145,7 @@ function handleReject() { emit('reject', props.request); close() }
           </div>
           <div class="flex flex-col gap-1">
             <span class="text-[10px] font-bold text-neutral-border uppercase tracking-wider">{{ t('request.card.fields.budget-line') }}</span>
-            <span class="text-base font-bold text-primary">{{ request.budgetLineId || '-' }}</span>
+            <span class="text-base font-bold text-primary">{{ request.budgetLineName || (request.budgetLineId ? `#${request.budgetLineId}` : '-') }}</span>
           </div>
         </div>
       </section>
@@ -123,9 +166,12 @@ function handleReject() { emit('reject', props.request); close() }
       <div class="flex justify-end gap-2 w-full">
         <template v-if="isPending && canApprove">
           <pv-button :label="t('request.detail.btn-reject')" severity="danger" outlined class="w-32" @click="handleReject" />
-          <pv-button :label="t('request.detail.btn-approve')" severity="success" class="w-32" @click="handleApprove" />
+          <pv-button :label="t('request.detail.btn-approve')" severity="success" class="w-32" :disabled="isOverBudget" @click="handleApprove" />
         </template>
         <pv-button :label="t('request.detail.btn-close')" class="w-32" severity="secondary" @click="close" />
+      </div>
+      <div v-if="isOverBudget && canApprove" class="w-full mt-2 text-xs text-danger italic text-right">
+        {{ t('request.filters.exceed-budget') }} — {{ t('request.detail.cannot-approve-budget') }}
       </div>
     </template>
   </pv-dialog>

@@ -31,6 +31,20 @@ const remainingDaysText = computed(() => {
 
 const firstItem = computed(() => props.request.items[0] ?? {})
 
+const isPending = computed(() => props.request?.requestStatus === 'Pending')
+
+const budgetBadge = computed(() => {
+  if (!isPending.value || props.request.budgetStatus === null) return null
+  return props.request.budgetStatus
+    ? { label: t('request.filters.within-budget'), severity: 'success' }
+    : { label: t('request.filters.exceed-budget'), severity: 'danger' }
+})
+
+const budgetLineDisplay = computed(() => {
+  if (!props.request.budgetLineId) return t('request.card.fields.no-budget')
+  return props.request.budgetLineName || `#${props.request.budgetLineId}`
+})
+
 const requestFields = computed(() => [
   {
     label: t('request.card.fields.material'),
@@ -38,7 +52,7 @@ const requestFields = computed(() => [
   },
   {
     label: t('request.card.fields.budget-line'),
-    value: props.request.budgetLineId
+    value: budgetLineDisplay.value
   },
   {
     label: t('request.card.fields.required-date'),
@@ -63,6 +77,25 @@ const requestFields = computed(() => [
       <div class="border border-neutral-border rounded-lg p-4 bg-neutral-bg flex flex-col gap-2">
         <p class="font-bold text-primary">{{ t('request.card.purpose.title') }}</p>
         <p class="text-sm text-primary">{{ request.purpose }}</p>
+      </div>
+      <div
+        v-if="budgetBadge"
+        class="flex items-center justify-between mt-3 px-3 py-2 rounded-lg border"
+        :class="{
+          'bg-success-soft/10 border-success/30': budgetBadge.severity === 'success',
+          'bg-danger-soft/10 border-danger/30': budgetBadge.severity === 'danger'
+        }"
+      >
+        <span class="text-xs font-bold text-primary/70">S/ {{ (request.totalAmount || 0).toFixed(2) }}</span>
+        <span
+          class="px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border"
+          :class="{
+            'bg-success-soft text-success border-success': budgetBadge.severity === 'success',
+            'bg-danger-soft text-danger border-danger': budgetBadge.severity === 'danger'
+          }"
+        >
+          {{ budgetBadge.label }}
+        </span>
       </div>
     </template>
     <template #footer>

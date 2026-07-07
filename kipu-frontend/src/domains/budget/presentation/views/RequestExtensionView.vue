@@ -3,37 +3,40 @@ import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { BudgetApi } from '../../infrastructure/budget-api.js';
-import { useTeamUserStore } from '@/domains/team/application/team-user.store.js';
 import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore.js';
 
 const { t } = useI18n();
 const router = useRouter();
 const repository = new BudgetApi();
-const teamStore = useTeamUserStore();
 const projectsStore = useProjectsStore();
 
 const projectSummary = ref({ total: 0, executed: 0, available: 0 });
-const budgetOptions = ref([]); // ADDED: Local ref for raw fresh data
+const budgetOptions = ref([]);
+
+const currentUser = computed(() => {
+  try {
+    const raw = localStorage.getItem('currentUser');
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+});
+
+const solicitedBy = computed(() => {
+  return currentUser.value ? (currentUser.value.fullName || currentUser.value.name || '') : '';
+});
 
 const form = ref({
   partidaId: '',
   additionalAmount: 0,
-  authorizedPerson: '',
-  reason: ''
-});
-
-const gestorManagers = computed(() => {
-  if (!teamStore.teamUsers) return [];
-  return teamStore.teamUsers.filter(u =>
-      u.role && (u.role.toLowerCase().includes('gestor') || u.role.toLowerCase().includes('manager'))
-  );
+  reason: '',
+  solicitedBy: ''
 });
 
 onMounted(async () => {
   projectSummary.value = await repository.getProjectSummary();
-  await teamStore.fetchUsers();
+  form.value.solicitedBy = solicitedBy.value;
 
-  // ADDED: Force fresh API call strictly filtered by current project ID context
   const allItems = await repository.findAll();
   budgetOptions.value = allItems.filter(item => String(item.projectId) === String(projectsStore.currentProjectId));
 });
@@ -41,14 +44,13 @@ onMounted(async () => {
 const saveExtension = async () => {
   if (!form.value.partidaId) return alert(t('budget.errors.selectPartida'));
   if (form.value.additionalAmount <= 0) return alert(t('budget.errors.positiveAmount'));
-  if (!form.value.authorizedPerson) return alert(t('budget.errors.selectResponsible'));
 
   if (form.value.additionalAmount > projectSummary.value.available) {
     return alert(t('budget.errors.insufficientFunds', { available: projectSummary.value.available.toLocaleString() }));
   }
 
   try {
-    await repository.requestExtension(form.value.partidaId, form.value.additionalAmount);
+    await repository.requestExtension(form.value.partidaId, form.value.additionalAmount, form.value.reason);
     router.push({ name: 'BudgetManagement' });
   } catch (error) {
     alert(t('budget.errors.saveFailed'));
@@ -66,6 +68,11 @@ const saveExtension = async () => {
 
       <div class="p-6 flex flex-col gap-5 text-left">
         <div class="flex flex-col gap-1.5">
+          <label class="text-xs font-black text-slate-500 uppercase tracking-wider">{{ t('budget.extension.solicitedBy') }}</label>
+          <div class="w-full p-3.5 bg-slate-100 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700">{{ solicitedBy }}</div>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
           <label class="text-xs font-black text-slate-500 uppercase tracking-wider">{{ t('budget.register.partida') }}</label>
           <select v-model="form.partidaId" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl outline-none cursor-pointer text-sm font-semibold text-slate-700 focus:border-sky-500 focus:bg-white transition-all">
             <option value="" disabled>{{ t('budget.register.selectPartida') }}</option>
@@ -81,14 +88,6 @@ const saveExtension = async () => {
           <small class="text-[11px] text-slate-400 font-semibold mt-0.5 block">
             {{ t('budget.extension.maxAvailable') }}: <span class="text-sky-600 font-bold">S/ {{ projectSummary.available.toLocaleString() }}</span>
           </small>
-        </div>
-
-        <div class="flex flex-col gap-1.5">
-          <label class="text-xs font-black text-slate-500 uppercase tracking-wider">{{ t('budget.extension.authorizedLabel') }}</label>
-          <select v-model="form.authorizedPerson" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl outline-none cursor-pointer text-sm font-semibold text-slate-700 focus:border-sky-500 focus:bg-white transition-all">
-            <option value="" disabled>{{ t('budget.register.selectResponsible') }}</option>
-            <option v-for="user in gestorManagers" :key="user.id" :value="user.fullName">{{ user.fullName }}</option>
-          </select>
         </div>
 
         <div class="flex flex-col gap-1.5">

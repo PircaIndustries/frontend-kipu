@@ -486,7 +486,8 @@
                 "budget-line": "Línea Presupuestaria",
                 "required-date": "Fecha Requerida",
                 "in-days": "{days} días restantes",
-                "time-exceeded": "Tiempo excedido"
+                "time-exceeded": "Tiempo excedido",
+                "no-budget": "Sin línea presupuestaria"
             },
             "purpose": {
                 "title": "Propósito"
@@ -531,7 +532,8 @@
                 "logistics": "Logística"
             },
             "btn-approve": "Aceptar",
-            "btn-reject": "Rechazar"
+            "btn-reject": "Rechazar",
+            "cannot-approve-budget": "No se puede aprobar porque excede el presupuesto disponible."
         },
         "create": {
             "title": "Nueva Solicitud de Material",
@@ -874,7 +876,8 @@
             "btn": "Solicitar Extensión",
             "maxAvailable": "Disponible global del proyecto",
             "reasonLabel": "Motivo de la Ampliación",
-            "authorizedLabel": "Persona Autorizada (Gestor)"
+            "authorizedLabel": "Persona Autorizada (Gestor)",
+            "solicitedBy": "Solicitado por"
         },
         "errors": {
             "selectPartida": "Por favor, seleccione una partida válida.",

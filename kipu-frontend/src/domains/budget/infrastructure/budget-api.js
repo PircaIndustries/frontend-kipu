@@ -27,6 +27,21 @@ apiClient.interceptors.request.use((config) => {
 const BUDGET_PATH = import.meta.env.VITE_BUDGET_ENDPOINT_PATH || '/budget-items';
 
 export class BudgetApi {
+    async create(resource) {
+        try {
+            const { data } = await apiClient.post(BUDGET_PATH, {
+                projectId: Number(resource.projectId),
+                activityName: resource.activityName || '',
+                details: resource.details || '',
+                assignedBudget: Number(resource.assignedBudget || 0)
+            });
+            return data;
+        } catch (error) {
+            console.error("Budget API create failed.", error);
+            return null;
+        }
+    }
+
     async findAll() {
         const projectsStore = useProjectsStore();
         const projectId = projectsStore.currentProjectId;
@@ -34,9 +49,7 @@ export class BudgetApi {
             const { data } = await apiClient.get(`${BUDGET_PATH}/project/${projectId}`);
             return data.filter(item => !item.isMiniAdvance);
         } catch (error) {
-            console.warn("Budget API findAll failed, using mock data.", error);
-            const localData = localStorage.getItem('mock_budget_items');
-            if (localData) return JSON.parse(localData);
+            console.error('Budget API findAll failed.', error);
             return [];
         }
     }
@@ -89,13 +102,23 @@ export class BudgetApi {
         }
     }
 
-    async requestExtension(id, additionalBudget) {
+    async requestExtension(id, additionalBudget, description) {
         try {
             await apiClient.post(`${BUDGET_PATH}/${id}/extensions`, {
-                amount: Number(additionalBudget)
+                amount: Number(additionalBudget),
+                description: description || ''
             });
         } catch (error) {
             console.error(error);
+            throw error;
+        }
+    }
+
+    async delete(id) {
+        try {
+            await apiClient.delete(`${BUDGET_PATH}/${id}`);
+        } catch (error) {
+            console.error('Budget API delete failed.', error);
             throw error;
         }
     }

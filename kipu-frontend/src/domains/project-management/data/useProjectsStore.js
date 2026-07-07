@@ -89,14 +89,6 @@ export const useProjectsStore = defineStore('projects', () => {
             const data = await projectsApi.getAll();
             projects.value = data.map(p => {
                 const entity = new ProjectEntity(p);
-                const localDocs = localStorage.getItem(`mock_docs_${entity.id}`);
-                if (localDocs) {
-                    entity.documents = JSON.parse(localDocs);
-                }
-                const localLogs = localStorage.getItem(`mock_logs_${entity.id}`);
-                if (localLogs) {
-                    entity.statusLogs = JSON.parse(localLogs);
-                }
                 return entity;
             });
         } catch (error) {
@@ -213,7 +205,6 @@ export const useProjectsStore = defineStore('projects', () => {
             // Re-attach local data
             updated.documents = project.documents;
             updated.statusLogs = updatedLogs;
-            localStorage.setItem(`mock_logs_${id}`, JSON.stringify(updatedLogs));
 
             projects.value = projects.value.map(p =>
                 String(p.id) === String(id) ? new ProjectEntity(updated) : p
@@ -246,7 +237,6 @@ export const useProjectsStore = defineStore('projects', () => {
             const updatedDocs = [...(project.documents || []), newDoc];
 
             project.documents = updatedDocs;
-            localStorage.setItem(`mock_docs_${projectId}`, JSON.stringify(updatedDocs));
             
             return newDoc;
         } catch (error) {
@@ -265,7 +255,6 @@ export const useProjectsStore = defineStore('projects', () => {
             );
 
             project.documents = updatedDocs;
-            localStorage.setItem(`mock_docs_${projectId}`, JSON.stringify(updatedDocs));
         } catch (error) {
             console.error('Failed to update project document:', error);
             throw error;
@@ -280,7 +269,6 @@ export const useProjectsStore = defineStore('projects', () => {
             const updatedDocs = (project.documents || []).filter(d => d.id !== docId);
 
             project.documents = updatedDocs;
-            localStorage.setItem(`mock_docs_${projectId}`, JSON.stringify(updatedDocs));
         } catch (error) {
             console.error('Failed to delete project document:', error);
             throw error;
