@@ -486,7 +486,8 @@
                 "budget-line": "Budget Line Item",
                 "required-date": "Required Date",
                 "in-days": "{days} days remaining",
-                "time-exceeded": "Time exceeded"
+                "time-exceeded": "Time exceeded",
+                "no-budget": "No budget line"
             },
             "purpose": {
                 "title": "Purpose"
@@ -531,7 +532,8 @@
                 "logistics": "Logistics"
             },
             "btn-approve": "Approve",
-            "btn-reject": "Reject"
+            "btn-reject": "Reject",
+            "cannot-approve-budget": "Cannot approve because it exceeds the available budget."
         },
         "create": {
             "title": "New Material Request",
@@ -913,7 +915,8 @@
             "btn": "Request Extension",
             "maxAvailable": "Project global available balance",
             "reasonLabel": "Extension Reason",
-            "authorizedLabel": "Authorized Person (Manager)"
+            "authorizedLabel": "Authorized Person (Manager)",
+            "solicitedBy": "Requested by"
         },
         "errors": {
             "selectPartida": "Please select a valid line item.",

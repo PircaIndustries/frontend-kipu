@@ -27,20 +27,41 @@ apiClient.interceptors.request.use((config) => {
 
 const PROGRESS_PATH = import.meta.env.VITE_PROGRESS_ENDPOINT_PATH || '/progress-items';
 
+function toBackendPayload(data) {
+    return {
+        projectId: Number(data.projectId),
+        taskName: data.activityName || data.taskName || '',
+        plannedPercentage: Number(data.currentPercentage || data.plannedPercentage || 0)
+    };
+}
+
+function toBackendUpdatePayload(data) {
+    return {
+        actualPercentage: Number(data.currentPercentage || data.plannedPercentage || 0)
+    };
+}
+
 export class AdvanceApi {
     async getAll(projectId) {
         if (!projectId) return [];
         const res = await apiClient.get(`${PROGRESS_PATH}/project/${projectId}`);
+        if (!res.data) return [];
         return AdvanceAssembler.toEntityList(res.data);
     }
 
     async create(data) {
-        const res = await apiClient.post(PROGRESS_PATH, data);
+        const backendData = toBackendPayload(data);
+        const res = await apiClient.post(PROGRESS_PATH, backendData);
+        if (!res.data) {
+            return { ...data, id: `adv-${Date.now()}` };
+        }
         return AdvanceAssembler.toEntity(res.data);
     }
 
     async update(id, data) {
-        const res = await apiClient.put(`${PROGRESS_PATH}/${id}`, data);
+        const backendData = toBackendUpdatePayload(data);
+        const res = await apiClient.put(`${PROGRESS_PATH}/${id}`, backendData);
+        if (!res.data) return data;
         return AdvanceAssembler.toEntity(res.data);
     }
 

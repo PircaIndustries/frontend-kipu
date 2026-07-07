@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { AdvanceApi } from '../infrastructure/advance-api.js';
+import { BudgetApi } from '@/domains/budget/infrastructure/budget-api.js';
 import { useProjectsStore } from '@/domains/project-management/data/useProjectsStore.js';
 import i18n from '@/locales/i18n';
 
 export const useAdvanceStore = defineStore('advances', () => {
     const api = new AdvanceApi();
+    const budgetApi = new BudgetApi();
     const projectsStore = useProjectsStore();
 
     const advances = ref([]);
@@ -13,13 +15,6 @@ export const useAdvanceStore = defineStore('advances', () => {
     const specialtyFilter = ref('');
     const searchFilter = ref('');
     const dateRange = ref({ start: null, end: null });
-
-    const persistLocal = () => {
-        const currentId = projectsStore.currentProjectId;
-        if (currentId) {
-            localStorage.setItem(`mock_advances_${currentId}`, JSON.stringify(advances.value));
-        }
-    };
 
     const currentProjectAdvances = computed(() => {
         const currentId = projectsStore.currentProjectId;
@@ -48,21 +43,13 @@ export const useAdvanceStore = defineStore('advances', () => {
         try {
             const currentId = projectsStore.currentProjectId;
             if (currentId) {
-                const result = await api.getAll(currentId);
-                advances.value = result;
-                persistLocal();
+                advances.value = await api.getAll(currentId);
             } else {
                 advances.value = [];
             }
         } catch (error) {
-            console.warn('Advance API failed, using local data.', error);
-            const currentId = projectsStore.currentProjectId;
-            if (currentId) {
-                const localData = localStorage.getItem(`mock_advances_${currentId}`);
-                advances.value = localData ? JSON.parse(localData) : [];
-            } else {
-                advances.value = [];
-            }
+            console.error('Advance API failed.', error);
+            advances.value = [];
         } finally {
             isLoading.value = false;
         }
@@ -78,17 +65,16 @@ export const useAdvanceStore = defineStore('advances', () => {
 
         newEntry.projectId = currentId;
 
-        try {
-            const created = await api.create(newEntry);
-            advances.value = [created, ...advances.value];
-            persistLocal();
-        } catch (error) {
-            console.warn('Advance API create failed, saving locally.', error);
-            newEntry.id = `adv-${Date.now()}`;
-            newEntry.lastUpdate = new Date().toISOString();
-            advances.value = [newEntry, ...advances.value];
-            persistLocal();
-        }
+        const created = await api.create(newEntry);
+        const merged = { ...created, ...newEntry, id: created.id };
+
+        budgetApi.create({
+            projectId: merged.projectId,
+            activityName: merged.activityName,
+            details: merged.details || '',
+            assignedBudget: 0
+        });
+        advances.value = [merged, ...advances.value];
     };
 
     const getAdvanceById = (id) => {
@@ -96,34 +82,32 @@ export const useAdvanceStore = defineStore('advances', () => {
     };
 
     const updateAdvance = async (id, updatedData) => {
-        try {
-            const result = await api.update(id, updatedData);
-            const index = advances.value.findIndex(item => String(item.id) === String(id));
-            if (index !== -1) {
-                advances.value[index] = result;
-            }
-            persistLocal();
-        } catch (error) {
-            console.warn('Advance API update failed, updating locally.', error);
-            const index = advances.value.findIndex(item => String(item.id) === String(id));
-            if (index !== -1) {
-                updatedData.lastUpdate = new Date().toISOString();
-                advances.value[index] = { ...advances.value[index], ...updatedData };
-            }
-            persistLocal();
+        const result = await api.update(id, updatedData);
+        const index = advances.value.findIndex(item => String(item.id) === String(id));
+        if (index !== -1) {
+            const merged = { ...advances.value[index], ...result };
+            advances.value[index] = merged;
         }
     };
 
     const deleteAdvance = async (id) => {
-        try {
-            await api.delete(id);
-            advances.value = advances.value.filter(item => String(item.id) !== String(id));
-            persistLocal();
-        } catch (error) {
-            console.warn('Advance API delete failed, deleting locally.', error);
-            advances.value = advances.value.filter(item => String(item.id) !== String(id));
-            persistLocal();
+        const advance = getAdvanceById(id);
+        if (advance && advance.activityName) {
+            try {
+                const budgetItems = await budgetApi.findAll();
+                const budgetItem = budgetItems.find(
+                    bi => bi.activityName === advance.activityName &&
+                          String(bi.projectId) === String(advance.projectId)
+                );
+                if (budgetItem) {
+                    await budgetApi.delete(budgetItem.id);
+                }
+            } catch (e) {
+                console.error('Failed to delete corresponding budget item.', e);
+            }
         }
+        await api.delete(id);
+        advances.value = advances.value.filter(item => String(item.id) !== String(id));
     };
 
     const calendarEvents = computed(() => {

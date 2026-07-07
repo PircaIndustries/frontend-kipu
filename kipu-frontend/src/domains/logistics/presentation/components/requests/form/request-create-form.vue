@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
@@ -8,6 +8,7 @@ import AutocompleteComponent from '@/shared/presentation/components/autocomplete
 import useRequestStore from '@/domains/logistics/application/requests.store.js';
 import useSupplierStore from '@/domains/logistics/application/supplier.store.js';
 import { getMeasureUnitLabel } from '@/domains/logistics/domain/model/materials/measureUnit.map.js';
+import { BudgetApi } from '@/domains/budget/infrastructure/budget-api.js';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -15,6 +16,7 @@ const toast = useToast();
 
 const requestStore = useRequestStore();
 const supplierStore = useSupplierStore();
+const budgetApi = new BudgetApi();
 
 const categoryOptions = computed(() =>
     requestStore.categories.map(c => ({ name: c.name }))
@@ -30,6 +32,18 @@ const requiredDate = ref(null);
 const deliveryLocation = ref('');
 const purpose = ref('');
 const additionalNotes = ref('');
+
+const selectedBudgetLineName = ref('');
+
+const selectedBudgetLineId = computed(() => {
+  if (!selectedBudgetLineName.value) return null;
+  const match = budgetLineOptions.value.find(b =>
+    `${String(b.id).padStart(2, '0')} - ${b.activityName || b.name}` === selectedBudgetLineName.value
+  );
+  return match ? match.id : null;
+});
+const budgetLineOptions = ref([]);
+const budgetItems = ref([]);
 
 const filteredMaterials = computed(() => {
   if (!selectedCategory.value) return [];
@@ -73,6 +87,26 @@ function onMaterialChange() {
   selectedSupplier.value = '';
 }
 
+const budgetLineAutocompleteOptions = computed(() =>
+  budgetLineOptions.value.map(b => ({
+    name: `${String(b.id).padStart(2, '0')} - ${b.activityName || b.name}`
+  }))
+);
+
+const selectedBudgetItem = computed(() => {
+  if (!selectedBudgetLineId.value) return null;
+  return budgetItems.value.find(b => String(b.id) === String(selectedBudgetLineId.value));
+});
+
+const budgetAssigned = computed(() => Number(selectedBudgetItem.value?.assignedBudget || 0));
+const budgetExecuted = computed(() => Number(selectedBudgetItem.value?.executedAmount || 0));
+const budgetAvailable = computed(() => budgetAssigned.value - budgetExecuted.value);
+
+const isWithinBudget = computed(() => {
+  if (!selectedBudgetItem.value) return null;
+  return totalPrice.value <= budgetAvailable.value;
+});
+
 const allFieldsValid = computed(() => {
   if (!selectedCategory.value) return false;
   if (!selectedMaterial.value) return false;
@@ -102,6 +136,7 @@ const onFormSubmit = () => {
     deadline: requiredDate.value ? new Date(requiredDate.value).toISOString() : new Date().toISOString(),
     requestPriority: selectedPriority.value,
     deliveryLocation: deliveryLocation.value,
+    budgetLineId: selectedBudgetLineId.value ? Number(selectedBudgetLineId.value) : null,
     purpose: purpose.value,
     additionalNotes: additionalNotes.value || null,
     requestedBy: currentUserId,
@@ -122,11 +157,21 @@ const onFormSubmit = () => {
   setTimeout(() => { submitting.value = false; }, 8000);
 };
 
+async function loadBudgetLines() {
+  try {
+    budgetItems.value = await budgetApi.findAll();
+    budgetLineOptions.value = budgetItems.value.filter(b => b.assignedBudget > 0);
+  } catch (e) {
+    console.error('Failed to load budget lines', e);
+  }
+}
+
 onMounted(() => {
   requestStore.fetchCategories();
   requestStore.fetchMaterials();
   supplierStore.fetchSuppliers();
   supplierStore.fetchSupplierOffers();
+  loadBudgetLines();
 });
 </script>
 
@@ -250,6 +295,87 @@ onMounted(() => {
               <span>{{ t(`request.create.priority.${slotProps.option.toLowerCase()}`) }}</span>
             </template>
           </pv-select>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <span class="text-xs font-bold text-primary/80 uppercase tracking-wider">
+          {{ t('request.create.fields.budget-line') }}
+        </span>
+        <autocomplete-component
+            v-model="selectedBudgetLineName"
+            :options="budgetLineAutocompleteOptions"
+            :placeholder="t('request.create.placeholders.select')"
+            :return-object="false"
+        />
+      </div>
+
+      <div
+        v-if="selectedBudgetItem"
+        class="border border-neutral-border/20 rounded-xl p-5 flex flex-col gap-4 bg-slate-50"
+      >
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+            {{ t('request.create.budget-verification.title') }}
+          </span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4">
+          <div class="flex flex-col items-center bg-white rounded-lg p-3 border border-neutral-border/20">
+            <span class="text-[10px] font-bold text-neutral-border uppercase tracking-wider">
+              {{ t('request.create.budget-verification.item-budget') }}
+            </span>
+            <span class="text-lg font-black text-primary">
+              S/ {{ budgetAssigned.toLocaleString() }}
+            </span>
+          </div>
+          <div class="flex flex-col items-center bg-white rounded-lg p-3 border border-neutral-border/20">
+            <span class="text-[10px] font-bold text-neutral-border uppercase tracking-wider">
+              {{ t('request.create.budget-verification.executed') }}
+            </span>
+            <span class="text-lg font-black text-warning">
+              S/ {{ budgetExecuted.toLocaleString() }}
+            </span>
+          </div>
+          <div class="flex flex-col items-center bg-white rounded-lg p-3 border border-neutral-border/20">
+            <span class="text-[10px] font-bold text-neutral-border uppercase tracking-wider">
+              {{ t('request.create.budget-verification.available') }}
+            </span>
+            <span class="text-lg font-black" :class="budgetAvailable >= 0 ? 'text-success' : 'text-danger'">
+              S/ {{ budgetAvailable.toLocaleString() }}
+            </span>
+          </div>
+        </div>
+
+        <div v-if="totalPrice > 0" class="flex items-center justify-between px-2 py-3 bg-white rounded-lg border"
+          :class="{
+            'border-success/30 bg-success-soft/10': isWithinBudget === true,
+            'border-danger/30 bg-danger-soft/10': isWithinBudget === false
+          }"
+        >
+          <div class="flex items-center gap-3">
+            <span v-if="isWithinBudget === true" class="w-8 h-8 rounded-full bg-success/10 flex items-center justify-center">
+              <i class="pi pi-check-circle text-success text-lg"></i>
+            </span>
+            <span v-else-if="isWithinBudget === false" class="w-8 h-8 rounded-full bg-danger/10 flex items-center justify-center">
+              <i class="pi pi-times-circle text-danger text-lg"></i>
+            </span>
+            <div class="flex flex-col">
+              <span class="text-xs font-bold text-primary/70 uppercase tracking-wider">
+                {{ t('request.create.fields.quantity') }}: {{ quantity }} {{ selectedUnit }} &times; S/ {{ selectedPrice.toFixed(2) }}
+              </span>
+              <span class="text-lg font-black text-primary">Total: S/ {{ totalPrice.toFixed(2) }}</span>
+            </div>
+          </div>
+          <span
+            class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border"
+            :class="{
+              'bg-success-soft text-success border-success': isWithinBudget === true,
+              'bg-danger-soft text-danger border-danger': isWithinBudget === false
+            }"
+          >
+            {{ isWithinBudget === true ? t('request.filters.within-budget') : t('request.filters.exceed-budget') }}
+          </span>
         </div>
       </div>
 
